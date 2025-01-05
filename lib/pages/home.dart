@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
           image: DecorationImage(image: AssetImage("assets/images/background-hires.png"),
           fit: BoxFit.cover)
         ),
-        child: const Placeholder()
+        child: const Text("home page")
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {},
       backgroundColor: Constants().pastelRed,
