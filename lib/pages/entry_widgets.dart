@@ -4,7 +4,6 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
-
 class NRGSpinbox extends StatefulWidget {
   final String title;
   final String jsonKey;
