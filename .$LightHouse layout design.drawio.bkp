@@ -264,8 +264,8 @@
         <mxCell id="2jo4EMqZSGKjD50c55YL-150" value="End Location" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="810" y="230" width="180" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="2jo4EMqZSGKjD50c55YL-152" value="No Park&lt;div&gt;Park&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1061.25" y="152.5" width="120" height="105" as="geometry" />
+        <mxCell id="2jo4EMqZSGKjD50c55YL-152" value="No Park&lt;div&gt;Park&lt;/div&gt;&lt;div&gt;Deep Climb&lt;/div&gt;&lt;div&gt;Shallow Climb&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1061.25" y="170" width="120" height="87.5" as="geometry" />
         </mxCell>
         <mxCell id="2jo4EMqZSGKjD50c55YL-153" value="Climb Start time (text box)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="810" y="305" width="180" height="30" as="geometry" />
