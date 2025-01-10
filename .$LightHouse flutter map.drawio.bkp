@@ -610,6 +610,9 @@
         <mxCell id="XD_a2D1CnMu3W7jzv9Nm-33" value="&lt;ol style=&quot;font-size: 20px;&quot;&gt;&lt;li&gt;Phone uploads JSON files in userData folder to main computer (should it delete these files after? or keep them as a backup? if they&#39;re a backup, the app needs some way to know which files have already been uploaded)&lt;/li&gt;&lt;li&gt;Computer adds data from JSON files to main database&lt;/li&gt;&lt;li&gt;Phone downloads updated database file&lt;/li&gt;&lt;/ol&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-824.19" y="810" width="444.19" height="250" as="geometry" />
         </mxCell>
+        <mxCell id="YAdQwgbq9Zl8hkpXT4mL-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#874003;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="20" y="-330" width="120" height="60" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
