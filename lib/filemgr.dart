@@ -3,6 +3,7 @@ import "dart:io";
 import "dart:math";
 import "package:flutter/material.dart";
 import "package:lighthouse/pages/data_entry.dart";
+
 import "package:path_provider/path_provider.dart";
 
 final Map<String, String> configData = {};

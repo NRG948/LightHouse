@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/layouts.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -60,7 +61,7 @@ class HomePage extends StatelessWidget {
               Navigator.pushNamed(context, "/entry", arguments: value);
             },
             itemBuilder: (BuildContext context) {
-              final enabledLayouts = configData["enabledLayouts"]!.split(",");
+              final enabledLayouts = layoutMap.keys;
               return enabledLayouts.map((jsonKey) {
                 return PopupMenuItem(
                     value: jsonKey,
