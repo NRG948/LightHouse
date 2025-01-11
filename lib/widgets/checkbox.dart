@@ -42,7 +42,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                 );
               }
             ),
-            Text(_title, style: comfortaaBold20pt,)
+            Text(_title, style: Constants.comfortaaBold20pt,)
           ],
         )
       )

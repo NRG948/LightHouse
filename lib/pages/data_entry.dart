@@ -110,7 +110,7 @@ class DataEntry extends StatelessWidget {
     );
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Constants().pastelRed,
+          backgroundColor: Constants.pastelRed,
           title: const Text(
             "Data Entry",
             style: TextStyle(

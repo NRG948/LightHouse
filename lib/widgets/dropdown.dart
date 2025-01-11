@@ -31,7 +31,7 @@ class _NRGDropdownState extends State<NRGDropdown> {
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
-          Text(_title, style: comfortaaBold20pt),
+          Text(_title, style: Constants.comfortaaBold20pt),
           DropdownButton<String>(
             items: _options.map<DropdownMenuItem<String>>(
               (String value) {

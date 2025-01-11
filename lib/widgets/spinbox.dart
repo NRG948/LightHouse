@@ -25,13 +25,13 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
-          Text(_title, style: comfortaaBold30pt),
+          Text(_title, style: Constants.comfortaaBold30pt),
           Center(
             child: Row(
               mainAxisAlignment:MainAxisAlignment.center,
               children: [
                 IconButton(onPressed:() {decrement();}, icon: Icon(Icons.keyboard_arrow_down,)),
-                Text("$_counter", style: comfortaaBold30pt,),
+                Text("$_counter", style: Constants.comfortaaBold30pt,),
                 IconButton(onPressed:() {increment();}, icon: Icon(Icons.keyboard_arrow_up,)),
               ],
             ),

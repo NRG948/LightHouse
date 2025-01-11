@@ -52,12 +52,12 @@ class _NRGTextboxState extends State<NRGTextbox> {
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
-          Text(_title, style: comfortaaBold20pt),
+          Text(_title, style: Constants.comfortaaBold20pt),
           TextField(
             keyboardType: _numeric ? TextInputType.text : TextInputType.number,
             inputFormatters: _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
             controller: _controller,
-            decoration: InputDecoration(labelText: "Enter Text", labelStyle: comfortaaBold20pt, border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText: "Enter Text", labelStyle: Constants.comfortaaBold20pt, border: OutlineInputBorder()),
             maxLines: double.parse(_height).toInt() > 100 ? 5 : 1 // Probably shouldn't be hard-coded but fine for now
           )
         ],

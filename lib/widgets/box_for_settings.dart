@@ -47,10 +47,10 @@ class _BoxForSettingsState extends State<BoxForSettings> {
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
-          Text(_title, style: comfortaaBold20pt),
+          Text(_title, style: Constants.comfortaaBold20pt),
           TextField(
             controller: _controller,
-            decoration: InputDecoration(labelText: "Enter Text", labelStyle: comfortaaBold20pt, border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText: "Enter Text", labelStyle: Constants.comfortaaBold20pt, border: OutlineInputBorder()),
           ) 
         ],
       )
