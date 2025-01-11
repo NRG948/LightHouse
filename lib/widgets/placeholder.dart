@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/filemgr.dart';
 
+
 class NRGPlaceholder extends StatefulWidget {
   final String title;
   final String jsonKey;

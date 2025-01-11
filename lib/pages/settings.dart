@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/pages/entry_widgets.dart";
+import "package:lighthouse/widgets/box_for_settings.dart";
+
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

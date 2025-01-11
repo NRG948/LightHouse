@@ -4,6 +4,9 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
+// Redudant - has been moved to lighthosue/widgets
+
+
 class NRGSpinbox extends StatefulWidget {
   final String title;
   final String jsonKey;
@@ -27,18 +30,19 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
       child: Column(
         children: [
           Text(_title, style: comfortaaBold30pt),
-           Center(
-             child: Row(mainAxisAlignment:MainAxisAlignment.center,
-             children: [
-              IconButton(onPressed:() {decrement();}, icon: Icon(Icons.keyboard_arrow_down,)),
-              Text("$_counter", style: comfortaaBold30pt,),
-              IconButton(onPressed:() {increment();}, icon: Icon(Icons.keyboard_arrow_up,)),
-             ],),
-           )
+          Center(
+            child: Row(
+              mainAxisAlignment:MainAxisAlignment.center,
+              children: [
+                IconButton(onPressed:() {decrement();}, icon: Icon(Icons.keyboard_arrow_down,)),
+                Text("$_counter", style: comfortaaBold30pt,),
+                IconButton(onPressed:() {increment();}, icon: Icon(Icons.keyboard_arrow_up,)),
+              ],
+            ),
+          )
         ],
       )
-      
-      );
+    );
   }
 
   @override
@@ -47,16 +51,19 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
     _counter = 0;
   }
 
-  void decrement() {setState(() {
-    if (_counter > 0) {_counter--; updateState();}
-  });
-
+  void decrement() {
+    setState(
+      () { if (_counter > 0) {_counter--; updateState();} }
+    );
   }
 
-  void increment() {setState(() {
-    _counter++;
-    updateState();
-  });
+  void increment() {
+    setState(
+      () {
+        _counter++;
+        updateState();
+      }
+    );
   }
 
   void updateState() {
@@ -64,7 +71,6 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
     DataEntry.exportData[_key] = _value;
   }
 }
-
 
 class NRGTextBox extends StatefulWidget {
   final String title;
