@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/pages/data_entry_paged.dart";
 import "package:lighthouse/pages/home.dart";
 import "package:lighthouse/pages/data_entry.dart";
 import "package:lighthouse/constants.dart";
@@ -27,7 +28,7 @@ class MainWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         "/home": (context) => HomePage(),
-        "/entry": (context) => DataEntry(),
+        "/entry": (context) => DataEntryPaged(),
         "/settings": (context) => SettingsPage()
       },
     );
