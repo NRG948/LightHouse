@@ -28,6 +28,9 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
   late final double height;
   late final double width;
 
+  //We need this so that we can call setState and have the stopwatch text change. 
+  late Duration stopwatchResult;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +38,13 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
     height = double.parse(_height);
     width = double.parse(_width);
 
-    Timer.periodic(const Duration(seconds: 0.05))
+    stopwatchResult = _stopwatch.elapsed;
+
+    Timer.periodic(const Duration(milliseconds: 100), (timer){
+      setState(() {
+        stopwatchResult = _stopwatch.elapsed;
+      });
+    });
   }
 
   @override
@@ -53,7 +62,7 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
             decoration: BoxDecoration(color: Colors.white), 
             child: Center(
               child: Text(
-                _stopwatch.elapsed.inMinutes.toString(), 
+                "${stopwatchResult.inMinutes} : ${stopwatchResult.inSeconds} : ${(stopwatchResult.inMilliseconds / 100).toInt()}", 
                 textAlign: TextAlign.center,
                 textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
               ),
@@ -62,7 +71,7 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
           Container(
             margin: EdgeInsets.only(left: width * 6/400), //For development, we can change the width without having to change this too. 
             child: IconButton(
-              onPressed: _stopwatch.reset,
+              onPressed: () {_stopwatch.stop(); _stopwatch.reset();},
               icon: Icon(
                 IconData(0xe514, fontFamily: 'MaterialIcons'), 
                 size: 45,
