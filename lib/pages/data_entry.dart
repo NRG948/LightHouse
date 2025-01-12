@@ -52,6 +52,8 @@ class _DataEntryState extends State<DataEntry> {
           return NRGSpinbox(
             title: title,
             jsonKey: jsonKey,
+            height: height,
+            width: width
           );
         case "stopwatch": 
           return NRGStopwatch();
