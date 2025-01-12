@@ -8,6 +8,12 @@ import 'package:lighthouse/layouts.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  List<LayoutLauncher> getLayouts() {
+    final enabledLayouts = layoutMap.keys;
+    return enabledLayouts.map((layout) {
+      return LayoutLauncher(icon: iconMap[layout] ?? Icons.data_object, title: layout);
+    }).toList();
+  }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -51,35 +57,33 @@ class HomePage extends StatelessWidget {
                 image: DecorationImage(
                     image: AssetImage("assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
-            child: const Text("home page")),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: Constants.pastelRed,
-          child: PopupMenuButton(
-            icon: Icon(Icons.add),
-            onSelected: (value) {
-              Navigator.pushNamed(context, "/entry", arguments: value);
-            },
-            itemBuilder: (BuildContext context) {
-              final enabledLayouts = layoutMap.keys;
-              return enabledLayouts.map((jsonKey) {
-                return PopupMenuItem(
-                    value: jsonKey,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Icon(
-                            Icons.data_object,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Text(jsonKey),
-                      ],
-                    ));
-              }).toList();
-            },
-          ),
-        ));
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: getLayouts())),
+        );
+  }
+}
+
+class LayoutLauncher extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  const LayoutLauncher({super.key, required this.icon, required this.title});
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, "/entry", arguments: title);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Container(
+          height: 100,
+          width: 400,
+          color: Colors.white,
+          child: Row(children: [
+            Icon(icon),
+            Text(title)
+          ],),
+        ),
+      ),
+    );
   }
 }
