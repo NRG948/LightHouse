@@ -142,7 +142,7 @@ class _DataEntryState extends State<DataEntry> {
             ),
             centerTitle: true,
             leading: IconButton(
-                onPressed: () {
+                onPressed: () { 
                   Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false);
                 },
                 icon: Icon(Icons.home)),
