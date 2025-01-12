@@ -9,6 +9,7 @@ import "package:lighthouse/widgets/dropdown.dart";
 
 import "package:lighthouse/widgets/placeholder.dart";
 import "package:lighthouse/widgets/spinbox.dart";
+import "package:lighthouse/widgets/stopwatch.dart";
 import "package:lighthouse/widgets/textbox.dart";
 
 class DataEntry extends StatefulWidget {
@@ -52,6 +53,8 @@ class _DataEntryState extends State<DataEntry> {
             title: title,
             jsonKey: jsonKey,
           );
+        case "stopwatch": 
+          return NRGStopwatch();
         case "textbox":
           return NRGTextbox(
             title: title,
