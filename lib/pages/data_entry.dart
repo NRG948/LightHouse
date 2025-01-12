@@ -38,14 +38,14 @@ class _DataEntryState extends State<DataEntry> {
       final type = widgetData["type"]!;
       if (type == "row") {
         return Row(
-          spacing: 10.0, children: createWidgetList(widgetData["children"]!));
+            spacing: 10.0, children: createWidgetList(widgetData["children"]!));
       }
       final title = widgetData["title"]!;
       final jsonKey = widgetData["jsonKey"]!;
       DataEntry.exportData[jsonKey] =
           "0"; // creates entry in global data object
-      final height = widgetData["height"];
-      final width = widgetData["width"];
+      final height = widgetData["height"] ?? "100";
+      final width = widgetData["width"] ?? "400";
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
@@ -81,17 +81,14 @@ class _DataEntryState extends State<DataEntry> {
           );
         case "placeholder":
           return NRGPlaceholder(
-              title: title,
-              jsonKey: jsonKey,
-              height: height ?? "100",
-              width: width ?? "400");
+              title: title, jsonKey: jsonKey, height: height, width: width);
       }
       return Text("type $type isn't a valid type");
     }).toList();
     return widgetList;
   }
 
-  ///returns a list of the BottomNavigationBarItems that each of the pages gives it. 
+  ///returns a list of the BottomNavigationBarItems that each of the pages gives it.
   List<BottomNavigationBarItem> createNavBar(List<dynamic> pages) {
     return pages.map((page) {
       String title = page["title"];
@@ -143,7 +140,8 @@ class _DataEntryState extends State<DataEntry> {
             centerTitle: true,
             leading: IconButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/home", (Route<dynamic> route) => false);
                 },
                 icon: Icon(Icons.home)),
             actions: [SaveJsonButton()],
