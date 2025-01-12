@@ -101,7 +101,7 @@ class _DataEntryState extends State<DataEntry> {
       canPop: false,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Constants().pastelRed,
+          backgroundColor: Constants.pastelRed,
           title: const Text("Data Entry", style: TextStyle(
              fontFamily: "Comfortaa",
              fontWeight: FontWeight.w900,
