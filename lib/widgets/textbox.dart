@@ -3,17 +3,13 @@ import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
+
 class NRGTextbox extends StatefulWidget {
   final String title;
   final String jsonKey;
   final String height;
   final bool numeric;
-  const NRGTextbox(
-      {super.key,
-      this.title = "Text Box",
-      this.jsonKey = "unnamed",
-      this.height = "100",
-      this.numeric = false});
+  const NRGTextbox({super.key, this.title="Text Box", this.jsonKey = "unnamed", this.height = "100", this.numeric = false});
 
   @override
   State<NRGTextbox> createState() => _NRGTextboxState();
@@ -32,11 +28,13 @@ class _NRGTextboxState extends State<NRGTextbox> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(() {
-      setState(() {
-        DataEntry.exportData[_key] = _controller.text;
-      });
-    });
+    _controller.addListener(
+      () {
+        setState(() {
+          DataEntry.exportData[_key] = _controller.text;
+        });
+      }
+    );
   }
 
   // idk what this one does but gpt demands it
@@ -49,28 +47,21 @@ class _NRGTextboxState extends State<NRGTextbox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: double.parse(_height),
-        width: 400,
-        decoration: BoxDecoration(
-            color: Colors.blueGrey, borderRadius: BorderRadius.circular(8)),
-        child: Column(
-          children: [
-            Text(_title, style: Constants.comfortaaBold20pt),
-            TextField(
-                keyboardType:
-                    _numeric ? TextInputType.text : TextInputType.number,
-                inputFormatters:
-                    _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
-                controller: _controller,
-                decoration: InputDecoration(
-                    labelText: "Enter Text",
-                    labelStyle: Constants.comfortaaBold20pt,
-                    border: OutlineInputBorder()),
-                maxLines: double.parse(_height).toInt() > 100
-                    ? 5
-                    : 1 // Probably shouldn't be hard-coded but fine for now
-                )
-          ],
-        ));
+      height: double.parse(_height),
+      width: 400,
+      decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
+      child: Column(
+        children: [
+          Text(_title, style: Constants.comfortaaBold20pt),
+          TextField(
+            keyboardType: _numeric ? TextInputType.text : TextInputType.number,
+            inputFormatters: _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
+            controller: _controller,
+            decoration: InputDecoration(labelText: "Enter Text", labelStyle: Constants.comfortaaBold20pt, border: OutlineInputBorder()),
+            maxLines: double.parse(_height).toInt() > 100 ? 5 : 1 // Probably shouldn't be hard-coded but fine for now
+          )
+        ],
+      )  
+    );
   }
 }
