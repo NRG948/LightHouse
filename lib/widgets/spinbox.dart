@@ -2,11 +2,17 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
-
 class NRGSpinbox extends StatefulWidget {
   final String title;
   final String jsonKey;
-  const NRGSpinbox({super.key, this.title = "Spinbox", this.jsonKey = "unnamed"});
+  final String height;
+  final String width;
+  const NRGSpinbox(
+      {super.key,
+      required this.title,
+      required this.jsonKey,
+      required this.height,
+      required this.width});
 
   @override
   State<NRGSpinbox> createState() => _NRGSpinboxState();
@@ -15,31 +21,47 @@ class NRGSpinbox extends StatefulWidget {
 class _NRGSpinboxState extends State<NRGSpinbox> {
   String get _title => widget.title;
   String get _key => widget.jsonKey;
+  String get _height => widget.height;
+  String get _width => widget.width;
   late int _counter;
   String _value = "";
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      width: 400,
-      decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
-      child: Column(
-        children: [
-          Text(_title, style: Constants.comfortaaBold30pt),
-          Center(
-            child: Row(
-              mainAxisAlignment:MainAxisAlignment.center,
-              children: [
-                IconButton(onPressed:() {decrement();}, icon: Icon(Icons.keyboard_arrow_down,)),
-                Text("$_counter", style: Constants.comfortaaBold30pt,),
-                IconButton(onPressed:() {increment();}, icon: Icon(Icons.keyboard_arrow_up,)),
-              ],
-            ),
-          )
-        ],
-      )
-      
-      );
+        height: double.parse(_height),
+        width: double.parse(_width),
+        decoration: BoxDecoration(
+            color: Colors.blueGrey, borderRadius: BorderRadius.circular(8)),
+        child: Column(
+          children: [
+            Text(_title, style: Constants.comfortaaBold30pt),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        decrement();
+                      },
+                      icon: Icon(
+                        Icons.keyboard_arrow_down,
+                      )),
+                  Text(
+                    "$_counter",
+                    style: Constants.comfortaaBold30pt,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        increment();
+                      },
+                      icon: Icon(
+                        Icons.keyboard_arrow_up,
+                      )),
+                ],
+              ),
+            )
+          ],
+        ));
   }
 
   @override
@@ -49,18 +71,19 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
   }
 
   void decrement() {
-    setState(
-      () { if (_counter > 0) {_counter--; updateState();} }
-    );
+    setState(() {
+      if (_counter > 0) {
+        _counter--;
+        updateState();
+      }
+    });
   }
 
   void increment() {
-    setState(
-      () {
-        _counter++;
-        updateState();
-      }
-    );
+    setState(() {
+      _counter++;
+      updateState();
+    });
   }
 
   void updateState() {
