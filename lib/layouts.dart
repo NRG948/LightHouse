@@ -231,7 +231,7 @@ Map<String, dynamic> chronoscout = {
         },
         {
           "title": "Timer",
-          "type": "stopwatch",
+          "type": "placeholder",
           "jsonKey": "shouldThisBeSeparate"
         }
       ]
