@@ -4,6 +4,9 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
+// Redudant - has been moved to lighthosue/widgets
+
+
 class NRGSpinbox extends StatefulWidget {
   final String title;
   final String jsonKey;
@@ -26,19 +29,20 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
-          Text(_title, style: comfortaaBold30pt),
-           Center(
-             child: Row(mainAxisAlignment:MainAxisAlignment.center,
-             children: [
-              IconButton(onPressed:() {decrement();}, icon: Icon(Icons.keyboard_arrow_down,)),
-              Text("$_counter", style: comfortaaBold30pt,),
-              IconButton(onPressed:() {increment();}, icon: Icon(Icons.keyboard_arrow_up,)),
-             ],),
-           )
+          Text(_title, style: Constants.comfortaaBold30pt),
+          Center(
+            child: Row(
+              mainAxisAlignment:MainAxisAlignment.center,
+              children: [
+                IconButton(onPressed:() {decrement();}, icon: Icon(Icons.keyboard_arrow_down,)),
+                Text("$_counter", style: Constants.comfortaaBold30pt,),
+                IconButton(onPressed:() {increment();}, icon: Icon(Icons.keyboard_arrow_up,)),
+              ],
+            ),
+          )
         ],
       )
-      
-      );
+    );
   }
 
   @override
@@ -47,16 +51,19 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
     _counter = 0;
   }
 
-  void decrement() {setState(() {
-    if (_counter > 0) {_counter--; updateState();}
-  });
-
+  void decrement() {
+    setState(
+      () { if (_counter > 0) {_counter--; updateState();} }
+    );
   }
 
-  void increment() {setState(() {
-    _counter++;
-    updateState();
-  });
+  void increment() {
+    setState(
+      () {
+        _counter++;
+        updateState();
+      }
+    );
   }
 
   void updateState() {
@@ -64,7 +71,6 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
     DataEntry.exportData[_key] = _value;
   }
 }
-
 
 class NRGTextBox extends StatefulWidget {
   final String title;
@@ -112,12 +118,12 @@ class _NRGTextBoxState extends State<NRGTextBox> {
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
-          Text(_title, style: comfortaaBold20pt),
+          Text(_title, style: Constants.comfortaaBold20pt),
           TextField(
             keyboardType: _numeric ? TextInputType.text : TextInputType.number,
             inputFormatters: _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
             controller: _controller,
-            decoration: InputDecoration(labelText: "Enter Text", labelStyle: comfortaaBold20pt, border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText: "Enter Text", labelStyle: Constants.comfortaaBold20pt, border: OutlineInputBorder()),
             maxLines: double.parse(_height).toInt() > 100 ? 5 : 1 // Probably shouldn't be hard-coded but fine for now
           )
         ],
@@ -154,7 +160,7 @@ class _NRGDropdownState extends State<NRGDropdown> {
       width: 400,
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child:Column(children: [
-        Text(_title, style: comfortaaBold20pt),
+        Text(_title, style: Constants.comfortaaBold20pt),
         DropdownButton<String>(
           items: _options.map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(value: value,child: Text(value),);
@@ -207,7 +213,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
             }
           );
         }),
-        Text(_title, style: comfortaaBold20pt,)
+        Text(_title, style: Constants.comfortaaBold20pt,)
       ],)
     ));
   }
@@ -256,10 +262,10 @@ class _BoxForSettingsState extends State<BoxForSettings> {
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Column(
         children: [
-          Text(_title, style: comfortaaBold20pt),
+          Text(_title, style: Constants.comfortaaBold20pt),
           TextField(
             controller: _controller,
-            decoration: InputDecoration(labelText: "Enter Text", labelStyle: comfortaaBold20pt, border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText: "Enter Text", labelStyle: Constants.comfortaaBold20pt, border: OutlineInputBorder()),
           )
              
              

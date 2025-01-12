@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
+
 import "package:lighthouse/pages/entry_widgets.dart";
 import "package:lighthouse/widgets/placeholder.dart";
 
@@ -111,6 +112,7 @@ class _DataEntryState extends State<DataEntry> {
           leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home");}, icon: Icon(Icons.home)),
           actions: [SaveJsonButton()],
         ),
+
         bottomNavigationBar: BottomNavigationBar(onTap: (index) {setState(() {
           currentPage = index; controller.jumpToPage(index);
         });},
@@ -130,6 +132,28 @@ class _DataEntryState extends State<DataEntry> {
         
       ),
     );
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Constants.pastelRed,
+          title: const Text(
+            "Data Entry",
+            style: TextStyle(
+                fontFamily: "Comfortaa",
+                fontWeight: FontWeight.w900,
+                color: Colors.white),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/home");
+              },
+              icon: Icon(Icons.home)),
+          actions: [SaveJsonButton()],
+        ),
+        body: PageView(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            children: createWidgetPages(layoutJSON["pages"])));
   }
 }
 
@@ -138,15 +162,25 @@ class SaveJsonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: () async {
-      if (await saveExport() == 0) {
-        showDialog(context: context, builder: (BuildContext context) {
-          return AlertDialog(content: Text("Successfully saved."),actions: [
-            TextButton(onPressed: () {Navigator.pushNamed(context, "/home");}, child: Text("OK"))
-          ],);
-        });
-      }
-    }, child: Text("Save"));
+    return TextButton(
+        onPressed: () async {
+          if (await saveExport() == 0) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text("Successfully saved."),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/home");
+                          },
+                          child: Text("OK"))
+                    ],
+                  );
+                });
+          }
+        },
+        child: Text("Save"));
   }
 }
-
