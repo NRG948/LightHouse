@@ -39,14 +39,14 @@ class _DataEntryState extends State<DataEntry> {
       final type = widgetData["type"]!;
       if (type == "row") {
         return Row(
-          spacing: 10.0, children: createWidgetList(widgetData["children"]!));
+            spacing: 10.0, children: createWidgetList(widgetData["children"]!));
       }
       final title = widgetData["title"]!;
       final jsonKey = widgetData["jsonKey"]!;
       DataEntry.exportData[jsonKey] =
           "0"; // creates entry in global data object
-      final height = widgetData["height"];
-      final width = widgetData["width"];
+      final height = widgetData["height"] ?? "100";
+      final width = widgetData["width"] ?? "400";
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
@@ -57,20 +57,17 @@ class _DataEntryState extends State<DataEntry> {
           return NRGStopwatch();
         case "textbox":
           return NRGTextbox(
-            title: title,
-            jsonKey: jsonKey,
-          );
+              title: title, jsonKey: jsonKey, height: height, width: width);
         case "checkbox":
           return NRGCheckbox(
-            title: title,
-            jsonKey: jsonKey,
-          );
+              title: title, jsonKey: jsonKey, height: height, width: width);
         case "numberbox":
           return NRGTextbox(
-            title: title,
-            jsonKey: jsonKey,
-            numeric: true,
-          );
+              title: title,
+              jsonKey: jsonKey,
+              numeric: true,
+              height: height,
+              width: width);
         case "dropdown":
           if (!(widgetData.containsKey("options"))) {
             return Text(
@@ -78,23 +75,21 @@ class _DataEntryState extends State<DataEntry> {
           }
           final options = widgetData["options"]!.split(",");
           return NRGDropdown(
-            title: title,
-            jsonKey: jsonKey,
-            options: options,
-          );
-        case "placeholder":
-          return NRGPlaceholder(
               title: title,
               jsonKey: jsonKey,
-              height: height ?? "100",
-              width: width ?? "400");
+              options: options,
+              height: height,
+              width: width);
+        case "placeholder":
+          return NRGPlaceholder(
+              title: title, jsonKey: jsonKey, height: height, width: width);
       }
       return Text("type $type isn't a valid type");
     }).toList();
     return widgetList;
   }
 
-  ///returns a list of the BottomNavigationBarItems that each of the pages gives it. 
+  ///returns a list of the BottomNavigationBarItems that each of the pages gives it.
   List<BottomNavigationBarItem> createNavBar(List<dynamic> pages) {
     return pages.map((page) {
       String title = page["title"];
@@ -146,7 +141,8 @@ class _DataEntryState extends State<DataEntry> {
             centerTitle: true,
             leading: IconButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/home", (Route<dynamic> route) => false);
                 },
                 icon: Icon(Icons.home)),
             actions: [SaveJsonButton()],
@@ -162,8 +158,10 @@ class _DataEntryState extends State<DataEntry> {
               unselectedItemColor: Colors.black,
               selectedIconTheme: IconThemeData(color: Colors.black),
               selectedItemColor: Colors.black,
-              backgroundColor: Colors.black,
               currentIndex: currentPage,
+              showUnselectedLabels: true,
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.blueGrey,
               items: createNavBar(layoutJSON["pages"])),
           body: PageView(
             controller: controller,

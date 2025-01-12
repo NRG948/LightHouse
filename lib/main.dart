@@ -22,7 +22,7 @@ class MainWidget extends StatelessWidget {
       theme: ThemeData(
         
       ),
-      title: "LightHouse Prototype",
+      title: "LightHouse",
       home: HomePage(),
       debugShowCheckedModeBanner: false,
       routes: {
