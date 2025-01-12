@@ -12,7 +12,6 @@ import "package:lighthouse/widgets/spinbox.dart";
 import "package:lighthouse/widgets/textbox.dart";
 
 class DataEntry extends StatefulWidget {
-
   const DataEntry({super.key});
   static final Map<String, String> exportData = {};
   @override
@@ -33,108 +32,146 @@ class _DataEntryState extends State<DataEntry> {
     controller.dispose();
     super.dispose();
   }
+
   List<Widget> createWidgetList(List<dynamic> widgets) {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
-      if(type == "row") {return Row(
-        spacing: 10.0,
-        children:createWidgetList(widgetData["children"]!));}
+      if (type == "row") {
+        return Row(
+          spacing: 10.0, children: createWidgetList(widgetData["children"]!));
+      }
       final title = widgetData["title"]!;
       final jsonKey = widgetData["jsonKey"]!;
-      DataEntry.exportData[jsonKey] = "0"; // creates entry in global data object
+      DataEntry.exportData[jsonKey] =
+          "0"; // creates entry in global data object
       final height = widgetData["height"];
       final width = widgetData["width"];
-      switch(type) {
+      switch (type) {
         case "spinbox":
-          return NRGSpinbox(title: title,jsonKey: jsonKey,);
+          return NRGSpinbox(
+            title: title,
+            jsonKey: jsonKey,
+          );
         case "textbox":
-          return NRGTextbox(title: title,jsonKey: jsonKey,);
+          return NRGTextbox(
+            title: title,
+            jsonKey: jsonKey,
+          );
         case "checkbox":
-          return NRGCheckbox(title: title, jsonKey: jsonKey,);
+          return NRGCheckbox(
+            title: title,
+            jsonKey: jsonKey,
+          );
         case "numberbox":
-          return NRGTextbox(title: title, jsonKey: jsonKey, numeric: true,);
+          return NRGTextbox(
+            title: title,
+            jsonKey: jsonKey,
+            numeric: true,
+          );
         case "dropdown":
-          if (!(widgetData.containsKey("options"))) { return Text("Widget $title doesn't have dropdown options specified.");}
+          if (!(widgetData.containsKey("options"))) {
+            return Text(
+                "Widget $title doesn't have dropdown options specified.");
+          }
           final options = widgetData["options"]!.split(",");
-          return NRGDropdown(title: title, jsonKey: jsonKey,options: options,);
+          return NRGDropdown(
+            title: title,
+            jsonKey: jsonKey,
+            options: options,
+          );
         case "placeholder":
-          return NRGPlaceholder(title: title, jsonKey: jsonKey, height: height ?? "100", width: width ?? "400");
-        }
-        return Text("type $type isn't a valid type");
+          return NRGPlaceholder(
+              title: title,
+              jsonKey: jsonKey,
+              height: height ?? "100",
+              width: width ?? "400");
+      }
+      return Text("type $type isn't a valid type");
     }).toList();
     return widgetList;
-    
   }
 
+  ///returns a list of the BottomNavigationBarItems that each of the pages gives it. 
   List<BottomNavigationBarItem> createNavBar(List<dynamic> pages) {
     return pages.map((page) {
       String title = page["title"];
       Icon icon = page["icon"];
-      return BottomNavigationBarItem(icon: icon,label:title);
+      return BottomNavigationBarItem(icon: icon, label: title);
     }).toList();
   }
 
-  List<Widget> createWidgetPages(List<Map<String,dynamic>> pages) {
+  List<Widget> createWidgetPages(List<Map<String, dynamic>> pages) {
     DataEntry.exportData.clear();
     return pages.map((page) {
       final widgetList = createWidgetList(page["widgets"]);
       return Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top:10.0, left: 10.0, right:10.0),
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: widgetList.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(top:10.0),
-                  child: widgetList[index],
-                );
-              },
-            ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widgetList.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: widgetList[index],
+              );
+            },
           ),
-        );
+        ),
+      );
     }).toList();
   }
 
-   @override
-   Widget build(BuildContext context) {
-   
-   final String activeConfig = (ModalRoute.of(context)?.settings.arguments as String?)!;
-   final layoutJSON = layoutMap.containsKey(activeConfig) ? layoutMap[activeConfig]! : Map();
+  @override
+  Widget build(BuildContext context) {
+    final String activeConfig =
+        (ModalRoute.of(context)?.settings.arguments as String?)!;
+    final layoutJSON =
+        layoutMap.containsKey(activeConfig) ? layoutMap[activeConfig]! : Map();
     return PopScope(
       canPop: false,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Constants.pastelRed,
-          title: Text(activeConfig, style: TextStyle(
-             fontFamily: "Comfortaa",
-             fontWeight: FontWeight.w900,
-             color: Colors.white
-          ),),
-          centerTitle: true,
-          leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home");}, icon: Icon(Icons.home)),
-          actions: [SaveJsonButton()],
-        ),
-        bottomNavigationBar: BottomNavigationBar(onTap: (index) {setState(() {
-          currentPage = index; controller.jumpToPage(index);
-        });},
-        unselectedIconTheme: IconThemeData(color: Colors.black),
-        unselectedItemColor: Colors.black,
-        selectedIconTheme: IconThemeData(color: Colors.black),
-        selectedItemColor: Colors.black,
-        backgroundColor: Colors.blueGrey,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentPage,
-        items: createNavBar(layoutJSON["pages"])),
-        body: PageView(
-          controller: controller,
-          scrollDirection: Axis.horizontal,
-          children: createWidgetPages(layoutJSON["pages"]),
-          onPageChanged: (index) { setState((){currentPage = index;});},
-        )
-        
-      ),
+          appBar: AppBar(
+            backgroundColor: Constants.pastelRed,
+            title: const Text(
+              "Data Entry",
+              style: TextStyle(
+                  fontFamily: "Comfortaa",
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white),
+            ),
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false);
+                },
+                icon: Icon(Icons.home)),
+            actions: [SaveJsonButton()],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+              onTap: (index) {
+                setState(() {
+                  currentPage = index;
+                  controller.jumpToPage(index);
+                });
+              },
+              unselectedIconTheme: IconThemeData(color: Colors.black),
+              unselectedItemColor: Colors.black,
+              selectedIconTheme: IconThemeData(color: Colors.black),
+              selectedItemColor: Colors.black,
+              backgroundColor: Colors.black,
+              currentIndex: currentPage,
+              items: createNavBar(layoutJSON["pages"])),
+          body: PageView(
+            controller: controller,
+            scrollDirection: Axis.horizontal,
+            children: createWidgetPages(layoutJSON["pages"]),
+            onPageChanged: (index) {
+              setState(() {
+                currentPage = index;
+              });
+            },
+          )),
     );
   }
 }
