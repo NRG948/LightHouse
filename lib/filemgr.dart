@@ -9,25 +9,28 @@ import "package:path_provider/path_provider.dart";
 final Map<String, String> configData = {};
 late String configFolder;
 
+///Checks to see if the platform this is running on is android or iOS.
+///If it is, then it attempts to get that platform's file manager.
 Future<void> initConfig() async {
-  
-  if(Platform.isAndroid) {
-  final directoryInstance = await getExternalStorageDirectory();
-  if (directoryInstance == null) {print("wtf"); return;}
-  configFolder = directoryInstance.path;
+  if (Platform.isAndroid) {
+    final directoryInstance = await getExternalStorageDirectory();
+    if (directoryInstance == null) {
+      print("wtf");
+      return;
+    }
+    configFolder = directoryInstance.path;
   } else if (Platform.isIOS) {
-  final directoryInstance = await getApplicationDocumentsDirectory();
-  configFolder = directoryInstance.path;
+    final directoryInstance = await getApplicationDocumentsDirectory();
+    configFolder = directoryInstance.path;
   } else {
-    throw UnimplementedError("You're trying to run this app on something other than iOS/Android. why?");
+    throw UnimplementedError(
+        "You're trying to run this app on something other than iOS/Android. why?");
   }
 }
 
-
-
 Future<void> loadConfig() async {
   configData.clear();
-  late Map<String,dynamic> configJson;
+  late Map<String, dynamic> configJson;
   final configFile = File("$configFolder/config.nrg");
   if (!(await configFile.exists())) {
     configFile.writeAsString(jsonEncode(defaultConfig));
@@ -35,23 +38,25 @@ Future<void> loadConfig() async {
   } else {
     configJson = jsonDecode(await configFile.readAsString());
   }
-  configData.addEntries(
-      configJson.entries.map((entry) => MapEntry(entry.key, entry.value.toString()))
-    );
+  configData.addEntries(configJson.entries
+      .map((entry) => MapEntry(entry.key, entry.value.toString())));
 }
+
 // TODO: Change naming scheme
 // Probably smth like {matchType}_{matchNum}_{driverStation}_{scouterName}_{random 3 digit failsafe ID}.json
 // will automatically use smarter naming scheme if all of these keys are present
 // int return type is for future error handling
 Future<int> saveExport() async {
   final exportDataEncoded = jsonEncode(DataEntry.exportData);
-  final eventKeyDirectory = Directory("$configFolder/${configData["eventKey"]}");
+  final eventKeyDirectory =
+      Directory("$configFolder/${configData["eventKey"]}");
   if (!(await eventKeyDirectory.exists())) {
     await eventKeyDirectory.create();
   }
 
   final exportName = Random().nextInt(99999);
-  final exportFile = File("$configFolder/${configData["eventKey"]}/nrg_$exportName.json");
+  final exportFile =
+      File("$configFolder/${configData["eventKey"]}/nrg_$exportName.json");
   exportFile.writeAsString(exportDataEncoded);
   return 0;
 }
@@ -62,14 +67,22 @@ Future<int> saveConfig() async {
   return 0;
 }
 
-List<String> getFiles()  {
-  final eventKeyDirectory = Directory("$configFolder/${configData["eventKey"]}");
-  if (!(eventKeyDirectory.existsSync())) { return ["No matches recorded for ${configData["eventKey"]}. Why not create one?"];}
+List<String> getFiles() {
+  final eventKeyDirectory =
+      Directory("$configFolder/${configData["eventKey"]}");
+  if (!(eventKeyDirectory.existsSync())) {
+    return [
+      "No matches recorded for ${configData["eventKey"]}. Why not create one?"
+    ];
+  }
   List<FileSystemEntity> eventKeyFiles = eventKeyDirectory.listSync().toList();
-  return eventKeyFiles.whereType<File>().map((file) => file.uri.pathSegments.last).toList();
+  return eventKeyFiles
+      .whereType<File>()
+      .map((file) => file.uri.pathSegments.last)
+      .toList();
 }
 
 final Map<String, String> defaultConfig = {
-    "eventKey": "2025nrg",
-    "scouterName": "barebonesNRG"
+  "eventKey": "2025nrg",
+  "scouterName": "barebonesNRG"
 };
