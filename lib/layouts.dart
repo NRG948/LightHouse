@@ -163,7 +163,7 @@ Map<String, dynamic> chronoscout = {
       "widgets": [
         {
           "title": "hiiiiii", 
-          "type": "stopwatch", 
+          "type": "stopwatch-horizontal", 
           "jsonKey": "random", 
         }
       ]

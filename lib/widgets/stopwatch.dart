@@ -11,10 +11,10 @@ class NRGStopwatch extends StatefulWidget {
   final stopwatch = Stopwatch();
 
   @override
-  State<NRGStopwatch> createState() => _NRGCheckboxState();
+  State<NRGStopwatch> createState() => _NRGStopwatchState();
 }
 
-class _NRGCheckboxState extends State<NRGStopwatch> {
+class _NRGStopwatchState extends State<NRGStopwatch> {
   Stopwatch get _stopwatch => widget.stopwatch;
   String get _height => widget.height;
   String get _width => widget.width;

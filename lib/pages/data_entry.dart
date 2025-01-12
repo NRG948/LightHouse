@@ -9,6 +9,7 @@ import "package:lighthouse/widgets/dropdown.dart";
 
 import "package:lighthouse/widgets/placeholder.dart";
 import "package:lighthouse/widgets/spinbox.dart";
+import "package:lighthouse/widgets/stopwatch-horizontal.dart";
 import "package:lighthouse/widgets/stopwatch.dart";
 import "package:lighthouse/widgets/textbox.dart";
 
@@ -57,6 +58,8 @@ class _DataEntryState extends State<DataEntry> {
           );
         case "stopwatch": 
           return NRGStopwatch();
+        case "stopwatch-horizontal":
+          return NRGStopwatchHorizontal();
         case "textbox":
           return NRGTextbox(
               title: title, jsonKey: jsonKey, height: height, width: width);
