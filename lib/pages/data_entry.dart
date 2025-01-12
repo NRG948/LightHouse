@@ -157,8 +157,10 @@ class _DataEntryState extends State<DataEntry> {
               unselectedItemColor: Colors.black,
               selectedIconTheme: IconThemeData(color: Colors.black),
               selectedItemColor: Colors.black,
-              backgroundColor: Colors.black,
               currentIndex: currentPage,
+              showUnselectedLabels: true,
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: Colors.blueGrey,
               items: createNavBar(layoutJSON["pages"])),
           body: PageView(
             controller: controller,
