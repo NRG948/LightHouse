@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/custom_icons.dart';
 
 
 Map<String, dynamic> altascout = {
@@ -6,7 +7,7 @@ Map<String, dynamic> altascout = {
   "pages": [
     {
       "title": "Initial Info",
-      "icon": Icon(Icons.info),
+      "icon": Icon(CustomIcons.wrench),
       "widgets": [
         {
           "title": "Scouter Name",
@@ -64,7 +65,7 @@ Map<String, dynamic> altascout = {
     },
     {
       "title": "Auto",
-      "icon": Icon(Icons.airplanemode_active),
+      "icon": Icon(CustomIcons.autonomous),
       "widgets": [
         {
           "title": "big boy auto widget",
@@ -76,7 +77,7 @@ Map<String, dynamic> altascout = {
     },
     {
       "title": "Teleop",
-      "icon": Icon(Icons.electric_car),
+      "icon": Icon(CustomIcons.gamepad),
       "widgets": [
         {
           "title": "Coral Pickups Station & Ground double spinbox",
@@ -99,7 +100,7 @@ Map<String, dynamic> altascout = {
     },
     {
       "title": "Endgame",
-      "icon": Icon(Icons.sports_score),
+      "icon": Icon(CustomIcons.flag),
       "widgets": [
         {
           "title": "End Location",

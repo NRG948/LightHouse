@@ -84,6 +84,9 @@ flutter:
            style: italic
          - asset: fonts/Comfortaa-Bold.ttf
            weight: 700
+     - family:  CustomIcons
+       fonts:
+         - asset: fonts/CustomIcons.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:
