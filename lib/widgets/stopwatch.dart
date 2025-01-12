@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class NRGStopwatch extends StatefulWidget {
@@ -18,9 +20,11 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
   String get _height => widget.height;
   String get _width => widget.width;
 
-  //usually, it is enought to just use "double.parse(_height/width)", but here, 
+  //usually, it is enough to just use "double.parse(_height/_width)", but here, 
   //it is used enough times that it's worth it to just make them 
-  //individual variables of their own. 
+  //individual variables of their own. Due to this however you need to *restart* the 
+  //app to see any changes to the dimensions, not just hot reload it. 
+  //(I know on vscode you can just press the green circle-arrow to do this. )
   late final double height;
   late final double width;
 
@@ -30,6 +34,8 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
     _stopwatch.reset();
     height = double.parse(_height);
     width = double.parse(_width);
+
+    Timer.periodic(const Duration(seconds: 0.05))
   }
 
   @override
@@ -47,7 +53,7 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
             decoration: BoxDecoration(color: Colors.white), 
             child: Center(
               child: Text(
-                "test", 
+                _stopwatch.elapsed.inMinutes.toString(), 
                 textAlign: TextAlign.center,
                 textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
               ),
