@@ -158,6 +158,17 @@ Map<String, dynamic> chronoscout = {
   "title": "Chronoscout",
   "pages": [
     {
+      "title": "HorizontalTest", 
+      "icon": Icon(CustomIcons.pitCrew), 
+      "widgets": [
+        {
+          "title": "hiiiiii", 
+          "type": "stopwatch", 
+          "jsonKey": "random", 
+        }
+      ]
+    }, 
+    {
       "title": "Setup",
       "icon": Icon(CustomIcons.wrench),
       "widgets": [
@@ -231,7 +242,7 @@ Map<String, dynamic> chronoscout = {
         },
         {
           "title": "Timer",
-          "type": "placeholder",
+          "type": "stopwatch",
           "jsonKey": "shouldThisBeSeparate"
         }
       ]

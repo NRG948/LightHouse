@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class NRGStopwatch extends StatefulWidget {
@@ -30,6 +29,7 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
 
   //We need this so that we can call setState and have the stopwatch text change. 
   late Duration stopwatchResult;
+  late Timer? _timer;
 
   @override
   void initState() {
@@ -40,11 +40,17 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
 
     stopwatchResult = _stopwatch.elapsed;
 
-    Timer.periodic(const Duration(milliseconds: 100), (timer){
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (timer){
       setState(() {
         stopwatchResult = _stopwatch.elapsed;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
