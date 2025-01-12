@@ -106,7 +106,7 @@ class _DataEntryState extends State<DataEntry> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Constants.pastelRed,
-          title: const Text("Data Entry", style: TextStyle(
+          title: Text(activeConfig, style: TextStyle(
              fontFamily: "Comfortaa",
              fontWeight: FontWeight.w900,
              color: Colors.white
@@ -122,7 +122,9 @@ class _DataEntryState extends State<DataEntry> {
         unselectedItemColor: Colors.black,
         selectedIconTheme: IconThemeData(color: Colors.black),
         selectedItemColor: Colors.black,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.blueGrey,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
         currentIndex: currentPage,
         items: createNavBar(layoutJSON["pages"])),
         body: PageView(

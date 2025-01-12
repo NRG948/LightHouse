@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/custom_icons.dart';
 
 
-Map<String, dynamic> alphaScout = {
+Map<String, dynamic> atlascout = {
   "title": "Alpha Scout",
   "pages": [
     {
       "title": "Initial Info",
-      "icon": Icon(Icons.info),
+      "icon": Icon(CustomIcons.wrench),
       "widgets": [
         {
           "title": "Scouter Name",
@@ -64,7 +65,7 @@ Map<String, dynamic> alphaScout = {
     },
     {
       "title": "Auto",
-      "icon": Icon(Icons.airplanemode_active),
+      "icon": Icon(CustomIcons.autonomous),
       "widgets": [
         {
           "title": "big boy auto widget",
@@ -76,7 +77,7 @@ Map<String, dynamic> alphaScout = {
     },
     {
       "title": "Teleop",
-      "icon": Icon(Icons.electric_car),
+      "icon": Icon(CustomIcons.gamepad),
       "widgets": [
         {
           "title": "Coral Pickups Station & Ground double spinbox",
@@ -99,7 +100,7 @@ Map<String, dynamic> alphaScout = {
     },
     {
       "title": "Endgame",
-      "icon": Icon(Icons.sports_score),
+      "icon": Icon(CustomIcons.flag),
       "widgets": [
         {
           "title": "End Location",
@@ -154,7 +155,7 @@ Map<String, dynamic> alphaScout = {
 };
 
 Map<String, Map> layoutMap = {
-  "alphaScout": alphaScout
+  "AtlaScout": atlascout
 };
 
 // TODO: Add icon bindings
