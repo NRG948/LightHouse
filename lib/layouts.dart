@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 
-Map<String, dynamic> alphaScout = {
-  "title": "Alpha Scout",
+Map<String, dynamic> altascout = {
+  "title": "Atlascout",
   "pages": [
     {
       "title": "Initial Info",
@@ -153,8 +153,16 @@ Map<String, dynamic> alphaScout = {
   ]
 };
 
+Map<String, dynamic> chronoscout = {
+  "title": "Chronoscout",
+  "pages": [
+
+  ]
+};
+
 Map<String, Map> layoutMap = {
-  "alphaScout": alphaScout
+  "altascout": altascout,
+  "chronoscout" : chronoscout
 };
 
 // TODO: Add icon bindings
