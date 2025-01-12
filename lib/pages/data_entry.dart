@@ -49,25 +49,20 @@ class _DataEntryState extends State<DataEntry> {
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
-            title: title,
-            jsonKey: jsonKey,
-          );
+              title: title, jsonKey: jsonKey, height: height, width: width);
         case "textbox":
           return NRGTextbox(
-            title: title,
-            jsonKey: jsonKey,
-          );
+              title: title, jsonKey: jsonKey, height: height, width: width);
         case "checkbox":
           return NRGCheckbox(
-            title: title,
-            jsonKey: jsonKey,
-          );
+              title: title, jsonKey: jsonKey, height: height, width: width);
         case "numberbox":
           return NRGTextbox(
-            title: title,
-            jsonKey: jsonKey,
-            numeric: true,
-          );
+              title: title,
+              jsonKey: jsonKey,
+              numeric: true,
+              height: height,
+              width: width);
         case "dropdown":
           if (!(widgetData.containsKey("options"))) {
             return Text(
@@ -75,10 +70,11 @@ class _DataEntryState extends State<DataEntry> {
           }
           final options = widgetData["options"]!.split(",");
           return NRGDropdown(
-            title: title,
-            jsonKey: jsonKey,
-            options: options,
-          );
+              title: title,
+              jsonKey: jsonKey,
+              options: options,
+              height: height,
+              width: width);
         case "placeholder":
           return NRGPlaceholder(
               title: title, jsonKey: jsonKey, height: height, width: width);
