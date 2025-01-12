@@ -18,27 +18,39 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
   String get _height => widget.height;
   String get _width => widget.width;
 
+  //usually, it is enought to just use "double.parse(_height/width)", but here, 
+  //it is used enough times that it's worth it to just make them 
+  //individual variables of their own. 
+  late final double height;
+  late final double width;
+
   @override
   void initState() {
     super.initState();
     _stopwatch.reset();
+    height = double.parse(_height);
+    width = double.parse(_width);
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.parse(_height),
-      width: double.parse(_width),
+      height: height,
+      width: width,
       decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(left: double.parse(_height) * 0.1),
-            height: double.parse(_height) * 0.8, 
-            width: double.parse(_width) * 0.6,
+            margin: EdgeInsets.only(left: height * 0.1),
+            height: height * 0.8, 
+            width: width * 0.6,
             decoration: BoxDecoration(color: Colors.white), 
-            child: Text(
-              
+            child: Center(
+              child: Text(
+                "test", 
+                textAlign: TextAlign.center,
+                textScaler: TextScaler.linear(3),
+              ),
             ), 
           ),
           Container(
