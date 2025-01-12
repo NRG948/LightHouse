@@ -4,8 +4,12 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
-import "package:lighthouse/pages/entry_widgets.dart";
+import "package:lighthouse/widgets/checkbox.dart";
+import "package:lighthouse/widgets/dropdown.dart";
+
 import "package:lighthouse/widgets/placeholder.dart";
+import "package:lighthouse/widgets/spinbox.dart";
+import "package:lighthouse/widgets/textbox.dart";
 
 class DataEntry extends StatefulWidget {
 
@@ -44,11 +48,11 @@ class _DataEntryState extends State<DataEntry> {
         case "spinbox":
           return NRGSpinbox(title: title,jsonKey: jsonKey,);
         case "textbox":
-          return NRGTextBox(title: title,jsonKey: jsonKey,);
+          return NRGTextbox(title: title,jsonKey: jsonKey,);
         case "checkbox":
           return NRGCheckbox(title: title, jsonKey: jsonKey,);
         case "numberbox":
-          return NRGTextBox(title: title, jsonKey: jsonKey, numeric: true,);
+          return NRGTextbox(title: title, jsonKey: jsonKey, numeric: true,);
         case "dropdown":
           if (!(widgetData.containsKey("options"))) { return Text("Widget $title doesn't have dropdown options specified.");}
           final options = widgetData["options"]!.split(",");
