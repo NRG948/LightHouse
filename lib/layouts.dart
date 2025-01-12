@@ -6,6 +6,7 @@ Map<String, dynamic> alphaScout = {
   "pages": [
     {
       "title": "Initial Info",
+      "icon": Icon(Icons.info),
       "widgets": [
         {
           "title": "Scouter Name",
@@ -63,6 +64,7 @@ Map<String, dynamic> alphaScout = {
     },
     {
       "title": "Auto",
+      "icon": Icon(Icons.airplanemode_active),
       "widgets": [
         {
           "title": "big boy auto widget",
@@ -74,6 +76,7 @@ Map<String, dynamic> alphaScout = {
     },
     {
       "title": "Teleop",
+      "icon": Icon(Icons.electric_car),
       "widgets": [
         {
           "title": "Coral Pickups Station & Ground double spinbox",
@@ -96,6 +99,7 @@ Map<String, dynamic> alphaScout = {
     },
     {
       "title": "Endgame",
+      "icon": Icon(Icons.sports_score),
       "widgets": [
         {
           "title": "End Location",
