@@ -25,7 +25,10 @@ class SettingsPage extends StatelessWidget {
             child: Text(setting, style: Constants.comfortaaBold20pt)
           ),
           TextField(
-            controller: TextEditingController(),
+            controller: TextEditingController(text: configData[setting]),
+            onChanged: (text) {
+              configData[setting] = text;
+            },
             decoration: InputDecoration(labelText: "Enter Text", labelStyle: Constants.comfortaaBold20pt, border: OutlineInputBorder()),
           ) 
         ],

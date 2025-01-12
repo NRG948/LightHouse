@@ -30,8 +30,8 @@ Future<void> loadConfig() async {
   late Map<String,dynamic> configJson;
   final configFile = File("$configFolder/config.nrg");
   if (!(await configFile.exists())) {
-    configFile.writeAsString(defaultConfig);
-    configJson = jsonDecode(defaultConfig);
+    configFile.writeAsString(jsonEncode(defaultConfig));
+    configJson = defaultConfig;
   } else {
     configJson = jsonDecode(await configFile.readAsString());
   }
@@ -69,7 +69,7 @@ List<String> getFiles()  {
   return eventKeyFiles.whereType<File>().map((file) => file.uri.pathSegments.last).toList();
 }
 
-final String defaultConfig = """{
+final Map<String, String> defaultConfig = {
     "eventKey": "2025nrg",
-    "enabledLayouts": "barebonesNRG"
-}""";
+    "scouterName": "barebonesNRG"
+};
