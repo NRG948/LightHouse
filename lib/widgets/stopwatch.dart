@@ -49,12 +49,12 @@ class _NRGCheckboxState extends State<NRGStopwatch> {
               child: Text(
                 "test", 
                 textAlign: TextAlign.center,
-                textScaler: TextScaler.linear(3),
+                textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
               ),
             ), 
           ),
           Container(
-            margin: EdgeInsets.only(left: 6), 
+            margin: EdgeInsets.only(left: width * 6/400), //For development, we can change the width without having to change this too. 
             child: IconButton(
               onPressed: _stopwatch.reset,
               icon: Icon(
