@@ -14,9 +14,9 @@ class HomePage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     loadConfig();
     return Scaffold(
-        backgroundColor: Constants().pastelRed,
+        backgroundColor: Constants.pastelRed,
         appBar: AppBar(
-          backgroundColor: Constants().pastelRed,
+          backgroundColor: Constants.pastelRed,
           title: const Text(
             "LightHouse",
             style: TextStyle(
@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
             child: const Text("home page")),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
-          backgroundColor: Constants().pastelRed,
+          backgroundColor: Constants.pastelRed,
           child: PopupMenuButton(
             icon: Icon(Icons.add),
             onSelected: (value) {

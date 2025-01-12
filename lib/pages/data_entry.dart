@@ -138,15 +138,25 @@ class SaveJsonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(onPressed: () async {
-      if (await saveExport() == 0) {
-        showDialog(context: context, builder: (BuildContext context) {
-          return AlertDialog(content: Text("Successfully saved."),actions: [
-            TextButton(onPressed: () {Navigator.pushNamed(context, "/home");}, child: Text("OK"))
-          ],);
-        });
-      }
-    }, child: Text("Save"));
+    return TextButton(
+        onPressed: () async {
+          if (await saveExport() == 0) {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text("Successfully saved."),
+                    actions: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/home");
+                          },
+                          child: Text("OK"))
+                    ],
+                  );
+                });
+          }
+        },
+        child: Text("Save"));
   }
 }
-
