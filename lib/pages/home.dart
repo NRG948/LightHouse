@@ -8,7 +8,6 @@ import 'package:lighthouse/layouts.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  ///NRG's custom homepage
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
