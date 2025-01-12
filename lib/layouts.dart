@@ -6,7 +6,7 @@ Map<String, dynamic> altascout = {
   "title": "Atlascout",
   "pages": [
     {
-      "title": "Initial Info",
+      "title": "Setup",
       "icon": Icon(CustomIcons.wrench),
       "widgets": [
         {
@@ -157,13 +157,130 @@ Map<String, dynamic> altascout = {
 Map<String, dynamic> chronoscout = {
   "title": "Chronoscout",
   "pages": [
-
+    {
+      "title": "Setup",
+      "icon": Icon(CustomIcons.wrench),
+      "widgets": [
+        {
+          "title": "Scouter Name",
+          "type": "placeholder",
+          "jsonKey": "scouterName"
+        },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Team Number",
+              "type": "placeholder",
+              "jsonKey": "scouterName",
+              "width": "275"
+            },
+            {
+              "title": "Driver Station",
+              "type": "placeholder",
+              "jsonKey": "driverStation",
+              "width": "100"
+            }
+          ]
+        },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Match Type",
+              "type": "placeholder",
+              "jsonKey": "matchType",
+              "width": "200"
+            },
+            {
+              "title": "Match Number",
+              "type": "placeholder",
+              "jsonKey": "matchNumber",
+              "width": "75"
+            },
+            {
+              "title": "Replay",
+              "type": "placeholder",
+              "jsonKey": "replay",
+              "width": "75"
+            }
+          ]
+        },
+        {
+          "title": "Starting Position",
+          "type": "placeholder",
+          "jsonKey": "startingPosition",
+          "height": "200"
+        },
+        {
+          "title": "Start match guided",
+          "type": "placeholder",
+          "jsonKey": "thisDoesntNeedAJSONKey"
+        }
+      ]
+    },
+    {
+      "title": "Auto",
+      "icon": Icon(CustomIcons.autonomous),
+      "widgets": [
+        {
+          "title":"big boy auto widget",
+          "type": "placeholder",
+          "jsonKey": "idkYet",
+          "height": "600"
+        },
+        {
+          "title": "Timer",
+          "type": "placeholder",
+          "jsonKey": "shouldThisBeSeparate"
+        }
+      ]
+    },
+    {
+      "title": "Teleop",
+      "icon": Icon(CustomIcons.gamepad),
+      "widgets": [
+        {
+          "title":"big boy teleop widget",
+          "type": "placeholder",
+          "jsonKey": "idkYet",
+          "height": "600"
+        },
+        {
+          "title": "Timer",
+          "type": "placeholder",
+          "jsonKey": "shouldThisBeSeparate"
+        }
+      ]
+    },
+    {
+      "title": "Endgame",
+      "icon": Icon(CustomIcons.flag),
+      "widgets": [
+        {
+          "title": "General Match Strategy",
+          "type": "dropdown",
+          "jsonKey": "generalStrategy",
+          "options": "Cycling,Defense,Feed/Pass,Other"
+        },
+        {
+          "title": "Data Quality (5 star rating)",
+          "type": "placeholder",
+          "jsonKey": "dataQuality"
+        },
+        {
+          "title": "Comments",
+          "type": "textbox",
+          "jsonKey": "comments"
+        }
+      ]
+    }
   ]
 };
 
 Map<String, Map> layoutMap = {
-  "altascout": altascout,
-  "chronoscout" : chronoscout
+  "AltaScout": altascout,
+  "ChronoScout" : chronoscout
 };
 
 // TODO: Add icon bindings
