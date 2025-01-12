@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/custom_icons.dart';
 
 
-Map<String, dynamic> atlascout = {
-  "title": "Alpha Scout",
+Map<String, dynamic> altascout = {
+  "title": "Atlascout",
   "pages": [
     {
       "title": "Initial Info",
@@ -154,8 +154,16 @@ Map<String, dynamic> atlascout = {
   ]
 };
 
+Map<String, dynamic> chronoscout = {
+  "title": "Chronoscout",
+  "pages": [
+
+  ]
+};
+
 Map<String, Map> layoutMap = {
-  "AtlaScout": atlascout
+  "altascout": altascout,
+  "chronoscout" : chronoscout
 };
 
 // TODO: Add icon bindings
