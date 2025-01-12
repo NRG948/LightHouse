@@ -70,7 +70,7 @@ Map<String, dynamic> AtlaScout = {
         {
           "title": "big boy auto widget",
           "type": "placeholder",
-          "jsonKey": "TODOauto",
+          "jsonKey": "autoQuantitative",
           "height": "750"
         }
       ]
@@ -215,7 +215,7 @@ Map<String, dynamic> chronoscout = {
         {
           "title": "Start match guided",
           "type": "placeholder",
-          "jsonKey": "thisDoesntNeedAJSONKey"
+          "jsonKey": ""
         }
       ]
     },
@@ -272,6 +272,26 @@ Map<String, dynamic> chronoscout = {
           "title": "Comments",
           "type": "textbox",
           "jsonKey": "comments"
+        }
+      ]
+    }
+  ]
+};
+
+Map<String, dynamic> pitscout = {
+  "title": "Pit Scout",
+  "pages": [
+    {
+      "title": "Initial Info",
+      "icon": Icon(CustomIcons.wrench),
+      "widgets": [
+        {
+          "title": "Team Number",
+          "type": "placeholder",
+          "jsonKey": "teamNumber"
+        },
+        {
+          "title"
         }
       ]
     }
