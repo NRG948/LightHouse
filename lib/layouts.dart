@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/custom_icons.dart';
 
 
-Map<String, dynamic> AtlaScout = {
+Map<String, dynamic> atlaScout = {
   "title": "Atlascout",
   "pages": [
     {
@@ -80,21 +80,32 @@ Map<String, dynamic> AtlaScout = {
       "icon": Icon(CustomIcons.gamepad),
       "widgets": [
         {
-          "title": "Coral Pickups Station & Ground double spinbox",
-          "type": "placeholder",
+          "title": "Coral Pickups",
+          "type": "multispinbox",
           "jsonKey": "coralPickupsStation,coralPickupsGround",
-          "height": "150"
+          "height": "150",
+          "boxNames": [
+            ["Station", "Ground"]
+          ]
         },
         {
-          "title": "Coral Scored 4 spinboxes",
-          "type": "placeholder",
+          "title": "Coral Scored",
+          "type": "multispinbox",
           "jsonKey": "coralScoredL1,coralScoredL2,coralScoredL3,coralScoredL4",
-          "height": "150"
+          "height": "150",
+          "boxNames":[
+            ["L1","L2","L3","L4"]
+          ]
         },
         {
-          "title": "Algae widget 6 spinboxes",
-          "type": "placeholder",
-          "jsonKey": "removeL2,removeL3,scoreProcessor,scoreNet,missProcessor,missNet"
+          "title": "Algae",
+          "type": "multispinbox",
+          "jsonKey": "removeL2,removeL3,scoreProcessor,scoreNet,missProcessor,missNet",
+          "height": "400",
+          "boxNames": [
+            ["Remove L2", "Remove L3", "Score Processor", "Score Net"],
+            ["Miss Processor", "Miss Net"]
+          ]
         }
       ]
     },
@@ -310,7 +321,7 @@ Map<String, dynamic> pitscout = {
 };
 
 Map<String, Map> layoutMap = {
-  "AtlaScout": AtlaScout,
+  "AtlaScout": atlaScout,
   "ChronoScout" : chronoscout
 };
 

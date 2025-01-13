@@ -6,6 +6,7 @@ import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
 import "package:lighthouse/widgets/checkbox.dart";
 import "package:lighthouse/widgets/dropdown.dart";
+import "package:lighthouse/widgets/multi_spinbox.dart";
 
 import "package:lighthouse/widgets/placeholder.dart";
 import "package:lighthouse/widgets/spinbox.dart";
@@ -60,6 +61,9 @@ class _DataEntryState extends State<DataEntry> {
           return NRGStopwatch();
         case "stopwatch-horizontal":
           return NRGStopwatchHorizontal();
+        case "multispinbox":
+          return NRGMultiSpinbox(title: title, jsonKey: jsonKey, height: height, width: width, 
+          boxNames: widgetData["boxNames"] ?? [["NO OPTIONS SPECIFIED"]]);
         case "textbox":
           return NRGTextbox(
               title: title, jsonKey: jsonKey, height: height, width: width);
@@ -150,7 +154,11 @@ class _DataEntryState extends State<DataEntry> {
                       context, "/home", (Route<dynamic> route) => false);
                 },
                 icon: Icon(Icons.home)),
-            actions: [SaveJsonButton()],
+            actions: [IconButton(icon: Icon(Icons.javascript), onPressed: () {
+              showDialog(context: context, builder: (BuildContext) {
+                return Dialog(child: Text(jsonEncode(DataEntry.exportData)),);
+              });
+            },), SaveJsonButton()],
           ),
           bottomNavigationBar: BottomNavigationBar(
               onTap: (index) {
