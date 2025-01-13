@@ -55,8 +55,6 @@ class _DataEntryState extends State<DataEntry> {
             height: height, 
             width: width, 
             jsonKey: jsonKey,
-            height: height,
-            width: width
           );
         case "stopwatch": 
           return NRGStopwatch();
