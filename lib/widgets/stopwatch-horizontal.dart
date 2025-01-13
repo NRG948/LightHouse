@@ -67,13 +67,15 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
             height: height * 0.8, 
             width: width * 0.6,
             decoration: BoxDecoration(color: Colors.white), 
-            child: Center(
+            child: Align(
+              alignment: Alignment(-0.5, 0),
               child: Transform.rotate(
-                angle: 1.5708,
+                angle: -1.5708,
                 child: Text(
                   "${stopwatchResult.inMinutes.toString().padLeft(2, "0")}\n${(stopwatchResult.inSeconds % 60).toInt().toString().padLeft(2, "0")}\n${((stopwatchResult.inMilliseconds / 100) % 10).toInt().toString().padLeft(2, "0")}", 
                   textAlign: TextAlign.center,
                   textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
+                  overflow: TextOverflow.visible,
                 ),
               ),
             ), 
@@ -82,9 +84,12 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
             margin: EdgeInsets.only(left: width * 6/400), //For development, we can change the width without having to change this too. 
             child: IconButton(
               onPressed: () {_stopwatch.stop(); _stopwatch.reset();},
-              icon: Icon(
-                IconData(0xe514, fontFamily: 'MaterialIcons'), 
-                size: 45,
+              icon: Transform.rotate(
+                angle: -1.5708,
+                child: Icon(
+                  IconData(0xe514, fontFamily: 'MaterialIcons'), 
+                  size: 45,
+                ),
               ),
             ),
           ),
@@ -92,9 +97,12 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
             margin: EdgeInsets.only(left: 0), 
             child: IconButton(
               onPressed: _stopwatch.start,
-              icon: Icon(
-                IconData(0xf2af, fontFamily: 'MaterialIcons'), 
-                size: 45,
+              icon: Transform.rotate(
+                angle: -1.5708,
+                child: Icon(
+                  IconData(0xf2af, fontFamily: 'MaterialIcons'), 
+                  size: 45,
+                ),
               ),
             ),
           ),  
