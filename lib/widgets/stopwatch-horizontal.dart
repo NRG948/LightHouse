@@ -68,10 +68,13 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
             width: width * 0.6,
             decoration: BoxDecoration(color: Colors.white), 
             child: Center(
-              child: Text(
-                "${stopwatchResult.inMinutes.toString().padLeft(2, "0")}\n${(stopwatchResult.inSeconds % 60).toInt().toString().padLeft(2, "0")}\n${((stopwatchResult.inMilliseconds / 100) % 10).toInt().toString().padLeft(2, "0")}", 
-                textAlign: TextAlign.center,
-                textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
+              child: Transform.rotate(
+                angle: 1.5708,
+                child: Text(
+                  "${stopwatchResult.inMinutes.toString().padLeft(2, "0")}\n${(stopwatchResult.inSeconds % 60).toInt().toString().padLeft(2, "0")}\n${((stopwatchResult.inMilliseconds / 100) % 10).toInt().toString().padLeft(2, "0")}", 
+                  textAlign: TextAlign.center,
+                  textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
+                ),
               ),
             ), 
           ),
