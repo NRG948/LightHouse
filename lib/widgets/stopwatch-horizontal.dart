@@ -96,7 +96,13 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
           Container(
             margin: EdgeInsets.only(left: 0), 
             child: IconButton(
-              onPressed: _stopwatch.start,
+              onPressed: () {
+                if (_stopwatch.isRunning){
+                  _stopwatch.stop();
+                  return;
+                }
+                _stopwatch.start();
+              },
               icon: Transform.rotate(
                 angle: -1.5708,
                 child: Icon(
