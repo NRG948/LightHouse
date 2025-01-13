@@ -82,7 +82,7 @@ Map<String, dynamic> atlaScout = {
         {
           "title": "Coral Pickups",
           "type": "multispinbox",
-          "jsonKey": "coralPickupsStation,coralPickupsGround",
+          "jsonKey": ["coralPickupsStation","coralPickupsGround",],
           "height": "150",
           "boxNames": [
             ["Station", "Ground"]
@@ -91,7 +91,7 @@ Map<String, dynamic> atlaScout = {
         {
           "title": "Coral Scored",
           "type": "multispinbox",
-          "jsonKey": "coralScoredL1,coralScoredL2,coralScoredL3,coralScoredL4",
+          "jsonKey": ["coralScoredL1","coralScoredL2","coralScoredL3","coralScoredL4"],
           "height": "150",
           "boxNames":[
             ["L1","L2","L3","L4"]
@@ -100,7 +100,7 @@ Map<String, dynamic> atlaScout = {
         {
           "title": "Algae",
           "type": "multispinbox",
-          "jsonKey": "removeL2,removeL3,scoreProcessor,scoreNet,missProcessor,missNet",
+          "jsonKey": ["removeL2","removeL3","scoreProcessor","scoreNet","missProcessor","missNet"],
           "height": "400",
           "boxNames": [
             ["Remove L2", "Remove L3", "Score Processor", "Score Net"],

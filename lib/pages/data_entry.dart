@@ -27,6 +27,7 @@ class _DataEntryState extends State<DataEntry> {
   @override
   void initState() {
     super.initState();
+    DataEntry.exportData.clear();
     controller = PageController(initialPage: 0);
   }
 
@@ -44,9 +45,12 @@ class _DataEntryState extends State<DataEntry> {
             spacing: 10.0, children: createWidgetList(widgetData["children"]!));
       }
       final title = widgetData["title"]!;
-      final jsonKey = widgetData["jsonKey"]!;
-      DataEntry.exportData[jsonKey] =
-          "0"; // creates entry in global data object
+      final jsonKey = widgetData["jsonKey"];
+      if (jsonKey is List<String>){for(String key in jsonKey) {
+        if(!(DataEntry.exportData.containsKey(key))){ DataEntry.exportData[key] = "0";}
+      }} else if (jsonKey != "" && !(DataEntry.exportData.containsKey(jsonKey))) {
+        DataEntry.exportData[jsonKey] = "0";
+      }
       final height = widgetData["height"] ?? "100";
       final width = widgetData["width"] ?? "400";
       switch (type) {
@@ -108,7 +112,6 @@ class _DataEntryState extends State<DataEntry> {
   }
 
   List<Widget> createWidgetPages(List<Map<String, dynamic>> pages) {
-    DataEntry.exportData.clear();
     return pages.map((page) {
       final widgetList = createWidgetList(page["widgets"]);
       return Center(

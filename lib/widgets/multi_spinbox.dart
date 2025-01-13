@@ -5,7 +5,7 @@ import "package:lighthouse/pages/data_entry.dart";
 
 class NRGMultiSpinbox extends StatefulWidget {
   final String title;
-  final String jsonKey;
+  final List<String> jsonKey;
   final String height;
   final String width;
   final List<List<String>> boxNames;
@@ -15,11 +15,13 @@ class NRGMultiSpinbox extends StatefulWidget {
   State<NRGMultiSpinbox> createState() => _NRGMultiSpinboxState();
 }
 
-class _NRGMultiSpinboxState extends State<NRGMultiSpinbox> {
+class _NRGMultiSpinboxState extends State<NRGMultiSpinbox> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
   String get _title => widget.title;
   String get _width => widget.width;
   String get _height => widget.height;
-  String get _keys => widget.jsonKey;
+  List<String> get _keys => widget.jsonKey;
   List<List<String>> get _boxNames => widget.boxNames;
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox> {
 
   
   Widget buildSpinboxes() {
-    final keyList = _keys.split(",");
+    final keyList = _keys;
     final nameList = _boxNames.expand((list) => list).toList();
     if (!(keyList.length == nameList.length)) {return Text("${nameList.length}-count spinbox has ${keyList.length} JSON keys associated with it");}
     
@@ -108,7 +110,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
   void increment() {
     setState(
       () {
-        if(_counter < 999) {_counter++;}
+        if(_counter < 999) {_counter++;updateState();}
       }
     );
   }
