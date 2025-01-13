@@ -1,8 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 
-class NRGStopwatch extends StatefulWidget {
-  NRGStopwatch({super.key});
+class NRGStopwatchHorizontal extends StatefulWidget {
+  NRGStopwatchHorizontal({super.key});
 
   final String title = "Stopwatch";
   final String height = "100";
@@ -11,10 +12,10 @@ class NRGStopwatch extends StatefulWidget {
   final stopwatch = Stopwatch();
 
   @override
-  State<NRGStopwatch> createState() => _NRGStopwatchState();
+  State<NRGStopwatchHorizontal> createState() => _NRGStopwatchHorizontalState();
 }
 
-class _NRGStopwatchState extends State<NRGStopwatch> {
+class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
   Stopwatch get _stopwatch => widget.stopwatch;
   String get _height => widget.height;
   String get _width => widget.width;
@@ -67,10 +68,13 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
             width: width * 0.6,
             decoration: BoxDecoration(color: Colors.white), 
             child: Center(
-              child: Text(
-                "${stopwatchResult.inMinutes} : ${(stopwatchResult.inSeconds % 60).toInt().toString().padLeft(2, "0")} : ${((stopwatchResult.inMilliseconds / 100) % 10).toInt()}", 
-                textAlign: TextAlign.center,
-                textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
+              child: Transform.rotate(
+                angle: 1.5708,
+                child: Text(
+                  "${stopwatchResult.inMinutes.toString().padLeft(2, "0")}\n${(stopwatchResult.inSeconds % 60).toInt().toString().padLeft(2, "0")}\n${((stopwatchResult.inMilliseconds / 100) % 10).toInt().toString().padLeft(2, "0")}", 
+                  textAlign: TextAlign.center,
+                  textScaler: TextScaler.linear(height * 3/100), //For development, we can change the height without having to change this too. 
+                ),
               ),
             ), 
           ),
