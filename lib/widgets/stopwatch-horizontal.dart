@@ -68,9 +68,9 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
             width: width * 0.6,
             decoration: BoxDecoration(color: Colors.white), 
             child: Align(
-              alignment: Alignment(-0.54, 0),
+              alignment: Alignment(0.54, 0),
               child: Transform.rotate(
-                angle: -1.5708,
+                angle: 1.5708,
                 child: Text(
                   "${stopwatchResult.inMinutes.toString().padLeft(2, "0")}\n${(stopwatchResult.inSeconds % 60).toInt().toString().padLeft(2, "0")}\n${((stopwatchResult.inMilliseconds / 100) % 10).toInt().toString().padLeft(2, "0")}", 
                   textAlign: TextAlign.center,
@@ -85,7 +85,7 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
             child: IconButton(
               onPressed: () {_stopwatch.stop(); _stopwatch.reset();},
               icon: Transform.rotate(
-                angle: -1.5708,
+                angle: 1.5708,
                 child: Icon(
                   IconData(0xe514, fontFamily: 'MaterialIcons'), 
                   size: 45,
@@ -104,7 +104,7 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
                 _stopwatch.start();
               },
               icon: Transform.rotate(
-                angle: -1.5708,
+                angle: 1.5708,
                 child: Icon(
                   IconData(0xf2af, fontFamily: 'MaterialIcons'), 
                   size: 45,
