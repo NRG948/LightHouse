@@ -87,7 +87,13 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
           Container(
             margin: EdgeInsets.only(left: 0), 
             child: IconButton(
-              onPressed: _stopwatch.start,
+              onPressed: () {
+                if (_stopwatch.isRunning){
+                  _stopwatch.stop();
+                  return;
+                }
+                _stopwatch.start();
+              },
               icon: Icon(
                 IconData(0xf2af, fontFamily: 'MaterialIcons'), 
                 size: 45,
