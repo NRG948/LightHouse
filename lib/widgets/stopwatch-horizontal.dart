@@ -68,7 +68,7 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
             width: width * 0.6,
             decoration: BoxDecoration(color: Colors.white), 
             child: Align(
-              alignment: Alignment(-0.5, 0),
+              alignment: Alignment(-0.54, 0),
               child: Transform.rotate(
                 angle: -1.5708,
                 child: Text(
