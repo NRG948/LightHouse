@@ -167,22 +167,8 @@ class _DataEntryState extends State<DataEntry> {
               });
             },), SaveJsonButton()],
           ),
-          bottomNavigationBar: BottomNavigationBar(
-              onTap: (index) {
-                setState(() {
-                  currentPage = index;
-                  controller.jumpToPage(index);
-                });
-              },
-              unselectedIconTheme: IconThemeData(color: Colors.black),
-              unselectedItemColor: Colors.black,
-              selectedIconTheme: IconThemeData(color: Colors.black),
-              selectedItemColor: Colors.black,
-              currentIndex: currentPage,
-              showUnselectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.blueGrey,
-              items: createNavBar(layoutJSON["pages"])),
+          bottomNavigationBar:  
+             buildBottomNavBar(layoutJSON),
           body: PageView(
             controller: controller,
             scrollDirection: Axis.horizontal,
@@ -194,6 +180,26 @@ class _DataEntryState extends State<DataEntry> {
             },
           )),
     );
+  }
+
+  Widget? buildBottomNavBar(Map<dynamic, dynamic> layoutJSON) {
+    if (layoutJSON["pages"].length < 2) {return null;}
+    return BottomNavigationBar(
+            onTap: (index) {
+              setState(() {
+                currentPage = index;
+                controller.jumpToPage(index);
+              });
+            },
+            unselectedIconTheme: IconThemeData(color: Colors.black),
+            unselectedItemColor: Colors.black,
+            selectedIconTheme: IconThemeData(color: Colors.black),
+            selectedItemColor: Colors.black,
+            currentIndex: currentPage,
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Colors.blueGrey,
+            items: createNavBar(layoutJSON["pages"]));
   }
 }
 
