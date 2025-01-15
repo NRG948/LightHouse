@@ -446,15 +446,127 @@ Map<String, dynamic> pitscout = {
   ]
 };
 
+Map<String, dynamic> hpscout = {
+  "title": "Human Player Scout",
+  "pages": [
+    {
+      "title": "Setup",
+      "icon": Icon(CustomIcons.wrench),
+      "widgets": [
+        {
+          "title": "Scouter Name",
+          "type": "placeholder",
+          "jsonKey": "scouterName"
+        },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Red Team Number",
+              "type": "placeholder",
+              "jsonKey": "redHPTeam",
+              "width": "190"
+            },
+            {
+              "title": "Blue Team Number",
+              "type": "placeholder",
+              "jsonKey": "blueHPTeam",
+              "width": "190"
+            }
+          ]
+        },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Match Type",
+              "type": "placeholder",
+              "jsonKey": "matchType",
+              "width": "200"
+            },
+            {
+              "title": "Match Number",
+              "type": "placeholder",
+              "jsonKey": "matchNumber",
+              "width": "75"
+            },
+            {
+              "title": "Replay",
+              "type": "placeholder",
+              "jsonKey": "replay",
+              "width": "75"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Scoring",
+      "icon": Icon(CustomIcons.gamepad),
+      "widgets": [
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Red Score",
+              "type": "spinbox",
+              "jsonKey": "redScore",
+              "width": "190",
+              "height": "190"
+            },
+            {
+              "title": "Blue Score",
+              "type": "spinbox",
+              "jsonKey": "blueScore",
+              "width": "190",
+              "height": "190"
+            }
+          ]
+        },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Red Miss",
+              "type": "spinbox",
+              "jsonKey": "redMiss",
+              "width": "190",
+              "height": "190"
+            },
+            {
+              "title": "Blue Miss",
+              "type": "spinbox",
+              "jsonKey": "blueMiss",
+              "width": "190",
+              "height": "190"
+            }
+          ]
+        },
+        {
+          "title": "Algae in Net",
+          "type": "multispinbox",
+          "jsonKey": ["redNetAlgae", "blueNetAlgae"],
+          "height": "250",
+          "boxNames": [
+            ["Red Algae", "Blue Algae"]
+          ]
+        }
+      ]
+    }
+  ]
+};
+
 Map<String, Map> layoutMap = {
   "AtlaScout": atlascout,
   "ChronoScout" : chronoscout,
-  "PitScout" : pitscout
+  "PitScout" : pitscout,
+  "HPScout": hpscout
 };
 
 
 Map<String, IconData> iconMap = {
   "AtlaScout": Icons.map,
   "ChronoScout": Icons.timer,
-  "PitScout": Icons.analytics_rounded
+  "PitScout": Icons.analytics_rounded,
+  "HPScout": Icons.child_care
 };
