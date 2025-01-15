@@ -138,6 +138,8 @@ class _DataEntryState extends State<DataEntry> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final String activeConfig =
         (ModalRoute.of(context)?.settings.arguments as String?)!;
     final layoutJSON =
@@ -169,15 +171,23 @@ class _DataEntryState extends State<DataEntry> {
           ),
           bottomNavigationBar:  
              buildBottomNavBar(layoutJSON),
-          body: PageView(
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            children: createWidgetPages(layoutJSON["pages"]),
-            onPageChanged: (index) {
-              setState(() {
-                currentPage = index;
-              });
-            },
+          body: Container(
+            height: screenHeight,
+            width: screenWidth,
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage("assets/images/background-hires.png"),
+              fit: BoxFit.fill)
+            ),
+            child: PageView(
+              controller: controller,
+              scrollDirection: Axis.horizontal,
+              children: createWidgetPages(layoutJSON["pages"]),
+              onPageChanged: (index) {
+                setState(() {
+                  currentPage = index;
+                });
+              },
+            ),
           )),
     );
   }
