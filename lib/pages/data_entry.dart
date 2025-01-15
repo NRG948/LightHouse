@@ -4,15 +4,17 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
-import "package:lighthouse/widgets/checkbox.dart";
-import "package:lighthouse/widgets/dropdown.dart";
-import "package:lighthouse/widgets/multi_spinbox.dart";
 
-import "package:lighthouse/widgets/placeholder.dart";
-import "package:lighthouse/widgets/spinbox.dart";
-import "package:lighthouse/widgets/stopwatch-horizontal.dart";
-import "package:lighthouse/widgets/stopwatch.dart";
-import "package:lighthouse/widgets/textbox.dart";
+import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
+import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
+import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
+import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
+import "package:lighthouse/widgets/game_agnostic/stopwatch-horizontal.dart";
+import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
+import "package:lighthouse/widgets/game_agnostic/textbox.dart";
+
+import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
@@ -44,11 +46,11 @@ class _DataEntryState extends State<DataEntry> {
         return Row(
             spacing: 10.0, children: createWidgetList(widgetData["children"]!));
       }
-      final title = widgetData["title"]!;
+      final title = widgetData["title"] ?? "NO TITLE";
       final jsonKey = widgetData["jsonKey"];
       if (jsonKey is List<String>){for(String key in jsonKey) {
         if(!(DataEntry.exportData.containsKey(key))){ DataEntry.exportData[key] = "0";}
-      }} else if (jsonKey != "" && !(DataEntry.exportData.containsKey(jsonKey))) {
+      }} else if (jsonKey != "" && jsonKey != null && !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
       final height = widgetData["height"] ?? "100";
@@ -96,6 +98,8 @@ class _DataEntryState extends State<DataEntry> {
         case "placeholder":
           return NRGPlaceholder(
               title: title, jsonKey: jsonKey, height: height, width: width);
+        case "rsAutoUntimed":
+          return RSAutoUntimed();
       }
       return Text("type $type isn't a valid type");
     }).toList();
