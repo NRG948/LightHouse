@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/custom_icons.dart';
 
 
-Map<String, dynamic> atlaScout = {
+Map<String, dynamic> atlascout = {
   "title": "Atlascout",
   "pages": [
     {
@@ -305,15 +305,141 @@ Map<String, dynamic> pitscout = {
   "pages": [
     {
       "title": "Initial Info",
-      "icon": Icon(CustomIcons.wrench),
+      "icon": Icon(CustomIcons.chartBar),
       "widgets": [
         {
           "title": "Team Number",
-          "type": "placeholder",
+          "type": "textbox",
           "jsonKey": "teamNumber"
         },
         {
-          "title"
+          "title": "Team Name",
+          "type": "textbox",
+          "jsonKey": "teamName"
+        },
+        {
+          "title": "Interviewee Name",
+          "type": "textbox",
+          "jsonKey": "intervieweeName"
+        },
+        {
+          "title": "Interviewer Name",
+          "type": "textbox",
+          "jsonKey": "interviewerName"
+        }
+      ]
+    },
+    {
+      "title": "Robot Stats",
+      "icon": Icon(CustomIcons.wrench),
+      "widgets": [
+        {
+          "title": "",
+          "type": "placeholder",
+          "jsonKey": "teamNumber"
+        }
+      ]
+    },
+    {
+      "title": "Auto",
+      "icon": Icon(CustomIcons.autonomous),
+      "widgets": [
+        {
+          "title": "Auto Routine",
+          "type": "placeholder",
+          "jsonKey": "teamNumber",
+          "height": "600"
+        },
+        {
+          "title": "Drops Algae on Ground",
+          "type": "placeholder",
+          "jsonKey": "dropsAlgaeAuto"
+        }
+      ]
+    },
+    {
+      "title": "Teleop",
+      "icon": Icon(CustomIcons.gamepad),
+      "widgets": [
+        {
+          "title": "Coral Scoring Ability",
+          "type": "placeholder",
+          "jsonKey": "coralScoringAbility"
+        },
+        {
+          "title": "Coral Intake Ability",
+          "type": "placeholder",
+          "jsonKey": "coralIntakeAbility"
+        },
+        {
+          "title": "Algae Removal Ability",
+          "type": "placeholder",
+          "jsonKey": "algaeRemovalAbility"
+        },
+        {
+          "title": "Algae Scoring Ability",
+          "type": "placeholder",
+          "jsonKey": "algaeScoringAbility"
+        }
+      ]
+    },
+    {
+      "title": "Endgame",
+      "icon": Icon(CustomIcons.flag),
+      "widgets": [
+        {
+          "title": "Climbing Ability and Preference",
+          "type": "placeholder",
+          "jsonKey": "climbingAbilityAndPreference",
+          "height": "400"          
+        },
+        {
+          "title": "Average Climb Time",
+          "type": "textbox",
+          "jsonKey": "averageClimbTime",
+        }
+      ]
+    },
+    {
+      "title": "Drive Team",
+      "icon": Icon(CustomIcons.racecar),
+      "widgets": [
+        {
+          "title": "Driver and Manipulator Experience",
+          "type": "textbox",
+          "jsonKey": "driveExperience"
+        },
+        {
+          "title": "Preferred Human Player Station",
+          "type": "placeholder",
+          "jsonKey": "humanPlayerPreference"
+        },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Average Coral Cycles",
+              "type": "placeholder",
+              "jsonKey": "averageCoralCycles",
+              "width": "190"
+            },
+            {
+              "title": "Average Algae Cycles",
+              "type": "placeholder",
+              "jsonKey": "averageAlgaeCycles",
+              "width": "190"
+            }
+          ]
+        },
+        {
+          "title": "Ideal Qualities in Alliance Partners",
+          "type": "textbox",
+          "jsonKey": "idealAlliancePartnerQualities"
+        },
+        {
+          "title": "Other Comments",
+          "type": "textbox",
+          "jsonKey": "otherComments"
         }
       ]
     }
@@ -321,12 +447,14 @@ Map<String, dynamic> pitscout = {
 };
 
 Map<String, Map> layoutMap = {
-  "AtlaScout": atlaScout,
-  "ChronoScout" : chronoscout
+  "AtlaScout": atlascout,
+  "ChronoScout" : chronoscout,
+  "PitScout" : pitscout
 };
 
 
 Map<String, IconData> iconMap = {
   "AtlaScout": Icons.map,
-  "ChronoScout": Icons.timer
+  "ChronoScout": Icons.timer,
+  "PitScout": Icons.analytics_rounded
 };
