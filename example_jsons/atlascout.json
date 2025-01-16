@@ -25,7 +25,7 @@
     "climbStartTime": "3:00", 
     "robotDisabled": "true", 
     "robotDisableReason": "Looks like they got into a fistfight with another team. ", 
-    "dataQuality": "Not good. I was trying to avoid the laptops being thrown (see above)", 
+    "dataQuality": "1.5", 
     "comments": "I'm surprised this was counted as a legitimate round. ", 
     "crossedMidline": "false"
 }
