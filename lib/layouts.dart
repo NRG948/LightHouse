@@ -173,7 +173,7 @@ Map<String, dynamic> chronoscout = {
   "title": "Chronoscout",
   "pages": [
     {
-      "title": "HorizontalTest", 
+      "title": "HorizontalTest", //Test page for horizontal stuff. 
       "icon": Icon(CustomIcons.pitCrew), 
       "widgets": [
         {
