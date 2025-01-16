@@ -19,6 +19,7 @@ import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, String> exportData = {};
+  static late String activeConfig;
   @override
   State<DataEntry> createState() => _DataEntryState();
 }
@@ -140,10 +141,11 @@ class _DataEntryState extends State<DataEntry> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final String activeConfig =
+    DataEntry.activeConfig =
         (ModalRoute.of(context)?.settings.arguments as String?)!;
+    print(DataEntry.activeConfig);
     final layoutJSON =
-        layoutMap.containsKey(activeConfig) ? layoutMap[activeConfig]! : Map();
+        layoutMap.containsKey(DataEntry.activeConfig) ? layoutMap[DataEntry.activeConfig]! : Map();
     return PopScope(
       canPop: false,
       child: Scaffold(
