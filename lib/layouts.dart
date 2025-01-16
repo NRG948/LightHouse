@@ -20,7 +20,7 @@ Map<String, dynamic> atlascout = {
             {
               "title": "Team Number",
               "type": "placeholder",
-              "jsonKey": "scouterName",
+              "jsonKey": "teamNumber",
               "width": "275"
             },
             {
@@ -60,7 +60,11 @@ Map<String, dynamic> atlascout = {
           "jsonKey": "startingPosition",
           "height": "200"
         },
-        {"title": "Preload", "type": "placeholder", "jsonKey": "preload"}
+        {
+          "title": "Preload", 
+          "type": "placeholder", 
+          "jsonKey": "preload"
+        }
       ]
     },
     {
@@ -100,7 +104,7 @@ Map<String, dynamic> atlascout = {
         {
           "title": "Algae",
           "type": "multispinbox",
-          "jsonKey": ["removeL2","removeL3","scoreProcessor","scoreNet","missProcessor","missNet"],
+          "jsonKey": ["algaeremoveL2","algaeremoveL3","algaescoreProcessor","algaescoreNet","algaemissProcessor","algaemissNet"],
           "height": "400",
           "boxNames": [
             ["Remove L2", "Remove L3", "Score Processor", "Score Net"],
