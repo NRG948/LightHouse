@@ -44,14 +44,24 @@ Future<void> loadConfig() async {
 // will automatically use smarter naming scheme if all of these keys are present
 // int return type is for future error handling
 Future<int> saveExport() async {
+  final random = Random();
   final exportDataEncoded = jsonEncode(DataEntry.exportData);
-  final eventKeyDirectory = Directory("$configFolder/${configData["eventKey"]}");
-  if (!(await eventKeyDirectory.exists())) {
-    await eventKeyDirectory.create();
+  final layoutDirectory = Directory("$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}");
+  if (!(await layoutDirectory.exists())) {
+    await layoutDirectory.create(recursive: true);
   }
-
-  final exportName = Random().nextInt(99999);
-  final exportFile = File("$configFolder/${configData["eventKey"]}/nrg_$exportName.json");
+  late String exportName;
+  switch (DataEntry.activeConfig) {
+    case "AtlaScout":
+    case "ChronoScout":
+       exportName = "${DataEntry.exportData["teamNumber"]}_${DataEntry.exportData["matchType"]}_${DataEntry.exportData["matchNumber"]}_${random.nextInt(9999)}";
+    case "PitScout":
+    case "HPScout":
+      exportName = "${DataEntry.exportData["teamNumber"]}_${DataEntry.activeConfig.split(" ")[0]}_${random.nextInt(9999)}}";
+    default:
+      exportName = "${random.nextInt(9999)}";
+  }
+  final exportFile = File("$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}/$exportName.json");
   exportFile.writeAsString(exportDataEncoded);
   return 0;
 }
