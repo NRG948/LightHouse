@@ -5,8 +5,8 @@ import "package:lighthouse/pages/data_entry.dart";
 class NRGCheckbox extends StatefulWidget {
   final String title;
   final String jsonKey;
-  final String height;
-  final String width;
+  final double height;
+  final double width;
   const NRGCheckbox(
       {super.key,
       required this.title,
@@ -23,8 +23,8 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
   bool isChecked = false;
   ValueNotifier<bool> checkboxNotifier = ValueNotifier<bool>(false);
   String get _title => widget.title;
-  String get _height => widget.height;
-  String get _width => widget.width;
+  double get _height => widget.height;
+  double get _width => widget.width;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,8 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
               checkboxNotifier.value ? "true" : "false";
         },
         child: Container(
-            height: double.parse(_height),
-            width: double.parse(_width),
+            height: _height,
+            width: _width,
             decoration: BoxDecoration(
                 color: Colors.blueGrey,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),

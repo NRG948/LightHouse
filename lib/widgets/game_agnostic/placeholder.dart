@@ -6,8 +6,8 @@ import 'package:lighthouse/filemgr.dart';
 class NRGPlaceholder extends StatefulWidget {
   final String title;
   final String jsonKey;
-  final String height;
-  final String width;
+  final double height;
+  final double width;
   const NRGPlaceholder(
       {super.key,
       required this.title,
@@ -20,9 +20,9 @@ class NRGPlaceholder extends StatefulWidget {
 }
 
 class _NRGPlaceholderState extends State<NRGPlaceholder> {
-  String get _height => widget.height;
+  double get _height => widget.height;
 
-  String get _width => widget.width;
+  double get _width => widget.width;
 
   String get title => widget.title;
 
@@ -31,8 +31,8 @@ class _NRGPlaceholderState extends State<NRGPlaceholder> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: double.parse(_height),
-        width: double.parse(_width),
+        height: _height,
+        width: _width,
         decoration: BoxDecoration(
             color: Colors.blueGrey,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),

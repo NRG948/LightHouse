@@ -77,8 +77,8 @@ class _DataEntryState extends State<DataEntry> {
       }} else if (jsonKey != "" && jsonKey != null && !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
-      final height = widgetData["height"] ?? "22";
-      final width = widgetData["width"] ?? "400";
+      final height = double.parse(widgetData["height"] ?? "100");
+      final width = double.parse(widgetData["width"] ?? "400");
       switch (type) {
         case "spinbox":
           return NRGSpinbox(

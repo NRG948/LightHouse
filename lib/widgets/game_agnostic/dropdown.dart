@@ -6,8 +6,8 @@ class NRGDropdown extends StatefulWidget {
   final List<String> options;
   final String title;
   final String jsonKey;
-  final String height;
-  final String width;
+  final double height;
+  final double width;
   const NRGDropdown(
       {super.key,
       required this.title,
@@ -25,15 +25,15 @@ class _NRGDropdownState extends State<NRGDropdown> {
   get _options => widget.options;
   String? selectedValue;
   get _key => widget.jsonKey;
-  String get _height => widget.height;
-  String get _width => widget.width;
+  double get _height => widget.height;
+  double get _width => widget.width;
 
   @override
   Widget build(BuildContext context) {
     selectedValue ??= _options[0];
     return Container(
-        height: double.parse(_height),
-        width: double.parse(_width),
+        height: _height,
+        width: _width,
         decoration: BoxDecoration(
             color: Colors.blueGrey,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
