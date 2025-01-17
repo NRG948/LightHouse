@@ -1,4 +1,5 @@
 import "dart:convert";
+import "dart:ffi";
 
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
@@ -25,6 +26,10 @@ class DataEntry extends StatefulWidget {
 }
 
 class _DataEntryState extends State<DataEntry> {
+  late double deviceWidth;
+  late double deviceHeight;
+
+
   int currentPage = 0;
   late PageController controller;
   @override
@@ -32,6 +37,8 @@ class _DataEntryState extends State<DataEntry> {
     super.initState();
     DataEntry.exportData.clear();
     controller = PageController(initialPage: 0);
+    deviceWidth = MediaQuery.sizeOf(context).width;
+    deviceHeight = MediaQuery.sizeOf(context).height;
   }
 
   @override
@@ -44,8 +51,11 @@ class _DataEntryState extends State<DataEntry> {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
       if (type == "row") {
-        return Row(
-            spacing: 10.0, children: createWidgetList(widgetData["children"]!));
+        return SizedBox(
+          width: 400,
+          child: Row(
+              spacing: 10.0, children: createWidgetList(widgetData["children"]!)),
+        );
       }
       final title = widgetData["title"] ?? "NO TITLE";
       final jsonKey = widgetData["jsonKey"];
