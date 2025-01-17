@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lighthouse/constants.dart';
 
 class NRGStopwatchHorizontal extends StatefulWidget {
   NRGStopwatchHorizontal({super.key});
@@ -59,7 +60,7 @@ class _NRGStopwatchHorizontalState extends State<NRGStopwatchHorizontal> {
     return Container(
       height: height,
       width: width,
-      decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Row(
         children: [
           Container(

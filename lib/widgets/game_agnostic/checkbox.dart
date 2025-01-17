@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
+/// A custom togglable boolean widget.
 class NRGCheckbox extends StatefulWidget {
   final String title;
   final String jsonKey;
@@ -38,7 +39,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
             height: double.parse(_height),
             width: double.parse(_width),
             decoration: BoxDecoration(
-                color: Colors.blueGrey, borderRadius: BorderRadius.circular(8)),
+                color: Colors.blueGrey, borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Row(
               children: [
                 ValueListenableBuilder(
@@ -50,10 +51,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                             checkboxNotifier.value = newValue ?? false;
                           });
                     }),
-                Text(
-                  _title,
-                  style: Constants.comfortaaBold20pt,
-                )
+                Text(_title, style: Constants.comfortaaBold20pt)
               ],
             )));
   }

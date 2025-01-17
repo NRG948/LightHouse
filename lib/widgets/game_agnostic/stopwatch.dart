@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:lighthouse/constants.dart';
 
 class NRGStopwatch extends StatefulWidget {
   NRGStopwatch({super.key});
@@ -58,7 +59,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
     return Container(
       height: height,
       width: width,
-      decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(color: Colors.blueGrey,borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Row(
         children: [
           Container(
