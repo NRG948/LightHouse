@@ -67,7 +67,7 @@ class _DataEntryState extends State<DataEntry> {
         return SizedBox(
           width: 90 * resizeScaleFactorWidth,
           child: Row(
-              spacing: 2.22 * resizeScaleFactorWidth, children: createWidgetList(widgetData["children"]!)),
+              spacing: 2 * resizeScaleFactorWidth, children: createWidgetList(widgetData["children"]!)),
         );
       }
       final title = widgetData["title"] ?? "NO TITLE";
@@ -77,8 +77,8 @@ class _DataEntryState extends State<DataEntry> {
       }} else if (jsonKey != "" && jsonKey != null && !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
-      final height = double.parse(widgetData["height"] ?? "100");
-      final width = double.parse(widgetData["width"] ?? "400");
+      final height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
+      final width = double.parse(widgetData["width"] ?? "70") * resizeScaleFactorWidth;
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
