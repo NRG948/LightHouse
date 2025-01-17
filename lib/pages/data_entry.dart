@@ -1,4 +1,5 @@
 import "dart:convert";
+import "dart:ffi";
 
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
@@ -25,6 +26,12 @@ class DataEntry extends StatefulWidget {
 }
 
 class _DataEntryState extends State<DataEntry> {
+  late double deviceWidth;
+  late double deviceHeight;
+
+  late double resizeScaleFactorWidth;
+  late double resizeScaleFactorHeight;
+
   int currentPage = 0;
   late PageController controller;
   @override
@@ -32,6 +39,19 @@ class _DataEntryState extends State<DataEntry> {
     super.initState();
     DataEntry.exportData.clear();
     controller = PageController(initialPage: 0);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    deviceWidth = MediaQuery.sizeOf(context).width;
+    deviceHeight = MediaQuery.sizeOf(context).height;
+
+    //These are such that we can resize widgets based on screen size, but we need a reference point, 
+    //so we are using a 412 x 915 dp phone as the reference and scaling based upon that. 
+    resizeScaleFactorWidth = deviceWidth / 90;
+    resizeScaleFactorHeight = deviceHeight / 200;
   }
 
   @override
@@ -44,8 +64,11 @@ class _DataEntryState extends State<DataEntry> {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
       if (type == "row") {
-        return Row(
-            spacing: 10.0, children: createWidgetList(widgetData["children"]!));
+        return SizedBox(
+          width: 90 * resizeScaleFactorWidth,
+          child: Row(
+              spacing: 2 * resizeScaleFactorWidth, children: createWidgetList(widgetData["children"]!)),
+        );
       }
       final title = widgetData["title"] ?? "NO TITLE";
       final jsonKey = widgetData["jsonKey"];
@@ -54,8 +77,8 @@ class _DataEntryState extends State<DataEntry> {
       }} else if (jsonKey != "" && jsonKey != null && !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
-      final height = widgetData["height"] ?? "100";
-      final width = widgetData["width"] ?? "400";
+      final height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
+      final width = double.parse(widgetData["width"] ?? "70") * resizeScaleFactorWidth;
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
