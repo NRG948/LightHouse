@@ -68,10 +68,8 @@ Map<String, dynamic> atlascout = {
       "icon": Icon(CustomIcons.autonomous),
       "widgets": [
         {
-          "title": "big boy auto widget",
-          "type": "placeholder",
-          "jsonKey": "autoQuantitative",
-          "height": "750"
+          "type": "rsAutoUntimed",
+          "jsonKey": ["processorCS","bargeCS"],
         }
       ]
     },
