@@ -53,17 +53,16 @@ class _RSAUHexagonState extends State<RSAUHexagon> {
           CustomPaint(size: Size.infinite,
           painter: HexagonPainter()),
           for (int i = 0; i < 6; i++)
-            Builder(builder: (context) {
-            final int currentIndex = i;
-            return Positioned.fill(child: GestureDetector(
-              onTap: () => onTriangleTap(_triangleLabels[currentIndex]),
-            ));})
+            TriangleTapRegion(
+              index: i,
+              onTap: () => onTriangleTap(_triangleLabels[i]),
+            ),
         ],
       ))
 
       );
   }
-  final _triangleLabels = ["AB","CD","EF","GH","IJ","KL"];
+  final _triangleLabels = ["KL","AB","CD","EF","GH","IJ",];
 }
 class HexagonPainter extends CustomPainter {
   @override
@@ -73,10 +72,10 @@ class HexagonPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
-    final double R = size.width / 2; // Assume a square widget for simplicity
+    final double R = size.width / 2; // Radius of the hexagon
     final Offset center = Offset(size.width / 2, size.height / 2);
 
-    // Calculate vertices of the hexagon
+    // Calculate the vertices of the hexagon
     final List<Offset> vertices = [];
     for (int k = 0; k < 6; k++) {
       double angle = k * (math.pi / 3);
@@ -108,7 +107,7 @@ class TriangleTapRegion extends StatelessWidget {
   final int index;
   final VoidCallback onTap;
 
-  TriangleTapRegion({required this.index, required this.onTap});
+  const TriangleTapRegion({super.key, required this.index, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -129,28 +128,30 @@ class TriangleTapRegion extends StatelessWidget {
           ));
         }
 
-        // Define the triangle path for the current index
-        final Path trianglePath = Path()
-          ..moveTo(center.dx, center.dy)
-          ..lineTo(vertices[index].dx, vertices[index].dy)
-          ..lineTo(vertices[(index + 1) % 6].dx, vertices[(index + 1) % 6].dy)
-          ..close();
+        // Define the triangle for this region
+        final Offset vertex1 = vertices[index];
+        final Offset vertex2 = vertices[(index + 1) % 6];
 
-        // Use a Stack for tap detection
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: onTap,
-                child: ClipPath(
-                  clipper: TriangleClipper(path: trianglePath),
-                  child: Container(
-                    color: Colors.transparent, // Invisible for tap area
-                  ),
-                ),
+        // Calculate the bounding box of the triangle
+        final double left = math.min(math.min(center.dx, vertex1.dx), vertex2.dx);
+        final double top = math.min(math.min(center.dy, vertex1.dy), vertex2.dy);
+        final double right = math.max(math.max(center.dx, vertex1.dx), vertex2.dx);
+        final double bottom = math.max(math.max(center.dy, vertex1.dy), vertex2.dy);
+
+        return Positioned(
+          left: left,
+          top: top,
+          width: right - left,
+          height: bottom - top,
+          child: GestureDetector(
+            onTap: onTap,
+            child: ClipPath(
+              clipper: TriangleClipper(center, vertex1, vertex2),
+              child: Container(
+                color: Colors.transparent, // Transparent for taps
               ),
             ),
-          ],
+          ),
         );
       },
     );
@@ -158,18 +159,27 @@ class TriangleTapRegion extends StatelessWidget {
 }
 
 class TriangleClipper extends CustomClipper<Path> {
-  final Path path;
+  final Offset center;
+  final Offset vertex1;
+  final Offset vertex2;
 
-  TriangleClipper({required this.path});
+  TriangleClipper(this.center, this.vertex1, this.vertex2);
 
   @override
   Path getClip(Size size) {
+    final Path path = Path()
+      ..moveTo(center.dx, center.dy)
+      ..lineTo(vertex1.dx, vertex1.dy)
+      ..lineTo(vertex2.dx, vertex2.dy)
+      ..close();
     return path;
   }
 
   @override
   bool shouldReclip(TriangleClipper oldClipper) {
-    return false;
+    return center != oldClipper.center ||
+        vertex1 != oldClipper.vertex1 ||
+        vertex2 != oldClipper.vertex2;
   }
 }
 void onTriangleTap(String triangleLabel) {
