@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 
+/// An empty widget.
 class NRGPlaceholder extends StatefulWidget {
   final String title;
   final String jsonKey;
@@ -32,7 +34,8 @@ class _NRGPlaceholderState extends State<NRGPlaceholder> {
         height: double.parse(_height),
         width: double.parse(_width),
         decoration: BoxDecoration(
-            color: Colors.blueGrey, borderRadius: BorderRadius.circular(8)),
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Text("Placeholder $title"));
   }
 

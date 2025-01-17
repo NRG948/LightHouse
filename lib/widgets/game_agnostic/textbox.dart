@@ -55,7 +55,8 @@ class _NRGTextboxState extends State<NRGTextbox> {
         height: double.parse(_height),
         width: double.parse(_width),
         decoration: BoxDecoration(
-            color: Colors.blueGrey, borderRadius: BorderRadius.circular(8)),
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           children: [
             Text(_title, style: Constants.comfortaaBold20pt),

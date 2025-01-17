@@ -7,6 +7,8 @@ class Constants {
   static TextStyle comfortaaBold30pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:30);
   static TextStyle comfortaaBold20pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:20);
   static TextStyle comfortaaBold10pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:10);
+
+  static final double borderRadius = 8;
 }
 
 TextStyle comfortaaBold(double fontSize,{bool bold=true}) {

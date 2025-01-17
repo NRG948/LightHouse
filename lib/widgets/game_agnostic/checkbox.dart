@@ -29,6 +29,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+        // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
           checkboxNotifier.value = !checkboxNotifier.value;
           DataEntry.exportData[_key] =
@@ -38,9 +39,11 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
             height: double.parse(_height),
             width: double.parse(_width),
             decoration: BoxDecoration(
-                color: Colors.blueGrey, borderRadius: BorderRadius.circular(8)),
+                color: Colors.blueGrey,
+                borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Row(
               children: [
+                // Updates the checkbox when [isChecked] is updated.
                 ValueListenableBuilder(
                     valueListenable: checkboxNotifier,
                     builder: (context, isChecked, child) {
@@ -50,10 +53,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                             checkboxNotifier.value = newValue ?? false;
                           });
                     }),
-                Text(
-                  _title,
-                  style: Constants.comfortaaBold20pt,
-                )
+                Text(_title, style: Constants.comfortaaBold20pt)
               ],
             )));
   }
