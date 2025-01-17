@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
+/// A manual counter that counts integers greater than 0.
 class NRGSpinbox extends StatefulWidget {
   final String title;
   final String jsonKey;
@@ -31,7 +32,8 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
         height: double.parse(_height),
         width: double.parse(_width),
         decoration: BoxDecoration(
-            color: Colors.blueGrey, borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           children: [
             Text(_title, style: Constants.comfortaaBold30pt),

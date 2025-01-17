@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
-// TODO: Implement Dropdown
 class NRGDropdown extends StatefulWidget {
   final List<String> options;
   final String title;
@@ -36,7 +35,8 @@ class _NRGDropdownState extends State<NRGDropdown> {
         height: double.parse(_height),
         width: double.parse(_width),
         decoration: BoxDecoration(
-            color: Colors.blueGrey, borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            color: Colors.blueGrey,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(children: [
           Text(_title, style: Constants.comfortaaBold20pt),
           DropdownButton<String>(

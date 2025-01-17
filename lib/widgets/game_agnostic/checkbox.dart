@@ -2,7 +2,6 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
-/// A custom togglable boolean widget.
 class NRGCheckbox extends StatefulWidget {
   final String title;
   final String jsonKey;
@@ -30,6 +29,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+        // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
           checkboxNotifier.value = !checkboxNotifier.value;
           DataEntry.exportData[_key] =
@@ -39,9 +39,11 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
             height: double.parse(_height),
             width: double.parse(_width),
             decoration: BoxDecoration(
-                color: Colors.blueGrey, borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                color: Colors.blueGrey,
+                borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Row(
               children: [
+                // Updates the checkbox when [isChecked] is updated.
                 ValueListenableBuilder(
                     valueListenable: checkboxNotifier,
                     builder: (context, isChecked, child) {
