@@ -29,6 +29,8 @@ class _DataEntryState extends State<DataEntry> {
   late double deviceWidth;
   late double deviceHeight;
 
+  late double resizeScaleFactorWidth;
+  late double resizeScaleFactorHeight;
 
   int currentPage = 0;
   late PageController controller;
@@ -37,8 +39,19 @@ class _DataEntryState extends State<DataEntry> {
     super.initState();
     DataEntry.exportData.clear();
     controller = PageController(initialPage: 0);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     deviceWidth = MediaQuery.sizeOf(context).width;
     deviceHeight = MediaQuery.sizeOf(context).height;
+
+    //These are such that we can resize widgets based on screen size, but we need a reference point, 
+    //so we are using a 412 x 915 dp phone as the reference and scaling based upon that. 
+    resizeScaleFactorWidth = deviceWidth / 90;
+    resizeScaleFactorHeight = deviceHeight / 200;
   }
 
   @override
@@ -52,9 +65,9 @@ class _DataEntryState extends State<DataEntry> {
       final type = widgetData["type"]!;
       if (type == "row") {
         return SizedBox(
-          width: 400,
+          width: 90 * resizeScaleFactorWidth,
           child: Row(
-              spacing: 10.0, children: createWidgetList(widgetData["children"]!)),
+              spacing: 2.22 * resizeScaleFactorWidth, children: createWidgetList(widgetData["children"]!)),
         );
       }
       final title = widgetData["title"] ?? "NO TITLE";
@@ -64,7 +77,7 @@ class _DataEntryState extends State<DataEntry> {
       }} else if (jsonKey != "" && jsonKey != null && !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
-      final height = widgetData["height"] ?? "100";
+      final height = widgetData["height"] ?? "22";
       final width = widgetData["width"] ?? "400";
       switch (type) {
         case "spinbox":
