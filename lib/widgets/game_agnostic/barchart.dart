@@ -30,9 +30,20 @@ class _NRGBarChartState extends State<NRGBarChart> {
 
   List<BarChartGroupData> getBarGroups(SplayTreeMap<int, double> data) =>
       data.keys
-          .map((int key) => BarChartGroupData(
-              x: key, barRods: [BarChartRodData(toY: data[key]!)]))
+          .map((int key) => BarChartGroupData(x: key, barRods: [
+                BarChartRodData(
+                    toY: data[key]!,
+                    gradient: LinearGradient(
+                        colors: [Constants.pastelYellow, Constants.pastelRed],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter),
+                    borderRadius: BorderRadius.circular(2),
+                    width: 12),
+              ]))
           .toList();
+
+  double getAverageData(SplayTreeMap<int, double> data) =>
+      data.values.fold(0.0, (x, y) => x + y) / data.length;
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +63,16 @@ class _NRGBarChartState extends State<NRGBarChart> {
                   fontSize: 50)),
           AspectRatio(
             aspectRatio: 2,
-            child: BarChart(BarChartData(barGroups: getBarGroups(_data))),
+            child: BarChart(BarChartData(
+                barGroups: getBarGroups(_data),
+                gridData: FlGridData(
+                    drawVerticalLine: false,
+                    horizontalInterval: 1,
+                    getDrawingHorizontalLine: (x) =>
+                        const FlLine(color: Colors.grey, strokeWidth: 1)))),
           ),
-          Text("AVERAGE: $_average", // TODO Calculate average value
+          Text(
+              "AVERAGE: ${num.parse(getAverageData(_data).toStringAsFixed(2))}", // TODO Calculate average value
               style: TextStyle(
                   fontFamily: "Comfortaa", color: Colors.black, fontSize: 20))
         ],
