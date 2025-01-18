@@ -51,7 +51,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
   /// Returns the average of [_data] excluding specified data from [_removedData].
   double getAverageData() =>
       (sum(_data.values) - sum(_removedData.map((x) => _data[x]))) /
-      _data.length;
+      (_data.length - _removedData.length);
 
   /// Returns the average of an [Iterable].
   double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
