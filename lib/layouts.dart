@@ -69,7 +69,7 @@ Map<String, dynamic> atlascout = {
       "widgets": [
         {
           "type": "rsAutoUntimed",
-          "jsonKey": ["processorCS","bargeCS"],
+          "jsonKey": ["autoProcessorCS","autoBargeCS","autoCoralScored","autoAlgaeRemoved","autoCoralScoredL1"],
         }
       ]
     },

@@ -88,6 +88,9 @@ flutter:
      - family:  CustomIcons
        fonts:
          - asset: fonts/CustomIcons.ttf
+     - family: CoralAlgaeIcons
+       fonts:
+         - asset: fonts/CoralAlgaeIcons.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

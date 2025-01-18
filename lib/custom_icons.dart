@@ -32,3 +32,20 @@ class CustomIcons {
   static const IconData gamepad = IconData(0xf11b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData autonomous = IconData(0xf544, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }
+class CoralAlgaeIcons {
+  CoralAlgaeIcons._();
+
+  static const _kFontFam = 'CoralAlgaeIcons';
+  static const String? _kFontPkg = null;
+
+  static const IconData autonomous = IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData coral = IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData coral2 = IconData(0xe806, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData coral3 = IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData coral4 = IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData teleop = IconData(0xe809, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData algae2FRCLogo = IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData algae2Plant = IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData algae3FRCLogo = IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData algae3Plant = IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+}

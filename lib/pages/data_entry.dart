@@ -18,7 +18,7 @@ import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
-  static final Map<String, String> exportData = {};
+  static final Map<String, dynamic> exportData = {};
   static late String activeConfig;
   @override
   State<DataEntry> createState() => _DataEntryState();
