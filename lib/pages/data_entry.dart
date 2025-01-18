@@ -1,9 +1,11 @@
+import "dart:collection";
 import "dart:convert";
 
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
+import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
@@ -56,6 +58,7 @@ class _DataEntryState extends State<DataEntry> {
       }
       final height = widgetData["height"] ?? "100";
       final width = widgetData["width"] ?? "400";
+      final data = widgetData["data"] ?? SplayTreeMap();
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
@@ -101,6 +104,8 @@ class _DataEntryState extends State<DataEntry> {
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "rsAutoUntimed":
           return RSAutoUntimed();
+        case "barchart":
+          return NRGBarChart(title: title, height: height, width: width, data: data);
       }
       return Text("type $type isn't a valid type");
     }).toList();

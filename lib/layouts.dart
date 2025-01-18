@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:lighthouse/custom_icons.dart';
 
@@ -563,11 +565,39 @@ Map<String, dynamic> hpscout = {
   ]
 };
 
+Map<String, dynamic> dataViewer = {
+  "title": "Data Viewer",
+  "pages": [
+    {
+      "title": "bing chilling",
+      "icon": Icon(CustomIcons.chartBar),
+      "widgets": [
+        {
+          "title": "Barchart Test",
+          "type": "barchart",
+          "height": "400",
+          "data": () {
+            SplayTreeMap<int, double> data = SplayTreeMap();
+            data.addAll({
+              1: 1.242,
+              2: 1.346,
+              4: 2.45,
+              3: 4.62,
+            });
+            return data;
+          } ()
+        }
+      ]
+    }
+  ]
+};
+
 Map<String, Map> layoutMap = {
   "AtlaScout": atlascout,
   "ChronoScout" : chronoscout,
   "PitScout" : pitscout,
-  "HPScout": hpscout
+  "HPScout": hpscout,
+  "DataViewer": dataViewer
 };
 
 
@@ -575,5 +605,6 @@ Map<String, IconData> iconMap = {
   "AtlaScout": Icons.map,
   "ChronoScout": Icons.timer,
   "PitScout": Icons.analytics_rounded,
-  "HPScout": Icons.child_care
+  "HPScout": Icons.child_care,
+  "DataViewer": Icons.account_box_rounded
 };
