@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 
+
+/// A horizontal bar chart widget that dislays numbers, automatically sorting by key.
 class NRGBarChart extends StatefulWidget {
   final String title;
   final String height;
@@ -29,15 +31,17 @@ class _NRGBarChartState extends State<NRGBarChart> {
   String get _width => widget.width;
   SplayTreeMap<int, double> get _data => widget.data;
   List<int> get _removedData => widget.removedData;
-  double _average = 0;
 
-  List<BarChartGroupData> getBarGroups(SplayTreeMap<int, double> data) =>
-      data.keys
+  /// Converts the [SplayTreeMap] dataset [_data] into a [BarChartGroupData] list to display.
+  List<BarChartGroupData> getBarGroups() =>
+      _data.keys
           .map((int key) => BarChartGroupData(x: key, barRods: [
                 BarChartRodData(
-                    toY: data[key]!,
+                    toY: _data[key]!,
                     gradient: LinearGradient(
-                        colors: !_removedData.contains(key) ? [Constants.pastelYellow, Constants.pastelRed] : [Colors.brown, Colors.grey],
+                        colors: !_removedData.contains(key)
+                            ? [Constants.pastelYellow, Constants.pastelRed]
+                            : [Colors.brown, Colors.grey],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter),
                     borderRadius: BorderRadius.circular(2),
@@ -45,8 +49,14 @@ class _NRGBarChartState extends State<NRGBarChart> {
               ]))
           .toList();
 
-  double getAverageData(SplayTreeMap<int, double> data) =>
-      (data.values.fold(0.0, (x, y) => x + y) - _removedData.map((x) => data[x]).fold(0.0, (x, y) => x + y!))/ data.length;
+  /// Returns the average of [_data] excluding specified data from [_removedData].
+  double getAverageData() =>
+      (sum(_data.values) - sum(_removedData.map((x) => _data[x]))) / _data.length;
+  
+  /// Returns the average of an [Iterable].
+  double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
+
+  num roundAtPlace(double number, int place) => num.parse(number.toStringAsFixed(place));
 
   @override
   Widget build(BuildContext context) {
@@ -58,30 +68,33 @@ class _NRGBarChartState extends State<NRGBarChart> {
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
         children: [
+          // Title Text.
           Text(_title,
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                   fontSize: 50)),
+          // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           AspectRatio(
             aspectRatio: 2,
             child: BarChart(BarChartData(
                 barTouchData: BarTouchData(
-                  enabled: true,
-                  touchTooltipData: BarTouchTooltipData(
-                    getTooltipColor: (group) => Color.fromARGB(200, 255, 255, 255),
-                  )
-                ),
-                barGroups: getBarGroups(_data),
+                    enabled: true,
+                    touchTooltipData: BarTouchTooltipData(
+                      getTooltipColor: (group) =>
+                          Color.fromARGB(200, 255, 255, 255),
+                    )),
+                barGroups: getBarGroups(),
                 gridData: FlGridData(
                     drawVerticalLine: false,
                     horizontalInterval: 1,
                     getDrawingHorizontalLine: (x) =>
                         const FlLine(color: Colors.grey, strokeWidth: 1)))),
           ),
+          // Average value text.
           Text(
-              "AVERAGE: ${num.parse(getAverageData(_data).toStringAsFixed(2))}", // TODO Calculate average value
+              "AVERAGE: ${roundAtPlace(getAverageData(), 2)}", // TODO Calculate average value
               style: TextStyle(
                   fontFamily: "Comfortaa", color: Colors.black, fontSize: 20))
         ],
