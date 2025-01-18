@@ -12,6 +12,6 @@ class Constants {
   static final double borderRadius = 8;
 }
 
-TextStyle comfortaaBold(double fontSize,{bool bold=true}) {
-  return TextStyle(fontFamily: "Comfortaa", fontWeight: bold ? FontWeight.bold : FontWeight.normal, color: Colors.white, fontSize:fontSize);
+TextStyle comfortaaBold(double fontSize,{bool bold=true, Color color = Colors.white}) {
+  return TextStyle(fontFamily: "Comfortaa", fontWeight: bold ? FontWeight.bold : FontWeight.normal, color: color, fontSize:fontSize);
 }

@@ -2,6 +2,8 @@ import "dart:math" as math;
 
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/custom_icons.dart';
+import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
 class RSAutoUntimed extends StatefulWidget {
@@ -12,40 +14,242 @@ class RSAutoUntimed extends StatefulWidget {
 }
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
+  late SharedState sharedState;
+  @override
+  void initState() {
+    super.initState();
+    sharedState = SharedState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       height:725,
       width:400,
-      color: Colors.blueGrey,
+      color: Constants.pastelWhite,
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RSAUCoralStation(title: "Processor CS", jsonKey: "processorCS"),
-          RSAUCoralStation(title: "Barge CS", jsonKey: "bargeCS"),
+          RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS"),
+          RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS"),
         ],),
         SizedBox(height: 10),
-        RSAUHexagon()
+        RSAUHexagon(sharedState: sharedState,),
+        RSAUReef(sharedState: sharedState)
       ],),
     );
   }
 }
 
-class RSAUHexagon extends StatefulWidget {
-  const RSAUHexagon({super.key});
+class RSAUReef extends StatefulWidget {
+  final SharedState sharedState;
+  const RSAUReef({super.key, required this.sharedState});
 
-  
   @override
-  State<RSAUHexagon> createState() => _RSAUHexagonState();
+  State<RSAUReef> createState() => _RSAUReefState();
 }
 
-class _RSAUHexagonState extends State<RSAUHexagon> {
+class _RSAUReefState extends State<RSAUReef> {
+  @override
+  void initState() {
+     DataEntry.exportData["autoCoralScored"] = [];
+    DataEntry.exportData["autoAlgaeRemoved"] = [];
+    super.initState();
+    widget.sharedState.addListener(() {setState(() {
+    });});
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    widget.sharedState.addListener(() {setState(() {
+
+    });});
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (widget.sharedState.activeTriangle == null) {
+      return Text("No Section Selected", style: comfortaaBold(18, color: Colors.black),);
+    }
+    String at = widget.sharedState.activeTriangle!;
     return Container(
-      color: Colors.white,
-      height: 360,
-      width: 360,
+      height: 330,
+      width: 318,
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Constants.pastelWhite,
+        border: Border.all(color: Colors.black,width: 1)),
+      child: Column(
+        spacing: 2,
+        children: [
+        Text("Section ${widget.sharedState.activeTriangle}",
+        textAlign: TextAlign.center,
+        style: comfortaaBold(18, color: Colors.black)),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[0]}4",),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[1]}4",),
+        ],),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[0]}3",),
+          RSAUReefButton(icon: CoralAlgaeIcons.algae3FRCLogo, location: "${at}3", algae: true,),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[1]}3",),
+        ],),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[0]}2",),
+          RSAUReefButton(icon: CoralAlgaeIcons.algae2FRCLogo, location: "${at}2", algae: true,),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[1]}2",),
+        ],),
+        RSAUTrough()    
+      ],)
+    );
+  }
+}
+class RSAUTrough extends StatefulWidget {
+  const RSAUTrough({super.key});
+
+  @override
+  State<RSAUTrough> createState() => _RSAUTroughState();
+}
+
+class _RSAUTroughState extends State<RSAUTrough> {
+  late int counter;
+
+  @override
+  void initState() {
+    super.initState();
+    counter = 0;
+  }
+
+  void increment() {setState( () {
+    if (counter < 99) {counter++;}
+    DataEntry.exportData["coralScoredL1"] = counter.toString();});
+  }
+
+  void decrement() {setState(() {
+    if (counter>0) {counter--;}
+    DataEntry.exportData["coralScoredL1"] = counter.toString();});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: increment,
+      child: Container(
+        height: 96,
+        width: 302,
+        decoration: BoxDecoration(
+          color: counter > 0 ? Constants.pastelRed : Colors.grey,
+          border: Border.all(
+            color: Colors.black,
+            width: 1
+          )
+        ),
+        child: Center(
+          child: GestureDetector(
+            onTap: increment,
+            child: Column(
+              children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(CoralAlgaeIcons.coral),
+                  Text("Coral Scored L1 (Trough)", textAlign: TextAlign.center,style: comfortaaBold(15, color: Colors.black),),
+                ],
+              ),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                child: SizedBox(
+                  height: 70,
+                  child: Row(
+                    children: [
+                    SizedBox(
+                      width: 250,
+                      child: Text(counter.toString(),style: comfortaaBold(23, color: Colors.black),textAlign: TextAlign.center,)),
+                    IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down),highlightColor: Colors.transparent,splashColor: Colors.transparent,)
+                  ],),
+                ),
+              )
+            ],),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RSAUReefButton extends StatefulWidget {
+  final IconData icon;
+  final bool algae;
+  final String location;
+  const RSAUReefButton({super.key, required this.icon, required this.location, this.algae = false});
+
+  @override
+  State<RSAUReefButton> createState() => _RSAUReefButtonState();
+}
+
+class _RSAUReefButtonState extends State<RSAUReefButton> {
+  late bool active;
+
+  @override
+  void initState() {
+    super.initState();
+    active = false;
+  }
+
+  void setActive() {setState(() {
+    if (!active) {
+      if (widget.algae) {
+        DataEntry.exportData["autoAlgaeRemoved"].add(widget.location);
+      } else {
+        DataEntry.exportData["autoCoralScored"].add(widget.location);
+      }
+    } else {
+      if (widget.algae) {
+        DataEntry.exportData["autoAlgaeRemoved"].remove(widget.location);
+      } else {
+        DataEntry.exportData["autoCoralScored"].remove(widget.location);
+      }
+    }
+    active = !active;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    active = DataEntry.exportData["autoCoralScored"].contains(widget.location) || DataEntry.exportData["autoAlgaeRemoved"].contains(widget.location);
+    return Container(
+      height: 60,
+      width:  widget.algae ? 75 : 100,
+      decoration: BoxDecoration(
+        color: active ? Constants.pastelRed : Colors.grey,
+        border: Border.all(
+          color: Colors.black,
+          width: 1
+        )),
+      child: IconButton(onPressed: setActive, icon: Icon(widget.icon),
+      iconSize: 45,
+      color: Colors.black,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,)
+    );
+  }
+}
+class RSAUHexagon extends StatelessWidget {
+  final SharedState sharedState;
+  const RSAUHexagon({super.key, required this.sharedState});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: Change these labels to more accurately match reef locations (top ones are flipped)
+    final triangleLabels = ["IJ","GH","EF","CD","AB","KL",];
+    return Container(
+      color: Constants.pastelWhite,
+      height: 275,
+      width: 275,
       alignment: Alignment.center,
       child: AspectRatio(aspectRatio: 1,
       child: Stack(
@@ -55,15 +259,18 @@ class _RSAUHexagonState extends State<RSAUHexagon> {
           for (int i = 0; i < 6; i++)
             TriangleTapRegion(
               index: i,
-              onTap: () => onTriangleTap(_triangleLabels[i]),
+              label: triangleLabels[i],
+              sharedState: sharedState
             ),
         ],
       ))
 
       );
   }
-  final _triangleLabels = ["KL","AB","CD","EF","GH","IJ",];
+
+  
 }
+
 class HexagonPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -103,14 +310,44 @@ class HexagonPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class TriangleTapRegion extends StatelessWidget {
-  final int index;
-  final VoidCallback onTap;
 
-  const TriangleTapRegion({super.key, required this.index, required this.onTap});
+class TriangleTapRegion extends StatefulWidget {
+  final int index;
+  final String label;
+  final SharedState sharedState;
+  const TriangleTapRegion({super.key, required this.index, required this.label, required this.sharedState});
 
   @override
+  State<TriangleTapRegion> createState() => _TriangleTapRegionState();
+}
+
+class _TriangleTapRegionState extends State<TriangleTapRegion> {
+  @override
+  void initState() {
+    super.initState();
+    widget.sharedState.addListener(() {setState(() {
+    });});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.sharedState.addListener(() {setState(() {
+    });});
+  }
+  @override
   Widget build(BuildContext context) {
+    Widget returnIfHighlighted = widget.sharedState.activeTriangle == widget.label ? GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {widget.sharedState.setActiveTriangle(widget.label);},
+      child: Container(
+        color: Colors.grey,
+         child: Text(widget.label, style: comfortaaBold(14,color:Colors.black),)
+       ),
+    ) : GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {widget.sharedState.setActiveTriangle(widget.label);},
+      child: Text(widget.label,style:comfortaaBold(14,color:Colors.black)));
     return LayoutBuilder(
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
@@ -129,35 +366,40 @@ class TriangleTapRegion extends StatelessWidget {
         }
 
         // Define the triangle for this region
-        final Offset vertex1 = vertices[index];
-        final Offset vertex2 = vertices[(index + 1) % 6];
+        final Offset vertex1 = vertices[widget.index];
+        final Offset vertex2 = vertices[(widget.index + 1) % 6];
 
-        // Calculate the bounding box of the triangle
-        final double left = math.min(math.min(center.dx, vertex1.dx), vertex2.dx);
-        final double top = math.min(math.min(center.dy, vertex1.dy), vertex2.dy);
-        final double right = math.max(math.max(center.dx, vertex1.dx), vertex2.dx);
-        final double bottom = math.max(math.max(center.dy, vertex1.dy), vertex2.dy);
+        // Calculate the centroid (approximate center) of the triangle
+        final Offset labelPosition = Offset(
+          (center.dx + vertex1.dx + vertex2.dx) / 3,
+          (center.dy + vertex1.dy + vertex2.dy) / 3,
+        );
 
-        return Positioned(
-          left: left,
-          top: top,
-          width: right - left,
-          height: bottom - top,
-          child: GestureDetector(
-            onTap: onTap,
-            child: ClipPath(
+        return Stack(
+          children: [
+            // Tap area for the triangle
+            ClipPath(
               clipper: TriangleClipper(center, vertex1, vertex2),
-              child: Container(
-                color: Colors.transparent, // Transparent for taps
+              child: GestureDetector(
+                onTap: () {widget.sharedState.setActiveTriangle(widget.label);
+                },
+                child: Container(
+                  color: Colors.transparent,
+                ),
               ),
             ),
-          ),
+            // Triangle label
+            Positioned(
+              left: labelPosition.dx - 10, // Adjust for text centering
+              top: labelPosition.dy - 10,  // Adjust for text centering
+              child: returnIfHighlighted
+            ),
+          ],
         );
       },
     );
   }
 }
-
 class TriangleClipper extends CustomClipper<Path> {
   final Offset center;
   final Offset vertex1;
@@ -182,9 +424,7 @@ class TriangleClipper extends CustomClipper<Path> {
         vertex2 != oldClipper.vertex2;
   }
 }
-void onTriangleTap(String triangleLabel) {
-  print(triangleLabel);
-}
+
 
 class RSAUCoralStation extends StatefulWidget {
   final String jsonKey;
@@ -205,11 +445,38 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: increment,
-      child: Container(
-        width: 100,
-        height: 50,
-        color: Constants.pastelRed,
-        child: Text(title, style: comfortaaBold(18),),
+      child: Row(
+        children: [
+          Container(
+            width: 100,
+            height: 51,
+             decoration: BoxDecoration(
+              color: Colors.grey,
+              border: Border.all(
+                color: Constants.pastelWhite,
+                width: 1
+              )
+            ),
+            child: Column(
+              children: [
+                Text(title, style: comfortaaBold(16),textAlign: TextAlign.center,),
+                Text(counter.toString(),style: comfortaaBold(18),)
+              ],
+            ),
+          ),
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              border: Border.all(
+                color: Constants.pastelWhite,
+                width: 1
+              )
+            ),
+            child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down),highlightColor: Colors.transparent,splashColor: Colors.transparent,)
+          )
+        ],
       ),
     );
   }
@@ -222,26 +489,26 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
   void updateState() {
     DataEntry.exportData[jsonKey] = counter.toString();
   }
-  void increment() {
+  void increment() {setState(() {
     if (counter<99) {
       counter++;
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("+1 $title: $counter"),
-        action: SnackBarAction(label: "Undo", onPressed: () {
-          decrement();
-        }),
-      ));
-    }
-    else {showDialog(context: context, builder: (builder) {return Dialog(child:Text("Counter $title is over limit!"));});}
+    } else {showDialog(context: context, builder: (builder) {return Dialog(child:Text("Counter $title is over limit!"));});}
     updateState();
+  });
   }
-  void decrement() {
+  void decrement() {setState(() {
     if (counter>0) {
       counter--;
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("-1 $title: $counter")));
     }
     updateState();
+  }); 
+  }
+}
+class SharedState extends ChangeNotifier {
+  String? activeTriangle;
+  void setActiveTriangle(String triangle) {
+    print(triangle);
+    activeTriangle = triangle;
+    notifyListeners();
   }
 }
