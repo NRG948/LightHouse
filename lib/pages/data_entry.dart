@@ -58,7 +58,8 @@ class _DataEntryState extends State<DataEntry> {
       }
       final height = widgetData["height"] ?? "100";
       final width = widgetData["width"] ?? "400";
-      final data = widgetData["data"] ?? SplayTreeMap();
+      final chartData = widgetData["chartData"] ?? SplayTreeMap();
+      final chartRemovedData = widgetData["chartRemovedData"] ?? [];
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
@@ -105,7 +106,7 @@ class _DataEntryState extends State<DataEntry> {
         case "rsAutoUntimed":
           return RSAutoUntimed();
         case "barchart":
-          return NRGBarChart(title: title, height: height, width: width, data: data);
+          return NRGBarChart(title: title, height: height, width: width, data: chartData, removedData: chartRemovedData);
       }
       return Text("type $type isn't a valid type");
     }).toList();

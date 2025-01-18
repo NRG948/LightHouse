@@ -9,13 +9,15 @@ class NRGBarChart extends StatefulWidget {
   final String height;
   final String width;
   final SplayTreeMap<int, double> data;
+  final List<int> removedData;
 
   const NRGBarChart(
       {super.key,
       required this.title,
       required this.height,
       required this.width,
-      required this.data});
+      required this.data,
+      required this.removedData});
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();
@@ -26,6 +28,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
   String get _height => widget.height;
   String get _width => widget.width;
   SplayTreeMap<int, double> get _data => widget.data;
+  List<int> get _removedData => widget.removedData;
   double _average = 0;
 
   List<BarChartGroupData> getBarGroups(SplayTreeMap<int, double> data) =>
@@ -34,7 +37,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                 BarChartRodData(
                     toY: data[key]!,
                     gradient: LinearGradient(
-                        colors: [Constants.pastelYellow, Constants.pastelRed],
+                        colors: !_removedData.contains(key) ? [Constants.pastelYellow, Constants.pastelRed] : [Colors.brown, Colors.grey],
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter),
                     borderRadius: BorderRadius.circular(2),
@@ -43,7 +46,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
           .toList();
 
   double getAverageData(SplayTreeMap<int, double> data) =>
-      data.values.fold(0.0, (x, y) => x + y) / data.length;
+      (data.values.fold(0.0, (x, y) => x + y) - _removedData.map((x) => data[x]).fold(0.0, (x, y) => x + y!))/ data.length;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,12 @@ class _NRGBarChartState extends State<NRGBarChart> {
           AspectRatio(
             aspectRatio: 2,
             child: BarChart(BarChartData(
+                barTouchData: BarTouchData(
+                  enabled: true,
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipColor: (group) => Color.fromARGB(200, 255, 255, 255),
+                  )
+                ),
                 barGroups: getBarGroups(_data),
                 gridData: FlGridData(
                     drawVerticalLine: false,

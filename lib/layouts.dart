@@ -576,7 +576,7 @@ Map<String, dynamic> dataViewer = {
           "title": "Barchart Test",
           "type": "barchart",
           "height": "300",
-          "data": () {
+          "chartData": () {
             SplayTreeMap<int, double> data = SplayTreeMap();
             data.addAll({
               6: 5,
@@ -593,7 +593,8 @@ Map<String, dynamic> dataViewer = {
               8: 4,
             });
             return data;
-          } ()
+          } (),
+          "chartRemovedData": [1, 5, 9]
         }
       ]
     }
