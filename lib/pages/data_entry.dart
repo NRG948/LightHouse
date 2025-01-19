@@ -315,7 +315,7 @@ class _DataEntryState extends State<DataEntry> {
           onTap: (index) {
             setState(() {
               currentPage = index;
-              controller.jumpToPage(index);
+              controller.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
             });
           },
           unselectedIconTheme: IconThemeData(color: Colors.black),
