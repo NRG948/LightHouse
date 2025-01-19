@@ -11,6 +11,7 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
+import "package:lighthouse/widgets/game_agnostic/mcq.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
@@ -174,6 +175,13 @@ class _DataEntryState extends State<DataEntry> {
               color: color,
               multiColor: multiColor,
               multiData: multiChartData);
+        case "mcq": 
+          return NRGMCQ(
+            title: title,
+            height: height,
+            width: width, 
+            jsonKey: jsonKey,
+          );
       }
       return Text("type $type isn't a valid type");
     }).toList();

@@ -65,7 +65,7 @@ Map<String, dynamic> atlascout = {
             }, 
             {
               "title": "Replay",
-              "type": "placeholder",
+              "type": "checkbox",
               "jsonKey": "replay",
               "width": "20"
             }
@@ -77,7 +77,7 @@ Map<String, dynamic> atlascout = {
           "jsonKey": "startingPosition",
           "height": "30"
         },
-        {"title": "Preload", "type": "placeholder", "jsonKey": "preload"}
+        {"title": "Preload", "type": "checkbox", "jsonKey": "preload"}
       ]
     },
     {
@@ -146,17 +146,18 @@ Map<String, dynamic> atlascout = {
       "widgets": [
         {
           "title": "End Location",
-          "type": "placeholder",
+          "type": "dropdown",
+          "options": "None,Park,Deep Climb,Shallow Climb", 
           "jsonKey": "endLocation"
         },
         {
           "title": "[ ] Attempted Climb?",
-          "type": "placeholder",
+          "type": "checkbox",
           "jsonKey": "attemptedClimb"
         },
         {
           "title": "Climb Start time",
-          "type": "placeholder",
+          "type": "numberbox",
           "jsonKey": "climbStartTime"
         },
         {
@@ -164,7 +165,7 @@ Map<String, dynamic> atlascout = {
           "children": [
             {
               "title": "Robot Disabled",
-              "type": "placeholder",
+              "type": "checkbox",
               "jsonKey": "robotDisabled",
               "width": "32"
             },
@@ -174,7 +175,7 @@ Map<String, dynamic> atlascout = {
             }, 
             {
               "title": "Reason for robot disable",
-              "type": "placeholder",
+              "type": "textbox",
               "jsonKey": "robotDisableReason",
               "width": "52"
             }
@@ -182,13 +183,13 @@ Map<String, dynamic> atlascout = {
         },
         {
           "title": "Data Quality",
-          "type": "placeholder",
+          "type": "mcq",
           "jsonKey": "dataQuality"
         },
         {"title": "Comments", "type": "placeholder", "jsonKey": "comments"},
         {
-          "title": "[ ] Team crossed over midline?",
-          "type": "placeholder",
+          "title": "Team crossed over midline?",
+          "type": "checkbox",
           "jsonKey": "crossedMidline"
         }
       ]
@@ -216,7 +217,7 @@ Map<String, dynamic> chronoscout = {
       "widgets": [
         {
           "title": "Scouter Name",
-          "type": "placeholder",
+          "type": "textbox",
           "jsonKey": "scouterName"
         },
         {
@@ -224,7 +225,7 @@ Map<String, dynamic> chronoscout = {
           "children": [
             {
               "title": "Team Number",
-              "type": "placeholder",
+              "type": "numberbox",
               "jsonKey": "scouterName",
               "width": "34"
             },
@@ -234,7 +235,8 @@ Map<String, dynamic> chronoscout = {
             }, 
             {
               "title": "Driver Station",
-              "type": "placeholder",
+              "options": "Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue3",
+              "type": "dropdown",
               "jsonKey": "driverStation",
               "width": "50"
             }
@@ -245,7 +247,8 @@ Map<String, dynamic> chronoscout = {
           "children": [
             {
               "title": "Match Type",
-              "type": "placeholder",
+              "type": "dropdown",
+              "options": "Qualifications,Playoffs,Finals",
               "jsonKey": "matchType",
               "width": "30"
             },
@@ -255,7 +258,7 @@ Map<String, dynamic> chronoscout = {
             }, 
             {
               "title": "Match Number",
-              "type": "placeholder",
+              "type": "numberbox",
               "jsonKey": "matchNumber",
               "width": "20"
             },
@@ -265,7 +268,7 @@ Map<String, dynamic> chronoscout = {
             }, 
             {
               "title": "Replay",
-              "type": "placeholder",
+              "type": "checkbox",
               "jsonKey": "replay",
               "width": "32"
             }
@@ -307,7 +310,7 @@ Map<String, dynamic> chronoscout = {
         },
         {
           "title": "Timer",
-          "type": "placeholder",
+          "type": "stopwatch",
           "jsonKey": "shouldThisBeSeparate"
         }
       ]
@@ -324,7 +327,7 @@ Map<String, dynamic> chronoscout = {
         },
         {
           "title": "Data Quality (5 star rating)",
-          "type": "placeholder",
+          "type": "mcq",
           "jsonKey": "dataQuality"
         },
         {"title": "Comments", "type": "textbox", "jsonKey": "comments"}
@@ -358,7 +361,36 @@ Map<String, dynamic> pitscout = {
       "title": "Robot Stats",
       "icon": Icon(CustomIcons.wrench),
       "widgets": [
-        {"title": "", "type": "placeholder", "jsonKey": "teamNumber"}
+        {
+          "title": "Robot Height (in)", 
+          "type" : "numberbox", 
+          "jsonKey": "robotHeight"
+        }, 
+        {
+          "title": "Robot Length (in)", 
+          "type": "numberbox", 
+          "jsonKey": "robotLength"
+        }, 
+        {
+          "title": "Robot Width (in)", 
+          "type": "numberbox", 
+          "jsonKey": "robotWidth"
+        }, 
+        {
+          "title": "Robot Weight (lbs)", 
+          "type": "numberbox", 
+          "jsonKey": "robotWeight"
+        }, 
+        {
+          "title": "Drivetrain", 
+          "type": "textbox", 
+          "jsonKey": "robotDrivetrain"
+        }, 
+        {
+          "title": "Describe Robot Mechanisms",
+          "type": "textbox", 
+          "jsonKey": "robotMechanisms"
+        }
       ]
     },
     {
@@ -368,11 +400,11 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Auto Routine",
           "type": "placeholder",
-          "jsonKey": "teamNumber",
+          "jsonKey": "autoRoutine",
         },
         {
           "title": "Drops Algae on Ground",
-          "type": "placeholder",
+          "type": "checkbox",
           "jsonKey": "dropsAlgaeAuto"
         }
       ]
@@ -431,7 +463,8 @@ Map<String, dynamic> pitscout = {
         },
         {
           "title": "Preferred Human Player Station",
-          "type": "placeholder",
+          "type": "dropdown",
+          "options": "Processer,Processer Coral Station,Barge Coral Station", 
           "jsonKey": "humanPlayerPreference"
         },
         {
@@ -439,7 +472,7 @@ Map<String, dynamic> pitscout = {
           "children": [
             {
               "title": "Average Coral Cycles",
-              "type": "placeholder",
+              "type": "numberbox",
               "jsonKey": "averageCoralCycles",
               "width": "42"
             },
@@ -449,7 +482,7 @@ Map<String, dynamic> pitscout = {
             }, 
             {
               "title": "Average Algae Cycles",
-              "type": "placeholder",
+              "type": "numberbox",
               "jsonKey": "averageAlgaeCycles",
               "width": "42"
             }
@@ -479,7 +512,7 @@ Map<String, dynamic> hpscout = {
       "widgets": [
         {
           "title": "Scouter Name",
-          "type": "placeholder",
+          "type": "textbox",
           "jsonKey": "scouterName"
         },
         {
@@ -487,7 +520,7 @@ Map<String, dynamic> hpscout = {
           "children": [
             {
               "title": "Red Team Number",
-              "type": "placeholder",
+              "type": "numberbox",
               "jsonKey": "redHPTeam",
               "width": "42"
             },
@@ -497,7 +530,7 @@ Map<String, dynamic> hpscout = {
             }, 
             {
               "title": "Blue Team Number",
-              "type": "placeholder",
+              "type": "numberbox",
               "jsonKey": "blueHPTeam",
               "width": "42"
             }
@@ -508,7 +541,8 @@ Map<String, dynamic> hpscout = {
           "children": [
             {
               "title": "Match Type",
-              "type": "placeholder",
+              "type": "dropdown",
+              "options": "Qualifications,Playoffs,Finals", 
               "jsonKey": "matchType",
               "width": "30"
             },
@@ -518,7 +552,7 @@ Map<String, dynamic> hpscout = {
             }, 
             {
               "title": "Match Number",
-              "type": "placeholder",
+              "type": "numberbox",
               "jsonKey": "matchNumber",
               "width": "30"
             },
@@ -528,7 +562,7 @@ Map<String, dynamic> hpscout = {
             }, 
             {
               "title": "Replay",
-              "type": "placeholder",
+              "type": "checkbox",
               "jsonKey": "replay",
               "width": "22"
             }
