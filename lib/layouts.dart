@@ -21,8 +21,12 @@ Map<String, dynamic> atlascout = {
               "title": "Team Number",
               "type": "numberbox",
               "jsonKey": "teamNumber",
-              "width": "41.5"
+              "width": "42"
             },
+            {
+              "type": "spacer", 
+              "width": "2"
+            }, 
             {
               "title": "Driver Station",
               "type": "dropdown",
@@ -40,19 +44,27 @@ Map<String, dynamic> atlascout = {
               "type": "dropdown",
               "options": "Qualifiers,Playoffs,ADD MORE NOT COMPLETE", 
               "jsonKey": "matchType",
-              "width": "37.5"
+              "width": "42"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Match Number",
               "type": "placeholder",
               "jsonKey": "matchNumber",
-              "width": "23"
+              "width": "20"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Replay",
               "type": "placeholder",
               "jsonKey": "replay",
-              "width": "21"
+              "width": "20"
             }
           ]
         },
@@ -60,7 +72,7 @@ Map<String, dynamic> atlascout = {
           "title": "Starting Position",
           "type": "placeholder",
           "jsonKey": "startingPosition",
-          "height": "200"
+          "height": "30"
         },
         {
           "title": "Preload", 
@@ -77,7 +89,7 @@ Map<String, dynamic> atlascout = {
           "title": "big boy auto widget",
           "type": "placeholder",
           "jsonKey": "autoQuantitative",
-          "height": "750"
+          "height": "60"
         }
       ]
     },
@@ -89,7 +101,7 @@ Map<String, dynamic> atlascout = {
           "title": "Coral Pickups",
           "type": "multispinbox",
           "jsonKey": ["coralPickupsStation","coralPickupsGround",],
-          "height": "150",
+          "height": "40",
           "boxNames": [
             ["Station", "Ground"]
           ]
@@ -98,7 +110,7 @@ Map<String, dynamic> atlascout = {
           "title": "Coral Scored",
           "type": "multispinbox",
           "jsonKey": ["coralScoredL1","coralScoredL2","coralScoredL3","coralScoredL4"],
-          "height": "150",
+          "height": "40",
           "boxNames":[
             ["L1","L2","L3","L4"]
           ]
@@ -107,7 +119,7 @@ Map<String, dynamic> atlascout = {
           "title": "Algae",
           "type": "multispinbox",
           "jsonKey": ["algaeremoveL2","algaeremoveL3","algaescoreProcessor","algaescoreNet","algaemissProcessor","algaemissNet"],
-          "height": "400",
+          "height": "65",
           "boxNames": [
             ["Remove L2", "Remove L3", "Score Processor", "Score Net"],
             ["Miss Processor", "Miss Net"]
@@ -141,13 +153,17 @@ Map<String, dynamic> atlascout = {
               "title": "Robot Disabled",
               "type": "placeholder",
               "jsonKey": "robotDisabled",
-              "width": "75"
+              "width": "32"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Reason for robot disable",
               "type": "placeholder",
               "jsonKey": "robotDisableReason",
-              "width": "300"
+              "width": "52"
             }
           ]
         },
@@ -175,7 +191,7 @@ Map<String, dynamic> chronoscout = {
   "title": "Chronoscout",
   "pages": [
     {
-      "title": "HorizontalTest", //Test page for horizontal stuff. 
+      "title": "HorizontalTest", //Test page for horizontal stuff. REMOVE FOR PRODUCTION
       "icon": Icon(CustomIcons.pitCrew), 
       "widgets": [
         {
@@ -201,13 +217,17 @@ Map<String, dynamic> chronoscout = {
               "title": "Team Number",
               "type": "placeholder",
               "jsonKey": "scouterName",
-              "width": "275"
+              "width": "34"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Driver Station",
               "type": "placeholder",
               "jsonKey": "driverStation",
-              "width": "100"
+              "width": "50"
             }
           ]
         },
@@ -218,19 +238,27 @@ Map<String, dynamic> chronoscout = {
               "title": "Match Type",
               "type": "placeholder",
               "jsonKey": "matchType",
-              "width": "200"
+              "width": "30"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Match Number",
               "type": "placeholder",
               "jsonKey": "matchNumber",
-              "width": "75"
+              "width": "20"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Replay",
               "type": "placeholder",
               "jsonKey": "replay",
-              "width": "75"
+              "width": "32"
             }
           ]
         },
@@ -238,7 +266,7 @@ Map<String, dynamic> chronoscout = {
           "title": "Starting Position",
           "type": "placeholder",
           "jsonKey": "startingPosition",
-          "height": "200"
+          //Deleted "height" field... Not sure why needed. No idea what type this should be. -Sean
         },
         {
           "title": "Start match guided",
@@ -255,7 +283,6 @@ Map<String, dynamic> chronoscout = {
           "title":"big boy auto widget",
           "type": "placeholder",
           "jsonKey": "idkYet",
-          "height": "600"
         },
         {
           "title": "Timer",
@@ -272,7 +299,6 @@ Map<String, dynamic> chronoscout = {
           "title":"big boy teleop widget",
           "type": "placeholder",
           "jsonKey": "idkYet",
-          "height": "600"
         },
         {
           "title": "Timer",
@@ -354,7 +380,6 @@ Map<String, dynamic> pitscout = {
           "title": "Auto Routine",
           "type": "placeholder",
           "jsonKey": "teamNumber",
-          "height": "600"
         },
         {
           "title": "Drops Algae on Ground",
@@ -397,7 +422,7 @@ Map<String, dynamic> pitscout = {
           "title": "Climbing Ability and Preference",
           "type": "placeholder",
           "jsonKey": "climbingAbilityAndPreference",
-          "height": "400"          
+          "height": "80"          
         },
         {
           "title": "Average Climb Time",
@@ -427,13 +452,17 @@ Map<String, dynamic> pitscout = {
               "title": "Average Coral Cycles",
               "type": "placeholder",
               "jsonKey": "averageCoralCycles",
-              "width": "190"
+              "width": "42"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Average Algae Cycles",
               "type": "placeholder",
               "jsonKey": "averageAlgaeCycles",
-              "width": "190"
+              "width": "42"
             }
           ]
         },
@@ -471,13 +500,17 @@ Map<String, dynamic> hpscout = {
               "title": "Red Team Number",
               "type": "placeholder",
               "jsonKey": "redHPTeam",
-              "width": "190"
+              "width": "42"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Blue Team Number",
               "type": "placeholder",
               "jsonKey": "blueHPTeam",
-              "width": "190"
+              "width": "42"
             }
           ]
         },
@@ -488,19 +521,27 @@ Map<String, dynamic> hpscout = {
               "title": "Match Type",
               "type": "placeholder",
               "jsonKey": "matchType",
-              "width": "200"
+              "width": "30"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Match Number",
               "type": "placeholder",
               "jsonKey": "matchNumber",
-              "width": "75"
+              "width": "30"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Replay",
               "type": "placeholder",
               "jsonKey": "replay",
-              "width": "75"
+              "width": "22"
             }
           ]
         }
@@ -512,39 +553,45 @@ Map<String, dynamic> hpscout = {
       "widgets": [
         {
           "type": "row",
+          "height": "25", 
           "children": [
             {
               "title": "Red Score",
               "type": "spinbox",
               "jsonKey": "redScore",
-              "width": "190",
-              "height": "190"
+              "width": "42",
+            },
+            {
+              "type": "spacer", 
+              "width": "2", 
             },
             {
               "title": "Blue Score",
               "type": "spinbox",
               "jsonKey": "blueScore",
-              "width": "190",
-              "height": "190"
+              "width": "42",
             }
           ]
         },
         {
           "type": "row",
+          "height": "25", 
           "children": [
             {
               "title": "Red Miss",
               "type": "spinbox",
               "jsonKey": "redMiss",
-              "width": "190",
-              "height": "190"
+              "width": "42",
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Blue Miss",
               "type": "spinbox",
               "jsonKey": "blueMiss",
-              "width": "190",
-              "height": "190"
+              "width": "42",
             }
           ]
         },
@@ -552,7 +599,7 @@ Map<String, dynamic> hpscout = {
           "title": "Algae in Net",
           "type": "multispinbox",
           "jsonKey": ["redNetAlgae", "blueNetAlgae"],
-          "height": "250",
+          "height": "40",
           "boxNames": [
             ["Red Algae", "Blue Algae"]
           ]

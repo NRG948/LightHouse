@@ -8,6 +8,7 @@ import "package:lighthouse/layouts.dart";
 
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
@@ -49,7 +50,7 @@ class _DataEntryState extends State<DataEntry> {
     deviceHeight = MediaQuery.sizeOf(context).height;
 
     //These are such that we can resize widgets based on screen size, but we need a reference point, 
-    //so we are using a 412 x 915 dp phone as the reference and scaling based upon that. 
+    //so we are using a 90 / 200 dp phone as the reference and scaling based upon that. 
     resizeScaleFactorWidth = deviceWidth / 90;
     resizeScaleFactorHeight = deviceHeight / 200;
   }
@@ -60,26 +61,47 @@ class _DataEntryState extends State<DataEntry> {
     super.dispose();
   }
 
-  List<Widget> createWidgetList(List<dynamic> widgets) {
+  List<Widget> createWidgetList(List<dynamic> widgets, [double? desireHeight]) {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
       if (type == "row") {
+        double height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
         return SizedBox(
           width: 90 * resizeScaleFactorWidth,
+          height: height, 
           child: Row(
-              spacing: 2 * resizeScaleFactorWidth, children: createWidgetList(widgetData["children"]!)),
+              spacing: 0, children: createWidgetList(widgetData["children"]!, height)),
         );
       }
       final title = widgetData["title"] ?? "NO TITLE";
       final jsonKey = widgetData["jsonKey"];
-      if (jsonKey is List<String>){for(String key in jsonKey) {
-        if(!(DataEntry.exportData.containsKey(key))){ DataEntry.exportData[key] = "0";}
-      }} else if (jsonKey != "" && jsonKey != null && !(DataEntry.exportData.containsKey(jsonKey))) {
+      if (jsonKey is List<String>) {
+        for (String key in jsonKey) {
+          if (!(DataEntry.exportData.containsKey(key))) {
+            DataEntry.exportData[key] = "0";
+          }
+        }
+      } else if (jsonKey != "" &&
+          jsonKey != null &&
+          !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
-      final height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
+      
+      double height;
+      if (desireHeight != null){
+        height = desireHeight;
+      } else {
+        height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
+      }
+      //We need to check this because flutter has a "default" # of pixels (regardless of device size)
+      //that is sets text boxes / dropdowns to. So we need to allow for that. 
+      if (height < 85) {
+        height = 85;
+      }
       final width = double.parse(widgetData["width"] ?? "70") * resizeScaleFactorWidth;
       switch (type) {
+        case "spacer": 
+          return NRGHorizontalSpacer(width: width);
         case "spinbox":
           return NRGSpinbox(
             title: title,
@@ -144,7 +166,7 @@ class _DataEntryState extends State<DataEntry> {
       final widgetList = createWidgetList(page["widgets"]);
       return Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          padding: EdgeInsets.only(top: 2 * resizeScaleFactorHeight, left: 2 * resizeScaleFactorWidth, right: 2 * resizeScaleFactorWidth),
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             itemCount: widgetList.length,
