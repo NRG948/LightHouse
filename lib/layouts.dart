@@ -85,10 +85,6 @@ Map<String, dynamic> atlascout = {
       "icon": Icon(CoralAlgaeIcons.autonomous),
       "widgets": [
         {
-          "title": "big boy auto widget",
-          "type": "placeholder",
-          "jsonKey": "autoQuantitative",
-          "height": "60"
           "type": "rsAutoUntimed",
           "jsonKey": ["autoProcessorCS","autoBargeCS","autoCoralScored","autoAlgaeRemoved","autoCoralScoredL1"],
           "height": "60", 
@@ -612,7 +608,7 @@ Map<String, dynamic> dataViewer = {
         {
           "title": "Barchart Test",
           "type": "barchart",
-          "height": "300",
+          "height": "60",
           "multiColor": [Constants.pastelRed, Constants.pastelYellow],
           "multiChartData": () {
             SplayTreeMap<int, List<double>> data = SplayTreeMap();
@@ -634,11 +630,11 @@ Map<String, dynamic> dataViewer = {
         },
         {
           "type": "row",
+          "height": "50", 
           "children": [
             {
               "title": "Barchart Test",
               "type": "barchart",
-              "height": "150",
               "width": "190",
               "color": Constants.pastelRed,
               "chartData": () {
@@ -662,7 +658,6 @@ Map<String, dynamic> dataViewer = {
             {
               "title": "Barchart Test",
               "type": "barchart",
-              "height": "150",
               "width": "190",
               "multiColor": [Colors.deepPurple, Colors.purple, Colors.purpleAccent, const Color.fromARGB(255, 244, 83, 195)],
               "multiChartData": () {
