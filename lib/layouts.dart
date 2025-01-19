@@ -66,7 +66,7 @@ Map<String, dynamic> atlascout = {
     },
     {
       "title": "Auto",
-      "icon": Icon(CustomIcons.autonomous),
+      "icon": Icon(CoralAlgaeIcons.autonomous),
       "widgets": [
         {
           "type": "rsAutoUntimed",
@@ -76,7 +76,7 @@ Map<String, dynamic> atlascout = {
     },
     {
       "title": "Teleop",
-      "icon": Icon(CustomIcons.gamepad),
+      "icon": Icon(CoralAlgaeIcons.teleop),
       "widgets": [
         {
           "title": "Coral Pickups",

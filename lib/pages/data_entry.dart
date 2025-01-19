@@ -184,8 +184,8 @@ class _DataEntryState extends State<DataEntry> {
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: Constants.pastelRed,
-            title: const Text(
-              "Data Entry",
+            title: Text(
+              DataEntry.activeConfig,
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   fontWeight: FontWeight.w900,
@@ -240,22 +240,25 @@ class _DataEntryState extends State<DataEntry> {
     if (layoutJSON["pages"].length < 2) {
       return null;
     }
-    return BottomNavigationBar(
-        onTap: (index) {
-          setState(() {
-            currentPage = index;
-            controller.jumpToPage(index);
-          });
-        },
-        unselectedIconTheme: IconThemeData(color: Colors.black),
-        unselectedItemColor: Colors.black,
-        selectedIconTheme: IconThemeData(color: Colors.black),
-        selectedItemColor: Colors.black,
-        currentIndex: currentPage,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.blueGrey,
-        items: createNavBar(layoutJSON["pages"]));
+    return Theme(
+      data: ThemeData(splashFactory: NoSplash.splashFactory),
+      child: BottomNavigationBar(
+          onTap: (index) {
+            setState(() {
+              currentPage = index;
+              controller.jumpToPage(index);
+            });
+          },
+          unselectedIconTheme: IconThemeData(color: Colors.black),
+          unselectedItemColor: Colors.black,
+          selectedIconTheme: IconThemeData(color: Colors.black),
+          selectedItemColor: Colors.black,
+          currentIndex: currentPage,
+          showUnselectedLabels: true,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Constants.pastelYellow,
+          items: createNavBar(layoutJSON["pages"])),
+    );
   }
 }
 
