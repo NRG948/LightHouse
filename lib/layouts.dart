@@ -583,7 +583,7 @@ Map<String, dynamic> dataViewer = {
               "title": "Barchart Test",
               "type": "barchart",
               "height": "150",
-              "width": "200",
+              "width": "190",
               "color": Constants.pastelRed,
               "chartData": () {
                 SplayTreeMap<int, double> data = SplayTreeMap();
@@ -602,6 +602,29 @@ Map<String, dynamic> dataViewer = {
                 return data;
               }(),
               "chartRemovedData": [8, 27, 58]
+            },
+            {
+              "title": "Barchart Test",
+              "type": "barchart",
+              "height": "150",
+              "width": "190",
+              "multiColor": [Colors.deepPurple, Colors.purple, Colors.purpleAccent, const Color.fromARGB(255, 244, 83, 195)],
+              "multiChartData": () {
+                SplayTreeMap<int, List<double>> data = SplayTreeMap();
+                data.addAll({
+                  1: [5, 5, 2, 7],
+                  8: [2, 7, 3, 6],
+                  13: [4, 1, 6, 2],
+                  16: [3, 1, 2, 6],
+                  27: [1, 3, 1, 7],
+                  38: [3, 6, 2, 7],
+                  43: [5, 2, 1, 2],
+                  47: [2, 1, 3, 8],
+                  58: [1, 1, 1, 1],
+                  65: [5, 2, 1, 3],
+                });
+                return data;
+              }()
             }
           ]
         }
