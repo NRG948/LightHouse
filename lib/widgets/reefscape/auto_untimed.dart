@@ -3,11 +3,11 @@ import "dart:math" as math;
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
-import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
 class RSAutoUntimed extends StatefulWidget {
-  const RSAutoUntimed({super.key});
+  final double width;
+  const RSAutoUntimed({super.key, required this.width});
 
   @override
   State<RSAutoUntimed> createState() => _RSAutoUntimedState();
@@ -15,28 +15,31 @@ class RSAutoUntimed extends StatefulWidget {
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
   late SharedState sharedState;
+  late double scaleFactor;
   @override
   void initState() {
     super.initState();
     sharedState = SharedState();
+
+    scaleFactor = widget.width / 400;
   }
 
   @override
   Widget build(BuildContext context) {
     
     return Container(
-      height:725,
-      width:400,
+      height:700 * scaleFactor,
+      width:widget.width,
       color: Constants.pastelWhite,
       child: Column(children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS"),
-          RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS"),
+          RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS", scaleFactor: scaleFactor,),
+          RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,),
         ],),
-        SizedBox(height: 10),
-        RSAUHexagon(sharedState: sharedState,),
-        RSAUReef(sharedState: sharedState)
+        SizedBox(height: 10 * scaleFactor),
+        RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
+        RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)
       ],),
     );
   }
@@ -44,7 +47,8 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 
 class RSAUReef extends StatefulWidget {
   final SharedState sharedState;
-  const RSAUReef({super.key, required this.sharedState});
+  final double scaleFactor;
+  const RSAUReef({super.key, required this.sharedState, required this.scaleFactor});
 
   @override
   State<RSAUReef> createState() => _RSAUReefState();
@@ -77,42 +81,43 @@ class _RSAUReefState extends State<RSAUReef> with AutomaticKeepAliveClientMixin 
     }
     String at = widget.sharedState.activeTriangle!;
     return Container(
-      height: 330,
-      width: 318,
-      padding: EdgeInsets.all(8),
+      height: 330 * widget.scaleFactor,
+      width: 318 * widget.scaleFactor,
+      padding: EdgeInsets.all(8 * widget.scaleFactor),
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
-        border: Border.all(color: Colors.black,width: 1)),
+        border: Border.all(color: Colors.black,width: 1 * widget.scaleFactor)),
       child: Column(
-        spacing: 2,
+        spacing: 2 * widget.scaleFactor,
         children: [
         Text("Section ${widget.sharedState.activeTriangle}",
         textAlign: TextAlign.center,
-        style: comfortaaBold(18, color: Colors.black)),
+        style: comfortaaBold(18 * widget.scaleFactor, color: Colors.black)),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[0]}4",),
-          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[1]}4",),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[0]}4",scaleFactor: widget.scaleFactor,),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[1]}4",scaleFactor: widget.scaleFactor),
         ],),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[0]}3",),
-          RSAUReefButton(icon: CoralAlgaeIcons.algae3FRCLogo, location: "${at}3", algae: true,),
-          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[1]}3",),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[0]}3",scaleFactor: widget.scaleFactor),
+          RSAUReefButton(icon: CoralAlgaeIcons.algae3FRCLogo, location: "${at}3", algae: true,scaleFactor: widget.scaleFactor),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[1]}3",scaleFactor: widget.scaleFactor),
         ],),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[0]}2",),
-          RSAUReefButton(icon: CoralAlgaeIcons.algae2FRCLogo, location: "${at}2", algae: true,),
-          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[1]}2",),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[0]}2",scaleFactor: widget.scaleFactor),
+          RSAUReefButton(icon: CoralAlgaeIcons.algae2FRCLogo, location: "${at}2", algae: true,scaleFactor: widget.scaleFactor),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[1]}2",scaleFactor: widget.scaleFactor),
         ],),
-        RSAUTrough()    
+        RSAUTrough(scaleFactor: widget.scaleFactor,)    
       ],)
     );
   }
 }
 class RSAUTrough extends StatefulWidget {
-  const RSAUTrough({super.key});
+  final double scaleFactor;
+  const RSAUTrough({super.key, required this.scaleFactor});
 
   @override
   State<RSAUTrough> createState() => _RSAUTroughState();
@@ -142,13 +147,13 @@ class _RSAUTroughState extends State<RSAUTrough> {
     return GestureDetector(
       onTap: increment,
       child: Container(
-        height: 96,
-        width: 302,
+        height: 96 * widget.scaleFactor,
+        width: 302 * widget.scaleFactor,
         decoration: BoxDecoration(
           color: counter > 0 ? Constants.pastelRed : Colors.grey,
           border: Border.all(
             color: Colors.black,
-            width: 1
+            width: widget.scaleFactor
           )
         ),
         child: Center(
@@ -159,20 +164,23 @@ class _RSAUTroughState extends State<RSAUTrough> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CoralAlgaeIcons.coral),
-                  Text("Coral Scored L1 (Trough)", textAlign: TextAlign.center,style: comfortaaBold(15, color: Colors.black),),
+                  Icon(CoralAlgaeIcons.coral, size: 24 * widget.scaleFactor,),
+                  Text("Coral Scored L1 (Trough)", textAlign: TextAlign.center,style: comfortaaBold(15 * widget.scaleFactor, color: Colors.black),),
                 ],
               ),
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: SizedBox(
-                  height: 70,
+                  height: 70 * widget.scaleFactor,
                   child: Row(
+                    spacing: 0,
                     children: [
                     SizedBox(
-                      width: 250,
-                      child: Text(counter.toString(),style: comfortaaBold(23, color: Colors.black),textAlign: TextAlign.center,)),
-                    IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down),highlightColor: Colors.transparent,splashColor: Colors.transparent,)
+                      width: 250 * widget.scaleFactor,
+                      child: Text(counter.toString(),style: comfortaaBold(23 * widget.scaleFactor, color: Colors.black),textAlign: TextAlign.center,)),
+                    SizedBox(
+                      width: 24,
+                      child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down, size: 25 * widget.scaleFactor),highlightColor: Colors.transparent,splashColor: Colors.transparent,iconSize: 25 * widget.scaleFactor))
                   ],),
                 ),
               )
@@ -188,7 +196,8 @@ class RSAUReefButton extends StatefulWidget {
   final IconData icon;
   final bool algae;
   final String location;
-  const RSAUReefButton({super.key, required this.icon, required this.location, this.algae = false});
+  final double scaleFactor;
+  const RSAUReefButton({super.key, required this.icon, required this.location, required this.scaleFactor, this.algae = false});
 
   @override
   State<RSAUReefButton> createState() => _RSAUReefButtonState();
@@ -225,25 +234,28 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
   Widget build(BuildContext context) {
     active = DataEntry.exportData["autoCoralScored"].contains(widget.location) || DataEntry.exportData["autoAlgaeRemoved"].contains(widget.location);
     return Container(
-      height: 60,
-      width:  widget.algae ? 75 : 100,
+      height: 60 * widget.scaleFactor,
+      width:  (widget.algae ? 75 : 100) * widget.scaleFactor,
       decoration: BoxDecoration(
         color: active ? Constants.pastelRed : Colors.grey,
         border: Border.all(
           color: Colors.black,
-          width: 1
+          width: widget.scaleFactor
         )),
-      child: IconButton(onPressed: setActive, icon: Icon(widget.icon),
-      iconSize: 45,
-      color: Colors.black,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,)
+      child: Center(
+        child: IconButton(onPressed: setActive, icon: Icon(widget.icon, size: 45 * widget.scaleFactor),
+        iconSize: 45 * widget.scaleFactor,
+        color: Colors.black,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,),
+      )
     );
   }
 }
 class RSAUHexagon extends StatelessWidget {
   final SharedState sharedState;
-  const RSAUHexagon({super.key, required this.sharedState});
+  final double scaleFactor;
+  const RSAUHexagon({super.key, required this.sharedState, required this.scaleFactor});
 
   @override
   Widget build(BuildContext context) {
@@ -251,8 +263,8 @@ class RSAUHexagon extends StatelessWidget {
     final triangleLabels = ["IJ","GH","EF","CD","AB","KL",];
     return Container(
       color: Constants.pastelWhite,
-      height: 275,
-      width: 275,
+      height: 275 * scaleFactor,
+      width: 275 * scaleFactor,
       alignment: Alignment.center,
       child: AspectRatio(aspectRatio: 1,
       child: Stack(
@@ -263,7 +275,8 @@ class RSAUHexagon extends StatelessWidget {
             TriangleTapRegion(
               index: i,
               label: triangleLabels[i],
-              sharedState: sharedState
+              sharedState: sharedState,
+              scaleFactor: scaleFactor
             ),
         ],
       ))
@@ -318,7 +331,8 @@ class TriangleTapRegion extends StatefulWidget {
   final int index;
   final String label;
   final SharedState sharedState;
-  const TriangleTapRegion({super.key, required this.index, required this.label, required this.sharedState});
+  final double scaleFactor;
+  const TriangleTapRegion({super.key, required this.index, required this.label, required this.sharedState, required this.scaleFactor});
 
   @override
   State<TriangleTapRegion> createState() => _TriangleTapRegionState();
@@ -345,12 +359,12 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
       onTap: () {widget.sharedState.setActiveTriangle(widget.label);},
       child: Container(
         color: Colors.grey,
-         child: Text(widget.label, style: comfortaaBold(14,color:Colors.black),)
+         child: Text(widget.label, style: comfortaaBold(14 * widget.scaleFactor,color:Colors.black),)
        ),
     ) : GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {widget.sharedState.setActiveTriangle(widget.label);},
-      child: Text(widget.label,style:comfortaaBold(14,color:Colors.black)));
+      child: Text(widget.label,style:comfortaaBold(14 * widget.scaleFactor,color:Colors.black)));
     return LayoutBuilder(
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
@@ -432,8 +446,9 @@ class TriangleClipper extends CustomClipper<Path> {
 class RSAUCoralStation extends StatefulWidget {
   final String jsonKey;
   final String title;
+  final double scaleFactor;
   const RSAUCoralStation({
-    super.key, required this.jsonKey, required this.title
+    super.key, required this.jsonKey, required this.title, required this.scaleFactor
   });
 
   @override
@@ -451,33 +466,33 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
       child: Row(
         children: [
           Container(
-            width: 100,
-            height: 51,
+            width: 100 * widget.scaleFactor,
+            height: 51 * widget.scaleFactor,
              decoration: BoxDecoration(
               color: Colors.grey,
               border: Border.all(
                 color: Constants.pastelWhite,
-                width: 1
+                width: widget.scaleFactor
               )
             ),
             child: Column(
               children: [
-                Text(title, style: comfortaaBold(16),textAlign: TextAlign.center,),
-                Text(counter.toString(),style: comfortaaBold(18),)
+                Text(title, style: comfortaaBold(16 * widget.scaleFactor),textAlign: TextAlign.center,),
+                Text(counter.toString(),style: comfortaaBold(18 * widget.scaleFactor),)
               ],
             ),
           ),
           Container(
-            width: 50,
-            height: 50,
+            width: 50 * widget.scaleFactor,
+            height: 50 * widget.scaleFactor,
             decoration: BoxDecoration(
               color: Colors.grey,
               border: Border.all(
                 color: Constants.pastelWhite,
-                width: 1
+                width: widget.scaleFactor
               )
             ),
-            child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down),highlightColor: Colors.transparent,splashColor: Colors.transparent,)
+            child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down, size: 25 * widget.scaleFactor,),highlightColor: Colors.transparent,splashColor: Colors.transparent,iconSize: 25 * widget.scaleFactor,)
           )
         ],
       ),
