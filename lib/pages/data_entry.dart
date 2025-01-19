@@ -163,7 +163,7 @@ class _DataEntryState extends State<DataEntry> {
           return NRGPlaceholder(
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "rsAutoUntimed":
-          return RSAutoUntimed();
+          return RSAutoUntimed(width: 400);
         case "barchart":
           return NRGBarChart(
               title: title,
