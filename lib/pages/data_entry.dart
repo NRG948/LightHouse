@@ -234,10 +234,30 @@ class _DataEntryState extends State<DataEntry> {
             ),
             centerTitle: true,
             leading: IconButton(
-                onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/home", (Route<dynamic> route) => false);
-                },
+              onPressed: () {
+                showDialog(
+                  context: context, 
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Text("Are you sure you want to return home? \n Non-saved data CANNOT be recovered!"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }, 
+                          child: Text("No")
+                        ), 
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false);
+                          }, 
+                          child: Text("Yes"), 
+                        ), 
+                      ],
+                    ); 
+                  }, 
+                ); 
+              },
                 icon: Icon(Icons.home)),
             actions: [
               IconButton(
