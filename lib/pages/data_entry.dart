@@ -18,6 +18,7 @@ import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch-horizontal.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
+import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
 
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 
@@ -182,6 +183,13 @@ class _DataEntryState extends State<DataEntry> {
             width: width, 
             jsonKey: jsonKey,
           );
+        case "three-stage-checkbox": 
+          return NRGThreeStageCheckbox(
+            title: title, 
+            jsonKey: jsonKey, 
+            height: height, 
+            width: width
+          ); 
       }
       return Text("type $type isn't a valid type");
     }).toList();
@@ -227,7 +235,7 @@ class _DataEntryState extends State<DataEntry> {
     print(DataEntry.activeConfig);
     final layoutJSON = layoutMap.containsKey(DataEntry.activeConfig)
         ? layoutMap[DataEntry.activeConfig]!
-        : Map();
+        : {};
     return PopScope(
       canPop: false,
       child: Scaffold(

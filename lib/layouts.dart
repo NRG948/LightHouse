@@ -415,7 +415,7 @@ Map<String, dynamic> pitscout = {
       "widgets": [
         {
           "title": "Coral Scoring Ability",
-          "type": "placeholder",
+          "type": "three-stage-checkbox",
           "jsonKey": "coralScoringAbility"
         },
         {
