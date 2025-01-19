@@ -685,17 +685,17 @@ Map<String, dynamic> dataViewer = {
 };
 
 Map<String, Map> layoutMap = {
-  "AtlaScout": atlascout,
-  "ChronoScout": chronoscout,
-  "PitScout": pitscout,
-  "HPScout": hpscout,
-  "DataViewer": dataViewer
+  "Atlas": atlascout,
+  "Chronos": chronoscout,
+  "Pit": pitscout,
+  "Human Player": hpscout,
+  "Data Viewer": dataViewer
 };
 
 Map<String, IconData> iconMap = {
-  "AtlaScout": Icons.map,
-  "ChronoScout": Icons.timer,
-  "PitScout": Icons.analytics_rounded,
-  "HPScout": Icons.child_care,
-  "DataViewer": Icons.account_box_rounded
+  "Atlas": Icons.map,
+  "Chronos": Icons.timer,
+  "Pit": Icons.analytics_rounded,
+  "Human Player": Icons.child_care,
+  "Data Viewer": Icons.account_box_rounded
 };
