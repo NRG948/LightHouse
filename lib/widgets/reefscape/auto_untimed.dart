@@ -50,7 +50,10 @@ class RSAUReef extends StatefulWidget {
   State<RSAUReef> createState() => _RSAUReefState();
 }
 
-class _RSAUReefState extends State<RSAUReef> {
+class _RSAUReefState extends State<RSAUReef> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
      DataEntry.exportData["autoCoralScored"] = [];

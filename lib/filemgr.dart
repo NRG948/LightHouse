@@ -62,8 +62,20 @@ Future<int> saveExport() async {
       exportName = "${random.nextInt(9999)}";
   }
   final exportFile = File("$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}/$exportName.json");
+  addToUploadQueue("$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}/$exportName.json");
   exportFile.writeAsString(exportDataEncoded);
   return 0;
+}
+
+void addToUploadQueue(String file) async {
+  final queueFile = File("$configFolder/uploadQueue.nrg");
+  if (!(await queueFile.exists())) {
+    queueFile.writeAsString(jsonEncode([file]));
+  } else {
+    final List<String> queue = jsonDecode(queueFile.readAsStringSync());
+    queue.add(file);
+    queueFile.writeAsString(jsonEncode(queue));
+  }
 }
 
 Future<int> saveConfig() async {
