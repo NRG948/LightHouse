@@ -61,14 +61,16 @@ class _DataEntryState extends State<DataEntry> {
     super.dispose();
   }
 
-  List<Widget> createWidgetList(List<dynamic> widgets) {
+  List<Widget> createWidgetList(List<dynamic> widgets, [double? desireHeight]) {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
       if (type == "row") {
+        double height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
         return SizedBox(
           width: 90 * resizeScaleFactorWidth,
+          height: height, 
           child: Row(
-              spacing: 0, children: createWidgetList(widgetData["children"]!)),
+              spacing: 0, children: createWidgetList(widgetData["children"]!, height)),
         );
       }
       final title = widgetData["title"] ?? "NO TITLE";
@@ -84,7 +86,13 @@ class _DataEntryState extends State<DataEntry> {
           !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
-      double height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
+      
+      double height;
+      if (desireHeight != null){
+        height = desireHeight;
+      } else {
+        height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
+      }
       //We need to check this because flutter has a "default" # of pixels (regardless of device size)
       //that is sets text boxes / dropdowns to. So we need to allow for that. 
       if (height < 85) {
