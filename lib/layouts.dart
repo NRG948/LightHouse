@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 
 Map<String, dynamic> atlascout = {
@@ -556,19 +557,20 @@ Map<String, dynamic> dataViewer = {
           "title": "Barchart Test",
           "type": "barchart",
           "height": "300",
-          "chartData": () {
-            SplayTreeMap<int, double> data = SplayTreeMap();
+          "multiColor": [Constants.pastelRed, Constants.pastelYellow],
+          "multiChartData": () {
+            SplayTreeMap<int, List<double>> data = SplayTreeMap();
             data.addAll({
-              1: 5,
-              8: 2,
-              13: 4,
-              16: 3,
-              27: 1,
-              38: 3,
-              43: 5,
-              47: 2,
-              58: 0,
-              65: 1,
+              1: [5, 0],
+              8: [2, 2],
+              13: [4, 1],
+              16: [3, 2],
+              27: [1, 0],
+              38: [3, 1],
+              43: [5, 1],
+              47: [2, 2],
+              58: [0, 1],
+              65: [1, 0],
             });
             return data;
           }(),
@@ -582,6 +584,7 @@ Map<String, dynamic> dataViewer = {
               "type": "barchart",
               "height": "150",
               "width": "200",
+              "color": Constants.pastelRed,
               "chartData": () {
                 SplayTreeMap<int, double> data = SplayTreeMap();
                 data.addAll({

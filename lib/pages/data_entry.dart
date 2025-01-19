@@ -51,30 +51,48 @@ class _DataEntryState extends State<DataEntry> {
       }
       final title = widgetData["title"] ?? "NO TITLE";
       final jsonKey = widgetData["jsonKey"];
-      if (jsonKey is List<String>){for(String key in jsonKey) {
-        if(!(DataEntry.exportData.containsKey(key))){ DataEntry.exportData[key] = "0";}
-      }} else if (jsonKey != "" && jsonKey != null && !(DataEntry.exportData.containsKey(jsonKey))) {
+      if (jsonKey is List<String>) {
+        for (String key in jsonKey) {
+          if (!(DataEntry.exportData.containsKey(key))) {
+            DataEntry.exportData[key] = "0";
+          }
+        }
+      } else if (jsonKey != "" &&
+          jsonKey != null &&
+          !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
       }
       final height = widgetData["height"] ?? "100";
       final width = widgetData["width"] ?? "400";
-      final chartData = widgetData["chartData"] ?? SplayTreeMap();
-      final chartRemovedData = widgetData["chartRemovedData"] ?? [];
+      final SplayTreeMap<int, double> chartData =
+          widgetData["chartData"] ?? SplayTreeMap();
+      final List<int> chartRemovedData = widgetData["chartRemovedData"] ?? [];
+      final Color color = widgetData["color"] ?? Colors.transparent;
+      final List<Color> multiColor = widgetData["multiColor"] ?? [];
+      final SplayTreeMap<int, List<double>> multiChartData =
+          widgetData["multiChartData"] ?? SplayTreeMap();
       switch (type) {
         case "spinbox":
           return NRGSpinbox(
             title: title,
-            height: height, 
-            width: width, 
+            height: height,
+            width: width,
             jsonKey: jsonKey,
           );
-        case "stopwatch": 
+        case "stopwatch":
           return NRGStopwatch();
         case "stopwatch-horizontal":
           return NRGStopwatchHorizontal();
         case "multispinbox":
-          return NRGMultiSpinbox(title: title, jsonKey: jsonKey, height: height, width: width, 
-          boxNames: widgetData["boxNames"] ?? [["NO OPTIONS SPECIFIED"]]);
+          return NRGMultiSpinbox(
+              title: title,
+              jsonKey: jsonKey,
+              height: height,
+              width: width,
+              boxNames: widgetData["boxNames"] ??
+                  [
+                    ["NO OPTIONS SPECIFIED"]
+                  ]);
         case "textbox":
           return NRGTextbox(
               title: title, jsonKey: jsonKey, height: height, width: width);
@@ -106,7 +124,15 @@ class _DataEntryState extends State<DataEntry> {
         case "rsAutoUntimed":
           return RSAutoUntimed();
         case "barchart":
-          return NRGBarChart(title: title, height: height, width: width, data: chartData, removedData: chartRemovedData);
+          return NRGBarChart(
+              title: title,
+              height: height,
+              width: width,
+              data: chartData,
+              removedData: chartRemovedData,
+              color: color,
+              multiColor: multiColor,
+              multiData: multiChartData);
       }
       return Text("type $type isn't a valid type");
     }).toList();
@@ -150,8 +176,9 @@ class _DataEntryState extends State<DataEntry> {
     DataEntry.activeConfig =
         (ModalRoute.of(context)?.settings.arguments as String?)!;
     print(DataEntry.activeConfig);
-    final layoutJSON =
-        layoutMap.containsKey(DataEntry.activeConfig) ? layoutMap[DataEntry.activeConfig]! : Map();
+    final layoutJSON = layoutMap.containsKey(DataEntry.activeConfig)
+        ? layoutMap[DataEntry.activeConfig]!
+        : Map();
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -171,21 +198,30 @@ class _DataEntryState extends State<DataEntry> {
                       context, "/home", (Route<dynamic> route) => false);
                 },
                 icon: Icon(Icons.home)),
-            actions: [IconButton(icon: Icon(Icons.javascript), onPressed: () {
-              showDialog(context: context, builder: (BuildContext) {
-                return Dialog(child: Text(jsonEncode(DataEntry.exportData)),);
-              });
-            },), SaveJsonButton()],
+            actions: [
+              IconButton(
+                icon: Icon(Icons.javascript),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext) {
+                        return Dialog(
+                          child: Text(jsonEncode(DataEntry.exportData)),
+                        );
+                      });
+                },
+              ),
+              SaveJsonButton()
+            ],
           ),
-          bottomNavigationBar:  
-             buildBottomNavBar(layoutJSON),
+          bottomNavigationBar: buildBottomNavBar(layoutJSON),
           body: Container(
             height: screenHeight,
             width: screenWidth,
             decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/images/background-hires.png"),
-              fit: BoxFit.fill)
-            ),
+                image: DecorationImage(
+                    image: AssetImage("assets/images/background-hires.png"),
+                    fit: BoxFit.fill)),
             child: PageView(
               controller: controller,
               scrollDirection: Axis.horizontal,
@@ -201,23 +237,25 @@ class _DataEntryState extends State<DataEntry> {
   }
 
   Widget? buildBottomNavBar(Map<dynamic, dynamic> layoutJSON) {
-    if (layoutJSON["pages"].length < 2) {return null;}
+    if (layoutJSON["pages"].length < 2) {
+      return null;
+    }
     return BottomNavigationBar(
-            onTap: (index) {
-              setState(() {
-                currentPage = index;
-                controller.jumpToPage(index);
-              });
-            },
-            unselectedIconTheme: IconThemeData(color: Colors.black),
-            unselectedItemColor: Colors.black,
-            selectedIconTheme: IconThemeData(color: Colors.black),
-            selectedItemColor: Colors.black,
-            currentIndex: currentPage,
-            showUnselectedLabels: true,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.blueGrey,
-            items: createNavBar(layoutJSON["pages"]));
+        onTap: (index) {
+          setState(() {
+            currentPage = index;
+            controller.jumpToPage(index);
+          });
+        },
+        unselectedIconTheme: IconThemeData(color: Colors.black),
+        unselectedItemColor: Colors.black,
+        selectedIconTheme: IconThemeData(color: Colors.black),
+        selectedItemColor: Colors.black,
+        currentIndex: currentPage,
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.blueGrey,
+        items: createNavBar(layoutJSON["pages"]));
   }
 }
 
