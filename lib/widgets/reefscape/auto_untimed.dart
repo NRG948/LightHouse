@@ -233,22 +233,25 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
   @override
   Widget build(BuildContext context) {
     active = DataEntry.exportData["autoCoralScored"].contains(widget.location) || DataEntry.exportData["autoAlgaeRemoved"].contains(widget.location);
-    return Container(
-      height: 60 * widget.scaleFactor,
-      width:  (widget.algae ? 75 : 100) * widget.scaleFactor,
-      decoration: BoxDecoration(
-        color: active ? Constants.pastelRed : Colors.grey,
-        border: Border.all(
+    return GestureDetector(
+      onTap: setActive,
+      child: Container(
+        height: 60 * widget.scaleFactor,
+        width:  (widget.algae ? 75 : 100) * widget.scaleFactor,
+        decoration: BoxDecoration(
+          color: active ? Constants.pastelRed : Colors.grey,
+          border: Border.all(
+            color: Colors.black,
+            width: widget.scaleFactor
+          )),
+        child: Center(
+          child: IconButton(onPressed: setActive, icon: Icon(widget.icon, size: 45 * widget.scaleFactor),
+          iconSize: 45 * widget.scaleFactor,
           color: Colors.black,
-          width: widget.scaleFactor
-        )),
-      child: Center(
-        child: IconButton(onPressed: setActive, icon: Icon(widget.icon, size: 45 * widget.scaleFactor),
-        iconSize: 45 * widget.scaleFactor,
-        color: Colors.black,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,),
-      )
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,),
+        )
+      ),
     );
   }
 }
