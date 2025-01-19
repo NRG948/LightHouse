@@ -1,5 +1,6 @@
 import "dart:collection";
 import "dart:convert";
+import "dart:ffi";
 
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
@@ -9,6 +10,7 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
@@ -27,6 +29,12 @@ class DataEntry extends StatefulWidget {
 }
 
 class _DataEntryState extends State<DataEntry> {
+  late double deviceWidth;
+  late double deviceHeight;
+
+  late double resizeScaleFactorWidth;
+  late double resizeScaleFactorHeight;
+
   int currentPage = 0;
   late PageController controller;
   @override
@@ -37,17 +45,35 @@ class _DataEntryState extends State<DataEntry> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    deviceWidth = MediaQuery.sizeOf(context).width;
+    deviceHeight = MediaQuery.sizeOf(context).height;
+
+    //These are such that we can resize widgets based on screen size, but we need a reference point, 
+    //so we are using a 90 / 200 dp phone as the reference and scaling based upon that. 
+    resizeScaleFactorWidth = deviceWidth / 90;
+    resizeScaleFactorHeight = deviceHeight / 200;
+  }
+
+  @override
   void dispose() {
     controller.dispose();
     super.dispose();
   }
 
-  List<Widget> createWidgetList(List<dynamic> widgets) {
+  List<Widget> createWidgetList(List<dynamic> widgets, [double? desireHeight]) {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
       if (type == "row") {
-        return Row(
-            spacing: 10.0, children: createWidgetList(widgetData["children"]!));
+        double height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
+        return SizedBox(
+          width: 90 * resizeScaleFactorWidth,
+          height: height, 
+          child: Row(
+              spacing: 0, children: createWidgetList(widgetData["children"]!, height)),
+        );
       }
       final title = widgetData["title"] ?? "NO TITLE";
       final jsonKey = widgetData["jsonKey"];
@@ -61,9 +87,21 @@ class _DataEntryState extends State<DataEntry> {
           jsonKey != null &&
           !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
+      } 
+      
+      double height;
+      if (desireHeight != null){
+        height = desireHeight;
+      } else {
+        height = double.parse(widgetData["height"] ?? "20") * resizeScaleFactorHeight;
       }
-      final height = widgetData["height"] ?? "100";
-      final width = widgetData["width"] ?? "400";
+      //We need to check this because flutter has a "default" # of pixels (regardless of device size)
+      //that is sets text boxes / dropdowns to. So we need to allow for that. 
+      if (height < 85) {
+        height = 85;
+      }
+      final width = double.parse(widgetData["width"] ?? "70") * resizeScaleFactorWidth;
+
       final SplayTreeMap<int, double> chartData =
           widgetData["chartData"] ?? SplayTreeMap();
       final List<int> chartRemovedData = widgetData["chartRemovedData"] ?? [];
@@ -71,7 +109,10 @@ class _DataEntryState extends State<DataEntry> {
       final List<Color> multiColor = widgetData["multiColor"] ?? [];
       final SplayTreeMap<int, List<double>> multiChartData =
           widgetData["multiChartData"] ?? SplayTreeMap();
+      
       switch (type) {
+        case "spacer": 
+          return NRGHorizontalSpacer(width: width);
         case "spinbox":
           return NRGSpinbox(
             title: title,
@@ -153,7 +194,7 @@ class _DataEntryState extends State<DataEntry> {
       final widgetList = createWidgetList(page["widgets"]);
       return Center(
         child: Padding(
-          padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          padding: EdgeInsets.only(top: 2 * resizeScaleFactorHeight, left: 2 * resizeScaleFactorWidth, right: 2 * resizeScaleFactorWidth),
           child: ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             itemCount: widgetList.length,

@@ -7,8 +7,8 @@ import 'package:lighthouse/constants.dart';
 /// A horizontal bar chart widget that dislays numbers, automatically sorting by key.
 class NRGBarChart extends StatefulWidget {
   String title;
-  String height;
-  String width;
+  double height;
+  double width;
   SplayTreeMap<int, double> data;
   SplayTreeMap<int, List<double>> multiData;
   List<int> removedData;
@@ -37,8 +37,8 @@ class NRGBarChart extends StatefulWidget {
 
 class _NRGBarChartState extends State<NRGBarChart> {
   String get _title => widget.title;
-  String get _height => widget.height;
-  String get _width => widget.width;
+  double get _height => widget.height;
+  double get _width => widget.width;
   SplayTreeMap<int, double>? get _data => widget.data;
   SplayTreeMap<int, List<double>>? get _multiData => widget.multiData;
   Color? get _color => widget.color;
@@ -53,7 +53,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                 color: !_removedData.contains(key) ? _color : Colors.grey,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(7), topRight: Radius.circular(7)),
-                width: (double.parse(_width) - 20) / _data!.length * 0.6),
+                width: (_width - 20) / _data!.length * 0.6),
           ]))
       .toList();
 
@@ -72,7 +72,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                   borderRadius: i == _multiData![key]!.length - 1 ? BorderRadius.only(
                       topLeft: Radius.circular(7),
                       topRight: Radius.circular(7)) : BorderRadius.zero,
-                  width: (double.parse(_width) - 20) / _multiData!.length * 0.6));
+                  width: (_width - 20) / _multiData!.length * 0.6));
               sum += _multiData![key]![i];
             }
             return rods;
@@ -93,8 +93,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.parse(_width),
-      height: double.parse(_height),
+      width: _width,
+      height: _height,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -106,7 +106,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                   fontFamily: "Comfortaa",
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
-                  fontSize: double.parse(_width) / 10)),
+                  fontSize: _width / 10)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           AspectRatio(
               aspectRatio: 2,
@@ -128,7 +128,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: double.parse(_width) / 25)));
+                                      fontSize: _width / 25)));
                         },
                       )),
                       bottomTitles: AxisTitles(
@@ -144,7 +144,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                       color: !_removedData.contains(value)
                                           ? Colors.black
                                           : Colors.grey,
-                                      fontSize: double.parse(_width) / 25)));
+                                      fontSize: _width / 25)));
                         },
                       )),
                     ),
@@ -167,7 +167,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   color: Colors.black,
-                  fontSize: double.parse(_width) / 20))
+                  fontSize: _width / 20))
         ],
       ),
     );

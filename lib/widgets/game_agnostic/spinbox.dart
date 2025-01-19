@@ -6,8 +6,8 @@ import "package:lighthouse/pages/data_entry.dart";
 class NRGSpinbox extends StatefulWidget {
   final String title;
   final String jsonKey;
-  final String height;
-  final String width;
+  final double height;
+  final double width;
   const NRGSpinbox(
       {super.key,
       required this.title,
@@ -22,15 +22,15 @@ class NRGSpinbox extends StatefulWidget {
 class _NRGSpinboxState extends State<NRGSpinbox> {
   String get _title => widget.title;
   String get _key => widget.jsonKey;
-  String get _height => widget.height;
-  String get _width => widget.width;
+  double get _height => widget.height;
+  double get _width => widget.width;
   late int _counter;
   String _value = "";
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: double.parse(_height),
-        width: double.parse(_width),
+        height: _height,
+        width: _width,
         decoration: BoxDecoration(
             color: Colors.blueGrey,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
