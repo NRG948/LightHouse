@@ -1,3 +1,4 @@
+import "dart:collection";
 import "dart:convert";
 import "dart:ffi";
 
@@ -5,6 +6,7 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
+import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
@@ -20,7 +22,7 @@ import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
-  static final Map<String, String> exportData = {};
+  static final Map<String, dynamic> exportData = {};
   static late String activeConfig;
   @override
   State<DataEntry> createState() => _DataEntryState();
@@ -85,7 +87,7 @@ class _DataEntryState extends State<DataEntry> {
           jsonKey != null &&
           !(DataEntry.exportData.containsKey(jsonKey))) {
         DataEntry.exportData[jsonKey] = "0";
-      }
+      } 
       
       double height;
       if (desireHeight != null){
@@ -99,23 +101,39 @@ class _DataEntryState extends State<DataEntry> {
         height = 85;
       }
       final width = double.parse(widgetData["width"] ?? "70") * resizeScaleFactorWidth;
+
+      final SplayTreeMap<int, double> chartData =
+          widgetData["chartData"] ?? SplayTreeMap();
+      final List<int> chartRemovedData = widgetData["chartRemovedData"] ?? [];
+      final Color color = widgetData["color"] ?? Colors.transparent;
+      final List<Color> multiColor = widgetData["multiColor"] ?? [];
+      final SplayTreeMap<int, List<double>> multiChartData =
+          widgetData["multiChartData"] ?? SplayTreeMap();
+      
       switch (type) {
         case "spacer": 
           return NRGHorizontalSpacer(width: width);
         case "spinbox":
           return NRGSpinbox(
             title: title,
-            height: height, 
-            width: width, 
+            height: height,
+            width: width,
             jsonKey: jsonKey,
           );
-        case "stopwatch": 
+        case "stopwatch":
           return NRGStopwatch();
         case "stopwatch-horizontal":
           return NRGStopwatchHorizontal();
         case "multispinbox":
-          return NRGMultiSpinbox(title: title, jsonKey: jsonKey, height: height, width: width, 
-          boxNames: widgetData["boxNames"] ?? [["NO OPTIONS SPECIFIED"]]);
+          return NRGMultiSpinbox(
+              title: title,
+              jsonKey: jsonKey,
+              height: height,
+              width: width,
+              boxNames: widgetData["boxNames"] ??
+                  [
+                    ["NO OPTIONS SPECIFIED"]
+                  ]);
         case "textbox":
           return NRGTextbox(
               title: title, jsonKey: jsonKey, height: height, width: width);
@@ -146,6 +164,16 @@ class _DataEntryState extends State<DataEntry> {
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "rsAutoUntimed":
           return RSAutoUntimed();
+        case "barchart":
+          return NRGBarChart(
+              title: title,
+              height: height,
+              width: width,
+              data: chartData,
+              removedData: chartRemovedData,
+              color: color,
+              multiColor: multiColor,
+              multiData: multiChartData);
       }
       return Text("type $type isn't a valid type");
     }).toList();
@@ -189,15 +217,16 @@ class _DataEntryState extends State<DataEntry> {
     DataEntry.activeConfig =
         (ModalRoute.of(context)?.settings.arguments as String?)!;
     print(DataEntry.activeConfig);
-    final layoutJSON =
-        layoutMap.containsKey(DataEntry.activeConfig) ? layoutMap[DataEntry.activeConfig]! : Map();
+    final layoutJSON = layoutMap.containsKey(DataEntry.activeConfig)
+        ? layoutMap[DataEntry.activeConfig]!
+        : Map();
     return PopScope(
       canPop: false,
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: Constants.pastelRed,
-            title: const Text(
-              "Data Entry",
+            title: Text(
+              DataEntry.activeConfig,
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   fontWeight: FontWeight.w900,
@@ -210,21 +239,30 @@ class _DataEntryState extends State<DataEntry> {
                       context, "/home", (Route<dynamic> route) => false);
                 },
                 icon: Icon(Icons.home)),
-            actions: [IconButton(icon: Icon(Icons.javascript), onPressed: () {
-              showDialog(context: context, builder: (BuildContext) {
-                return Dialog(child: Text(jsonEncode(DataEntry.exportData)),);
-              });
-            },), SaveJsonButton()],
+            actions: [
+              IconButton(
+                icon: Icon(Icons.javascript),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext) {
+                        return Dialog(
+                          child: Text(jsonEncode(DataEntry.exportData)),
+                        );
+                      });
+                },
+              ),
+              SaveJsonButton()
+            ],
           ),
-          bottomNavigationBar:  
-             buildBottomNavBar(layoutJSON),
+          bottomNavigationBar: buildBottomNavBar(layoutJSON),
           body: Container(
             height: screenHeight,
             width: screenWidth,
             decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage("assets/images/background-hires.png"),
-              fit: BoxFit.fill)
-            ),
+                image: DecorationImage(
+                    image: AssetImage("assets/images/background-hires.png"),
+                    fit: BoxFit.fill)),
             child: PageView(
               controller: controller,
               scrollDirection: Axis.horizontal,
@@ -240,23 +278,28 @@ class _DataEntryState extends State<DataEntry> {
   }
 
   Widget? buildBottomNavBar(Map<dynamic, dynamic> layoutJSON) {
-    if (layoutJSON["pages"].length < 2) {return null;}
-    return BottomNavigationBar(
-            onTap: (index) {
-              setState(() {
-                currentPage = index;
-                controller.jumpToPage(index);
-              });
-            },
-            unselectedIconTheme: IconThemeData(color: Colors.black),
-            unselectedItemColor: Colors.black,
-            selectedIconTheme: IconThemeData(color: Colors.black),
-            selectedItemColor: Colors.black,
-            currentIndex: currentPage,
-            showUnselectedLabels: true,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.blueGrey,
-            items: createNavBar(layoutJSON["pages"]));
+    if (layoutJSON["pages"].length < 2) {
+      return null;
+    }
+    return Theme(
+      data: ThemeData(splashFactory: NoSplash.splashFactory),
+      child: BottomNavigationBar(
+          onTap: (index) {
+            setState(() {
+              currentPage = index;
+              controller.jumpToPage(index);
+            });
+          },
+          unselectedIconTheme: IconThemeData(color: Colors.black),
+          unselectedItemColor: Colors.black,
+          selectedIconTheme: IconThemeData(color: Colors.black),
+          selectedItemColor: Colors.black,
+          currentIndex: currentPage,
+          showUnselectedLabels: true,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Constants.pastelYellow,
+          items: createNavBar(layoutJSON["pages"])),
+    );
   }
 }
 

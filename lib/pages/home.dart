@@ -8,10 +8,10 @@ import 'package:lighthouse/layouts.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  List<LayoutLauncher> getLayouts() {
+  List<Launcher> getLayouts() {
     final enabledLayouts = layoutMap.keys;
     return enabledLayouts.map((layout) {
-      return LayoutLauncher(icon: iconMap[layout] ?? Icons.data_object, title: layout);
+      return Launcher(icon: iconMap[layout] ?? Icons.data_object, title: layout);
     }).toList();
   }
   @override
@@ -62,15 +62,16 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class LayoutLauncher extends StatelessWidget {
+class Launcher extends StatelessWidget {
   final IconData icon;
   final String title;
-  const LayoutLauncher({super.key, required this.icon, required this.title});
+  final String route;
+  const Launcher({super.key, required this.icon, required this.title, this.route = "/entry"});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/entry", arguments: title);
+        Navigator.pushNamed(context, route, arguments: title);
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),

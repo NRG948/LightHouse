@@ -6,6 +6,7 @@ import "package:lighthouse/pages/home.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/settings.dart";
 
+/// The main method also known as the entry point into the application.
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initConfig();
@@ -16,6 +17,7 @@ void main() async {
   });
 }
 
+/// The first widget shown when the app is first opened.
 class MainWidget extends StatelessWidget {
   const MainWidget({super.key});
 

@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:lighthouse/custom_icons.dart';
+import 'dart:collection';
 
+import 'package:flutter/material.dart';
+import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/custom_icons.dart';
 
 Map<String, dynamic> atlascout = {
   "title": "Atlascout",
@@ -30,9 +32,10 @@ Map<String, dynamic> atlascout = {
             {
               "title": "Driver Station",
               "type": "dropdown",
-              "options": "Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue3", 
+              "options": "Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue3",
               "jsonKey": "driverStation",
               "width": "42", 
+              "height": "84", 
             }
           ]
         },
@@ -74,33 +77,35 @@ Map<String, dynamic> atlascout = {
           "jsonKey": "startingPosition",
           "height": "30"
         },
-        {
-          "title": "Preload", 
-          "type": "placeholder", 
-          "jsonKey": "preload"
-        }
+        {"title": "Preload", "type": "placeholder", "jsonKey": "preload"}
       ]
     },
     {
       "title": "Auto",
-      "icon": Icon(CustomIcons.autonomous),
+      "icon": Icon(CoralAlgaeIcons.autonomous),
       "widgets": [
         {
           "title": "big boy auto widget",
           "type": "placeholder",
           "jsonKey": "autoQuantitative",
           "height": "60"
+          "type": "rsAutoUntimed",
+          "jsonKey": ["autoProcessorCS","autoBargeCS","autoCoralScored","autoAlgaeRemoved","autoCoralScoredL1"],
+          "height": "60", 
         }
       ]
     },
     {
       "title": "Teleop",
-      "icon": Icon(CustomIcons.gamepad),
+      "icon": Icon(CoralAlgaeIcons.teleop),
       "widgets": [
         {
           "title": "Coral Pickups",
           "type": "multispinbox",
-          "jsonKey": ["coralPickupsStation","coralPickupsGround",],
+          "jsonKey": [
+            "coralPickupsStation",
+            "coralPickupsGround",
+          ],
           "height": "40",
           "boxNames": [
             ["Station", "Ground"]
@@ -109,16 +114,28 @@ Map<String, dynamic> atlascout = {
         {
           "title": "Coral Scored",
           "type": "multispinbox",
-          "jsonKey": ["coralScoredL1","coralScoredL2","coralScoredL3","coralScoredL4"],
+          "jsonKey": [
+            "coralScoredL1",
+            "coralScoredL2",
+            "coralScoredL3",
+            "coralScoredL4"
+          ],
           "height": "40",
-          "boxNames":[
-            ["L1","L2","L3","L4"]
+          "boxNames": [
+            ["L1", "L2", "L3", "L4"]
           ]
         },
         {
           "title": "Algae",
           "type": "multispinbox",
-          "jsonKey": ["algaeremoveL2","algaeremoveL3","algaescoreProcessor","algaescoreNet","algaemissProcessor","algaemissNet"],
+          "jsonKey": [
+            "algaeremoveL2",
+            "algaeremoveL3",
+            "algaescoreProcessor",
+            "algaescoreNet",
+            "algaemissProcessor",
+            "algaemissNet"
+          ],
           "height": "65",
           "boxNames": [
             ["Remove L2", "Remove L3", "Score Processor", "Score Net"],
@@ -172,11 +189,7 @@ Map<String, dynamic> atlascout = {
           "type": "placeholder",
           "jsonKey": "dataQuality"
         },
-        {
-          "title": "Comments",
-          "type": "placeholder",
-          "jsonKey": "comments"
-        },
+        {"title": "Comments", "type": "placeholder", "jsonKey": "comments"},
         {
           "title": "[ ] Team crossed over midline?",
           "type": "placeholder",
@@ -195,12 +208,12 @@ Map<String, dynamic> chronoscout = {
       "icon": Icon(CustomIcons.pitCrew), 
       "widgets": [
         {
-          "title": "hiiiiii", 
-          "type": "stopwatch-horizontal", 
-          "jsonKey": "random", 
+          "title": "hiiiiii",
+          "type": "stopwatch-horizontal",
+          "jsonKey": "random",
         }
       ]
-    }, 
+    },
     {
       "title": "Setup",
       "icon": Icon(CustomIcons.wrench),
@@ -268,11 +281,7 @@ Map<String, dynamic> chronoscout = {
           "jsonKey": "startingPosition",
           //Deleted "height" field... Not sure why needed. No idea what type this should be. -Sean
         },
-        {
-          "title": "Start match guided",
-          "type": "placeholder",
-          "jsonKey": ""
-        }
+        {"title": "Start match guided", "type": "placeholder", "jsonKey": ""}
       ]
     },
     {
@@ -280,7 +289,7 @@ Map<String, dynamic> chronoscout = {
       "icon": Icon(CustomIcons.autonomous),
       "widgets": [
         {
-          "title":"big boy auto widget",
+          "title": "big boy auto widget",
           "type": "placeholder",
           "jsonKey": "idkYet",
         },
@@ -296,7 +305,7 @@ Map<String, dynamic> chronoscout = {
       "icon": Icon(CustomIcons.gamepad),
       "widgets": [
         {
-          "title":"big boy teleop widget",
+          "title": "big boy teleop widget",
           "type": "placeholder",
           "jsonKey": "idkYet",
         },
@@ -322,11 +331,7 @@ Map<String, dynamic> chronoscout = {
           "type": "placeholder",
           "jsonKey": "dataQuality"
         },
-        {
-          "title": "Comments",
-          "type": "textbox",
-          "jsonKey": "comments"
-        }
+        {"title": "Comments", "type": "textbox", "jsonKey": "comments"}
       ]
     }
   ]
@@ -339,16 +344,8 @@ Map<String, dynamic> pitscout = {
       "title": "Initial Info",
       "icon": Icon(CustomIcons.chartBar),
       "widgets": [
-        {
-          "title": "Team Number",
-          "type": "textbox",
-          "jsonKey": "teamNumber"
-        },
-        {
-          "title": "Team Name",
-          "type": "textbox",
-          "jsonKey": "teamName"
-        },
+        {"title": "Team Number", "type": "textbox", "jsonKey": "teamNumber"},
+        {"title": "Team Name", "type": "textbox", "jsonKey": "teamName"},
         {
           "title": "Interviewee Name",
           "type": "textbox",
@@ -365,11 +362,7 @@ Map<String, dynamic> pitscout = {
       "title": "Robot Stats",
       "icon": Icon(CustomIcons.wrench),
       "widgets": [
-        {
-          "title": "",
-          "type": "placeholder",
-          "jsonKey": "teamNumber"
-        }
+        {"title": "", "type": "placeholder", "jsonKey": "teamNumber"}
       ]
     },
     {
@@ -422,7 +415,7 @@ Map<String, dynamic> pitscout = {
           "title": "Climbing Ability and Preference",
           "type": "placeholder",
           "jsonKey": "climbingAbilityAndPreference",
-          "height": "80"          
+          "height": "80"  
         },
         {
           "title": "Average Climb Time",
@@ -609,17 +602,105 @@ Map<String, dynamic> hpscout = {
   ]
 };
 
-Map<String, Map> layoutMap = {
-  "AtlaScout": atlascout,
-  "ChronoScout" : chronoscout,
-  "PitScout" : pitscout,
-  "HPScout": hpscout
+Map<String, dynamic> dataViewer = {
+  "title": "Data Viewer",
+  "pages": [
+    {
+      "title": "bing chilling",
+      "icon": Icon(CustomIcons.chartBar),
+      "widgets": [
+        {
+          "title": "Barchart Test",
+          "type": "barchart",
+          "height": "300",
+          "multiColor": [Constants.pastelRed, Constants.pastelYellow],
+          "multiChartData": () {
+            SplayTreeMap<int, List<double>> data = SplayTreeMap();
+            data.addAll({
+              1: [5, 0],
+              8: [2, 2],
+              13: [4, 1],
+              16: [3, 2],
+              27: [1, 0],
+              38: [3, 1],
+              43: [5, 1],
+              47: [2, 2],
+              58: [0, 1],
+              65: [1, 0],
+            });
+            return data;
+          }(),
+          "chartRemovedData": [8, 27, 58]
+        },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Barchart Test",
+              "type": "barchart",
+              "height": "150",
+              "width": "190",
+              "color": Constants.pastelRed,
+              "chartData": () {
+                SplayTreeMap<int, double> data = SplayTreeMap();
+                data.addAll({
+                  1: 5,
+                  8: 2,
+                  13: 4,
+                  16: 3,
+                  27: 1,
+                  38: 3,
+                  43: 5,
+                  47: 2,
+                  58: 0,
+                  65: 1,
+                });
+                return data;
+              }(),
+              "chartRemovedData": [8, 27, 58]
+            },
+            {
+              "title": "Barchart Test",
+              "type": "barchart",
+              "height": "150",
+              "width": "190",
+              "multiColor": [Colors.deepPurple, Colors.purple, Colors.purpleAccent, const Color.fromARGB(255, 244, 83, 195)],
+              "multiChartData": () {
+                SplayTreeMap<int, List<double>> data = SplayTreeMap();
+                data.addAll({
+                  1: [5, 5, 2, 7],
+                  8: [2, 7, 3, 6],
+                  13: [4, 1, 6, 2],
+                  16: [3, 1, 2, 6],
+                  27: [1, 3, 1, 7],
+                  38: [3, 6, 2, 7],
+                  43: [5, 2, 1, 2],
+                  47: [2, 1, 3, 8],
+                  58: [1, 1, 1, 1],
+                  65: [5, 2, 1, 3],
+                });
+                return data;
+              }()
+            }
+          ]
+        }
+      ]
+    }
+  ]
 };
 
+Map<String, Map> layoutMap = {
+  "AtlaScout": atlascout,
+  "ChronoScout": chronoscout,
+  "PitScout": pitscout,
+  "HPScout": hpscout,
+  "DataViewer": dataViewer
+};
 
 Map<String, IconData> iconMap = {
   "AtlaScout": Icons.map,
   "ChronoScout": Icons.timer,
   "PitScout": Icons.analytics_rounded,
-  "HPScout": Icons.child_care
+  "HPScout": Icons.child_care,
+  "DataViewer": Icons.account_box_rounded
 };
