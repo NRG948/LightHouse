@@ -21,8 +21,12 @@ Map<String, dynamic> atlascout = {
               "title": "Team Number",
               "type": "numberbox",
               "jsonKey": "teamNumber",
-              "width": "41.5"
+              "width": "42"
             },
+            {
+              "type": "spacer", 
+              "width": "2"
+            }, 
             {
               "title": "Driver Station",
               "type": "dropdown",
@@ -40,19 +44,27 @@ Map<String, dynamic> atlascout = {
               "type": "dropdown",
               "options": "Qualifiers,Playoffs,ADD MORE NOT COMPLETE", 
               "jsonKey": "matchType",
-              "width": "37.5"
+              "width": "42"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Match Number",
               "type": "placeholder",
               "jsonKey": "matchNumber",
-              "width": "23"
+              "width": "20"
             },
+            {
+              "type": "spacer", 
+              "width": "2", 
+            }, 
             {
               "title": "Replay",
               "type": "placeholder",
               "jsonKey": "replay",
-              "width": "21"
+              "width": "20"
             }
           ]
         },
