@@ -18,7 +18,9 @@ class NRGThreeStageCheckbox extends StatefulWidget {
   State<NRGThreeStageCheckbox> createState() => _NRGThreeStageCheckboxState();
 }
 
-class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> {
+class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
   String get _key => widget.jsonKey;
   CheckboxStage stage = CheckboxStage.unable;
   ValueNotifier<CheckboxStage> checkboxNotifier = ValueNotifier<CheckboxStage>(CheckboxStage.unable);
