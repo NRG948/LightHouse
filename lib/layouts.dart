@@ -45,7 +45,7 @@ Map<String, dynamic> atlascout = {
             {
               "title": "Match Type",
               "type": "dropdown",
-              "options": "Qualifiers,Playoffs,ADD MORE NOT COMPLETE", 
+              "options": "Qualifications,Playoffs,Finals", 
               "jsonKey": "matchType",
               "width": "42"
             },
@@ -55,7 +55,7 @@ Map<String, dynamic> atlascout = {
             }, 
             {
               "title": "Match Number",
-              "type": "placeholder",
+              "type": "textbox",
               "jsonKey": "matchNumber",
               "width": "20"
             },
