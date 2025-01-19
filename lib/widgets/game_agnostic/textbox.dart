@@ -6,8 +6,8 @@ import "package:lighthouse/pages/data_entry.dart";
 class NRGTextbox extends StatefulWidget {
   final String title;
   final String jsonKey;
-  final String height;
-  final String width;
+  final double height;
+  final double width;
   final bool numeric;
   const NRGTextbox(
       {super.key,
@@ -24,8 +24,8 @@ class NRGTextbox extends StatefulWidget {
 class _NRGTextboxState extends State<NRGTextbox> {
   String get _title => widget.title;
   String get _key => widget.jsonKey;
-  String get _height => widget.height;
-  String get _width => widget.width;
+  double get _height => widget.height;
+  double get _width => widget.width;
   bool get _numeric => widget.numeric;
   final TextEditingController _controller = TextEditingController();
 
@@ -52,8 +52,8 @@ class _NRGTextboxState extends State<NRGTextbox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: double.parse(_height),
-        width: double.parse(_width),
+        height: _height,
+        width: _width,
         decoration: BoxDecoration(
             color: Colors.blueGrey,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -70,7 +70,7 @@ class _NRGTextboxState extends State<NRGTextbox> {
                     labelText: "Enter Text",
                     labelStyle: Constants.comfortaaBold20pt,
                     border: OutlineInputBorder()),
-                maxLines: double.parse(_height).toInt() > 100
+                maxLines: _height.toInt() > 100
                     ? 5
                     : 1 // Probably shouldn't be hard-coded but fine for now
                 )

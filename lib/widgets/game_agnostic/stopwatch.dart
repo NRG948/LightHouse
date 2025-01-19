@@ -6,8 +6,8 @@ class NRGStopwatch extends StatefulWidget {
   NRGStopwatch({super.key});
 
   final String title = "Stopwatch";
-  final String height = "100";
-  final String width = "400";
+  final double height = 100;
+  final double width = 400;
 
   final stopwatch = Stopwatch();
 
@@ -17,8 +17,8 @@ class NRGStopwatch extends StatefulWidget {
 
 class _NRGStopwatchState extends State<NRGStopwatch> {
   Stopwatch get _stopwatch => widget.stopwatch;
-  String get _height => widget.height;
-  String get _width => widget.width;
+  double get _height => widget.height;
+  double get _width => widget.width;
 
   //usually, it is enough to just use "double.parse(_height/_width)", but here,
   //it is used enough times that it's worth it to just make them
@@ -36,8 +36,8 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
   void initState() {
     super.initState();
     _stopwatch.reset();
-    height = double.parse(_height);
-    width = double.parse(_width);
+    height = _height;
+    width = _width;
 
     stopwatchResult = _stopwatch.elapsed;
 
