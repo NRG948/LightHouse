@@ -28,9 +28,9 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
   double get _height => widget.height;
   double get _width => widget.width;
 
-  IconData getCheckIcon() {
+  IconData? getCheckIcon() {
     if (checkboxNotifier.value == CheckboxStage.unable) {
-      return IconData(0xe16a, fontFamily: 'MaterialIcons');
+      return null;
     } else if (checkboxNotifier.value == CheckboxStage.able) {
       return IconData(0xe156, fontFamily: 'MaterialIcons');
     } else {
