@@ -40,7 +40,6 @@ class SavedData extends StatelessWidget {
             LayoutDropdown(),
             SizedBox(height: 5,),
             SavedFileList()
-            
 
           ],
         ))
@@ -82,6 +81,7 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
             return DropdownMenuItem<String>(value: item,child: Text(item),);
           }).toList(), onChanged:(eventKey){setState(() {
             selectedValue = eventKey ?? SavedData.sharedState.activeEvent;
+            SavedData.sharedState.setActiveEvent(selectedValue);
           });}),
         ],
       ),
@@ -126,6 +126,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
             return DropdownMenuItem<String>(value: item,child: Text(item),);
           }).toList(), onChanged:(layout){setState(() {
             selectedValue = layout ?? layouts[0];
+            SavedData.sharedState.setActiveLayout(selectedValue);
           });}),
         ],
       ),
@@ -152,13 +153,21 @@ class _SavedFileListState extends State<SavedFileList> {
     if (SavedData.sharedState.activeLayout == "No Data") {return Text("No layouts");}
     
     List<String> fileListStrings = getFilesInLayout(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout);
-    
     if (fileListStrings.isEmpty) {
       
       return Text("No matches for layout ${SavedData.sharedState.activeLayout}");
-      } 
-    return Column(children: fileListStrings.map((file) {
-      return SavedFile(fileName: file,);}).toList());
+      }
+    List<SavedFile> savedFiles = fileListStrings.map((file) {
+        return SavedFile(fileName: file,);}).toList();
+    return SizedBox(
+      height: 600,
+      child: ListView.builder(
+        itemCount: savedFiles.length,
+        itemBuilder: (context,index) {
+          return savedFiles[index];
+        }
+      ),
+    );
   }
 }
 
@@ -178,10 +187,12 @@ class _SavedFileState extends State<SavedFile> {
   @override
   void initState() {
     super.initState();
-    savedFileJson = loadFile(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
+    
   }
   @override
   Widget build(BuildContext context) {
+    print("${SavedData.sharedState.activeEvent}, ${SavedData.sharedState.activeLayout}, ${widget.fileName}");
+    savedFileJson = loadFile(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
     if (["matchType","matchNumber","driverStation","scouterName","teamNumber"].every((value) => savedFileJson.containsKey(value))) {
       matchInfo = Padding(
         padding: const EdgeInsets.all(8.0),
@@ -213,7 +224,9 @@ class _SavedFileState extends State<SavedFile> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                       Icon(Icons.data_object,size:30),
-                      AutoSizeText(SavedData.sharedState.activeLayout,style: comfortaaBold(25,color: Colors.black),)
+                      SizedBox(
+                        width: 70,
+                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25,color: Colors.black),maxLines: 1,))
                     ],),
                   ),
                 ],
@@ -243,20 +256,31 @@ class _SavedFileState extends State<SavedFile> {
     } else {
       matchInfo = Text("doesn't satisfy");
     }
-    return Container(
-      width: 400 * SavedData.scaleFactor,
-      height: 200 * SavedData.scaleFactor,
-      decoration: BoxDecoration(
-        color: Constants.pastelWhite,
-        borderRadius: BorderRadius.circular(Constants.borderRadius)
+    return Padding(
+      padding: const EdgeInsets.only(
+        bottom: 10
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-        Container(width: 325, height: 195,color: Colors.red,child: matchInfo,),
-        Container(width: 65, height: 195,color: Colors.yellow,),
-      ],),
-      );
+      child: Container(
+        width: 400 * SavedData.scaleFactor,
+        height: 200 * SavedData.scaleFactor,
+        decoration: BoxDecoration(
+          color: Constants.pastelWhite,
+          borderRadius: BorderRadius.circular(Constants.borderRadius)
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          SizedBox(width: 325, height: 195,child: matchInfo,),
+          SizedBox(width: 65, height: 195,child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(onPressed: () {}, icon: Icon(Icons.edit_note,size:50)),
+              IconButton(onPressed: () {}, icon: Icon(Icons.delete,size:50))
+            ],
+          ),),
+        ],),
+        ),
+    );
   }
 }
 
@@ -266,6 +290,10 @@ class SharedState extends ChangeNotifier {
   late String activeLayout;
   void setActiveEvent(String event) {
     activeEvent = event;
+    notifyListeners();
+  }
+  void setActiveLayout(String layout) {
+    activeLayout = layout;
     notifyListeners();
   }
 }
