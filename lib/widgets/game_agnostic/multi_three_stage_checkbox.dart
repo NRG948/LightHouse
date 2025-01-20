@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart';
 
 class NRGMultiThreeStageCheckbox extends StatefulWidget {
   final String title;
@@ -18,8 +19,7 @@ class NRGMultiThreeStageCheckbox extends StatefulWidget {
   @override
   State<NRGMultiThreeStageCheckbox> createState() => _NRGMultiThreeStageCheckboxState();
 }
-
-class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
+ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -46,7 +46,7 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
               style: comfortaaBold(18),
               textAlign: TextAlign.center,
             ),
-            buildSpinboxes()
+            buildThreeStageCheckmarks()
           ],
         ));
   }
@@ -56,7 +56,7 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
     final nameList = _boxNames.expand((list) => list).toList();
     if (!(keyList.length == nameList.length)) {
       return Text(
-          "${nameList.length}-count spinbox has ${keyList.length} JSON keys associated with it");
+          "${nameList.length}-count three-stage-checkbox has ${keyList.length} JSON keys associated with it");
     }
     final List<Widget> rowList = _boxNames.map((row) {
       return Row(
@@ -65,8 +65,20 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
             // As much of this code is simply modified from MultiSpinbox, 
             //it has the same limitations--as in, do not give the same name
             //to multiple different ones. 
-            return NRGMultiSpinChild(
-                title: title, jsonKey: keyList[nameList.indexOf(title)]);
+
+            //-------for finding the width of title
+            final textPainter = TextPainter(
+              text: TextSpan(text: title), 
+              textDirection: TextDirection.ltr, 
+            );
+
+            textPainter.layout();
+
+            final textwidth = textPainter.size.width;
+            //-------end of that sections
+
+            return NRGThreeStageCheckbox(
+                title: title, jsonKey: keyList[nameList.indexOf(title)], height: 50, width: textwidth * 3.5,);
           }).toList() as List<Widget>);
     }).toList();
     return Column(children: rowList);

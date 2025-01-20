@@ -415,18 +415,45 @@ Map<String, dynamic> pitscout = {
       "widgets": [
         {
           "title": "Coral Scoring Ability",
-          "type": "three-stage-checkbox",
-          "jsonKey": "coralScoringAbility"
+          "type": "multi-three-stage-checkbox",
+          "jsonKey": [
+            "coralScoringAbilityL1", 
+            "coralScoringAbilityL2", 
+            "coralScoringAbilityL3", 
+            "coralScoringAbilityL4"
+          ], 
+          "boxNames": [
+            ["L1", "L2", "L3", "L4"]
+          ], 
+          "height": "20"
         },
         {
           "title": "Coral Intake Ability",
-          "type": "placeholder",
-          "jsonKey": "coralIntakeAbility"
+          "type": "multi-three-stage-checkbox",
+          "jsonKey": [
+            "canIntakeStation", 
+            "canIntakeGround"
+          ], 
+          "boxNames": [
+            [
+              "Station", 
+              "Ground"
+            ]
+          ]
         },
         {
           "title": "Algae Removal Ability",
-          "type": "placeholder",
-          "jsonKey": "algaeRemovalAbility"
+          "type": "multi-three-stage-checkbox",
+          "jsonKey": [
+            "canRemoveAlgaeL2"
+            "canRemoveAlgaeL3"
+          ], 
+          "boxnames": [
+            [
+              "L2", 
+              "L3"
+            ]
+          ]
         },
         {
           "title": "Algae Scoring Ability",

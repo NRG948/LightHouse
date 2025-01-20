@@ -13,6 +13,7 @@ import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/mcq.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
+import "package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch-horizontal.dart";
@@ -190,6 +191,18 @@ class _DataEntryState extends State<DataEntry> {
             height: height, 
             width: width
           ); 
+        case "multi-three-stage-checkbox": 
+          return NRGMultiThreeStageCheckbox(
+            title: title, 
+            jsonKey: jsonKey, 
+            height: height, 
+            width: width, 
+            boxNames: 
+              widgetData["boxNames"] ??
+                  [
+                    ["NO OPTIONS SPECIFIED"]
+                  ]
+          );
       }
       return Text("type $type isn't a valid type");
     }).toList();
