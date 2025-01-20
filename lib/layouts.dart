@@ -445,10 +445,10 @@ Map<String, dynamic> pitscout = {
           "title": "Algae Removal Ability",
           "type": "multi-three-stage-checkbox",
           "jsonKey": [
-            "canRemoveAlgaeL2"
+            "canRemoveAlgaeL2", 
             "canRemoveAlgaeL3"
           ], 
-          "boxnames": [
+          "boxNames": [
             [
               "L2", 
               "L3"
@@ -457,8 +457,17 @@ Map<String, dynamic> pitscout = {
         },
         {
           "title": "Algae Scoring Ability",
-          "type": "placeholder",
-          "jsonKey": "algaeScoringAbility"
+          "type": "multi-three-stage-checkbox",
+          "jsonKey": [
+            "canScoreProcessor", 
+            "canScorenet", 
+          ], 
+          "boxNames": [
+            [
+              "Processor", 
+              "Net"
+            ]
+          ]
         }
       ]
     },
@@ -468,9 +477,17 @@ Map<String, dynamic> pitscout = {
       "widgets": [
         {
           "title": "Climbing Ability and Preference",
-          "type": "placeholder",
-          "jsonKey": "climbingAbilityAndPreference",
-          "height": "80"  
+          "type": "multi-three-stage-checkbox",
+          "jsonKey": [
+            "canClimbShallow", 
+            "canClimbDeep"
+          ],
+          "boxNames": [
+            [
+              "Shallow", 
+              "Deep"
+            ]
+          ] 
         },
         {
           "title": "Average Climb Time",

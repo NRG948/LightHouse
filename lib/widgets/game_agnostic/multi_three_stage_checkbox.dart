@@ -75,7 +75,7 @@ class NRGMultiThreeStageCheckbox extends StatefulWidget {
             textPainter.layout();
 
             final textwidth = textPainter.size.width;
-            //-------end of that sections
+            //-------end of that section
 
             return NRGThreeStageCheckbox(
                 title: title, jsonKey: keyList[nameList.indexOf(title)], height: 50, width: textwidth * 3.5,);
