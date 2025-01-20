@@ -9,7 +9,7 @@ Map<String, dynamic> atlascout = {
   "pages": [
     {
       "title": "Setup",
-      "icon": Icon(CustomIcons.wrench),
+      "icon": CustomIcons.wrench,
       "widgets": [
         {
           "title": "Scouter Name",
@@ -82,7 +82,7 @@ Map<String, dynamic> atlascout = {
     },
     {
       "title": "Auto",
-      "icon": Icon(CoralAlgaeIcons.autonomous),
+      "icon": CoralAlgaeIcons.autonomous,
       "widgets": [
         {
           "type": "rsAutoUntimed",
@@ -93,7 +93,7 @@ Map<String, dynamic> atlascout = {
     },
     {
       "title": "Teleop",
-      "icon": Icon(CoralAlgaeIcons.teleop),
+      "icon": CoralAlgaeIcons.teleop,
       "widgets": [
         {
           "title": "Coral Pickups",
@@ -142,7 +142,7 @@ Map<String, dynamic> atlascout = {
     },
     {
       "title": "Endgame",
-      "icon": Icon(CustomIcons.flag),
+      "icon": CustomIcons.flag,
       "widgets": [
         {
           "title": "End Location",
@@ -202,7 +202,7 @@ Map<String, dynamic> chronoscout = {
   "pages": [
     {
       "title": "HorizontalTest", //Test page for horizontal stuff. REMOVE FOR PRODUCTION
-      "icon": Icon(CustomIcons.pitCrew), 
+      "icon": CustomIcons.pitCrew, 
       "widgets": [
         {
           "title": "hiiiiii",
@@ -213,7 +213,7 @@ Map<String, dynamic> chronoscout = {
     },
     {
       "title": "Setup",
-      "icon": Icon(CustomIcons.wrench),
+      "icon": CustomIcons.wrench,
       "widgets": [
         {
           "title": "Scouter Name",
@@ -226,7 +226,7 @@ Map<String, dynamic> chronoscout = {
             {
               "title": "Team Number",
               "type": "numberbox",
-              "jsonKey": "scouterName",
+              "jsonKey": "teamNumber",
               "width": "34"
             },
             {
@@ -285,7 +285,7 @@ Map<String, dynamic> chronoscout = {
     },
     {
       "title": "Auto",
-      "icon": Icon(CustomIcons.autonomous),
+      "icon": CoralAlgaeIcons.autonomous,
       "widgets": [
         {
           "title": "big boy auto widget",
@@ -301,7 +301,7 @@ Map<String, dynamic> chronoscout = {
     },
     {
       "title": "Teleop",
-      "icon": Icon(CustomIcons.gamepad),
+      "icon": CoralAlgaeIcons.teleop,
       "widgets": [
         {
           "title": "big boy teleop widget",
@@ -317,7 +317,7 @@ Map<String, dynamic> chronoscout = {
     },
     {
       "title": "Endgame",
-      "icon": Icon(CustomIcons.flag),
+      "icon": CustomIcons.flag,
       "widgets": [
         {
           "title": "General Match Strategy",
@@ -341,7 +341,7 @@ Map<String, dynamic> pitscout = {
   "pages": [
     {
       "title": "Initial Info",
-      "icon": Icon(CustomIcons.chartBar),
+      "icon": CustomIcons.chartBar,
       "widgets": [
         {"title": "Team Number", "type": "textbox", "jsonKey": "teamNumber"},
         {"title": "Team Name", "type": "textbox", "jsonKey": "teamName"},
@@ -359,7 +359,7 @@ Map<String, dynamic> pitscout = {
     },
     {
       "title": "Robot Stats",
-      "icon": Icon(CustomIcons.wrench),
+      "icon": CustomIcons.wrench,
       "widgets": [
         {
           "title": "Robot Height (in)", 
@@ -395,7 +395,7 @@ Map<String, dynamic> pitscout = {
     },
     {
       "title": "Auto",
-      "icon": Icon(CustomIcons.autonomous),
+      "icon": CoralAlgaeIcons.autonomous,
       "widgets": [
         {
           "title": "Auto Routine",
@@ -411,7 +411,7 @@ Map<String, dynamic> pitscout = {
     },
     {
       "title": "Teleop",
-      "icon": Icon(CustomIcons.gamepad),
+      "icon": CoralAlgaeIcons.teleop,
       "widgets": [
         {
           "title": "Coral Scoring Ability",
@@ -473,7 +473,7 @@ Map<String, dynamic> pitscout = {
     },
     {
       "title": "Endgame",
-      "icon": Icon(CustomIcons.flag),
+      "icon": CustomIcons.flag,
       "widgets": [
         {
           "title": "Climbing Ability and Preference",
@@ -498,7 +498,7 @@ Map<String, dynamic> pitscout = {
     },
     {
       "title": "Drive Team",
-      "icon": Icon(CustomIcons.racecar),
+      "icon": CustomIcons.racecar,
       "widgets": [
         {
           "title": "Driver and Manipulator Experience",
@@ -552,7 +552,7 @@ Map<String, dynamic> hpscout = {
   "pages": [
     {
       "title": "Setup",
-      "icon": Icon(CustomIcons.wrench),
+      "icon": CustomIcons.wrench,
       "widgets": [
         {
           "title": "Scouter Name",
@@ -616,7 +616,7 @@ Map<String, dynamic> hpscout = {
     },
     {
       "title": "Scoring",
-      "icon": Icon(CustomIcons.gamepad),
+      "icon": CustomIcons.gamepad,
       "widgets": [
         {
           "type": "row",
@@ -681,7 +681,7 @@ Map<String, dynamic> dataViewer = {
   "pages": [
     {
       "title": "bing chilling",
-      "icon": Icon(CustomIcons.chartBar),
+      "icon": CustomIcons.chartBar,
       "widgets": [
         {
           "title": "Barchart Test",

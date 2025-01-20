@@ -7,7 +7,7 @@ import 'package:lighthouse/layouts.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
+  static late double scaleFactor;
   List<Launcher> getLaunchers() {
     final enabledLayouts = layoutMap.keys;
     final enabledLaunchers = enabledLayouts.map((layout) {
@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    scaleFactor = screenHeight / 914;
     loadConfig();
     return Scaffold(
         backgroundColor: Constants.pastelRed,
@@ -78,8 +79,8 @@ class Launcher extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          height: 100,
-          width: 400,
+          height: 100 * HomePage.scaleFactor,
+          width: 400 * HomePage.scaleFactor,
           color: Colors.white,
           child: Row(children: [
             Icon(icon),
