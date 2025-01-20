@@ -8,11 +8,13 @@ import 'package:lighthouse/layouts.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  List<Launcher> getLayouts() {
+  List<Launcher> getLaunchers() {
     final enabledLayouts = layoutMap.keys;
-    return enabledLayouts.map((layout) {
+    final enabledLaunchers = enabledLayouts.map((layout) {
       return Launcher(icon: iconMap[layout] ?? Icons.data_object, title: layout);
     }).toList();
+    enabledLaunchers.add(Launcher(icon: Icons.folder,title: "View Saved Data", route: "/saved_data",));
+    return enabledLaunchers;
   }
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class HomePage extends StatelessWidget {
                 image: DecorationImage(
                     image: AssetImage("assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: getLayouts())),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: getLaunchers())),
         );
   }
 }

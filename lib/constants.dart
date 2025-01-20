@@ -4,6 +4,7 @@ class Constants {
   static Color pastelRed = Color.fromARGB(255, 227, 150, 136);
   static Color pastelYellow = Color.fromARGB(255, 237, 193, 142);
   static Color pastelWhite = Color.fromARGB(255, 250, 242, 240);
+  static Color pastelBlue = Color.fromARGB(255, 0, 204, 255,);
 
   static TextStyle comfortaaBold30pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:30);
   static TextStyle comfortaaBold20pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:20);
