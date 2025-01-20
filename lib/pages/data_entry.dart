@@ -11,12 +11,15 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
+import "package:lighthouse/widgets/game_agnostic/mcq.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
+import "package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch-horizontal.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
+import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
 
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 
@@ -174,6 +177,32 @@ class _DataEntryState extends State<DataEntry> {
               color: color,
               multiColor: multiColor,
               multiData: multiChartData);
+        case "mcq": 
+          return NRGMCQ(
+            title: title,
+            height: height,
+            width: width, 
+            jsonKey: jsonKey,
+          );
+        case "three-stage-checkbox": 
+          return NRGThreeStageCheckbox(
+            title: title, 
+            jsonKey: jsonKey, 
+            height: height, 
+            width: width
+          ); 
+        case "multi-three-stage-checkbox": 
+          return NRGMultiThreeStageCheckbox(
+            title: title, 
+            jsonKey: jsonKey, 
+            height: height, 
+            width: width, 
+            boxNames: 
+              widgetData["boxNames"] ??
+                  [
+                    ["NO OPTIONS SPECIFIED"]
+                  ]
+          );
       }
       return Text("type $type isn't a valid type");
     }).toList();
@@ -219,7 +248,7 @@ class _DataEntryState extends State<DataEntry> {
     print(DataEntry.activeConfig);
     final layoutJSON = layoutMap.containsKey(DataEntry.activeConfig)
         ? layoutMap[DataEntry.activeConfig]!
-        : Map();
+        : {};
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -307,7 +336,7 @@ class _DataEntryState extends State<DataEntry> {
           onTap: (index) {
             setState(() {
               currentPage = index;
-              controller.jumpToPage(index);
+              controller.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
             });
           },
           unselectedIconTheme: IconThemeData(color: Colors.black),
