@@ -687,20 +687,20 @@ Map<String, dynamic> dataViewer = {
           "title": "Barchart Test",
           "type": "barchart",
           "height": "70",
-          "multiColor": [Constants.pastelRed, Constants.pastelYellow],
+          "multiColor": [Constants.pastelRed, Constants.pastelYellow, Constants.pastelBlue],
           "multiChartData": () {
             SplayTreeMap<int, List<double>> data = SplayTreeMap();
             data.addAll({
-              1: [5, 0],
-              8: [2, 2],
-              13: [4, 1],
-              16: [3, 2],
-              27: [1, 0],
-              38: [3, 1],
-              43: [5, 1],
-              47: [2, 2],
-              58: [0, 1],
-              65: [1, 0],
+              1: [5, 0, 1],
+              8: [2, 2, 2],
+              13: [4, 1, 1],
+              16: [3, 2, 3],
+              27: [1, 0, 3],
+              38: [3, 1, 1],
+              43: [5, 1, 1],
+              47: [2, 2, 4],
+              58: [0, 1, 1],
+              65: [1, 0, 2],
             });
             return data;
           }(),
@@ -761,6 +761,9 @@ Map<String, dynamic> dataViewer = {
               "chartRemovedData": [8, 27, 58]
             }
           ]
+        },
+        {
+          "type": "scrollable-box"
         }
       ]
     }

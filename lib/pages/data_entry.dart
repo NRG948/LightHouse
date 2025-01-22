@@ -15,6 +15,7 @@ import "package:lighthouse/widgets/game_agnostic/mcq.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
+import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch-horizontal.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
@@ -203,6 +204,8 @@ class _DataEntryState extends State<DataEntry> {
                     ["NO OPTIONS SPECIFIED"]
                   ]
           );
+        case "scrollable-box":
+          return ScrollableBox(width: width, height: height);
       }
       return Text("type $type isn't a valid type");
     }).toList();
