@@ -713,7 +713,7 @@ Map<String, dynamic> dataViewer = {
             {
               "title": "Barchart Test",
               "type": "barchart",
-              "width": "190",
+              "width": "42",
               "color": Constants.pastelRed,
               "chartData": () {
                 SplayTreeMap<int, double> data = SplayTreeMap();
@@ -734,9 +734,13 @@ Map<String, dynamic> dataViewer = {
               "chartRemovedData": [8, 27, 58]
             },
             {
+              "type": "spacer", 
+              "width": "2", 
+            },
+            {
               "title": "Barchart Test",
               "type": "barchart",
-              "width": "190",
+              "width": "42",
               "multiColor": [Colors.deepPurple, Colors.purple, Colors.purpleAccent, const Color.fromARGB(255, 244, 83, 195)],
               "multiChartData": () {
                 SplayTreeMap<int, List<double>> data = SplayTreeMap();
