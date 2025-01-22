@@ -380,3 +380,10 @@ class SaveJsonButton extends StatelessWidget {
         icon: Icon(Icons.save,color: Constants.pastelWhite,));
   }
 }
+
+enum GuidanceState {
+  setup, 
+  auto, 
+  teleop, 
+  endgame
+}
