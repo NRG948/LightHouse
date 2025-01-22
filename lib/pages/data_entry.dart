@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:collection";
 import "dart:convert";
 import "dart:ffi";
@@ -22,12 +23,12 @@ import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
 
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
+import "package:path/path.dart";
 
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
   static late String activeConfig;
-  static final Stopwatch guidanceStopwatch = Stopwatch();
   @override
   State<DataEntry> createState() => _DataEntryState();
 }
@@ -39,6 +40,10 @@ class _DataEntryState extends State<DataEntry> {
   late double resizeScaleFactorWidth;
   late double resizeScaleFactorHeight;
 
+  final guidanceStopwatch = Stopwatch(); 
+  GuidanceState guidanceState = GuidanceState.setup;
+  late final guidanceCheckTimer = Timer.periodic(Duration(milliseconds: 200), CheckGuidanceState);
+
   int currentPage = 0;
   late PageController controller;
   @override
@@ -46,14 +51,15 @@ class _DataEntryState extends State<DataEntry> {
     super.initState();
     DataEntry.exportData.clear();
     controller = PageController(initialPage: 0);
+    guidanceStopwatch.reset();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    deviceWidth = MediaQuery.sizeOf(context).width;
-    deviceHeight = MediaQuery.sizeOf(context).height;
+    deviceWidth = MediaQuery.sizeOf(context as BuildContext).width;
+    deviceHeight = MediaQuery.sizeOf(context as BuildContext).height;
 
     //These are such that we can resize widgets based on screen size, but we need a reference point, 
     //so we are using a 90 / 200 dp phone as the reference and scaling based upon that. 
@@ -350,6 +356,28 @@ class _DataEntryState extends State<DataEntry> {
           backgroundColor: Constants.pastelYellow,
           items: createNavBar(layoutJSON["pages"])),
     );
+  }
+
+  void StartGuidanceStopwatch() {
+    guidanceStopwatch.reset();
+    guidanceStopwatch.start();
+    guidanceState = GuidanceState.setup;
+  }
+  void StopGuidanceStopwatch() {
+    throw UnimplementedError("erm... if you're reading this, then I (Sean) probably have dementia");
+  }
+
+  void CheckGuidanceState(Timer guidanceTimer) {
+    if (guidanceStopwatch.elapsed.inSeconds >= 135) {
+      guidanceState = GuidanceState.endgame;
+    } else if (guidanceStopwatch.elapsed.inSeconds >= 15) {
+      guidanceState = GuidanceState.teleop;
+    } else {
+      guidanceState = GuidanceState.auto;
+    }
+    while (guidanceState.index != currentPage) {
+      controller.animateToPage(currentPage + 1, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+    }
   }
 }
 
