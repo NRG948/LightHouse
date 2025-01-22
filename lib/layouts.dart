@@ -6,6 +6,7 @@ import 'package:lighthouse/custom_icons.dart';
 
 Map<String, dynamic> atlascout = {
   "title": "Atlascout",
+  
   "pages": [
     {
       "title": "Setup",
@@ -784,4 +785,5 @@ Map<String, IconData> iconMap = {
   "Pit": Icons.analytics_rounded,
   "Human Player": Icons.child_care,
   "Data Viewer": Icons.account_box_rounded
+  
 };
