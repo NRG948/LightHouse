@@ -27,6 +27,7 @@ class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
   static late String activeConfig;
+  final Stopwatch
   @override
   State<DataEntry> createState() => _DataEntryState();
 }
