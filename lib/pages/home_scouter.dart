@@ -101,13 +101,30 @@ class Launcher extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
+        //space between each choice
         child: Container(
           height: 100 * ScouterHomePage.scaleFactor,
           width: 400 * ScouterHomePage.scaleFactor,
+          //the size of the box that holds each choice
           color: Colors.white,
           child: Row(children: [
-            Icon(icon),
-            Text(title)
+            Expanded(
+          child: Container(
+            padding: EdgeInsets.all(15),  // Padding inside the container
+            decoration: BoxDecoration(
+              color: Colors.blue[100],   // Background color of the container
+              borderRadius: BorderRadius.circular(10), // Rounded corners
+            ),
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 30, color: Colors.white),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Icon(icon, color: Colors.lightGreen[300], size: 50),
+        ), // Positioned to the right
           ],),
         ),
       ),
