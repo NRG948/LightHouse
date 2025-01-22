@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/data_entry.dart";
 import "package:lighthouse/pages/data_viewer_home.dart";
+import "package:lighthouse/pages/home_scouter.dart";
 import "package:lighthouse/pages/scouter_home.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/saved_data.dart";
