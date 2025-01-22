@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:collection/collection.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,44 @@ class _NRGBarChartState extends State<NRGBarChart> {
       (sum(_data!.values) - sum(_removedData.map((x) => _data![x]))) /
       (_data!.length - _removedData.length);
 
-  /// Returns the average of an [Iterable].
+  /// Returns the averages of [_multiData].
+  List<double> getMultiAverageData() {
+    int dataAmount = _multiData!.values.toList().first.length;
+    List<int> keys = _multiData!.keys.toList();
+    List<double> sums = List.filled(dataAmount, 0);
+    for (int i = 0; i < dataAmount; i++) {
+      for (int key in keys) {
+        if (_removedData.contains(key)) continue; // To skip removed data.
+        sums[i] += _multiData![key]![i];
+      }
+    }
+    return sums.map((x) => x / (keys.length - _removedData.length)).toList();
+  }
+
+  /// Gets a column of texts or a single text depending on the type of graph.
+  Widget getAverageText() => _multiData!.isEmpty
+      ? _getSingleText(getAverageData(), _color ?? Colors.black)
+      : Column(
+          children: _multiColor != null
+              ? IterableZip<dynamic>([getMultiAverageData(), _multiColor!])
+                  .toList()
+                  .map((x) => _getSingleText(x[0], x[1]))
+                  .toList()
+                  .reversed
+                  .toList()
+              : getMultiAverageData()
+                  .map((x) => _getSingleText(x, Colors.black))
+                  .toList());
+
+  Widget _getSingleText(double average, Color color) =>
+      Text("AVERAGE: ${roundAtPlace(average, 2)}",
+          style: TextStyle(
+              fontFamily: "Comfortaa",
+              fontWeight: FontWeight.w900,
+              color: color,
+              fontSize: _width / 20));
+
+  /// Returns the sum of an [Iterable].
   double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
 
   num roundAtPlace(double number, int place) =>
@@ -168,14 +206,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                             const FlLine(color: Colors.grey, strokeWidth: 1)))),
               )),
           // Average value text.
-          Text(
-              _multiData!.isEmpty
-                  ? "AVERAGE: ${roundAtPlace(getAverageData(), 2)}"
-                  : "NO AVERAGE", // TODO Calculate average value
-              style: TextStyle(
-                  fontFamily: "Comfortaa",
-                  color: Colors.black,
-                  fontSize: _width / 20))
+          getAverageText()
         ],
       ),
     );

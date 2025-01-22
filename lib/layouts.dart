@@ -686,7 +686,7 @@ Map<String, dynamic> dataViewer = {
         {
           "title": "Barchart Test",
           "type": "barchart",
-          "height": "60",
+          "height": "70",
           "multiColor": [Constants.pastelRed, Constants.pastelYellow],
           "multiChartData": () {
             SplayTreeMap<int, List<double>> data = SplayTreeMap();
@@ -757,7 +757,8 @@ Map<String, dynamic> dataViewer = {
                   65: [5, 2, 1, 3],
                 });
                 return data;
-              }()
+              }(),
+              "chartRemovedData": [8, 27, 58]
             }
           ]
         }
