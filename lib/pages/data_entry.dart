@@ -11,6 +11,7 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/mcq.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
@@ -209,6 +210,13 @@ class _DataEntryState extends State<DataEntry> {
                   [
                     ["NO OPTIONS SPECIFIED"]
                   ]
+          );
+        case "guidance-start": 
+          return NRGGuidanceButton(
+            height: height, 
+            width: width, 
+            startGuidance: StartGuidanceStopwatch, 
+            endGuidance: StopGuidanceStopwatch, 
           );
       }
       return Text("type $type isn't a valid type");
