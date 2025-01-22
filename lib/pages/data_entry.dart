@@ -214,8 +214,8 @@ class _DataEntryState extends State<DataEntry> {
   List<BottomNavigationBarItem> createNavBar(List<dynamic> pages) {
     return pages.map((page) {
       String title = page["title"];
-      Icon icon = page["icon"];
-      return BottomNavigationBarItem(icon: icon, label: title);
+      Icon icon = Icon(page["icon"]);
+      return BottomNavigationBarItem(icon: icon, label: title,);
     }).toList();
   }
 
@@ -260,7 +260,7 @@ class _DataEntryState extends State<DataEntry> {
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   fontWeight: FontWeight.w900,
-                  color: Colors.white),
+                  color: Constants.pastelWhite),
             ),
             centerTitle: true,
             leading: IconButton(
@@ -279,7 +279,7 @@ class _DataEntryState extends State<DataEntry> {
                         ), 
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false);
+                            Navigator.pushNamedAndRemoveUntil(context, "/home-scouter", (Route<dynamic> route) => false);
                           }, 
                           child: Text("Yes"), 
                         ), 
@@ -288,10 +288,10 @@ class _DataEntryState extends State<DataEntry> {
                   }, 
                 ); 
               },
-                icon: Icon(Icons.home)),
+                icon: Icon(Icons.home, color:Constants.pastelWhite)),
             actions: [
               IconButton(
-                icon: Icon(Icons.javascript),
+                icon: Icon(Icons.javascript,color:Constants.pastelWhite),
                 onPressed: () {
                   showDialog(
                       context: context,
@@ -340,10 +340,10 @@ class _DataEntryState extends State<DataEntry> {
               controller.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
             });
           },
-          unselectedIconTheme: IconThemeData(color: Colors.black),
-          unselectedItemColor: Colors.black,
-          selectedIconTheme: IconThemeData(color: Colors.black),
-          selectedItemColor: Colors.black,
+          unselectedIconTheme: IconThemeData(color: Constants.pastelWhite),
+          unselectedItemColor: Constants.pastelWhite,
+          selectedIconTheme: IconThemeData(color: Constants.pastelWhite),
+          selectedItemColor: Constants.pastelWhite,
           currentIndex: currentPage,
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
@@ -358,7 +358,7 @@ class SaveJsonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return IconButton(
         onPressed: () async {
           if (await saveExport() == 0) {
             showDialog(
@@ -369,7 +369,7 @@ class SaveJsonButton extends StatelessWidget {
                     actions: [
                       TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, "/home");
+                            Navigator.pushNamed(context, "/home-scouter");
                           },
                           child: Text("OK"))
                     ],
@@ -377,6 +377,6 @@ class SaveJsonButton extends StatelessWidget {
                 });
           }
         },
-        child: Text("Save"));
+        icon: Icon(Icons.save,color: Constants.pastelWhite,));
   }
 }

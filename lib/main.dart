@@ -2,8 +2,10 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/data_entry.dart";
-import "package:lighthouse/pages/home.dart";
+import "package:lighthouse/pages/data_viewer_home.dart";
+import "package:lighthouse/pages/scouter_home.dart";
 import "package:lighthouse/constants.dart";
+import "package:lighthouse/pages/saved_data.dart";
 import "package:lighthouse/pages/settings.dart";
 
 /// The main method also known as the entry point into the application.
@@ -30,12 +32,14 @@ class MainWidget extends StatelessWidget {
         
       ),
       title: "LightHouse",
-      home: HomePage(),
+      home: ScouterHomePage(),
       debugShowCheckedModeBanner: false,
       routes: {
-        "/home": (context) => HomePage(),
+        "/home-scouter": (context) => ScouterHomePage(),
         "/entry": (context) => DataEntry(),
-        "/settings": (context) => SettingsPage()
+        "/settings": (context) => SettingsPage(),
+        "/saved_data": (context) => SavedData(),
+        "/home-data-viewer": (context) => DataViewerHome()
       },
     );
   }

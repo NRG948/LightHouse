@@ -5,22 +5,46 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/layouts.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
-
-  List<Launcher> getLayouts() {
+class ScouterHomePage extends StatelessWidget {
+  const ScouterHomePage({super.key});
+  static late double scaleFactor;
+  List<Launcher> getLaunchers() {
     final enabledLayouts = layoutMap.keys;
-    return enabledLayouts.map((layout) {
+    final enabledLaunchers = enabledLayouts.map((layout) {
       return Launcher(icon: iconMap[layout] ?? Icons.data_object, title: layout);
     }).toList();
+    enabledLaunchers.add(Launcher(icon: Icons.folder,title: "View Saved Data", route: "/saved_data",));
+    return enabledLaunchers;
   }
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    scaleFactor = screenHeight / 914;
     loadConfig();
     return Scaffold(
         backgroundColor: Constants.pastelRed,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(child: Text("Switch Mode")),
+              ListTile(
+                leading: Icon(Icons.home),
+                title: Text("Scouter Home"),
+                onTap: () {}
+              ),
+              ListTile(
+                leading: Icon(Icons.bar_chart),
+                title: Text("Data Viewer Home"),
+                onTap: () {
+                  Navigator.pushNamed(context, "/home-data-viewer");
+                }
+              )
+              
+            ],
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: Constants.pastelRed,
           title: const Text(
@@ -57,7 +81,7 @@ class HomePage extends StatelessWidget {
                 image: DecorationImage(
                     image: AssetImage("assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: getLayouts())),
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: getLaunchers())),
         );
   }
 }
@@ -76,8 +100,8 @@ class Launcher extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          height: 100,
-          width: 400,
+          height: 100 * ScouterHomePage.scaleFactor,
+          width: 400 * ScouterHomePage.scaleFactor,
           color: Colors.white,
           child: Row(children: [
             Icon(icon),
