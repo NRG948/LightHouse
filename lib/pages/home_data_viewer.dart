@@ -31,7 +31,7 @@ class DataViewerHome extends StatelessWidget {
                 leading: Icon(Icons.bar_chart),
                 title: Text("Data Viewer Home"),
                 onTap: () {
-                  
+                  Navigator.pop(context);
                 }
               )
               

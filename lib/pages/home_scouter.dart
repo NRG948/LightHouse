@@ -32,7 +32,9 @@ class ScouterHomePage extends StatelessWidget {
               ListTile(
                 leading: Icon(Icons.home),
                 title: Text("Scouter Home"),
-                onTap: () {}
+                onTap: () {
+                  Navigator.pop(context);
+                }
               ),
               ListTile(
                 leading: Icon(Icons.bar_chart),

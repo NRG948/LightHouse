@@ -124,6 +124,13 @@ Map<String, dynamic> loadFile(String eventKey, String layout, String fileName) {
   return jsonDecode(File("$configFolder/$eventKey/$layout/$fileName").readAsStringSync());
 }
 
+int deleteFile(String eventKey, String layout, String fileName) {
+  File fileToDelete = File("$configFolder/$eventKey/$layout/$fileName");
+  if (!fileToDelete.existsSync()) {return 1;}
+  fileToDelete.deleteSync();
+  return 0;
+}
+
 final Map<String, String> defaultConfig = {
     "eventKey": "2025nrg",
     "scouterName": "barebonesNRG"
