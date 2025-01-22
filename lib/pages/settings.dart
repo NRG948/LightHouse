@@ -46,7 +46,7 @@ class SettingsPage extends StatelessWidget {
            color: Colors.white
         ),),
         centerTitle: true,
-        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home");}, icon: Icon(Icons.home)),
+        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, icon: Icon(Icons.home)),
       ),
       body: Container(
         height: screenHeight,
@@ -83,7 +83,7 @@ class SaveSettingsButton extends StatelessWidget {
       if (await saveConfig() == 0) {
         showDialog(context: context, builder: (BuildContext context) {
           return AlertDialog(content: Text("Successfully saved."),actions: [
-            TextButton(onPressed: () {Navigator.pushNamed(context, "/home");}, child: Text("OK"))
+            TextButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, child: Text("OK"))
           ],);
         });
       }

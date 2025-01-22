@@ -278,7 +278,7 @@ class _DataEntryState extends State<DataEntry> {
                         ), 
                         TextButton(
                           onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(context, "/home", (Route<dynamic> route) => false);
+                            Navigator.pushNamedAndRemoveUntil(context, "/home-scouter", (Route<dynamic> route) => false);
                           }, 
                           child: Text("Yes"), 
                         ), 
@@ -368,7 +368,7 @@ class SaveJsonButton extends StatelessWidget {
                     actions: [
                       TextButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, "/home");
+                            Navigator.pushNamed(context, "/home-scouter");
                           },
                           child: Text("OK"))
                     ],

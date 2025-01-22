@@ -24,7 +24,7 @@ class SavedData extends StatelessWidget {
            color: Colors.white
         ),),
         centerTitle: true,
-        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home");}, icon: Icon(Icons.home)),
+        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, icon: Icon(Icons.home)),
       ),
       body: Container(
         height: screenHeight,

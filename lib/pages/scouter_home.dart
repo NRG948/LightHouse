@@ -5,8 +5,8 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/layouts.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class ScouterHomePage extends StatelessWidget {
+  const ScouterHomePage({super.key});
   static late double scaleFactor;
   List<Launcher> getLaunchers() {
     final enabledLayouts = layoutMap.keys;
@@ -24,6 +24,27 @@ class HomePage extends StatelessWidget {
     loadConfig();
     return Scaffold(
         backgroundColor: Constants.pastelRed,
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(child: Text("Switch Mode")),
+              ListTile(
+                leading: Icon(Icons.home),
+                title: Text("Scouter Home"),
+                onTap: () {}
+              ),
+              ListTile(
+                leading: Icon(Icons.bar_chart),
+                title: Text("Data Viewer Home"),
+                onTap: () {
+                  Navigator.pushNamed(context, "/home-data-viewer");
+                }
+              )
+              
+            ],
+          ),
+        ),
         appBar: AppBar(
           backgroundColor: Constants.pastelRed,
           title: const Text(
@@ -79,8 +100,8 @@ class Launcher extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Container(
-          height: 100 * HomePage.scaleFactor,
-          width: 400 * HomePage.scaleFactor,
+          height: 100 * ScouterHomePage.scaleFactor,
+          width: 400 * ScouterHomePage.scaleFactor,
           color: Colors.white,
           child: Row(children: [
             Icon(icon),
