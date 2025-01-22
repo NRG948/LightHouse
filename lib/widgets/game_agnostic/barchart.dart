@@ -26,10 +26,10 @@ class NRGBarChart extends StatefulWidget {
       SplayTreeMap<int, List<double>>? multiData,
       List<Color>? multiColor})
       : removedData = removedData ?? [],
-      color = color ?? Colors.transparent,
-      data = data ?? SplayTreeMap(),
-      multiData = multiData ?? SplayTreeMap(),
-      multiColor = multiColor ?? [];
+        color = color ?? Colors.transparent,
+        data = data ?? SplayTreeMap(),
+        multiData = multiData ?? SplayTreeMap(),
+        multiColor = multiColor ?? [];
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();
@@ -68,10 +68,14 @@ class _NRGBarChartState extends State<NRGBarChart> {
               rods.add(BarChartRodData(
                   fromY: sum,
                   toY: sum + _multiData![key]![i],
-                  color: !_removedData.contains(key) ? _multiColor![i] : (i % 2 == 0 ? Colors.grey : Colors.blueGrey),
-                  borderRadius: i == _multiData![key]!.length - 1 ? BorderRadius.only(
-                      topLeft: Radius.circular(7),
-                      topRight: Radius.circular(7)) : BorderRadius.zero,
+                  color: !_removedData.contains(key)
+                      ? _multiColor![i]
+                      : (i % 2 == 0 ? Colors.grey : Colors.blueGrey),
+                  borderRadius: i == _multiData![key]!.length - 1
+                      ? BorderRadius.only(
+                          topLeft: Radius.circular(7),
+                          topRight: Radius.circular(7))
+                      : BorderRadius.zero,
                   width: (_width - 20) / _multiData!.length * 0.6));
               sum += _multiData![key]![i];
             }
@@ -154,7 +158,9 @@ class _NRGBarChartState extends State<NRGBarChart> {
                           getTooltipColor: (group) =>
                               Color.fromARGB(200, 255, 255, 255),
                         )),
-                    barGroups: _multiData!.isEmpty ? getBarGroups() : getMultiBarGroups(),
+                    barGroups: _multiData!.isEmpty
+                        ? getBarGroups()
+                        : getMultiBarGroups(),
                     gridData: FlGridData(
                         drawVerticalLine: false,
                         horizontalInterval: 1,
@@ -163,7 +169,9 @@ class _NRGBarChartState extends State<NRGBarChart> {
               )),
           // Average value text.
           Text(
-              _multiData!.isEmpty ? "AVERAGE: ${roundAtPlace(getAverageData(), 2)}" : "NO AVERAGE", // TODO Calculate average value
+              _multiData!.isEmpty
+                  ? "AVERAGE: ${roundAtPlace(getAverageData(), 2)}"
+                  : "NO AVERAGE", // TODO Calculate average value
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   color: Colors.black,
