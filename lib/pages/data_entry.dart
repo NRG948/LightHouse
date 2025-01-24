@@ -113,7 +113,9 @@ class _DataEntryState extends State<DataEntry> {
       final List<Color> multiColor = widgetData["multiColor"] ?? [];
       final SplayTreeMap<int, List<double>> multiChartData =
           widgetData["multiChartData"] ?? SplayTreeMap();
-      
+      final List<List<String>> comments = widgetData["comments"] ?? [[]];
+      final Sort sortType = widgetData["sortType"] ?? Sort.EARLIEST;
+
       switch (type) {
         case "spacer": 
           return NRGHorizontalSpacer(width: width);
@@ -205,7 +207,7 @@ class _DataEntryState extends State<DataEntry> {
                   ]
           );
         case "scrollable-box":
-          return ScrollableBox(width: width, height: height, title: title);
+          return ScrollableBox(width: width, height: height, title: title, comments: comments, sort: sortType);
       }
       return Text("type $type isn't a valid type");
     }).toList();

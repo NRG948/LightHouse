@@ -6,8 +6,10 @@ import 'package:lighthouse/constants.dart';
 class CommentBox extends StatefulWidget {
   final String name;
   final String text;
+  final String time;
 
-  const CommentBox({super.key, required this.name, required this.text});
+  const CommentBox(
+      {super.key, required this.name, required this.text, required this.time});
 
   @override
   State<CommentBox> createState() => _CommentBoxState();
@@ -16,6 +18,7 @@ class CommentBox extends StatefulWidget {
 class _CommentBoxState extends State<CommentBox> {
   String get _text => widget.text;
   String get _name => widget.name;
+  String get _time => widget.time;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +37,21 @@ class _CommentBoxState extends State<CommentBox> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(_name,
-              textAlign: TextAlign.left,
-              style: comfortaaBold(20,
-                  customFontWeight: FontWeight.w900,
-                  color: Constants.pastelWhite)),
+          Row(
+            spacing: 10,
+            children: [
+              Text(_name,
+                  textAlign: TextAlign.left,
+                  style: comfortaaBold(20,
+                      customFontWeight: FontWeight.w900,
+                      color: Constants.pastelWhite)),
+              Text(_time,
+                  textAlign: TextAlign.left,
+                  style: comfortaaBold(14,
+                      customFontWeight: FontWeight.w500,
+                      color: Constants.pastelYellow)),
+            ],
+          ),
           Text(_text,
               textAlign: TextAlign.left,
               style:
