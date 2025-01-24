@@ -765,7 +765,9 @@ Map<String, dynamic> dataViewer = {
           ]
         },
         {
-          "type": "scrollable-box"
+          "type": "scrollable-box",
+          "height": "40",
+          "title": "Comments"
         }
       ]
     }

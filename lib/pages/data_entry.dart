@@ -205,7 +205,7 @@ class _DataEntryState extends State<DataEntry> {
                   ]
           );
         case "scrollable-box":
-          return ScrollableBox(width: width, height: height);
+          return ScrollableBox(width: width, height: height, title: title);
       }
       return Text("type $type isn't a valid type");
     }).toList();

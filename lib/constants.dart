@@ -8,13 +8,33 @@ class Constants {
   static Color ufogreen = Color.fromARGB(255,60,208,125); 
   static Color magenta = Color.fromARGB(255,255,0,255);
 
-  static TextStyle comfortaaBold30pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:30);
-  static TextStyle comfortaaBold20pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:20);
-  static TextStyle comfortaaBold10pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:10);
+  static TextStyle comfortaaBold30pt = TextStyle(
+      fontFamily: "Comfortaa",
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+      fontSize: 30);
+  static TextStyle comfortaaBold20pt = TextStyle(
+      fontFamily: "Comfortaa",
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+      fontSize: 20);
+  static TextStyle comfortaaBold10pt = TextStyle(
+      fontFamily: "Comfortaa",
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+      fontSize: 10);
 
   static final double borderRadius = 8;
 }
 
-TextStyle comfortaaBold(double fontSize,{bool bold=true, Color color = Colors.white}) {
-  return TextStyle(fontFamily: "Comfortaa", fontWeight: bold ? FontWeight.bold : FontWeight.normal, color: color, fontSize:fontSize);
+TextStyle comfortaaBold(double fontSize,
+    {bool bold = true,
+    Color color = Colors.white,
+    FontWeight? customFontWeight}) {
+  return TextStyle(
+      fontFamily: "Comfortaa",
+      fontWeight:
+          customFontWeight ?? (bold ? FontWeight.bold : FontWeight.normal),
+      color: color,
+      fontSize: fontSize);
 }
