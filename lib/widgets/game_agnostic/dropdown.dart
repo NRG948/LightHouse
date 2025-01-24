@@ -43,10 +43,19 @@ class _NRGDropdownState extends State<NRGDropdown> {
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Colors.blueGrey,
+            color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: Column(children: [
-          Text(_title, style: Constants.comfortaaBold20pt),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+          Container(
+            height: _height / 2,
+            width: _width / 2,
+            decoration: BoxDecoration(
+              color: Constants.pastelGray,
+              borderRadius: BorderRadius.circular(Constants.borderRadius)
+            ),
+            child: Center(child: Text(_title, style: comfortaaBold(20,color: Constants.pastelWhite)))),
           DropdownButton<String>(
             items: _options.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(

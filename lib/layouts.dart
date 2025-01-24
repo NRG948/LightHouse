@@ -19,60 +19,64 @@ Map<String, dynamic> atlascout = {
           "jsonKey": "scouterName", 
         },
         {
-          "type": "row",
-          "children": [
-            {
-              "title": "Team Number",
-              "type": "numberbox",
-              "jsonKey": "teamNumber",
-              "width": "42"
-            },
-            {
-              "type": "spacer", 
-              "width": "2"
-            }, 
-            {
-              "title": "Driver Station",
-              "type": "dropdown",
-              "options": "Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue3",
-              "jsonKey": "driverStation",
-              "width": "42", 
-              "height": "84", 
-            }
-          ]
+          "type": "matchInfo",
+          "jsonKey": ["teamNumber", "driverStation", "matchType", "matchNumber", "replay"]
         },
-        {
-          "type": "row",
-          "children": [
-            {
-              "title": "Match Type",
-              "type": "dropdown",
-              "options": "Qualifications,Playoffs,Finals", 
-              "jsonKey": "matchType",
-              "width": "42"
-            },
-            {
-              "type": "spacer", 
-              "width": "2", 
-            }, 
-            {
-              "title": "Match Number",
-              "type": "textbox",
-              "jsonKey": "matchNumber",
-              "width": "20"
-            },
-            {
-              "type": "spacer", 
-              "width": "2", 
-            }, 
-            {
-              "title": "Replay",
-              "type": "checkbox",
-              "jsonKey": "replay",
-              "width": "20"
-            }
-          ]
-        },
+        // {
+        //   "type": "row",
+        //   "children": [
+        //     {
+        //       "title": "Team Number",
+        //       "type": "numberbox",
+        //       "jsonKey": "teamNumber",
+        //       "width": "42"
+        //     },
+        //     {
+        //       "type": "spacer", 
+        //       "width": "2"
+        //     }, 
+        //     {
+        //       "title": "Driver Station",
+        //       "type": "dropdown",
+        //       "options": "Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue3",
+        //       "jsonKey": "driverStation",
+        //       "width": "42", 
+        //       "height": "84", 
+        //     }
+        //   ]
+        // },
+        // {
+        //   "type": "row",
+        //   "children": [
+        //     {
+        //       "title": "Match Type",
+        //       "type": "dropdown",
+        //       "options": "Qualifications,Playoffs,Finals", 
+        //       "jsonKey": "matchType",
+        //       "width": "42"
+        //     },
+        //     {
+        //       "type": "spacer", 
+        //       "width": "2", 
+        //     }, 
+        //     {
+        //       "title": "Match Number",
+        //       "type": "textbox",
+        //       "jsonKey": "matchNumber",
+        //       "width": "20"
+        //     },
+        //     {
+        //       "type": "spacer", 
+        //       "width": "2", 
+        //     }, 
+        //     {
+        //       "title": "Replay",
+        //       "type": "checkbox",
+        //       "jsonKey": "replay",
+        //       "width": "20"
+        //     }
+        //   ]
+        // },
         {
           "title": "Starting Position",
           "type": "placeholder",
@@ -116,7 +120,7 @@ Map<String, dynamic> atlascout = {
             "coralScoredL1",
             "coralScoredL2",
             "coralScoredL3",
-            "coralScoredL4"
+            "coralScoredL4",
           ],
           "height": "40",
           "boxNames": [

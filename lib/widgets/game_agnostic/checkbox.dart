@@ -1,3 +1,4 @@
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
@@ -21,6 +22,7 @@ class NRGCheckbox extends StatefulWidget {
 class _NRGCheckboxState extends State<NRGCheckbox> {
   String get _key => widget.jsonKey;
   bool isChecked = false;
+
   ValueNotifier<bool> checkboxNotifier = ValueNotifier<bool>(false);
   String get _title => widget.title;
   double get _height => widget.height;
@@ -39,7 +41,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
             height: _height,
             width: _width,
             decoration: BoxDecoration(
-                color: Colors.blueGrey,
+                color: Constants.pastelWhite,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Row(
               children: [
@@ -53,7 +55,9 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                             checkboxNotifier.value = newValue ?? false;
                           });
                     }),
-                Text(_title, style: Constants.comfortaaBold20pt)
+                SizedBox(
+                  width: _width * 0.65,
+                  child: AutoSizeText(_title, style: comfortaaBold(20,color:Colors.black),maxLines: 1,minFontSize: 9,))
               ],
             )));
   }
