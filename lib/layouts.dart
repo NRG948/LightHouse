@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
@@ -785,5 +786,23 @@ Map<String, IconData> iconMap = {
   "Pit": Icons.analytics_rounded,
   "Human Player": Icons.child_care,
   "Data Viewer": Icons.account_box_rounded
-  
+
 };
+
+Map<String, Color> colorMap = {
+  "Atlas": Colors.teal,
+  "Chronos": Colors.red,
+  "Pit": Constants.ufogreen,
+  "Human Player": Constants.magenta,
+  "Data Viewer": Colors.blue,
+
+};
+
+Map<String, double> fontMap = {
+  "Atlas": 25.0,
+  "Chronos": 25.0,
+  "Pit": 25.0,
+  "Human Player": 25.0,
+  "Data Viewer": 25.0,
+};
+
