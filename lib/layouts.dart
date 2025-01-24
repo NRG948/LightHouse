@@ -201,17 +201,6 @@ Map<String, dynamic> chronoscout = {
   "title": "Chronoscout",
   "pages": [
     {
-      "title": "HorizontalTest", //Test page for horizontal stuff. REMOVE FOR PRODUCTION
-      "icon": CustomIcons.pitCrew, 
-      "widgets": [
-        {
-          "title": "hiiiiii",
-          "type": "stopwatch-horizontal",
-          "jsonKey": "random",
-        }
-      ]
-    },
-    {
       "title": "Setup",
       "icon": CustomIcons.wrench,
       "widgets": [
@@ -274,6 +263,9 @@ Map<String, dynamic> chronoscout = {
             }
           ]
         },
+        {
+          "type": "guidance-start", 
+        }, 
         {
           "title": "Starting Position",
           "type": "placeholder",

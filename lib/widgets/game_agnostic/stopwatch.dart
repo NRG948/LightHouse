@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 
 class NRGStopwatch extends StatefulWidget {
-  NRGStopwatch({super.key});
-
   final String title = "Stopwatch";
   final double height = 100;
   final double width = 400;
+  final int pageIndex;
+  final pageController;
 
   final stopwatch = Stopwatch();
+
+  NRGStopwatch({super.key, required this.pageController, required this.pageIndex});
 
   @override
   State<NRGStopwatch> createState() => _NRGStopwatchState();
@@ -46,6 +48,16 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
         stopwatchResult = _stopwatch.elapsed;
       });
     });
+
+     widget.pageController.addListener(_pageListener);
+  }
+
+   void _pageListener() {
+    if (widget.pageController.page?.round() != widget.pageIndex) {
+      _stopwatch.stop(); // Stop the stopwatch when navigating away
+    } else {
+      _stopwatch.start(); // Restart the stopwatch when navigating back
+    }
   }
 
   @override

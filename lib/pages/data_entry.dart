@@ -24,7 +24,6 @@ import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
 
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
-import "package:path/path.dart";
 
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
@@ -43,7 +42,7 @@ class _DataEntryState extends State<DataEntry> {
 
   final guidanceStopwatch = Stopwatch(); 
   GuidanceState guidanceState = GuidanceState.setup;
-  late final guidanceCheckTimer = Timer.periodic(Duration(milliseconds: 200), CheckGuidanceState);
+  late final guidanceCheckTimer = Timer.periodic(Duration(milliseconds: 500), CheckGuidanceState);
 
   int currentPage = 0;
   late PageController controller;
@@ -59,8 +58,8 @@ class _DataEntryState extends State<DataEntry> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    deviceWidth = MediaQuery.sizeOf(context as BuildContext).width;
-    deviceHeight = MediaQuery.sizeOf(context as BuildContext).height;
+    deviceWidth = MediaQuery.sizeOf(context).width;
+    deviceHeight = MediaQuery.sizeOf(context).height;
 
     //These are such that we can resize widgets based on screen size, but we need a reference point, 
     //so we are using a 90 / 200 dp phone as the reference and scaling based upon that. 
@@ -132,7 +131,10 @@ class _DataEntryState extends State<DataEntry> {
             jsonKey: jsonKey,
           );
         case "stopwatch":
-          return NRGStopwatch();
+          return NRGStopwatch(
+            pageController: controller,
+            pageIndex: currentPage,
+          );
         case "stopwatch-horizontal":
           return NRGStopwatchHorizontal();
         case "multispinbox":
@@ -216,7 +218,6 @@ class _DataEntryState extends State<DataEntry> {
             height: height, 
             width: width, 
             startGuidance: StartGuidanceStopwatch, 
-            endGuidance: StopGuidanceStopwatch, 
           );
       }
       return Text("type $type isn't a valid type");
@@ -366,24 +367,27 @@ class _DataEntryState extends State<DataEntry> {
     );
   }
 
+  ///Causes the [guidanceStopwatch] to be reset and start! 
+  ///
+  ///Also resets the [guidanceState] :)
   void StartGuidanceStopwatch() {
     guidanceStopwatch.reset();
     guidanceStopwatch.start();
     guidanceState = GuidanceState.setup;
-  }
-  void StopGuidanceStopwatch() {
-    throw UnimplementedError("erm... if you're reading this, then I (Sean) probably have dementia");
+    guidanceCheckTimer;
   }
 
   void CheckGuidanceState(Timer guidanceTimer) {
     if (guidanceStopwatch.elapsed.inSeconds >= 135) {
       guidanceState = GuidanceState.endgame;
+      guidanceTimer.cancel();
     } else if (guidanceStopwatch.elapsed.inSeconds >= 15) {
       guidanceState = GuidanceState.teleop;
     } else {
       guidanceState = GuidanceState.auto;
     }
-    while (guidanceState.index != currentPage) {
+
+    if (guidanceState.index != currentPage) {
       controller.animateToPage(currentPage + 1, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
     }
   }
