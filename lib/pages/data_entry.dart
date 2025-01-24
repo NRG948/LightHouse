@@ -29,11 +29,12 @@ class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
   static late String activeConfig;
+  static final GlobalKey<DataEntryState> globalKey = GlobalKey<DataEntryState>();
   @override
-  State<DataEntry> createState() => _DataEntryState();
+  State<DataEntry> createState() => DataEntryState();
 }
 
-class _DataEntryState extends State<DataEntry> {
+class DataEntryState extends State<DataEntry> {
   late double deviceWidth;
   late double deviceHeight;
 
@@ -46,6 +47,8 @@ class _DataEntryState extends State<DataEntry> {
 
   int currentPage = 0;
   late PageController controller;
+
+  bool isUnderGuidance = false;
   @override
   void initState() {
     super.initState();
@@ -134,6 +137,7 @@ class _DataEntryState extends State<DataEntry> {
           return NRGStopwatch(
             pageController: controller,
             pageIndex: currentPage,
+            dataEntryKey: DataEntry.globalKey,
           );
         case "stopwatch-horizontal":
           return NRGStopwatchHorizontal();
@@ -387,7 +391,7 @@ class _DataEntryState extends State<DataEntry> {
       guidanceState = GuidanceState.auto;
     }
 
-    if (guidanceState.index != currentPage) {
+    if (guidanceState.index != currentPage && currentPage != 3) {
       controller.animateToPage(currentPage + 1, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
     }
   }

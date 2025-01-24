@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/pages/data_entry.dart';
 
 class NRGStopwatch extends StatefulWidget {
   final String title = "Stopwatch";
@@ -8,10 +9,11 @@ class NRGStopwatch extends StatefulWidget {
   final double width = 400;
   final int pageIndex;
   final pageController;
+  final GlobalKey<DataEntryState> dataEntryKey;
 
   final stopwatch = Stopwatch();
 
-  NRGStopwatch({super.key, required this.pageController, required this.pageIndex});
+  NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryKey});
 
   @override
   State<NRGStopwatch> createState() => _NRGStopwatchState();
@@ -53,10 +55,12 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
   }
 
    void _pageListener() {
-    if (widget.pageController.page?.round() != widget.pageIndex) {
+    if (widget.dataEntryKey.currentState!.isUnderGuidance) {
+      if (widget.pageController.page?.round() != widget.pageIndex) {
       _stopwatch.stop(); // Stop the stopwatch when navigating away
-    } else {
-      _stopwatch.start(); // Restart the stopwatch when navigating back
+      } else {
+        _stopwatch.start(); // Restart the stopwatch when navigating back
+      }
     }
   }
 
