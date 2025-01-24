@@ -36,7 +36,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           children: [
-            Text(_title, style: Constants.comfortaaBold30pt),
+            Text(_title, style: comfortaaBold(30)),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +50,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
                       )),
                   Text(
                     "$_counter",
-                    style: Constants.comfortaaBold30pt,
+                    style: comfortaaBold(30),
                   ),
                   IconButton(
                       onPressed: () {

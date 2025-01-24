@@ -11,6 +11,7 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
+import "package:lighthouse/widgets/game_agnostic/match_info.dart";
 import "package:lighthouse/widgets/game_agnostic/mcq.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart";
@@ -180,6 +181,8 @@ class _DataEntryState extends State<DataEntry> {
               color: color,
               multiColor: multiColor,
               multiData: multiChartData);
+        case "matchInfo":
+          return MatchInfo(width: 400);
         case "mcq": 
           return NRGMCQ(
             title: title,

@@ -8,21 +8,12 @@ class Constants {
   static Color ufogreen = Color.fromARGB(255,60,208,125); 
   static Color magenta = Color.fromARGB(255,255,0,255);
 
-  static TextStyle comfortaaBold30pt = TextStyle(
-      fontFamily: "Comfortaa",
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-      fontSize: 30);
-  static TextStyle comfortaaBold20pt = TextStyle(
-      fontFamily: "Comfortaa",
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-      fontSize: 20);
-  static TextStyle comfortaaBold10pt = TextStyle(
-      fontFamily: "Comfortaa",
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-      fontSize: 10);
+  static Color pastelGray = Color.fromARGB(255, 199, 185, 186);
+  static Color pastelReddishBrown = Color.fromARGB(255, 103, 50, 47);
+  static Color pastelRedMuted = Color.fromARGB(255, 162, 90, 83);
+  static TextStyle comfortaaBold30pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:30);
+  static TextStyle comfortaaBold20pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:20);
+  static TextStyle comfortaaBold10pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:10);
 
   static final double borderRadius = 8;
 }
@@ -30,11 +21,13 @@ class Constants {
 TextStyle comfortaaBold(double fontSize,
     {bool bold = true,
     Color color = Colors.white,
-    FontWeight? customFontWeight}) {
+    FontWeight? customFontWeight,
+    bool italic = false}) {
   return TextStyle(
       fontFamily: "Comfortaa",
       fontWeight:
           customFontWeight ?? (bold ? FontWeight.bold : FontWeight.normal),
       color: color,
-      fontSize: fontSize);
+      fontSize: fontSize,
+      fontStyle: italic ? FontStyle.italic : FontStyle.normal);
 }

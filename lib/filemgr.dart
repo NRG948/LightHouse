@@ -7,10 +7,11 @@ import "package:path/path.dart";
 
 import "package:path_provider/path_provider.dart";
 
-final Map<String, String> configData = {};
+late final Map<String, String> configData;
 late String configFolder;
 
 Future<void> initConfig() async {
+  configData = {};
   
   if(Platform.isAndroid) {
   final directoryInstance = await getExternalStorageDirectory();
@@ -40,6 +41,7 @@ Future<void> loadConfig() async {
       configJson.entries.map((entry) => MapEntry(entry.key, entry.value.toString()))
     );
 }
+
 
 List<String> getSavedEvents() {
   final configDir = Directory(configFolder);

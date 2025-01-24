@@ -37,7 +37,7 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Colors.blueGrey,
+            color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +45,7 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
           children: [
             Text(
               _title,
-              style: comfortaaBold(18),
+              style: comfortaaBold(18,color: Constants.pastelReddishBrown),
               textAlign: TextAlign.center,
             ),
             buildSpinboxes()
@@ -103,7 +103,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
                 opacity: 0.7,
                 child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text(_title, style: comfortaaBold(25)))),
+                    child: Text(_title, style: comfortaaBold(25,color: Constants.pastelReddishBrown)))),
             // The increment button.
             SizedBox(
                 height: 40,
@@ -120,7 +120,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
           // The current number count.
           Text(
             _counter.toString(),
-            style: comfortaaBold(30),
+            style: comfortaaBold(30,color: Constants.pastelReddishBrown),
           ),
           // The decrement number.
           SizedBox(
