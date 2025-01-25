@@ -1,8 +1,8 @@
 import "dart:collection";
 import "dart:convert";
-import "dart:ffi";
 
 import "package:flutter/material.dart";
+import "package:flutter/rendering.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
@@ -41,6 +41,7 @@ class _DataEntryState extends State<DataEntry> {
   late double resizeScaleFactorHeight;
 
   int currentPage = 0;
+  double startDrag = 0.0;
   late PageController controller;
   @override
   void initState() {
@@ -274,30 +275,7 @@ class _DataEntryState extends State<DataEntry> {
             ),
             centerTitle: true,
             leading: IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context, 
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Text("Are you sure you want to return home? \n Non-saved data CANNOT be recovered!"),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }, 
-                          child: Text("No")
-                        ), 
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(context, "/home-scouter", (Route<dynamic> route) => false);
-                          }, 
-                          child: Text("Yes"), 
-                        ), 
-                      ],
-                    ); 
-                  }, 
-                ); 
-              },
+              onPressed: () {showReturnDialog(context);},
                 icon: Icon(Icons.home, color:Constants.pastelWhite)),
             actions: [
               IconButton(
@@ -312,7 +290,7 @@ class _DataEntryState extends State<DataEntry> {
                       });
                 },
               ),
-              SaveJsonButton()
+              IconButton(onPressed: () {saveJson(context);}, icon: Icon(Icons.save,color: Constants.pastelWhite,))
             ],
           ),
           bottomNavigationBar: buildBottomNavBar(layoutJSON),
@@ -323,15 +301,27 @@ class _DataEntryState extends State<DataEntry> {
                 image: DecorationImage(
                     image: AssetImage("assets/images/background-hires.png"),
                     fit: BoxFit.fill)),
-            child: PageView(
-              controller: controller,
-              scrollDirection: Axis.horizontal,
-              children: createWidgetPages(layoutJSON["pages"]),
-              onPageChanged: (index) {
-                setState(() {
-                  currentPage = index;
-                });
+            child: NotificationListener<UserScrollNotification>(
+              onNotification: (notification) {
+                if (notification.direction == ScrollDirection.forward &&
+                notification.metrics.pixels <= 0.0) {
+               showReturnDialog(context);
+                }
+                if (notification.direction == ScrollDirection.reverse && notification.metrics.pixels >= notification.metrics.maxScrollExtent) {
+                  saveJson(context);
+                }
+                return true;
               },
+              child: PageView(
+                controller: controller,
+                scrollDirection: Axis.horizontal,
+                children: createWidgetPages(layoutJSON["pages"]),
+                onPageChanged: (index) {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
+              ),
             ),
           )),
     );
@@ -363,30 +353,56 @@ class _DataEntryState extends State<DataEntry> {
   }
 }
 
-class SaveJsonButton extends StatelessWidget {
-  const SaveJsonButton({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () async {
-          if (await saveExport() == 0) {
+void saveJson(BuildContext context) async {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    content: Text("Successfully saved."),
+                    content: Text("Are you sure you want to save? Please make sure your data is accurate."),
                     actions: [
+                      TextButton(onPressed: () {Navigator.pop(context);}, child: Text("No")),
                       TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/home-scouter");
+                          onPressed: () async {
+                            if (await saveExport() == 0) {
+                            showDialog(context: context, builder: (context) {
+                              return AlertDialog(
+                                content: Text("Successfully saved"),
+                                actions: [
+                                  TextButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, child: Text("OK"))
+                                ],
+                              );
+                            });}
+                           
                           },
-                          child: Text("OK"))
+                          child: Text("Yes")),
                     ],
                   );
                 });
           }
-        },
-        icon: Icon(Icons.save,color: Constants.pastelWhite,));
-  }
+
+void showReturnDialog(BuildContext context) {
+  showDialog(
+                  context: context, 
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Text("Are you sure you want to return home? \n Non-saved data CANNOT be recovered!"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }, 
+                          child: Text("No")
+                        ), 
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushNamedAndRemoveUntil(context, "/home-scouter", (Route<dynamic> route) => false);
+                          }, 
+                          child: Text("Yes"), 
+                        ), 
+                      ],
+                    ); 
+                  }, 
+                ); 
+
 }
