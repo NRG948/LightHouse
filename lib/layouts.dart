@@ -130,7 +130,8 @@ Map<String, dynamic> atlascout = {
           ],
           "height": "40",
           "boxNames": [
-            ["L1", "L2", "L3", "L4"]
+            ["L1", "L2"],
+            ["L3", "L4"]
           ]
         },
         {
@@ -146,7 +147,8 @@ Map<String, dynamic> atlascout = {
           ],
           "height": "65",
           "boxNames": [
-            ["Remove L2", "Remove L3", "Score Processor", "Score Net"],
+            ["Remove L2", "Remove L3"],
+            ["Score Processor", "Score Net"],
             ["Miss Processor", "Miss Net"]
           ]
         }
@@ -793,7 +795,7 @@ Map<String, Map> layoutMap = {
 };
 
 Map<String, IconData> iconMap = {
-  "Atlas": Icons.map,
+  "Atlas": Icons.public,
   "Chronos": Icons.timer,
   "Pit": Icons.analytics_rounded,
   "Human Player": Icons.child_care,
@@ -804,9 +806,9 @@ Map<String, Color> colorMap = {
   "Atlas": Constants.pastelRed,
   "Chronos": Constants.pastelYellow,
   "Pit": Constants.pastelGray,
-  "Human Player": Constants.pastelGray,
+  "Human Player": Constants.pastelRed,
   "Data Viewer": Constants.pastelYellow,
-  "View Saved Data": Constants.pastelBlueAgain,
+  "View Saved Data": Constants.pastelGray,
   "Sync to Server": Constants.pastelBlueAgain
 };
 

@@ -1,3 +1,4 @@
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
@@ -97,56 +98,59 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
   String get _key => widget.jsonKey;
   double get _scaleFactor => widget.scaleFactor;
   late int _counter;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 124 * _scaleFactor,
-      width: 95 * _scaleFactor,
+      width: 225 * _scaleFactor,
+      height: 95 * _scaleFactor,
       child: Column(
         children: [
-          Stack(alignment: Alignment.center, children: [
-            // The title.
-            Opacity(
-                opacity: 0.7,
-                child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(_title, style: comfortaaBold(25 * _scaleFactor,color: Constants.pastelReddishBrown)))),
-            // The increment button.
-            SizedBox(
-                height: 40 * _scaleFactor,
-                width: 40 * _scaleFactor,
-                child: IconButton(
-                  onPressed: () {
-                    increment();
-                  },
-                  icon: Icon(
-                    Icons.add,
-                    size: 30 * _scaleFactor
-                  ),
-                ))
-          ]),
-          // The current number count.
-          Text(
-            _counter.toString(),
-            style: comfortaaBold(30 * _scaleFactor,color: Constants.pastelReddishBrown),
-          ),
-          // The decrement number.
           SizedBox(
-              height: 40 * _scaleFactor,
-              width: 40 * _scaleFactor,
-              child: IconButton(
-                  onPressed: () {
-                    decrement();
-                  },
-                  icon: Icon(
-                    Icons.remove,
-                    size: 30 * _scaleFactor
-                  ))),
+            height: 95 * 0.3 * _scaleFactor,
+            child: AutoSizeText(_title,maxLines: 1,style: comfortaaBold(40,color: Constants.pastelReddishBrown),),
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+            SizedBox(
+              height: 37.2,
+              width: 37.2,
+              child: GestureDetector(
+                onTap: decrement,
+                child: Transform.flip(
+                  flipY:true,
+                  child: CustomPaint(
+                    painter: RoundedTrianglePainter(color: Constants.pastelRed),
+                    
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              height: 60 * _scaleFactor,
+              width: 80 * _scaleFactor,
+              decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+              child: Center(child: AutoSizeText(_counter.toString(),maxLines: 1,textAlign: TextAlign.center,style: comfortaaBold(60 * _scaleFactor),)),
+            ),
+            SizedBox(
+              height: 37.2,
+              width: 37.2,
+              child: GestureDetector(
+                onTap: increment,
+                child: CustomPaint(
+                  painter: RoundedTrianglePainter(color: Constants.pastelRed),
+                  
+                ),
+              ),
+            ),
+            
+          ],)
         ],
       ),
     );
   }
-
+  
   @override
   void initState() {
     super.initState();
@@ -176,5 +180,48 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
   /// Exports [_counter] to the json.
   void updateState() {
     DataEntry.exportData[_key] = _counter.toString();
+  }
+}
+
+class Triangle extends StatelessWidget {
+  const Triangle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
+class RoundedTrianglePainter extends CustomPainter {
+  final Color color;
+  const RoundedTrianglePainter({this.color = Colors.black});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double width = size.width;
+    final double height = size.height;
+
+    final double scaleX = width / 200;
+    final double scaleY = height / 200;
+    final double offset = width * 0.185;
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    final path = Path()
+      ..moveTo(((200 / 2) - 16) * scaleX, 80 * scaleY - offset)
+      ..arcToPoint(
+        Offset(((200 / 2) + 16) * scaleX, 80 * scaleY - offset),
+        radius: Radius.circular(22 * scaleX),
+        clockwise: true,
+      )
+      ..lineTo(200 * scaleX, 200 * scaleY - offset)
+      ..lineTo(0, 200 * scaleY - offset)
+      ..close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
