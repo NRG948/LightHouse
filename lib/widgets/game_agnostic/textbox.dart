@@ -71,7 +71,7 @@ class _NRGTextboxState extends State<NRGTextbox> {
                 controller: _controller,
                 decoration: InputDecoration(
                     labelText: _title,
-                    labelStyle: comfortaaBold(25,color: Constants.pastelReddishBrown,italic: true),
+                    labelStyle: comfortaaBold(15,color: Constants.pastelReddishBrown,italic: true),
                     fillColor: Constants.pastelYellow,
                     filled:true,
                     floatingLabelBehavior: FloatingLabelBehavior.never,

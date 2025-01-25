@@ -17,6 +17,7 @@ class SavedData extends StatelessWidget {
     scaleFactor = screenWidth / 411;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
         title: const Text("SavedData", style: TextStyle(
            fontFamily: "Comfortaa",
@@ -24,7 +25,7 @@ class SavedData extends StatelessWidget {
            color: Colors.white
         ),),
         centerTitle: true,
-        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, icon: Icon(Icons.home)),
+        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, icon: Icon(Icons.home,color: Constants.pastelWhite,)),
       ),
       body: Container(
         height: screenHeight,

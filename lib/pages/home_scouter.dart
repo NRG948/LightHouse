@@ -14,17 +14,20 @@ class ScouterHomePage extends StatelessWidget {
       return Launcher(
         icon: iconMap[layout] ?? Icons.data_object,
         title: layout,
-        color: colorMap[layout] ?? Colors.purple,
-        fontSize: fontMap[layout] ?? 25.0,
+        color: colorMap[layout] ?? Colors.black,
       );
     }).toList();
     enabledLaunchers.add(Launcher(
       icon: Icons.folder,
       title: "View Saved Data",
       route: "/saved_data",
-      color: Colors.green,
-      fontSize: 25.0,
+      color: colorMap["View Saved Data"] ?? Colors.black,
     ));
+    enabledLaunchers.add(Launcher(
+    icon: Icons.sync_outlined, 
+    route: "/sync",
+    title: "Sync to Server", 
+    color: colorMap["Sync to Server"] ?? Colors.black));
     return enabledLaunchers;
   }
 
@@ -58,6 +61,7 @@ class ScouterHomePage extends StatelessWidget {
         ),
       ),
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
         title: const Text(
           "LightHouse",
@@ -69,7 +73,7 @@ class ScouterHomePage extends StatelessWidget {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(Icons.javascript_outlined),
+            icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
             onPressed: (() {
               showDialog(
                   context: context,
@@ -80,7 +84,7 @@ class ScouterHomePage extends StatelessWidget {
             }),
           ),
           IconButton(
-              icon: Icon(Icons.settings),
+              icon: Icon(Icons.settings,color: Constants.pastelWhite,),
               onPressed: () {
                 Navigator.pushNamed(context, "/settings");
               })
@@ -105,14 +109,13 @@ class Launcher extends StatelessWidget {
   final String title;
   final String route;
   final Color color;
-  final double fontSize;
   const Launcher(
       {super.key,
       required this.icon,
       required this.title,
       this.route = "/entry",
       required this.color,
-      required this.fontSize});
+  });
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -123,11 +126,11 @@ class Launcher extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         //space between each choice
         child: Container(
-          height: 100 * ScouterHomePage.scaleFactor,
+          height: 75 * ScouterHomePage.scaleFactor,
           width: 400 * ScouterHomePage.scaleFactor,
 
           //the size of the box that holds each choice
-          color: Colors.white,
+          decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
           child: Row(
             children: [
               Expanded(

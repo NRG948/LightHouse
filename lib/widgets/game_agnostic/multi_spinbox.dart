@@ -9,6 +9,7 @@ class NRGMultiSpinbox extends StatefulWidget {
   final double height;
   final double width;
   final List<List<String>> boxNames;
+  
   const NRGMultiSpinbox(
       {super.key,
       required this.title,
@@ -30,9 +31,13 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
   double get _height => widget.height;
   List<String> get _keys => widget.jsonKey;
   List<List<String>> get _boxNames => widget.boxNames;
+  double get _scaleFactor => _width / 400;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(_width.toString());
+    debugPrint(_scaleFactor.toString());
+
     return Container(
         height: _height,
         width: _width,
@@ -45,15 +50,15 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
           children: [
             Text(
               _title,
-              style: comfortaaBold(18,color: Constants.pastelReddishBrown),
+              style: comfortaaBold(18 * _scaleFactor,color: Constants.pastelReddishBrown),
               textAlign: TextAlign.center,
             ),
-            buildSpinboxes()
+            buildSpinboxes(_scaleFactor)
           ],
         ));
   }
 
-  Widget buildSpinboxes() {
+  Widget buildSpinboxes(double scaleFactor) {
     final keyList = _keys;
     final nameList = _boxNames.expand((list) => list).toList();
     if (!(keyList.length == nameList.length)) {
@@ -69,7 +74,7 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
             // sooooooo
             // don't do that
             return NRGMultiSpinChild(
-                title: title, jsonKey: keyList[nameList.indexOf(title)]);
+                title: title, jsonKey: keyList[nameList.indexOf(title)],scaleFactor: scaleFactor,);
           }).toList() as List<Widget>);
     }).toList();
     return Column(children: rowList);
@@ -79,8 +84,9 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
 class NRGMultiSpinChild extends StatefulWidget {
   final String title;
   final String jsonKey;
+  final double scaleFactor;
   const NRGMultiSpinChild(
-      {super.key, required this.title, required this.jsonKey});
+      {super.key, required this.title, required this.jsonKey, required this.scaleFactor});
 
   @override
   State<NRGMultiSpinChild> createState() => _NRGMultiSpinChildState();
@@ -89,12 +95,13 @@ class NRGMultiSpinChild extends StatefulWidget {
 class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
   String get _title => widget.title;
   String get _key => widget.jsonKey;
+  double get _scaleFactor => widget.scaleFactor;
   late int _counter;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 124,
-      width: 95,
+      height: 124 * _scaleFactor,
+      width: 95 * _scaleFactor,
       child: Column(
         children: [
           Stack(alignment: Alignment.center, children: [
@@ -103,35 +110,37 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
                 opacity: 0.7,
                 child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text(_title, style: comfortaaBold(25,color: Constants.pastelReddishBrown)))),
+                    child: Text(_title, style: comfortaaBold(25 * _scaleFactor,color: Constants.pastelReddishBrown)))),
             // The increment button.
             SizedBox(
-                height: 40,
-                width: 40,
+                height: 40 * _scaleFactor,
+                width: 40 * _scaleFactor,
                 child: IconButton(
                   onPressed: () {
                     increment();
                   },
                   icon: Icon(
                     Icons.add,
+                    size: 30 * _scaleFactor
                   ),
                 ))
           ]),
           // The current number count.
           Text(
             _counter.toString(),
-            style: comfortaaBold(30,color: Constants.pastelReddishBrown),
+            style: comfortaaBold(30 * _scaleFactor,color: Constants.pastelReddishBrown),
           ),
           // The decrement number.
           SizedBox(
-              height: 40,
-              width: 40,
+              height: 40 * _scaleFactor,
+              width: 40 * _scaleFactor,
               child: IconButton(
                   onPressed: () {
                     decrement();
                   },
                   icon: Icon(
                     Icons.remove,
+                    size: 30 * _scaleFactor
                   ))),
         ],
       ),

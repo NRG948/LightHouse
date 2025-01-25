@@ -5,8 +5,10 @@ class Constants {
   static Color pastelYellow = Color.fromARGB(255, 237, 193, 142);
   static Color pastelWhite = Color.fromARGB(255, 250, 242, 240);
   static Color pastelBlue = Color.fromARGB(255, 0, 204, 255,);
+  static Color pastelBlueAgain = Color.fromARGB(255, 111, 163, 195);
   static Color ufogreen = Color.fromARGB(255,60,208,125); 
   static Color magenta = Color.fromARGB(255,255,0,255);
+
 
   static Color pastelGray = Color.fromARGB(255, 199, 185, 186);
   static Color pastelReddishBrown = Color.fromARGB(255, 103, 50, 47);

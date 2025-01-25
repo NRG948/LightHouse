@@ -39,6 +39,7 @@ class SettingsPage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
         title: const Text("Settings", style: TextStyle(
            fontFamily: "Comfortaa",

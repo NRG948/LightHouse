@@ -163,9 +163,10 @@ Map<String, dynamic> atlascout = {
           "jsonKey": "endLocation"
         },
         {
-          "title": "[ ] Attempted Climb?",
+          "title": "Attempted Climb?",
           "type": "checkbox",
-          "jsonKey": "attemptedClimb"
+          "jsonKey": "attemptedClimb",
+          "height": "10"
         },
         {
           "title": "Climb Start time",
@@ -186,7 +187,7 @@ Map<String, dynamic> atlascout = {
               "width": "2",
             },
             {
-              "title": "Reason for robot disable",
+              "title": "Reason?",
               "type": "textbox",
               "jsonKey": "robotDisableReason",
               "width": "52"
@@ -194,11 +195,12 @@ Map<String, dynamic> atlascout = {
           ]
         },
         {"title": "Data Quality", "type": "mcq", "jsonKey": "dataQuality"},
-        {"title": "Comments", "type": "placeholder", "jsonKey": "comments"},
+        {"title": "Comments", "type": "textbox", "jsonKey": "comments","height":"10"},
         {
           "title": "Team crossed over midline?",
           "type": "checkbox",
-          "jsonKey": "crossedMidline"
+          "jsonKey": "crossedMidline",
+          "height": "10"
         }
       ]
     }
@@ -403,9 +405,16 @@ Map<String, dynamic> pitscout = {
       "icon": CoralAlgaeIcons.autonomous,
       "widgets": [
         {
-          "title": "Auto Routine",
-          "type": "placeholder",
-          "jsonKey": "autoRoutine",
+          "height": "40",
+          "width": "30",
+          "type": "rsAutoUntimedPit",
+          "jsonKey": [
+            "autoProcessorCS",
+            "autoBargeCS",
+            "autoCoralScored",
+            "autoAlgaeRemoved",
+            "autoCoralScoredL1"
+          ],
         },
         {
           "title": "Drops Algae on Ground",
@@ -561,37 +570,24 @@ Map<String, dynamic> hpscout = {
           ]
         },
         {
-          "type": "row",
-          "children": [
-            {
               "title": "Match Type",
               "type": "dropdown",
               "options": "Qualifications,Playoffs,Finals",
               "jsonKey": "matchType",
-              "width": "30"
+            
             },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
+             {
               "title": "Match Number",
               "type": "numberbox",
               "jsonKey": "matchNumber",
-              "width": "30"
-            },
-            {
-              "type": "spacer",
-              "width": "2",
+          
             },
             {
               "title": "Replay",
               "type": "checkbox",
               "jsonKey": "replay",
-              "width": "22"
+
             }
-          ]
-        }
       ]
     },
     {
@@ -786,6 +782,8 @@ Map<String, dynamic> dataViewer = {
   ]
 };
 
+
+
 Map<String, Map> layoutMap = {
   "Atlas": atlascout,
   "Chronos": chronoscout,
@@ -799,15 +797,17 @@ Map<String, IconData> iconMap = {
   "Chronos": Icons.timer,
   "Pit": Icons.analytics_rounded,
   "Human Player": Icons.child_care,
-  "Data Viewer": Icons.account_box_rounded
+  "Data Viewer": Icons.account_box_rounded,
 };
 
 Map<String, Color> colorMap = {
-  "Atlas": Colors.teal,
-  "Chronos": Colors.red,
-  "Pit": Constants.ufogreen,
-  "Human Player": Constants.magenta,
-  "Data Viewer": Colors.blue,
+  "Atlas": Constants.pastelRed,
+  "Chronos": Constants.pastelYellow,
+  "Pit": Constants.pastelGray,
+  "Human Player": Constants.pastelGray,
+  "Data Viewer": Constants.pastelYellow,
+  "View Saved Data": Constants.pastelBlueAgain,
+  "Sync to Server": Constants.pastelBlueAgain
 };
 
 Map<String, double> fontMap = {

@@ -34,7 +34,7 @@ class _NRGPlaceholderState extends State<NRGPlaceholder> {
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Text("Placeholder $title"));
   }

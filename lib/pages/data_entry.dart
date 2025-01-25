@@ -102,7 +102,8 @@ class _DataEntryState extends State<DataEntry> {
       }
       //We need to check this because flutter has a "default" # of pixels (regardless of device size)
       //that is sets text boxes / dropdowns to. So we need to allow for that. 
-      if (height < 85) {
+      // Hard-coding this to make checkboxes smaller
+      if (height < 85 && (type != "checkbox")) {
         height = 85;
       }
       final width = double.parse(widgetData["width"] ?? "70") * resizeScaleFactorWidth;
@@ -171,6 +172,8 @@ class _DataEntryState extends State<DataEntry> {
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "rsAutoUntimed":
           return RSAutoUntimed(width: 400);
+        case "rsAutoUntimedPit":
+          return RSAutoUntimed(width: 300, pit:true);
         case "barchart":
           return NRGBarChart(
               title: title,
