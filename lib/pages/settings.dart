@@ -75,12 +75,19 @@ class SettingsPage extends StatelessWidget {
   }
 }
 
-class SaveSettingsButton extends StatelessWidget {
+class SaveSettingsButton extends StatefulWidget {
   const SaveSettingsButton({super.key});
 
   @override
+  State<SaveSettingsButton> createState() => _SaveSettingsButtonState();
+}
+
+class _SaveSettingsButtonState extends State<SaveSettingsButton> {
+  @override
   Widget build(BuildContext context) {
+   
     return TextButton(onPressed: () async {
+      if (!mounted) {return;}
       if (await saveConfig() == 0) {
         showDialog(context: context, builder: (BuildContext context) {
           return AlertDialog(content: Text("Successfully saved."),actions: [
