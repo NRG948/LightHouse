@@ -40,6 +40,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return GestureDetector(
         // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
@@ -78,6 +79,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                     ),
                   ]
                 ),
+                SizedBox(width: 3), 
                 Text(_title, style: comfortaaBold(20,color: Constants.pastelReddishBrown)), 
               ],
             )));

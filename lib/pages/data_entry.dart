@@ -2,6 +2,7 @@ import "dart:async";
 import "dart:collection";
 import "dart:convert";
 
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/rendering.dart";
 import "package:lighthouse/constants.dart";
@@ -45,7 +46,7 @@ class DataEntryState extends State<DataEntry> {
   final guidanceStopwatch = Stopwatch();
   GuidanceState guidanceState = GuidanceState.setup;
   late final guidanceCheckTimer =
-      Timer.periodic(Duration(milliseconds: 500), CheckGuidanceState);
+      Timer.periodic(Duration(milliseconds: 500), checkGuidanceState);
 
   int currentPage = 0;
   double startDrag = 0.0;
@@ -233,7 +234,7 @@ class DataEntryState extends State<DataEntry> {
           return NRGGuidanceButton(
             height: height,
             width: width,
-            startGuidance: StartGuidanceStopwatch,
+            startGuidance: startGuidanceStopwatch,
           );
         case "scrollable-box":
           return ScrollableBox(
@@ -290,7 +291,6 @@ class DataEntryState extends State<DataEntry> {
     final screenHeight = MediaQuery.of(context).size.height;
     DataEntry.activeConfig =
         (ModalRoute.of(context)?.settings.arguments as String?)!;
-    print(DataEntry.activeConfig);
     final layoutJSON = layoutMap.containsKey(DataEntry.activeConfig)
         ? layoutMap[DataEntry.activeConfig]!
         : {};
@@ -299,12 +299,15 @@ class DataEntryState extends State<DataEntry> {
       child: Scaffold(
           appBar: AppBar(
             backgroundColor: Constants.pastelRed,
-            title: Text(
-              DataEntry.activeConfig,
-              style: TextStyle(
-                  fontFamily: "Comfortaa",
-                  fontWeight: FontWeight.w900,
-                  color: Constants.pastelWhite),
+            title: FittedBox(
+              child: AutoSizeText(
+                "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
+                style: TextStyle(
+                    fontFamily: "Comfortaa",
+                    fontWeight: FontWeight.w900,
+                    color: Constants.pastelWhite),
+                minFontSize: 4,
+              ),
             ),
             centerTitle: true,
             leading: IconButton(
@@ -398,12 +401,13 @@ class DataEntryState extends State<DataEntry> {
                   curve: Curves.decelerate);
             });
           },
-          unselectedIconTheme: IconThemeData(color: Constants.pastelWhite),
+          unselectedIconTheme: IconThemeData(color: Constants.pastelWhite, size: 25),
           unselectedItemColor: Constants.pastelWhite,
-          selectedIconTheme: IconThemeData(color: Constants.pastelWhite),
+          selectedIconTheme: IconThemeData(color: Constants.pastelWhite, size: 35),
           selectedItemColor: Constants.pastelWhite,
           currentIndex: currentPage,
-          showUnselectedLabels: true,
+          showUnselectedLabels: false,
+          showSelectedLabels: false,
           type: BottomNavigationBarType.fixed,
           backgroundColor: Constants.pastelYellow,
           items: createNavBar(layoutJSON["pages"])),
@@ -413,7 +417,7 @@ class DataEntryState extends State<DataEntry> {
   ///Causes the [guidanceStopwatch] to be reset and start!
   ///
   ///Also resets the [guidanceState] :)
-  void StartGuidanceStopwatch() {
+  void startGuidanceStopwatch() {
     isUnderGuidance = true;
     guidanceStopwatch.reset();
     guidanceStopwatch.start();
@@ -421,7 +425,7 @@ class DataEntryState extends State<DataEntry> {
     guidanceCheckTimer;
   }
 
-  void CheckGuidanceState(Timer guidanceTimer) {
+  void checkGuidanceState(Timer guidanceTimer) {
     if (guidanceStopwatch.elapsed.inSeconds >= 135 + Constants.startDelay) {
       if (guidanceState != GuidanceState.endgame) {
         guidanceState = GuidanceState.endgame;
