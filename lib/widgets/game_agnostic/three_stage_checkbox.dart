@@ -51,7 +51,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
             height: _height,
             width: _width,
             decoration: BoxDecoration(
-                color: Colors.blueGrey,
+                color: Constants.pastelWhite,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Row(
               children: [
@@ -78,7 +78,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                     ),
                   ]
                 ),
-                Text(_title, style: Constants.comfortaaBold20pt), 
+                Text(_title, style: comfortaaBold(20,color: Constants.pastelReddishBrown)), 
               ],
             )));
   }

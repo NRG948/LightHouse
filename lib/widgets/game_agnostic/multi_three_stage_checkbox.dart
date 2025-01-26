@@ -35,7 +35,7 @@ class NRGMultiThreeStageCheckbox extends StatefulWidget {
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Colors.blueGrey,
+            color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +43,7 @@ class NRGMultiThreeStageCheckbox extends StatefulWidget {
           children: [
             Text(
               _title,
-              style: comfortaaBold(18),
+              style: comfortaaBold(18,color: Constants.pastelReddishBrown),
               textAlign: TextAlign.center,
             ),
             buildThreeStageCheckmarks()

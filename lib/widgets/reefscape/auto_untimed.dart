@@ -7,7 +7,8 @@ import 'package:lighthouse/pages/data_entry.dart';
 
 class RSAutoUntimed extends StatefulWidget {
   final double width;
-  const RSAutoUntimed({super.key, required this.width});
+  final bool pit;
+  const RSAutoUntimed({super.key, required this.width, this.pit = false});
 
   @override
   State<RSAutoUntimed> createState() => _RSAutoUntimedState();
@@ -26,21 +27,22 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 
   @override
   Widget build(BuildContext context) {
-    
-    return Container(
-      height:700 * scaleFactor,
-      width:widget.width,
-      color: Constants.pastelWhite,
-      child: Column(children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    List<Widget> children = widget.pit ? [
+        SizedBox(height: 10 * scaleFactor),
+        RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
+        RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] : [Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS", scaleFactor: scaleFactor,),
           RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,),
         ],),
         SizedBox(height: 10 * scaleFactor),
         RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
-        RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)
-      ],),
+        RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] ;
+    return Container(
+      height:700 * scaleFactor,
+      width:widget.width,
+      color: Constants.pastelWhite,
+      child: Column(children: children),
     );
   }
 }

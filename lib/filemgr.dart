@@ -7,10 +7,11 @@ import "package:path/path.dart";
 
 import "package:path_provider/path_provider.dart";
 
-final Map<String, String> configData = {};
+late final Map<String, String> configData;
 late String configFolder;
 
 Future<void> initConfig() async {
+  configData = {};
   
   if(Platform.isAndroid) {
   final directoryInstance = await getExternalStorageDirectory();
@@ -40,6 +41,7 @@ Future<void> loadConfig() async {
       configJson.entries.map((entry) => MapEntry(entry.key, entry.value.toString()))
     );
 }
+
 
 List<String> getSavedEvents() {
   final configDir = Directory(configFolder);
@@ -78,6 +80,7 @@ Future<int> saveExport() async {
   late String exportName;
   switch (DataEntry.activeConfig) {
     case "Atlas":
+      
     case "Chronos":
        exportName = "${DataEntry.exportData["teamNumber"]}_${DataEntry.exportData["matchType"]}_${DataEntry.exportData["matchNumber"]}_${random.nextInt(9999)}";
     case "Pit":
@@ -122,6 +125,13 @@ List<String> getFiles()  {
 
 Map<String, dynamic> loadFile(String eventKey, String layout, String fileName) {
   return jsonDecode(File("$configFolder/$eventKey/$layout/$fileName").readAsStringSync());
+}
+
+int deleteFile(String eventKey, String layout, String fileName) {
+  File fileToDelete = File("$configFolder/$eventKey/$layout/$fileName");
+  if (!fileToDelete.existsSync()) {return 1;}
+  fileToDelete.deleteSync();
+  return 0;
 }
 
 final Map<String, String> defaultConfig = {

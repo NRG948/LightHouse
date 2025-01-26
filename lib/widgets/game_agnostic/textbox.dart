@@ -1,3 +1,4 @@
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
@@ -9,13 +10,15 @@ class NRGTextbox extends StatefulWidget {
   final double height;
   final double width;
   final bool numeric;
+  final String defaultText;
   const NRGTextbox(
       {super.key,
       required this.title,
       required this.jsonKey,
       required this.height,
       required this.width,
-      this.numeric = false});
+      this.numeric = false,
+      this.defaultText = "Enter Text"});
 
   @override
   State<NRGTextbox> createState() => _NRGTextboxState();
@@ -55,26 +58,29 @@ class _NRGTextboxState extends State<NRGTextbox> {
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Colors.blueGrey,
+            color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: Column(
-          children: [
-            Text(_title, style: Constants.comfortaaBold20pt),
-            TextField(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: TextField(
                 keyboardType:
                     _numeric ? TextInputType.text : TextInputType.number,
                 inputFormatters:
                     _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
                 controller: _controller,
                 decoration: InputDecoration(
-                    labelText: "Enter Text",
-                    labelStyle: Constants.comfortaaBold20pt,
-                    border: OutlineInputBorder()),
-                maxLines: _height.toInt() > 100
-                    ? 5
-                    : 1 // Probably shouldn't be hard-coded but fine for now
-                )
-          ],
+                    labelText: _title,
+                    labelStyle: comfortaaBold(15,color: Constants.pastelReddishBrown,italic: true),
+                    fillColor: Constants.pastelYellow,
+                    filled:true,
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(Constants.borderRadius),
+                      borderSide: BorderSide.none
+                    )),
+                ),
+          ),
         ));
   }
 }

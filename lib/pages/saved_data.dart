@@ -17,6 +17,7 @@ class SavedData extends StatelessWidget {
     scaleFactor = screenWidth / 411;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
         title: const Text("SavedData", style: TextStyle(
            fontFamily: "Comfortaa",
@@ -24,7 +25,7 @@ class SavedData extends StatelessWidget {
            color: Colors.white
         ),),
         centerTitle: true,
-        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, icon: Icon(Icons.home)),
+        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, icon: Icon(Icons.home,color: Constants.pastelWhite,)),
       ),
       body: Container(
         height: screenHeight,
@@ -275,7 +276,26 @@ class _SavedFileState extends State<SavedFile> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(onPressed: () {}, icon: Icon(Icons.edit_note,size:50)),
-              IconButton(onPressed: () {}, icon: Icon(Icons.delete,size:50))
+              IconButton(onPressed: () {
+                showDialog(context: context, builder: (BuildContext context) {
+                  return AlertDialog(title:Text("Delete Data"),
+                  content: Text("Are you sure you want to delete ${widget.fileName}?"),
+                  actions: [
+                    TextButton(onPressed: () {
+                      Navigator.pop(context);
+                    }, child: Text("No")),
+                    TextButton(onPressed: () {
+                      if (deleteFile(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName) == 0) {
+                        Navigator.pushReplacementNamed(context, "/saved_data");
+                      } else {
+                        showDialog(context: context, builder: (BuildContext context) {return AlertDialog(content: Text("Error"));});
+                      }
+                      //
+                    }, child: Text("Yes"))
+                  ],
+                  );
+                });
+              }, icon: Icon(Icons.delete,size:50))
             ],
           ),),
         ],),
