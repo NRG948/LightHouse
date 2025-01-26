@@ -29,7 +29,6 @@ class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
   static late String activeConfig;
-  static final GlobalKey<DataEntryState> globalKey = GlobalKey<DataEntryState>();
   @override
   State<DataEntry> createState() => DataEntryState();
 }
@@ -137,7 +136,7 @@ class DataEntryState extends State<DataEntry> {
           return NRGStopwatch(
             pageController: controller,
             pageIndex: currentPage,
-            dataEntryKey: DataEntry.globalKey,
+            dataEntryState: this,
           );
         case "stopwatch-horizontal":
           return NRGStopwatchHorizontal();
@@ -355,6 +354,7 @@ class DataEntryState extends State<DataEntry> {
       child: BottomNavigationBar(
           onTap: (index) {
             setState(() {
+              isUnderGuidance = false;
               currentPage = index;
               controller.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
             });
@@ -375,6 +375,7 @@ class DataEntryState extends State<DataEntry> {
   ///
   ///Also resets the [guidanceState] :)
   void StartGuidanceStopwatch() {
+    isUnderGuidance = true;
     guidanceStopwatch.reset();
     guidanceStopwatch.start();
     guidanceState = GuidanceState.setup;
@@ -382,17 +383,27 @@ class DataEntryState extends State<DataEntry> {
   }
 
   void CheckGuidanceState(Timer guidanceTimer) {
-    if (guidanceStopwatch.elapsed.inSeconds >= 135) {
-      guidanceState = GuidanceState.endgame;
-      guidanceTimer.cancel();
-    } else if (guidanceStopwatch.elapsed.inSeconds >= 15) {
-      guidanceState = GuidanceState.teleop;
+    if (guidanceStopwatch.elapsed.inSeconds >= 135 + Constants.startDelay) {
+      if (guidanceState != GuidanceState.endgame) {
+        guidanceState = GuidanceState.endgame;
+        guidanceTimer.cancel();
+        isUnderGuidance = false;
+        // This must come *after* guidanceState is set to what it should be.
+        controller.animateToPage(guidanceState.index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+      }
+    } else if (guidanceStopwatch.elapsed.inSeconds >= 15 + Constants.startDelay) {
+      if (guidanceState != GuidanceState.teleop) {
+        isUnderGuidance = true;
+        guidanceState = GuidanceState.teleop;
+        controller.animateToPage(guidanceState.index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+      }
     } else {
-      guidanceState = GuidanceState.auto;
-    }
-
-    if (guidanceState.index != currentPage && currentPage != 3) {
-      controller.animateToPage(currentPage + 1, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+      if (guidanceState != GuidanceState.auto) {
+        guidanceState = GuidanceState.auto;
+        isUnderGuidance = true;
+        // This must come *after* guidanceState is set to what it should be.
+        controller.animateToPage(guidanceState.index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+      }
     }
   }
 }

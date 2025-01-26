@@ -11,6 +11,11 @@ class Constants {
   static TextStyle comfortaaBold10pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:10);
 
   static final double borderRadius = 8;
+
+  /// There is alwasy a delay between the end of, for example, 
+  /// auto and the start of teleop. Thus, this is simply for
+  /// adding a bit of delay before the next section. :)
+  static final double startDelay = 3;
 }
 
 TextStyle comfortaaBold(double fontSize,{bool bold=true, Color color = Colors.white}) {

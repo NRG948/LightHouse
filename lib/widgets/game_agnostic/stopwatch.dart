@@ -9,11 +9,11 @@ class NRGStopwatch extends StatefulWidget {
   final double width = 400;
   final int pageIndex;
   final pageController;
-  final GlobalKey<DataEntryState> dataEntryKey;
+  final DataEntryState dataEntryState;
 
   final stopwatch = Stopwatch();
 
-  NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryKey});
+  NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryState});
 
   @override
   State<NRGStopwatch> createState() => _NRGStopwatchState();
@@ -55,7 +55,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
   }
 
    void _pageListener() {
-    if (widget.dataEntryKey.currentState!.isUnderGuidance) {
+    if (widget.dataEntryState.isUnderGuidance) {
       if (widget.pageController.page?.round() != widget.pageIndex) {
       _stopwatch.stop(); // Stop the stopwatch when navigating away
       } else {
