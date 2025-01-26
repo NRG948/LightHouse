@@ -61,6 +61,7 @@ class _DataEntryState extends State<DataEntry> {
     //so we are using a 90 / 200 dp phone as the reference and scaling based upon that. 
     resizeScaleFactorWidth = deviceWidth / 90;
     resizeScaleFactorHeight = deviceHeight / 200;
+    
   }
 
   @override
@@ -70,6 +71,7 @@ class _DataEntryState extends State<DataEntry> {
   }
 
   List<Widget> createWidgetList(List<dynamic> widgets, [double? desireHeight]) {
+    
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
       if (type == "row") {
@@ -108,7 +110,7 @@ class _DataEntryState extends State<DataEntry> {
         height = 85;
       }
       final width = double.parse(widgetData["width"] ?? "70") * resizeScaleFactorWidth;
-
+    
       final SplayTreeMap<int, double> chartData =
           widgetData["chartData"] ?? SplayTreeMap();
       final List<int> chartRemovedData = widgetData["chartRemovedData"] ?? [];
@@ -172,9 +174,9 @@ class _DataEntryState extends State<DataEntry> {
           return NRGPlaceholder(
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "rsAutoUntimed":
-          return RSAutoUntimed(width: 400);
+          return RSAutoUntimed(width: width);
         case "rsAutoUntimedPit":
-          return RSAutoUntimed(width: 300, pit:true);
+          return RSAutoUntimed(width: width, pit:true);
         case "barchart":
           return NRGBarChart(
               title: title,

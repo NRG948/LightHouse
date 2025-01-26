@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
@@ -150,7 +151,7 @@ class Launcher extends StatelessWidget {
                     ),
 
                     child: Center(
-                      child: Text(
+                      child: AutoSizeText(
                         title.toUpperCase(),
                         style: comfortaaBold(25,color: Colors.white)
                       ),
