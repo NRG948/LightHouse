@@ -399,7 +399,7 @@ Map<String, dynamic> pitscout = {
       "widgets": [
         {
           "height": "40",
-          "width": "30",
+          "width": "60",
           "type": "rsAutoUntimedPit",
           "jsonKey": [
             "autoProcessorCS",

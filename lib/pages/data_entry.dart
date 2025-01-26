@@ -196,7 +196,7 @@ class DataEntryState extends State<DataEntry> {
         case "rsAutoUntimed":
           return RSAutoUntimed(width: width);
         case "rsAutoUntimedPit":
-          return RSAutoUntimed(width: width, pit: true);
+          return RSAutoUntimed(width: width, pit:true);
         case "barchart":
           return NRGBarChart(
               title: title,
@@ -208,8 +208,8 @@ class DataEntryState extends State<DataEntry> {
               multiColor: multiColor,
               multiData: multiChartData);
         case "matchInfo":
-          return MatchInfo(width: 400);
-        case "mcq":
+          return MatchInfo(width: width);
+        case "mcq": 
           return NRGMCQ(
             title: title,
             height: height,
@@ -275,7 +275,7 @@ class DataEntryState extends State<DataEntry> {
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.only(top: 10.0),
-                child: widgetList[index],
+                child: Center(child: widgetList[index],)
               );
             },
           ),

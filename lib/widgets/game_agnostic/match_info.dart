@@ -43,7 +43,7 @@ class _MatchInfoState extends State<MatchInfo> {
    
     return Container(
       width: 400 * scaleFactor,
-      height: 205 * scaleFactor,
+      height: 250 * scaleFactor,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -105,6 +105,7 @@ class _MatchInfoState extends State<MatchInfo> {
             children: [
               Container(
                 width: 150 * scaleFactor,
+                height: 65 * scaleFactor,
                 decoration: BoxDecoration(color: Constants.pastelYellow,borderRadius: BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
                   child: DropdownButton(value:matchType,  items: ["Qualifications", "Playoffs", "Finals"].map((v) {return DropdownMenuItem(value:v,child: Text(v,style: comfortaaBold(15 * scaleFactor,color: Constants.pastelReddishBrown),));}).toList(), onChanged: (value) {
@@ -115,6 +116,7 @@ class _MatchInfoState extends State<MatchInfo> {
               ),
               Container(
                 width: 100 * scaleFactor,
+                height: 65 * scaleFactor,
                 decoration: BoxDecoration(color: Constants.pastelYellow,borderRadius: BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
                   child: DropdownButton(value:driverStation,  items: ["Red 1", "Red 2", "Red 3", "Blue 1", "Blue 2", "Blue 3"].map((v) {return DropdownMenuItem(value:v,child: Text(v,style: comfortaaBold(15 * scaleFactor,color: Constants.pastelReddishBrown),));}).toList(), onChanged: (value) {
@@ -124,7 +126,7 @@ class _MatchInfoState extends State<MatchInfo> {
                 ),
               ),
               SizedBox(
-                  height: 45 * scaleFactor,
+                  height: 65 * scaleFactor,
                   width: 75 * scaleFactor,
                   child: TextField(
                     keyboardType: TextInputType.number,
