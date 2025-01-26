@@ -53,7 +53,6 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
         stopwatchResult = _stopwatch.elapsed;
         stopwatchDisplay = widget.dataEntryState.stopwatchInitialValue - stopwatchResult;
         if (stopwatchDisplay < Duration(seconds: 0)) {
-          print('HELLLLLLPPPPPPPPPPP');
           stopwatchDisplay = Duration(seconds: 0);
           _stopwatch.stop();
         }
