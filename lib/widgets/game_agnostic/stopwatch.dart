@@ -34,6 +34,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
 
   //We need this so that we can call setState and have the stopwatch text change.
   late Duration stopwatchResult;
+  late Duration stopwatchDisplay;
   late Timer? _timer;
 
   @override
@@ -44,10 +45,18 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
     width = _width;
 
     stopwatchResult = _stopwatch.elapsed;
+    //value that is displayed. 
+    stopwatchDisplay = widget.dataEntryState.stopwatchInitialValue;
 
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
         stopwatchResult = _stopwatch.elapsed;
+        stopwatchDisplay = widget.dataEntryState.stopwatchInitialValue - stopwatchResult;
+        if (stopwatchDisplay < Duration(seconds: 0)) {
+          print('HELLLLLLPPPPPPPPPPP');
+          stopwatchDisplay = Duration(seconds: 0);
+          _stopwatch.stop();
+        }
       });
     });
 
@@ -87,11 +96,9 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
             decoration: BoxDecoration(color: Colors.white),
             child: Center(
               child: Text(
-                "${stopwatchResult.inMinutes} : ${(stopwatchResult.inSeconds % 60).toInt().toString().padLeft(2, "0")} : ${((stopwatchResult.inMilliseconds / 100) % 10).toInt()}",
+                "${stopwatchDisplay.inMinutes} : ${(stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0")} : ${((stopwatchDisplay.inMilliseconds / 100) % 10).toInt()}",
                 textAlign: TextAlign.center,
-                textScaler: TextScaler.linear(height *
-                    3 /
-                    100), //For development, we can change the height without having to change this too.
+                textScaler: TextScaler.linear(height * 3 /100), //For development, we can change the height without having to change this too.
               ),
             ),
           ),
