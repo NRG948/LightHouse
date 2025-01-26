@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:collection";
 import "dart:convert";
 
@@ -10,6 +11,7 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/match_info.dart";
 import "package:lighthouse/widgets/game_agnostic/mcq.dart";
@@ -30,24 +32,31 @@ class DataEntry extends StatefulWidget {
   static final Map<String, dynamic> exportData = {};
   static late String activeConfig;
   @override
-  State<DataEntry> createState() => _DataEntryState();
+  State<DataEntry> createState() => DataEntryState();
 }
 
-class _DataEntryState extends State<DataEntry> {
+class DataEntryState extends State<DataEntry> {
   late double deviceWidth;
   late double deviceHeight;
 
   late double resizeScaleFactorWidth;
   late double resizeScaleFactorHeight;
 
+  final guidanceStopwatch = Stopwatch(); 
+  GuidanceState guidanceState = GuidanceState.setup;
+  late final guidanceCheckTimer = Timer.periodic(Duration(milliseconds: 500), CheckGuidanceState);
+
   int currentPage = 0;
   double startDrag = 0.0;
   late PageController controller;
+
+  bool isUnderGuidance = false;
   @override
   void initState() {
     super.initState();
     DataEntry.exportData.clear();
     controller = PageController(initialPage: 0);
+    guidanceStopwatch.reset();
   }
 
   @override
@@ -130,7 +139,11 @@ class _DataEntryState extends State<DataEntry> {
             jsonKey: jsonKey,
           );
         case "stopwatch":
-          return NRGStopwatch();
+          return NRGStopwatch(
+            pageController: controller,
+            pageIndex: currentPage,
+            dataEntryState: this,
+          );
         case "stopwatch-horizontal":
           return NRGStopwatchHorizontal();
         case "multispinbox":
@@ -212,6 +225,12 @@ class _DataEntryState extends State<DataEntry> {
                   [
                     ["NO OPTIONS SPECIFIED"]
                   ]
+          );
+        case "guidance-start": 
+          return NRGGuidanceButton(
+            height: height, 
+            width: width, 
+            startGuidance: StartGuidanceStopwatch, 
           );
         case "scrollable-box":
           return ScrollableBox(width: width, height: height, title: title, comments: comments, sort: sortType);
@@ -336,6 +355,7 @@ class _DataEntryState extends State<DataEntry> {
       child: BottomNavigationBar(
           onTap: (index) {
             setState(() {
+              isUnderGuidance = false;
               currentPage = index;
               controller.animateToPage(index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
             });
@@ -350,6 +370,42 @@ class _DataEntryState extends State<DataEntry> {
           backgroundColor: Constants.pastelYellow,
           items: createNavBar(layoutJSON["pages"])),
     );
+  }
+
+  ///Causes the [guidanceStopwatch] to be reset and start! 
+  ///
+  ///Also resets the [guidanceState] :)
+  void StartGuidanceStopwatch() {
+    isUnderGuidance = true;
+    guidanceStopwatch.reset();
+    guidanceStopwatch.start();
+    guidanceState = GuidanceState.setup;
+    guidanceCheckTimer;
+  }
+
+  void CheckGuidanceState(Timer guidanceTimer) {
+    if (guidanceStopwatch.elapsed.inSeconds >= 135 + Constants.startDelay) {
+      if (guidanceState != GuidanceState.endgame) {
+        guidanceState = GuidanceState.endgame;
+        guidanceTimer.cancel();
+        isUnderGuidance = false;
+        // This must come *after* guidanceState is set to what it should be.
+        controller.animateToPage(guidanceState.index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+      }
+    } else if (guidanceStopwatch.elapsed.inSeconds >= 15 + Constants.startDelay) {
+      if (guidanceState != GuidanceState.teleop) {
+        isUnderGuidance = true;
+        guidanceState = GuidanceState.teleop;
+        controller.animateToPage(guidanceState.index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+      }
+    } else {
+      if (guidanceState != GuidanceState.auto) {
+        guidanceState = GuidanceState.auto;
+        isUnderGuidance = true;
+        // This must come *after* guidanceState is set to what it should be.
+        controller.animateToPage(guidanceState.index, duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+      }
+    }
   }
 }
 
@@ -405,4 +461,11 @@ void showReturnDialog(BuildContext context) {
                   }, 
                 ); 
 
+}
+
+enum GuidanceState {
+  setup, 
+  auto, 
+  teleop, 
+  endgame
 }
