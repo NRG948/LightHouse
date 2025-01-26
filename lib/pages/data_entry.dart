@@ -52,6 +52,10 @@ class DataEntryState extends State<DataEntry> {
   late PageController controller;
 
   bool isUnderGuidance = false;
+  // This is because stopwatches on different pages need to start 
+  // at different times, sooooo... the stopwatches can simply look
+  // at this value...
+  Duration stopwatchInitialValue = Duration(seconds: 15);
   @override
   void initState() {
     super.initState();
@@ -378,6 +382,17 @@ class DataEntryState extends State<DataEntry> {
             setState(() {
               isUnderGuidance = false;
               currentPage = index;
+              // this tells the stopwatches what they should start
+              // counting down from. 
+              switch (currentPage) {
+                case 1: {
+                  stopwatchInitialValue = Duration(seconds: 15);
+                }
+                case 2: {
+                  stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
+                }
+              }
+
               controller.animateToPage(index,
                   duration: Duration(milliseconds: 300),
                   curve: Curves.decelerate);
@@ -421,12 +436,14 @@ class DataEntryState extends State<DataEntry> {
       if (guidanceState != GuidanceState.teleop) {
         isUnderGuidance = true;
         guidanceState = GuidanceState.teleop;
+        stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
         controller.animateToPage(guidanceState.index,
             duration: Duration(milliseconds: 300), curve: Curves.decelerate);
       }
     } else {
       if (guidanceState != GuidanceState.auto) {
         guidanceState = GuidanceState.auto;
+        stopwatchInitialValue = Duration(seconds: 15);
         isUnderGuidance = true;
         // This must come *after* guidanceState is set to what it should be.
         controller.animateToPage(guidanceState.index,
