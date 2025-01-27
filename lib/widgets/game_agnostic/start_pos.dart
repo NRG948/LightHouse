@@ -19,7 +19,7 @@ class _NRGStartPosState extends State<NRGStartPos> {
       width: widget.width,
       decoration: BoxDecoration(color: Constants.pastelWhite, borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: GestureDetector(
-        
+        onTap: () {showStartPos(context, 400, 200);},
         child: Column(
           children: [
             SizedBox(height: widget.height*0.05,),
@@ -27,7 +27,7 @@ class _NRGStartPosState extends State<NRGStartPos> {
             width: 0.7 * widget.width,
             height: 0.25 * widget.height,
             decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-            child: AutoSizeText("STARTING POSITION",style: comfortaaBold(20),textAlign: TextAlign.center,),
+            child: Center(child: AutoSizeText("STARTING POSITION",style: comfortaaBold(20),textAlign: TextAlign.center,)),
               ),
             SizedBox(height: widget.height*0.1,),
             Container(
@@ -40,4 +40,16 @@ class _NRGStartPosState extends State<NRGStartPos> {
         )),
     );
   }
+}
+
+void showStartPos(BuildContext context, double width, double height) {
+  showDialog(context: context, builder: (context) {
+    return Center(
+      child: Container(
+        width: width,
+        height: height,
+        color: Constants.pastelBlue
+      ),
+    );
+  });
 }

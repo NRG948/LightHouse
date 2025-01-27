@@ -1,3 +1,4 @@
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
@@ -55,7 +56,7 @@ class _NRGDropdownState extends State<NRGDropdown> {
               color: Constants.pastelGray,
               borderRadius: BorderRadius.circular(Constants.borderRadius)
             ),
-            child: Center(child: Text(_title, style: comfortaaBold(20,color: Constants.pastelWhite)))),
+            child: Center(child: AutoSizeText(_title, style: comfortaaBold(20,color: Constants.pastelWhite),maxLines: 1,))),
           DropdownButton<String>(
             items: _options.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(

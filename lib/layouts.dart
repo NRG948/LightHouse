@@ -22,61 +22,7 @@ Map<String, dynamic> atlascout = {
           "type": "matchInfo",
           "jsonKey": ["teamNumber", "driverStation", "matchType", "matchNumber", "replay"]
         },
-        // {
-        //   "type": "row",
-        //   "children": [
-        //     {
-        //       "title": "Team Number",
-        //       "type": "numberbox",
-        //       "jsonKey": "teamNumber",
-        //       "width": "42"
-        //     },
-        //     {
-        //       "type": "spacer", 
-        //       "width": "2"
-        //     }, 
-        //     {
-        //       "title": "Driver Station",
-        //       "type": "dropdown",
-        //       "options": "Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue3",
-        //       "jsonKey": "driverStation",
-        //       "width": "42", 
-        //       "height": "84", 
-        //     }
-        //   ]
-        // },
-        // {
-        //   "type": "row",
-        //   "children": [
-        //     {
-        //       "title": "Match Type",
-        //       "type": "dropdown",
-        //       "options": "Qualifications,Playoffs,Finals", 
-        //       "jsonKey": "matchType",
-        //       "width": "42"
-        //     },
-        //     {
-        //       "type": "spacer", 
-        //       "width": "2", 
-        //     }, 
-        //     {
-        //       "title": "Match Number",
-        //       "type": "textbox",
-        //       "jsonKey": "matchNumber",
-        //       "width": "20"
-        //     },
-        //     {
-        //       "type": "spacer", 
-        //       "width": "2", 
-        //     }, 
-        //     {
-        //       "title": "Replay",
-        //       "type": "checkbox",
-        //       "jsonKey": "replay",
-        //       "width": "20"
-        //     }
-        //   ]
-        // },
+        
         {
           "title": "Starting Position",
           "type": "startPos",
@@ -218,71 +164,26 @@ Map<String, dynamic> chronoscout = {
       "title": "Setup",
       "icon": CustomIcons.wrench,
       "widgets": [
-        {"title": "Scouter Name", "type": "textbox", "jsonKey": "scouterName"},
         {
-          "type": "row",
-          "children": [
-            {
-              "title": "Team Number",
-              "type": "numberbox",
-              "jsonKey": "teamNumber",
-              "width": "34"
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Driver Station",
-              "options": "Red 1,Red 2,Red 3,Blue 1,Blue 2,Blue3",
-              "type": "dropdown",
-              "jsonKey": "driverStation",
-              "width": "50"
-            }
-          ]
+          "title": "Scouter Name",
+          "type": "textbox",
+          "jsonKey": "scouterName",
         },
         {
-          "type": "row",
-          "children": [
-            {
-              "title": "Match Type",
-              "type": "dropdown",
-              "options": "Qualifications,Playoffs,Finals",
-              "jsonKey": "matchType",
-              "width": "30"
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Match Number",
-              "type": "numberbox",
-              "jsonKey": "matchNumber",
-              "width": "20"
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Replay",
-              "type": "checkbox",
-              "jsonKey": "replay",
-              "width": "32"
-            }
-          ]
+          "type": "matchInfo",
+          "jsonKey": ["teamNumber", "driverStation", "matchType", "matchNumber", "replay"]
         },
+        
+        {
+          "title": "Starting Position",
+          "type": "startPos",
+          "jsonKey": "startingPosition",
+          "height": "30"
+        },
+        
         {
           "type": "guidance-start", 
         }, 
-        {
-          "title": "Starting Position",
-          "type": "placeholder",
-          "jsonKey": "startingPosition",
-          //Deleted "height" field... Not sure why needed. No idea what type this should be. -Sean
-        },
-        {"title": "Start match guided", "type": "placeholder", "jsonKey": ""}
       ]
     },
     {
@@ -322,7 +223,7 @@ Map<String, dynamic> chronoscout = {
       "icon": CustomIcons.flag,
       "widgets": [
         {
-          "title": "General Match Strategy",
+          "title": "General Strategy",
           "type": "dropdown",
           "jsonKey": "generalStrategy",
           "options": "Cycling,Defense,Feed/Pass,Other"
@@ -332,7 +233,7 @@ Map<String, dynamic> chronoscout = {
           "type": "dataQuality",
           "jsonKey": "dataQuality"
         },
-        {"title": "Comments", "type": "textbox", "jsonKey": "comments"}
+        {"title": "Comments", "type": "textbox", "jsonKey": "comments","maxLines":20,"fontSize":15.0,"height":"100"}
       ]
     }
   ]
