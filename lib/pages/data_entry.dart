@@ -377,6 +377,17 @@ class DataEntryState extends State<DataEntry> {
                 onPageChanged: (index) {
                   setState(() {
                     currentPage = index;
+                    
+                    // this tells the stopwatches what they should start
+                    // counting down from. 
+                    switch (currentPage) {
+                      case 1: {
+                        stopwatchInitialValue = Duration(seconds: 15);
+                      }
+                      case 2: {
+                        stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
+                      }
+                    }
                   });
                 },
               ),
@@ -396,16 +407,6 @@ class DataEntryState extends State<DataEntry> {
             setState(() {
               isUnderGuidance = false;
               currentPage = index;
-              // this tells the stopwatches what they should start
-              // counting down from. 
-              switch (currentPage) {
-                case 1: {
-                  stopwatchInitialValue = Duration(seconds: 15);
-                }
-                case 2: {
-                  stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
-                }
-              }
 
               controller.animateToPage(index,
                   duration: Duration(milliseconds: 300),
