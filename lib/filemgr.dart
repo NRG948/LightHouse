@@ -80,7 +80,6 @@ Future<int> saveExport() async {
   late String exportName;
   switch (DataEntry.activeConfig) {
     case "Atlas":
-      
     case "Chronos":
        exportName = "${DataEntry.exportData["teamNumber"]}_${DataEntry.exportData["matchType"]}_${DataEntry.exportData["matchNumber"]}_${random.nextInt(9999)}";
     case "Pit":
@@ -104,8 +103,9 @@ void addToUploadQueue(String file) async {
   if (!(await queueFile.exists())) {
     queueFile.writeAsString(jsonEncode([file]));
   } else {
-    final List<String> queue = jsonDecode(queueFile.readAsStringSync());
+    final List<dynamic> queue = jsonDecode(queueFile.readAsStringSync());
     queue.add(file);
+    print(queue);
     queueFile.writeAsString(jsonEncode(queue));
   }
 }

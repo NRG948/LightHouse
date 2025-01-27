@@ -32,7 +32,7 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
   double get _height => widget.height;
   List<String> get _keys => widget.jsonKey;
   List<List<String>> get _boxNames => widget.boxNames;
-  double get _scaleFactor => _width / 400;
+  double get _scaleFactor => _width / 500;
 
   @override
   Widget build(BuildContext context) {

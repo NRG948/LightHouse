@@ -69,6 +69,9 @@ flutter:
   assets:
       - assets/images/Background.png
       - assets/images/background-hires.png
+      - assets/images/startPos.png
+      - assets/images/startPos_white.png
+      - assets/images/startPosWhiteLabel.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

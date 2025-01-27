@@ -15,12 +15,13 @@ import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/match_info.dart";
-import "package:lighthouse/widgets/game_agnostic/mcq.dart";
+import "package:lighthouse/widgets/game_agnostic/data_quality.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
+import "package:lighthouse/widgets/game_agnostic/start_pos.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch-horizontal.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
@@ -74,7 +75,7 @@ class DataEntryState extends State<DataEntry> {
 
     //These are such that we can resize widgets based on screen size, but we need a reference point,
     //so we are using a 90 / 200 dp phone as the reference and scaling based upon that.
-    resizeScaleFactorWidth = deviceWidth / 90;
+    resizeScaleFactorWidth = deviceWidth / 80;
     resizeScaleFactorHeight = deviceHeight / 200;
   }
 
@@ -91,7 +92,7 @@ class DataEntryState extends State<DataEntry> {
         double height = double.parse(widgetData["height"] ?? "20") *
             resizeScaleFactorHeight;
         return SizedBox(
-          width: 90 * resizeScaleFactorWidth,
+          width: 70 * resizeScaleFactorWidth,
           height: height,
           child: Row(
               spacing: 0,
@@ -167,18 +168,26 @@ class DataEntryState extends State<DataEntry> {
                     ["NO OPTIONS SPECIFIED"]
                   ]);
         case "textbox":
+          final int maxLines = widgetData["maxLines"] ?? 1;
+          final double fontSize = widgetData["fontSize"] ?? 30.0;
           return NRGTextbox(
-              title: title, jsonKey: jsonKey, height: height, width: width);
+              title: title, jsonKey: jsonKey, height: height, width: width, maxLines: maxLines,fontSize: fontSize,);
         case "checkbox":
           return NRGCheckbox(
               title: title, jsonKey: jsonKey, height: height, width: width);
+        case "checkbox_vertical":
+          return NRGCheckbox(title: title, jsonKey: jsonKey, height: height, width: width,vertical:true);
         case "numberbox":
+         final int maxLines = widgetData["maxLines"] ?? 1;
+          final double fontSize = widgetData["fontSize"] ?? 30.0;
           return NRGTextbox(
               title: title,
               jsonKey: jsonKey,
               numeric: true,
               height: height,
-              width: width);
+              width: width,
+              fontSize: fontSize,
+              maxLines: maxLines,);
         case "dropdown":
           if (!(widgetData.containsKey("options"))) {
             return Text(
@@ -210,13 +219,15 @@ class DataEntryState extends State<DataEntry> {
               multiData: multiChartData);
         case "matchInfo":
           return MatchInfo(width: width);
-        case "mcq": 
-          return NRGMCQ(
+        case "dataQuality": 
+          return NRGDataQuality(
             title: title,
             height: height,
             width: width,
             jsonKey: jsonKey,
           );
+        case "startPos":
+          return NRGStartPos(height: height, width: width);
         case "three-stage-checkbox":
           return NRGThreeStageCheckbox(
               title: title, jsonKey: jsonKey, height: height, width: width);

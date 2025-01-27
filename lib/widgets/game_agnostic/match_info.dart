@@ -43,7 +43,7 @@ class _MatchInfoState extends State<MatchInfo> {
    
     return Container(
       width: 400 * scaleFactor,
-      height: 250 * scaleFactor,
+      height: 225 * scaleFactor,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -99,7 +99,7 @@ class _MatchInfoState extends State<MatchInfo> {
                 )
               ],
           ),
-          SizedBox(height:20*scaleFactor),
+          SizedBox(height:5*scaleFactor),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [

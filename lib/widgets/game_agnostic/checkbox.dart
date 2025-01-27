@@ -8,12 +8,14 @@ class NRGCheckbox extends StatefulWidget {
   final String jsonKey;
   final double height;
   final double width;
+  final bool vertical;
   const NRGCheckbox(
       {super.key,
       required this.title,
       required this.jsonKey,
       required this.height,
-      required this.width});
+      required this.width,
+      this.vertical = false});
 
   @override
   State<NRGCheckbox> createState() => _NRGCheckboxState();
@@ -30,6 +32,53 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
 
   @override
   Widget build(BuildContext context) {
+    Widget rowOrColumn = widget.vertical
+        ? Column(
+            children: [
+              // Updates the checkbox when [isChecked] is updated.
+              ValueListenableBuilder(
+                  valueListenable: checkboxNotifier,
+                  builder: (context, isChecked, child) {
+                    return Checkbox(
+                        value: isChecked,
+                        onChanged: (bool? newValue) {
+                          checkboxNotifier.value = newValue ?? false;
+                        });
+                  }),
+              SizedBox(
+                  width: _width * 0.65,
+                  child: AutoSizeText(
+                    _title,
+                    style: comfortaaBold(20, color: Colors.black),
+                    maxLines: 2,
+                    minFontSize: 9,
+                    textAlign: TextAlign.center,
+                  ))
+            ],
+          )
+        : Row(
+            children: [
+              // Updates the checkbox when [isChecked] is updated.
+              ValueListenableBuilder(
+                  valueListenable: checkboxNotifier,
+                  builder: (context, isChecked, child) {
+                    return Checkbox(
+                        value: isChecked,
+                        onChanged: (bool? newValue) {
+                          checkboxNotifier.value = newValue ?? false;
+                        });
+                  }),
+              SizedBox(
+                  width: _width * 0.65,
+                  child: AutoSizeText(
+                    _title,
+                    style: comfortaaBold(20, color: Colors.black),
+                    maxLines: 1,
+                    minFontSize: 9,
+                  ))
+            ],
+          );
+
     return GestureDetector(
         // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
@@ -43,22 +92,6 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
             decoration: BoxDecoration(
                 color: Constants.pastelWhite,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
-            child: Row(
-              children: [
-                // Updates the checkbox when [isChecked] is updated.
-                ValueListenableBuilder(
-                    valueListenable: checkboxNotifier,
-                    builder: (context, isChecked, child) {
-                      return Checkbox(
-                          value: isChecked,
-                          onChanged: (bool? newValue) {
-                            checkboxNotifier.value = newValue ?? false;
-                          });
-                    }),
-                SizedBox(
-                  width: _width * 0.65,
-                  child: AutoSizeText(_title, style: comfortaaBold(20,color:Colors.black),maxLines: 1,minFontSize: 9,))
-              ],
-            )));
+            child: rowOrColumn));
   }
 }

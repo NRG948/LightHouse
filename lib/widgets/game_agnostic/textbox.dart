@@ -11,6 +11,8 @@ class NRGTextbox extends StatefulWidget {
   final double width;
   final bool numeric;
   final String defaultText;
+  final double fontSize;
+  final int maxLines;
   const NRGTextbox(
       {super.key,
       required this.title,
@@ -18,6 +20,8 @@ class NRGTextbox extends StatefulWidget {
       required this.height,
       required this.width,
       this.numeric = false,
+      required this.fontSize,
+      required this.maxLines,
       this.defaultText = "Enter Text"});
 
   @override
@@ -30,6 +34,8 @@ class _NRGTextboxState extends State<NRGTextbox> {
   double get _height => widget.height;
   double get _width => widget.width;
   bool get _numeric => widget.numeric;
+  int get _maxLines => widget.maxLines;
+  double get _fontSize => widget.fontSize;
   final TextEditingController _controller = TextEditingController();
 
   // Apparently all this TextEditingController BS can just be done by passing a lambda to the onChanged
@@ -62,16 +68,19 @@ class _NRGTextboxState extends State<NRGTextbox> {
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
             child: TextField(
                 keyboardType:
                     _numeric ? TextInputType.text : TextInputType.number,
                 inputFormatters:
                     _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
                 controller: _controller,
+                style: comfortaaBold(_fontSize,color: Constants.pastelReddishBrown),
+                maxLines: _maxLines,
                 decoration: InputDecoration(
+                  
                     labelText: _title,
-                    labelStyle: comfortaaBold(15,color: Constants.pastelReddishBrown,italic: true),
+                    labelStyle: comfortaaBold(_fontSize,color: Constants.pastelReddishBrown,italic: true),
                     fillColor: Constants.pastelYellow,
                     filled:true,
                     floatingLabelBehavior: FloatingLabelBehavior.never,

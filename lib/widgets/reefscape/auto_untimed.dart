@@ -28,20 +28,20 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = widget.pit ? [
-        SizedBox(height: 10 * scaleFactor),
+        SizedBox(height: 5 * scaleFactor),
         RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
         RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] : [Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS", scaleFactor: scaleFactor,),
           RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,),
         ],),
-        SizedBox(height: 10 * scaleFactor),
+        SizedBox(height: 5 * scaleFactor),
         RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
         RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] ;
     return Container(
-      height:700 * scaleFactor,
+      height:666 * scaleFactor,
       width:widget.width,
-      color: Constants.pastelWhite,
+      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(children: children),
     );
   }
@@ -88,7 +88,8 @@ class _RSAUReefState extends State<RSAUReef> with AutomaticKeepAliveClientMixin 
       padding: EdgeInsets.all(8 * widget.scaleFactor),
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
-        border: Border.all(color: Colors.black,width: 1 * widget.scaleFactor)),
+        border: Border.all(color: Colors.black),
+        borderRadius: BorderRadius.circular(Constants.borderRadius),),
       child: Column(
         spacing: 2 * widget.scaleFactor,
         children: [
@@ -472,12 +473,12 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
         children: [
           Container(
             width: 100 * widget.scaleFactor,
-            height: 51 * widget.scaleFactor,
+            height: 50 * widget.scaleFactor,
              decoration: BoxDecoration(
-              color: Colors.grey,
-              border: Border.all(
-                color: Constants.pastelWhite,
-                width: widget.scaleFactor
+              color: Constants.pastelGray,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(Constants.borderRadius),
+                bottomLeft: Radius.circular(Constants.borderRadius)
               )
             ),
             child: Column(
@@ -491,11 +492,8 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
             width: 50 * widget.scaleFactor,
             height: 50 * widget.scaleFactor,
             decoration: BoxDecoration(
-              color: Colors.grey,
-              border: Border.all(
-                color: Constants.pastelWhite,
-                width: widget.scaleFactor
-              )
+              color: Constants.pastelGray,
+              borderRadius: BorderRadius.only(topRight:Radius.circular(Constants.borderRadius),bottomRight: Radius.circular(Constants.borderRadius)),
             ),
             child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down, size: 25 * widget.scaleFactor,),highlightColor: Colors.transparent,splashColor: Colors.transparent,iconSize: 25 * widget.scaleFactor,)
           )

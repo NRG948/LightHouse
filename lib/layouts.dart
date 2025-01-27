@@ -79,11 +79,11 @@ Map<String, dynamic> atlascout = {
         // },
         {
           "title": "Starting Position",
-          "type": "placeholder",
+          "type": "startPos",
           "jsonKey": "startingPosition",
           "height": "30"
         },
-        {"title": "Preload", "type": "checkbox", "jsonKey": "preload"}
+        {"title": "Preload", "type": "checkbox", "jsonKey": "preload","height":"10"}
       ]
     },
     {
@@ -180,9 +180,9 @@ Map<String, dynamic> atlascout = {
           "children": [
             {
               "title": "Robot Disabled",
-              "type": "checkbox",
+              "type": "checkbox_vertical",
               "jsonKey": "robotDisabled",
-              "width": "32"
+              "width": "20"
             },
             {
               "type": "spacer",
@@ -192,12 +192,14 @@ Map<String, dynamic> atlascout = {
               "title": "Reason?",
               "type": "textbox",
               "jsonKey": "robotDisableReason",
-              "width": "52"
+              "width": "48",
+              "maxLines": 2,
+              "fontSize": 15.0
             }
           ]
         },
-        {"title": "Data Quality", "type": "mcq", "jsonKey": "dataQuality"},
-        {"title": "Comments", "type": "textbox", "jsonKey": "comments","height":"10"},
+        {"title": "Data Quality", "type": "dataQuality", "jsonKey": "dataQuality"},
+        {"title": "Comments", "type": "textbox", "jsonKey": "comments","height":"10","fontSize":15.0,"maxLines":3},
         {
           "title": "Team crossed over midline?",
           "type": "checkbox",
@@ -326,8 +328,8 @@ Map<String, dynamic> chronoscout = {
           "options": "Cycling,Defense,Feed/Pass,Other"
         },
         {
-          "title": "Data Quality (5 star rating)",
-          "type": "mcq",
+          "title": "Data Quality",
+          "type": "dataQuality",
           "jsonKey": "dataQuality"
         },
         {"title": "Comments", "type": "textbox", "jsonKey": "comments"}
