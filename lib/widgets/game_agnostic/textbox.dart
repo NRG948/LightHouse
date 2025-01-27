@@ -65,7 +65,7 @@ class _NRGTextboxState extends State<NRGTextbox> {
             padding: EdgeInsets.all(10),
             child: TextField(
                 keyboardType:
-                    _numeric ? TextInputType.text : TextInputType.number,
+                    _numeric ? TextInputType.number : TextInputType.text,
                 inputFormatters:
                     _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
                 controller: _controller,
