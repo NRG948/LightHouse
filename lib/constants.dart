@@ -6,9 +6,10 @@ class Constants {
   static const Color pastelWhite = Color.fromARGB(255, 250, 242, 240);
   static const Color pastelBlue = Color.fromARGB(255, 0, 204, 255,);
   static const Color pastelBlueAgain = Color.fromARGB(255, 111, 163, 195);
+  static const Color markerLightGray = Color.fromARGB(255, 120, 120, 120);
+  static const Color markerDarkGray = Color.fromARGB(255, 92, 92, 92);
   static const Color ufogreen = Color.fromARGB(255,60,208,125); 
   static const Color magenta = Color.fromARGB(255,255,0,255);
-
 
   static const Color pastelGray = Color.fromARGB(255, 199, 185, 186);
   static const Color pastelReddishBrown = Color.fromARGB(255, 103, 50, 47);

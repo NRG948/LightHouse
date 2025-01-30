@@ -60,7 +60,7 @@ Map<String, dynamic> atlascout = {
             "coralPickupsStation",
             "coralPickupsGround",
           ],
-          "height": "40",
+          "height": "20",
           "boxNames": [
             ["Station", "Ground"]
           ]
@@ -74,7 +74,7 @@ Map<String, dynamic> atlascout = {
             "coralScoredL3",
             "coralScoredL4",
           ],
-          "height": "40",
+          "height": "35",
           "boxNames": [
             ["L1", "L2"],
             ["L3", "L4"]
@@ -91,7 +91,7 @@ Map<String, dynamic> atlascout = {
             "algaemissProcessor",
             "algaemissNet"
           ],
-          "height": "65",
+          "height": "50",
           "boxNames": [
             ["Remove L2", "Remove L3"],
             ["Score Processor", "Score Net"],

@@ -26,6 +26,8 @@ class _MatchInfoState extends State<MatchInfo> {
         DataEntry.exportData["teamNumber"] = teamNumberController.text;
       });
     });
+    DataEntry.exportData["matchType"] = "Qualifications";
+    DataEntry.exportData["driverStation"] = "Red 1";
   }
   
   @override

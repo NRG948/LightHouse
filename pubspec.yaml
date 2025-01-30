@@ -73,6 +73,8 @@ flutter:
       - assets/images/startPos.png
       - assets/images/startPos_white.png
       - assets/images/startPosWhiteLabel.png
+      - assets/images/startPosFSBlue.png
+      - assets/images/startPosFSRed.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

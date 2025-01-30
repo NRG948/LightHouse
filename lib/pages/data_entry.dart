@@ -38,8 +38,8 @@ class DataEntry extends StatefulWidget {
 }
 
 class DataEntryState extends State<DataEntry> {
-  late double deviceWidth;
-  late double deviceHeight;
+  static late double deviceWidth;
+  static late double deviceHeight;
 
   late double resizeScaleFactorWidth;
   late double resizeScaleFactorHeight;
