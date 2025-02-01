@@ -73,6 +73,9 @@ List<String> getLayouts(String eventKey) {
 
 List<String> getFilesInLayout(String eventKey, String layout) {
   final layoutDir = Directory("$configFolder/$eventKey/$layout");
+  if (!layoutDir.existsSync()) {
+    return [];
+  }
   // DO NOT REMOVE THIS DEBUGPRINT STATEMENT!!!
   // Refer to the comment in getLayouts()
   debugPrint(layoutDir.listSync().toString());
