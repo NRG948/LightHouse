@@ -12,24 +12,26 @@ late String configFolder;
 
 Future<void> initConfig() async {
   configData = {};
-  
-  if(Platform.isAndroid) {
-  final directoryInstance = await getExternalStorageDirectory();
-  if (directoryInstance == null) {print("wtf"); return;}
-  configFolder = directoryInstance.path;
+
+  if (Platform.isAndroid) {
+    final directoryInstance = await getExternalStorageDirectory();
+    if (directoryInstance == null) {
+      print("wtf");
+      return;
+    }
+    configFolder = directoryInstance.path;
   } else if (Platform.isIOS) {
-  final directoryInstance = await getApplicationDocumentsDirectory();
-  configFolder = directoryInstance.path;
+    final directoryInstance = await getApplicationDocumentsDirectory();
+    configFolder = directoryInstance.path;
   } else {
-    throw UnimplementedError("You're trying to run this app on something other than iOS/Android. why?");
+    throw UnimplementedError(
+        "You're trying to run this app on something other than iOS/Android. why?");
   }
 }
 
-
-
 Future<void> loadConfig() async {
   configData.clear();
-  late Map<String,dynamic> configJson;
+  late Map<String, dynamic> configJson;
   final configFile = File("$configFolder/config.nrg");
   if (!(await configFile.exists())) {
     configFile.writeAsString(jsonEncode(defaultConfig));
@@ -37,15 +39,15 @@ Future<void> loadConfig() async {
   } else {
     configJson = jsonDecode(await configFile.readAsString());
   }
-  configData.addEntries(
-      configJson.entries.map((entry) => MapEntry(entry.key, entry.value.toString()))
-    );
+  configData.addEntries(configJson.entries
+      .map((entry) => MapEntry(entry.key, entry.value.toString())));
 }
-
 
 List<String> getSavedEvents() {
   final configDir = Directory(configFolder);
-  return configDir.listSync().whereType<Directory>().map((dir) {return basename(dir.path);}).toList();
+  return configDir.listSync().whereType<Directory>().map((dir) {
+    return basename(dir.path);
+  }).toList();
 }
 
 List<String> getLayouts(String eventKey) {
@@ -56,9 +58,16 @@ List<String> getLayouts(String eventKey) {
   // my best guess is that the listSync() method is broken and won't return files/folders
   // unless you've already tried to list that directory
   // essentially shrodinger's folder
-  debugPrint(eventKeyDir.listSync().whereType<Directory>().map((dir) {return basename(dir.path);}).toString());
-  final List<String> layoutList = eventKeyDir.listSync().whereType<Directory>().map((dir) {return basename(dir.path);}).toList();
-  if (layoutList.isEmpty) {layoutList.add("No Data");}
+  debugPrint(eventKeyDir.listSync().whereType<Directory>().map((dir) {
+    return basename(dir.path);
+  }).toString());
+  final List<String> layoutList =
+      eventKeyDir.listSync().whereType<Directory>().map((dir) {
+    return basename(dir.path);
+  }).toList();
+  if (layoutList.isEmpty) {
+    layoutList.add("No Data");
+  }
   return layoutList;
 }
 
@@ -67,13 +76,16 @@ List<String> getFilesInLayout(String eventKey, String layout) {
   // DO NOT REMOVE THIS DEBUGPRINT STATEMENT!!!
   // Refer to the comment in getLayouts()
   debugPrint(layoutDir.listSync().toString());
-  return layoutDir.listSync().map((file) {return basename(file.path);}).toList();
+  return layoutDir.listSync().map((file) {
+    return basename(file.path);
+  }).toList();
 }
 
 Future<int> saveExport() async {
   final random = Random();
-  
-  final layoutDirectory = Directory("$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}");
+
+  final layoutDirectory = Directory(
+      "$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}");
   if (!(await layoutDirectory.exists())) {
     await layoutDirectory.create(recursive: true);
   }
@@ -81,15 +93,19 @@ Future<int> saveExport() async {
   switch (DataEntry.activeConfig) {
     case "Atlas":
     case "Chronos":
-       exportName = "${DataEntry.exportData["teamNumber"]}_${DataEntry.exportData["matchType"]}_${DataEntry.exportData["matchNumber"]}_${random.nextInt(9999)}";
+      exportName =
+          "${DataEntry.exportData["teamNumber"]}_${DataEntry.exportData["matchType"]}_${DataEntry.exportData["matchNumber"]}_${random.nextInt(9999)}";
     case "Pit":
     case "Human Player":
-      exportName = "${DataEntry.exportData["teamNumber"]}_${DataEntry.activeConfig.split(" ")[0]}_${random.nextInt(9999)}}";
+      exportName =
+          "${DataEntry.exportData["teamNumber"]}_${DataEntry.activeConfig.split(" ")[0]}_${random.nextInt(9999)}}";
     default:
       exportName = "${random.nextInt(9999)}";
   }
-  final exportFile = File("$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}/$exportName.json");
-  addToUploadQueue("$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}/$exportName.json");
+  final exportFile = File(
+      "$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}/$exportName.json");
+  addToUploadQueue(
+      "$configFolder/${configData["eventKey"]}/${DataEntry.activeConfig}/$exportName.json");
   DataEntry.exportData["layout"] = DataEntry.activeConfig;
   DataEntry.exportData["exportName"] = exportName;
   DataEntry.exportData["timestamp"] = DateTime.now().toString();
@@ -116,25 +132,36 @@ Future<int> saveConfig() async {
   return 0;
 }
 
-List<String> getFiles()  {
-  final eventKeyDirectory = Directory("$configFolder/${configData["eventKey"]}");
-  if (!(eventKeyDirectory.existsSync())) { return ["No matches recorded for ${configData["eventKey"]}. Why not create one?"];}
+List<String> getFiles() {
+  final eventKeyDirectory =
+      Directory("$configFolder/${configData["eventKey"]}");
+  if (!(eventKeyDirectory.existsSync())) {
+    return [
+      "No matches recorded for ${configData["eventKey"]}. Why not create one?"
+    ];
+  }
   List<FileSystemEntity> eventKeyFiles = eventKeyDirectory.listSync().toList();
-  return eventKeyFiles.whereType<File>().map((file) => file.uri.pathSegments.last).toList();
+  return eventKeyFiles
+      .whereType<File>()
+      .map((file) => file.uri.pathSegments.last)
+      .toList();
 }
 
 Map<String, dynamic> loadFile(String eventKey, String layout, String fileName) {
-  return jsonDecode(File("$configFolder/$eventKey/$layout/$fileName").readAsStringSync());
+  return jsonDecode(
+      File("$configFolder/$eventKey/$layout/$fileName").readAsStringSync());
 }
 
 int deleteFile(String eventKey, String layout, String fileName) {
   File fileToDelete = File("$configFolder/$eventKey/$layout/$fileName");
-  if (!fileToDelete.existsSync()) {return 1;}
+  if (!fileToDelete.existsSync()) {
+    return 1;
+  }
   fileToDelete.deleteSync();
   return 0;
 }
 
 final Map<String, String> defaultConfig = {
-    "eventKey": "2025nrg",
-    "scouterName": "barebonesNRG"
+  "eventKey": "2025nrg",
+  "scouterName": "barebonesNRG"
 };

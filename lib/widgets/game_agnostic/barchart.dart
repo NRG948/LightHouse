@@ -15,6 +15,8 @@ class NRGBarChart extends StatefulWidget {
   List<int> removedData;
   Color color;
   List<Color> multiColor;
+  String dataLabel;
+  List<String> dataLabels;
 
   NRGBarChart(
       {super.key,
@@ -25,12 +27,16 @@ class NRGBarChart extends StatefulWidget {
       SplayTreeMap<int, double>? data,
       List<int>? removedData,
       SplayTreeMap<int, List<double>>? multiData,
-      List<Color>? multiColor})
+      List<Color>? multiColor,
+      String? dataLabel,
+      List<String>? dataLabels})
       : removedData = removedData ?? [],
         color = color ?? Colors.transparent,
         data = data ?? SplayTreeMap(),
         multiData = multiData ?? SplayTreeMap(),
-        multiColor = multiColor ?? [];
+        multiColor = multiColor ?? [],
+        dataLabel = dataLabel ?? "",
+        dataLabels = dataLabels ?? [];
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();
@@ -45,6 +51,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
   Color? get _color => widget.color;
   List<Color>? get _multiColor => widget.multiColor;
   List<int> get _removedData => widget.removedData;
+  String get _dataLabel => widget.dataLabel;
+  List<String> get _dataLabels => widget.dataLabels;
 
   /// Converts the [SplayTreeMap] dataset [_data] into a [BarChartGroupData] list to display.
   List<BarChartGroupData> getBarGroups() => _data!.keys
@@ -104,22 +112,31 @@ class _NRGBarChartState extends State<NRGBarChart> {
   }
 
   /// Gets a column of texts or a single text depending on the type of graph.
-  Widget getAverageText() => _multiData!.isEmpty
-      ? _getSingleText(getAverageData(), _color ?? Colors.black)
-      : Column(
-          children: _multiColor != null
-              ? IterableZip<dynamic>([getMultiAverageData(), _multiColor!])
-                  .toList()
-                  .map((x) => _getSingleText(x[0], x[1]))
-                  .toList()
-                  .reversed
-                  .toList()
-              : getMultiAverageData()
-                  .map((x) => _getSingleText(x, Colors.black))
-                  .toList());
+  Widget getAverageText() {
+    if (_multiData!.isEmpty) {
+      return _getSingleText(
+          getAverageData(), _color ?? Colors.black, _dataLabel);
+    } else {
+      List<Widget> texts = [];
+      List<double> averages = getMultiAverageData();
 
-  Widget _getSingleText(double average, Color color) =>
-      Text("AVERAGE: ${roundAtPlace(average, 2)}",
+      for (int i = 0; i < averages.length; i++) {
+        texts.add(_getSingleText(
+            averages[i],
+            _multiColor != null
+                ? _multiColor![i % _multiColor!.length]
+                : Colors.black,
+            _dataLabels.isNotEmpty
+                ? _dataLabels[i % _dataLabels.length]
+                : ""));
+      }
+
+      return Column(children: texts.reversed.toList());
+    }
+  }
+
+  Widget _getSingleText(double average, Color color, String label) =>
+      Text("AVERAGE${label != "" ? " $label" : ""}: ${roundAtPlace(average, 2)}",
           style: TextStyle(
               fontFamily: "Comfortaa",
               fontWeight: FontWeight.w900,
