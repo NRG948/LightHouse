@@ -5,14 +5,14 @@ import 'package:lighthouse/pages/data_entry.dart';
 
 class NRGStopwatch extends StatefulWidget {
   final String title = "Stopwatch";
-  final double height = 100;
-  final double width = 400;
+  final double height = 90;
+  final double width = 360;
   final int pageIndex;
   final pageController;
   final DataEntryState dataEntryState;
 
 
-  NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryState});
+  const NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryState});
 
   @override
   State<NRGStopwatch> createState() => _NRGStopwatchState();
@@ -89,7 +89,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
       height: height,
       width: width,
       decoration: BoxDecoration(
-          color: Colors.blueGrey,
+          color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Row(
         children: [
@@ -97,12 +97,13 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
             margin: EdgeInsets.only(left: height * 0.1),
             height: height * 0.8,
             width: width * 0.6,
-            decoration: BoxDecoration(color: Colors.white),
+            decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Center(
               child: Text(
                 "${stopwatchDisplay.inMinutes} : ${(stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0")} : ${((stopwatchDisplay.inMilliseconds / 100) % 10).toInt()}",
                 textAlign: TextAlign.center,
                 textScaler: TextScaler.linear(height * 3 /100), //For development, we can change the height without having to change this too.
+                
               ),
             ),
           ),
@@ -119,6 +120,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
               icon: Icon(
                 IconData(0xe514, fontFamily: 'MaterialIcons'),
                 size: 45,
+                color: Constants.pastelGray,
               ),
             ),
           ),
@@ -135,6 +137,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
               icon: Icon(
                 IconData(0xf2af, fontFamily: 'MaterialIcons'),
                 size: 45,
+                color: Constants.pastelGray,
               ),
             ),
           ),
