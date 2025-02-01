@@ -49,7 +49,7 @@ class _CommentBoxState extends State<CommentBox> {
                   textAlign: TextAlign.left,
                   style: comfortaaBold(14,
                       customFontWeight: FontWeight.w500,
-                      color: Constants.pastelYellow)),
+                      color: Constants.pastelWhite)),
             ],
           ),
           Text(_text,
