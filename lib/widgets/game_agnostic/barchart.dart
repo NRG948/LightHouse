@@ -35,8 +35,8 @@ class NRGBarChart extends StatefulWidget {
         data = data ?? SplayTreeMap(),
         multiData = multiData ?? SplayTreeMap(),
         multiColor = multiColor ?? [],
-        dataLabel = dataLabel ?? "",
-        dataLabels = dataLabels ?? [];
+        dataLabel = dataLabel ?? "AVERAGE",
+        dataLabels = dataLabels ?? ["AVERAGE"];
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();
@@ -120,6 +120,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
       List<Widget> texts = [];
       List<double> averages = getMultiAverageData();
 
+      texts.add(_getSingleText(averages.sum, Colors.black, "TOTAL AVERAGE"));
+
       for (int i = 0; i < averages.length; i++) {
         texts.add(_getSingleText(
             averages[i],
@@ -136,12 +138,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
   }
 
   Widget _getSingleText(double average, Color color, String label) =>
-      Text("AVERAGE${label != "" ? " $label" : ""}: ${roundAtPlace(average, 2)}",
-          style: TextStyle(
-              fontFamily: "Comfortaa",
-              fontWeight: FontWeight.w900,
-              color: color,
-              fontSize: _width / 20));
+      Text("$label: ${roundAtPlace(average, 2)}",
+          style: comfortaaBold(_width / 20, color: color, customFontWeight: FontWeight.w900));
 
   /// Returns the sum of an [Iterable].
   double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
@@ -163,7 +161,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
           Text(_title,
               style: TextStyle(
                   fontFamily: "Comfortaa",
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w900,
                   color: Colors.black,
                   fontSize: _width / 10)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
