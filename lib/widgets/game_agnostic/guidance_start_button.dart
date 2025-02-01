@@ -33,7 +33,12 @@ class _NRGGuidanceButtonState extends State<NRGGuidanceButton> {
         decoration: BoxDecoration(
               color: Constants.pastelWhite,
               borderRadius: BorderRadius.circular(Constants.borderRadius)),
-              child: Text("Start w/ Guided Navigation")
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                Text("GUIDED NAVIGATION",style: comfortaaBold(21,color: Constants.pastelReddishBrown),),
+                Icon(Icons.arrow_forward,color: Constants.pastelReddishBrown,size:33)
+              ],)
       ),
     );
   }
