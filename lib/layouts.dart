@@ -60,7 +60,7 @@ Map<String, dynamic> atlascout = {
             "coralPickupsStation",
             "coralPickupsGround",
           ],
-          "height": "20",
+          "height": "30",
           "boxNames": [
             ["Station", "Ground"]
           ]
@@ -74,7 +74,7 @@ Map<String, dynamic> atlascout = {
             "coralScoredL3",
             "coralScoredL4",
           ],
-          "height": "35",
+          "height": "43",
           "boxNames": [
             ["L1", "L2"],
             ["L3", "L4"]
@@ -91,7 +91,7 @@ Map<String, dynamic> atlascout = {
             "algaemissProcessor",
             "algaemissNet"
           ],
-          "height": "50",
+          "height": "65",
           "boxNames": [
             ["Remove L2", "Remove L3"],
             ["Score Processor", "Score Net"],
@@ -192,13 +192,12 @@ Map<String, dynamic> chronoscout = {
       "widgets": [
         {
           "title": "big boy auto widget",
-          "type": "placeholder",
-          "jsonKey": "idkYet",
+          "type": "rsAutoTimed",
+          "jsonKey": "autoEventList",
         },
         {
           "title": "Timer",
           "type": "stopwatch",
-          "jsonKey": "shouldThisBeSeparate"
         }
       ]
     },
@@ -208,13 +207,12 @@ Map<String, dynamic> chronoscout = {
       "widgets": [
         {
           "title": "big boy teleop widget",
-          "type": "placeholder",
-          "jsonKey": "idkYet",
+          "type": "rsTeleopTimed",
+          "jsonKey": "teleopEventList",
         },
         {
           "title": "Timer",
           "type": "stopwatch",
-          "jsonKey": "shouldThisBeSeparate"
         }
       ]
     },
@@ -397,7 +395,7 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Preferred Human Player Station",
           "type": "dropdown",
-          "options": "Processer,Processer Coral Station,Barge Coral Station",
+          "options": "Processor,Processor Coral Station,Barge Coral Station",
           "jsonKey": "humanPlayerPreference"
         },
         {

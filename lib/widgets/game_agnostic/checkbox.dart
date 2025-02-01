@@ -39,14 +39,20 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
               ValueListenableBuilder(
                   valueListenable: checkboxNotifier,
                   builder: (context, isChecked, child) {
-                    return Checkbox(
-                        value: isChecked,
-                        onChanged: (bool? newValue) {
-                          checkboxNotifier.value = newValue ?? false;
-                        });
+                    return SizedBox(
+                      width: 0.35 * _width,
+                      height: 0.35 * _height,
+                      child: Checkbox(
+                          value: isChecked,
+                          visualDensity: VisualDensity.compact,
+                          onChanged: (bool? newValue) {
+                            checkboxNotifier.value = newValue ?? false;
+                          }),
+                    );
                   }),
               SizedBox(
                   width: _width * 0.65,
+                  height: 0.35 * _height,
                   child: AutoSizeText(
                     _title,
                     style: comfortaaBold(20, color: Colors.black),

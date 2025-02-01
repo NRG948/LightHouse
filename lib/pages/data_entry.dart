@@ -8,8 +8,8 @@ import "package:flutter/rendering.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
-import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 
+import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
@@ -27,11 +27,14 @@ import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
 
+import "package:lighthouse/widgets/reefscape/auto_timed.dart";
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
+import "package:lighthouse/widgets/reefscape/teleop_timed.dart";
 
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
+  static final Map<int, Duration> stopwatchMap = {};
   static late String activeConfig;
   @override
   State<DataEntry> createState() => DataEntryState();
@@ -44,7 +47,7 @@ class DataEntryState extends State<DataEntry> {
   late double resizeScaleFactorWidth;
   late double resizeScaleFactorHeight;
 
-  final guidanceStopwatch = Stopwatch();
+  static final guidanceStopwatch = Stopwatch();
   GuidanceState guidanceState = GuidanceState.setup;
   late final guidanceCheckTimer =
       Timer.periodic(Duration(milliseconds: 500), checkGuidanceState);
@@ -75,6 +78,7 @@ class DataEntryState extends State<DataEntry> {
 
     //These are such that we can resize widgets based on screen size, but we need a reference point,
     //so we are using a 90 / 200 dp phone as the reference and scaling based upon that.
+    // This is 80 by 200 now because idk?? ig it works better
     resizeScaleFactorWidth = deviceWidth / 80;
     resizeScaleFactorHeight = deviceHeight / 200;
   }
@@ -205,6 +209,10 @@ class DataEntryState extends State<DataEntry> {
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "rsAutoUntimed":
           return RSAutoUntimed(width: width);
+        case "rsAutoTimed":
+          return RSAutoTimed(width: width);
+        case "rsTeleopTimed":
+          return RSTeleopTimed(width: width);
         case "rsAutoUntimedPit":
           return RSAutoUntimed(width: width, pit:true);
         case "barchart":
@@ -535,3 +543,6 @@ void showReturnDialog(BuildContext context) {
 }
 
 enum GuidanceState { setup, auto, teleop, endgame }
+extension DurationExtensions on Duration {
+  double get deciseconds => double.parse((inMilliseconds / 1000).toStringAsFixed(1));
+}

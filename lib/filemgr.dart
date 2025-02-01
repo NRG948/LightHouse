@@ -98,7 +98,7 @@ Future<int> saveExport() async {
     case "Pit":
     case "Human Player":
       exportName =
-          "${DataEntry.exportData["teamNumber"]}_${DataEntry.activeConfig.split(" ")[0]}_${random.nextInt(9999)}}";
+          "${DataEntry.exportData["teamNumber"]}_${DataEntry.activeConfig.split(" ")[0]}_${random.nextInt(9999)}";
     default:
       exportName = "${random.nextInt(9999)}";
   }

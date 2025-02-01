@@ -11,7 +11,6 @@ class NRGStopwatch extends StatefulWidget {
   final pageController;
   final DataEntryState dataEntryState;
 
-  final stopwatch = Stopwatch();
 
   NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryState});
 
@@ -19,8 +18,9 @@ class NRGStopwatch extends StatefulWidget {
   State<NRGStopwatch> createState() => _NRGStopwatchState();
 }
 
-class _NRGStopwatchState extends State<NRGStopwatch> {
-  Stopwatch get _stopwatch => widget.stopwatch;
+class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClientMixin{
+  
+  final _stopwatch = Stopwatch();
   double get _height => widget.height;
   double get _width => widget.width;
 
@@ -31,14 +31,18 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
   //(I know on vscode you can just press the green circle-arrow to do this. )
   late final double height;
   late final double width;
-
+  
   //We need this so that we can call setState and have the stopwatch text change.
   late Duration stopwatchResult;
   late Duration stopwatchDisplay;
   late Timer? _timer;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
+    print("RUNNING!");
     super.initState();
     _stopwatch.reset();
     height = _height;
@@ -47,7 +51,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
     stopwatchResult = _stopwatch.elapsed;
     //value that is displayed. 
     stopwatchDisplay = widget.dataEntryState.stopwatchInitialValue;
-
+    
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
         stopwatchResult = _stopwatch.elapsed;
@@ -56,6 +60,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> {
           stopwatchDisplay = Duration(seconds: 0);
           _stopwatch.stop();
         }
+        DataEntry.stopwatchMap[widget.pageIndex] = _stopwatch.elapsed;
       });
     });
 
