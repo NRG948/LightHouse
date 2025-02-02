@@ -72,6 +72,25 @@ class _DataViewerHomeState extends State<DataViewerHome> {
         });
   }
 
+  Widget getFunctionalMatches() {
+    int disabledMatches = 0;
+    int totalMatches = 0;
+
+    for (Map<String, dynamic> matchData in atlasData) {
+      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
+        if (matchData["robotDisabled"] == "true") {
+          disabledMatches++;
+        }
+        totalMatches++;
+      }
+    }
+
+    return Text(
+        "Functional Matches: ${totalMatches - disabledMatches}/$totalMatches",
+        textAlign: TextAlign.left,
+        style: comfortaaBold(10, color: Colors.black));
+  }
+
   Widget getPreferredStrategy() {
     Map<String, int> frequencyMap = {};
 
@@ -82,11 +101,10 @@ class _DataViewerHomeState extends State<DataViewerHome> {
       }
     }
 
-    return Center(
-      child: Text(
-          "Preferred Strategy: ${frequencyMap.isNotEmpty ? frequencyMap.entries.reduce((a, b) => a.value > b.value ? a : b).key : "None"}",
-          style: comfortaaBold(12, color: Colors.black)),
-    );
+    return Text(
+        "Preferred Strategy: ${frequencyMap.isNotEmpty ? frequencyMap.entries.reduce((a, b) => a.value > b.value ? a : b).key : "None"}",
+        textAlign: TextAlign.left,
+        style: comfortaaBold(10, color: Colors.black));
   }
 
   Widget getDisableReasonCommentBox() {
@@ -105,9 +123,9 @@ class _DataViewerHomeState extends State<DataViewerHome> {
     }
 
     return ScrollableBox(
-        width: 290,
+        width: 240,
         height: 110,
-        title: "Disable Reasons",
+        title: "Disable Reason",
         comments: comments,
         sort: Sort.LENGTH_MAX);
   }
@@ -126,7 +144,7 @@ class _DataViewerHomeState extends State<DataViewerHome> {
 
     return ScrollableBox(
         width: 400,
-        height: 180,
+        height: 150,
         title: "Comments",
         comments: comments,
         sort: Sort.LENGTH_MAX);
@@ -347,16 +365,22 @@ class _DataViewerHomeState extends State<DataViewerHome> {
                         color: Constants.pastelWhite,
                         borderRadius: BorderRadius.all(
                             Radius.circular(Constants.borderRadius))),
-                    child: getClimbStartTimeBarChart())
-              ]),
-              Container(
-                  width: 400,
-                  height: 30,
+                    child: getClimbStartTimeBarChart()),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  width: 190,
+                  height: 160,
                   decoration: BoxDecoration(
                       color: Constants.pastelWhite,
                       borderRadius: BorderRadius.all(
                           Radius.circular(Constants.borderRadius))),
-                  child: getPreferredStrategy()),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: 10,
+                    children: [getFunctionalMatches(), getPreferredStrategy()],
+                  ),
+                )
+              ]),
               Container(
                 decoration: BoxDecoration(
                     color: Constants.pastelWhite,

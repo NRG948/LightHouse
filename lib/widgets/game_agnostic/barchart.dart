@@ -128,9 +128,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
             _multiColor != null
                 ? _multiColor![i % _multiColor!.length]
                 : Colors.black,
-            _dataLabels.isNotEmpty
-                ? _dataLabels[i % _dataLabels.length]
-                : ""));
+            _dataLabels.isNotEmpty ? _dataLabels[i % _dataLabels.length] : ""));
       }
 
       return Column(children: texts.reversed.toList());
@@ -139,7 +137,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
 
   Widget _getSingleText(double average, Color color, String label) =>
       Text("$label: ${roundAtPlace(average, 2)}",
-          style: comfortaaBold(_width / 20, color: color, customFontWeight: FontWeight.w900));
+          style: comfortaaBold(_width / 20,
+              color: color, customFontWeight: FontWeight.w900));
 
   /// Returns the sum of an [Iterable].
   double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
@@ -158,12 +157,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
       child: Column(
         children: [
           // Title Text.
-          Text(_title,
-              style: TextStyle(
-                  fontFamily: "Comfortaa",
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black,
-                  fontSize: _width / 10)),
+          Text(_title, style: comfortaaBold(_width / 10, color: Colors.black)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           AspectRatio(
               aspectRatio: 2,
@@ -185,7 +179,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: _width / 25)));
+                                      fontSize: _width / 20)));
                         },
                       )),
                       bottomTitles: AxisTitles(
@@ -201,7 +195,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                       color: !_removedData.contains(value)
                                           ? Colors.black
                                           : Colors.grey,
-                                      fontSize: _width / 25)));
+                                      fontSize: _width / 20)));
                         },
                       )),
                     ),

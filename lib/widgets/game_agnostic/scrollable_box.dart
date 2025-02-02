@@ -29,7 +29,8 @@ class _ScrollableBoxState extends State<ScrollableBox> {
   String get _title => widget.title;
   List<List<String>> get _comments => widget.comments;
   Sort get _sort => widget.sort;
-  int Function(List<String>, List<String>)  sortingAlgorithm = (x, y) => int.parse(y[2]) - int.parse(x[2]);
+  int Function(List<String>, List<String>) sortingAlgorithm =
+      (x, y) => int.parse(y[2]) - int.parse(x[2]);
 
   void setSortingAlgorithm() {
     switch (_sort) {
@@ -67,11 +68,10 @@ class _ScrollableBoxState extends State<ScrollableBox> {
             color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
-          spacing: 10,
+          spacing: 8,
           children: [
-            Text(_title,
-                style: comfortaaBold(24,
-                    customFontWeight: FontWeight.w900, color: Colors.black)),
+            Text("$_title (${_comments.length})",
+                style: comfortaaBold(20, color: Colors.black)),
             Expanded(
               child: ListView.separated(
                   itemCount: _comments.length,
@@ -79,7 +79,9 @@ class _ScrollableBoxState extends State<ScrollableBox> {
                       Divider(height: 12, color: Constants.pastelWhite),
                   itemBuilder: (BuildContext context, int index) {
                     return CommentBox(
-                        name: _comments[index][0], text: _comments[index][1], time: _comments[index][2]);
+                        name: _comments[index][0],
+                        text: _comments[index][1],
+                        time: _comments[index][2]);
                   }),
             ),
           ],

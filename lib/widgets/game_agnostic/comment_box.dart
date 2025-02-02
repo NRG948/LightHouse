@@ -37,21 +37,11 @@ class _CommentBoxState extends State<CommentBox> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            spacing: 10,
-            children: [
-              Text(_name,
-                  textAlign: TextAlign.left,
-                  style: comfortaaBold(20,
-                      customFontWeight: FontWeight.w900,
-                      color: Constants.pastelWhite)),
-              Text(_time,
-                  textAlign: TextAlign.left,
-                  style: comfortaaBold(14,
-                      customFontWeight: FontWeight.w500,
-                      color: Constants.pastelWhite)),
-            ],
-          ),
+          Text("$_name  $_time",
+              textAlign: TextAlign.left,
+              style: comfortaaBold(18,
+                  customFontWeight: FontWeight.w900,
+                  color: Constants.pastelWhite)),
           Text(_text,
               textAlign: TextAlign.left,
               style:
