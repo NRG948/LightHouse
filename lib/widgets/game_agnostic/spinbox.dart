@@ -1,3 +1,4 @@
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
@@ -33,11 +34,11 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Colors.blueGrey,
+            color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           children: [
-            Text(_title, style: comfortaaBold(30)),
+            AutoSizeText(_title, style: comfortaaBold(30,color: Constants.pastelReddishBrown)),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -49,9 +50,9 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
                       icon: Icon(
                         Icons.keyboard_arrow_down,
                       )),
-                  Text(
+                  AutoSizeText(
                     "$_counter",
-                    style: comfortaaBold(30),
+                    style: comfortaaBold(30,color: Constants.pastelReddishBrown),
                   ),
                   IconButton(
                       onPressed: () {

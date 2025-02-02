@@ -12,10 +12,11 @@ import "package:lighthouse/layouts.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/data_quality.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/match_info.dart";
-import "package:lighthouse/widgets/game_agnostic/data_quality.dart";
+import "package:lighthouse/widgets/game_agnostic/match_info_hp.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
@@ -231,6 +232,8 @@ class DataEntryState extends State<DataEntry> {
               multiData: multiChartData);
         case "matchInfo":
           return MatchInfo(width: width);
+        case "matchInfoHP":
+          return MatchInfoHumanPlayer(width: width,);
         case "dataQuality": 
           return NRGDataQuality(
             title: title,

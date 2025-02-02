@@ -114,12 +114,6 @@ class _StarRatingState extends State<StarRating> {
                 : starValue; // Half or full star
             _updateRating(newRating);
           },
-          onHorizontalDragUpdate: (details) {
-            // Handle drag gestures for smoother interaction
-            double dragRating = (details.localPosition.dx / widget.starSize)
-                .clamp(0, 5);
-            _updateRating((dragRating * 2).round() / 2.0); // Round to nearest 0.5
-          },
           child: Icon(
             icon,
             color: icon == Icons.star_border

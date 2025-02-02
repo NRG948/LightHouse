@@ -393,7 +393,7 @@ Map<String, dynamic> pitscout = {
           "jsonKey": "driveExperience"
         },
         {
-          "title": "Preferred Human Player Station",
+          "title": "Preferred HP Station",
           "type": "dropdown",
           "options": "Processor,Processor Coral Station,Barge Coral Station",
           "jsonKey": "humanPlayerPreference"
@@ -442,52 +442,14 @@ Map<String, dynamic> hpscout = {
       "icon": CustomIcons.wrench,
       "widgets": [
         {"title": "Scouter Name", "type": "textbox", "jsonKey": "scouterName"},
-        {
-          "type": "row",
-          "children": [
-            {
-              "title": "Red Team Number",
-              "type": "numberbox",
-              "jsonKey": "redHPTeam",
-              "width": "42"
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Blue Team Number",
-              "type": "numberbox",
-              "jsonKey": "blueHPTeam",
-              "width": "42"
-            }
-          ]
-        },
-        {
-              "title": "Match Type",
-              "type": "dropdown",
-              "options": "Qualifications,Playoffs,Finals",
-              "jsonKey": "matchType",
-            
-            },
-             {
-              "title": "Match Number",
-              "type": "numberbox",
-              "jsonKey": "matchNumber",
-          
-            },
-            {
-              "title": "Replay",
-              "type": "checkbox",
-              "jsonKey": "replay",
-
-            }
+        {"type": "matchInfoHP"}
       ]
     },
     {
       "title": "Scoring",
       "icon": CustomIcons.gamepad,
       "widgets": [
+       // TODO: Add HP multi spinbox
         {
           "type": "row",
           "height": "25",
@@ -496,7 +458,7 @@ Map<String, dynamic> hpscout = {
               "title": "Red Score",
               "type": "spinbox",
               "jsonKey": "redScore",
-              "width": "42",
+              "width": "34",
             },
             {
               "type": "spacer",
@@ -506,7 +468,7 @@ Map<String, dynamic> hpscout = {
               "title": "Blue Score",
               "type": "spinbox",
               "jsonKey": "blueScore",
-              "width": "42",
+              "width": "34",
             }
           ]
         },
@@ -518,7 +480,7 @@ Map<String, dynamic> hpscout = {
               "title": "Red Miss",
               "type": "spinbox",
               "jsonKey": "redMiss",
-              "width": "42",
+              "width": "34",
             },
             {
               "type": "spacer",
@@ -528,7 +490,7 @@ Map<String, dynamic> hpscout = {
               "title": "Blue Miss",
               "type": "spinbox",
               "jsonKey": "blueMiss",
-              "width": "42",
+              "width": "34",
             }
           ]
         },
@@ -683,7 +645,6 @@ Map<String, Map> layoutMap = {
   "Chronos": chronoscout,
   "Pit": pitscout,
   "Human Player": hpscout,
-  "Data Viewer": dataViewer
 };
 
 Map<String, IconData> iconMap = {
@@ -704,10 +665,4 @@ Map<String, Color> colorMap = {
   "Sync to Server": Constants.pastelBlueAgain
 };
 
-Map<String, double> fontMap = {
-  "Atlas": 25.0,
-  "Chronos": 25.0,
-  "Pit": 25.0,
-  "Human Player": 25.0,
-  "Data Viewer": 25.0,
-};
+
