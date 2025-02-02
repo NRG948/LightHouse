@@ -35,6 +35,14 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
   double get _scaleFactor => _width / 500;
 
   @override
+  void initState() {
+    super.initState();
+    for (String i in _keys) {
+      DataEntry.exportData[i] = 0;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     debugPrint(_width.toString());
@@ -180,7 +188,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
 
   /// Exports [_counter] to the json.
   void updateState() {
-    DataEntry.exportData[_key] = _counter.toString();
+    DataEntry.exportData[_key] = _counter;
   }
 }
 

@@ -26,6 +26,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
   double get _width => widget.width;
   late int _counter;
   String _value = "";
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,6 +71,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
   void initState() {
     super.initState();
     _counter = 0;
+    DataEntry.exportData[_key] = 0;
   }
 
   void decrement() {
@@ -89,7 +91,6 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
   }
 
   void updateState() {
-    _value = _counter.toString();
-    DataEntry.exportData[_key] = _value;
+    DataEntry.exportData[_key] = _counter;
   }
 }

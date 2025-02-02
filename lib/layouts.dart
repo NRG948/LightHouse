@@ -197,7 +197,7 @@ Map<String, dynamic> chronoscout = {
         },
         {
           "title": "Timer",
-          "type": "stopwatch",
+          "type": "stopwatch-horizontal",
         }
       ]
     },
@@ -212,7 +212,7 @@ Map<String, dynamic> chronoscout = {
         },
         {
           "title": "Timer",
-          "type": "stopwatch",
+          "type": "stopwatch-horizontal",
         }
       ]
     },

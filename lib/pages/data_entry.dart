@@ -108,13 +108,13 @@ class DataEntryState extends State<DataEntry> {
       if (jsonKey is List<String>) {
         for (String key in jsonKey) {
           if (!(DataEntry.exportData.containsKey(key))) {
-            DataEntry.exportData[key] = "0";
+            //DataEntry.exportData[key] = "0";
           }
         }
       } else if (jsonKey != "" &&
           jsonKey != null &&
           !(DataEntry.exportData.containsKey(jsonKey))) {
-        DataEntry.exportData[jsonKey] = "0";
+        //DataEntry.exportData[jsonKey] = "0";
       }
 
       double height;
@@ -160,7 +160,12 @@ class DataEntryState extends State<DataEntry> {
             dataEntryState: this,
           );
         case "stopwatch-horizontal":
-          return NRGStopwatchHorizontal();
+          return NRGStopwatch(
+            pageController: controller,
+            pageIndex: currentPage,
+            dataEntryState: this,
+            horizontal: true,
+          );
         case "multispinbox":
           return NRGMultiSpinbox(
               title: title,

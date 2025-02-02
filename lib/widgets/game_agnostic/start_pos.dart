@@ -13,6 +13,12 @@ class NRGStartPos extends StatefulWidget {
 }
 
 class _NRGStartPosState extends State<NRGStartPos> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -29,6 +29,8 @@ class NRGMultiThreeStageCheckbox extends StatefulWidget {
   List<String> get _keys => widget.jsonKey;
   List<List<String>> get _boxNames => widget.boxNames;
 
+
+
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/constants.dart";
 
 
 class SettingsPage extends StatelessWidget {

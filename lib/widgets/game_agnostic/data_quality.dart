@@ -23,6 +23,11 @@ class NRGDataQuality extends StatefulWidget {
 
 class _NRGDataQualityState extends State<NRGDataQuality> {
 
+  @override void initState() {
+    super.initState();
+    DataEntry.exportData[widget.jsonKey] = 0.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +44,7 @@ class _NRGDataQualityState extends State<NRGDataQuality> {
             child: AutoSizeText("DATA QUALITY",style: comfortaaBold(20),textAlign: TextAlign.center,),
           ),
           StarRating(onRatingChanged: (value) {
-            DataEntry.exportData["dataQuality"] = value.toString();
+            DataEntry.exportData["dataQuality"] = value;
           },starSize: 0.15 * widget.width,)
         ],
       ),

@@ -31,6 +31,13 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
   double get _width => widget.width;
 
   @override
+  void initState() {
+    super.initState();
+    DataEntry.exportData[widget.jsonKey] = false;
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     Widget rowOrColumn = widget.vertical
         ? Column(
@@ -90,7 +97,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
         onTap: () {
           checkboxNotifier.value = !checkboxNotifier.value;
           DataEntry.exportData[_key] =
-              checkboxNotifier.value ? "true" : "false";
+              checkboxNotifier.value;
         },
         child: Container(
             height: _height,
