@@ -23,9 +23,12 @@ class _MatchInfoState extends State<MatchInfo> {
     eventKey = configData["eventKey"]!;
     teamNumberController.addListener(() {
       setState(() {
-        DataEntry.exportData["teamNumber"] = teamNumberController.text;
+        DataEntry.exportData["teamNumber"] = teamNumberController.text as int;
       });
     });
+    DataEntry.exportData["matchNumber"] = 0;
+    DataEntry.exportData["teamNumber"] = 0;
+    DataEntry.exportData["replay"] = false;
     DataEntry.exportData["matchType"] = "Qualifications";
     DataEntry.exportData["driverStation"] = "Red 1";
   }
@@ -95,7 +98,7 @@ class _MatchInfoState extends State<MatchInfo> {
                   scale: 1.5,
                   child: Checkbox(value: replay, onChanged: (v) {setState(() {
                     replay = v ?? false;
-                    DataEntry.exportData["replay"] = replay ? "true" : "false";});
+                    DataEntry.exportData["replay"] = replay;});
                   },
                   activeColor: Constants.pastelYellow,),
                 )
@@ -134,7 +137,7 @@ class _MatchInfoState extends State<MatchInfo> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (value) {
-                      DataEntry.exportData["matchNumber"] = value.toString();
+                      DataEntry.exportData["matchNumber"] = value as int;
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(

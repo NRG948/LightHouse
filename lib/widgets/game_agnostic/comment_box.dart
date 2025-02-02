@@ -21,6 +21,11 @@ class _CommentBoxState extends State<CommentBox> {
   String get _time => widget.time;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

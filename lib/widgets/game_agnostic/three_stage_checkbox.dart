@@ -38,6 +38,12 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
     }
   }
 
+ @override
+  void initState() {
+    super.initState();
+    DataEntry.exportData[_key] = "unable";
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);

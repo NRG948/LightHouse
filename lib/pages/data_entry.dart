@@ -22,7 +22,6 @@ import "package:lighthouse/widgets/game_agnostic/placeholder.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/start_pos.dart";
-import "package:lighthouse/widgets/game_agnostic/stopwatch-horizontal.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
@@ -108,13 +107,13 @@ class DataEntryState extends State<DataEntry> {
       if (jsonKey is List<String>) {
         for (String key in jsonKey) {
           if (!(DataEntry.exportData.containsKey(key))) {
-            DataEntry.exportData[key] = "0";
+            //DataEntry.exportData[key] = "0";
           }
         }
       } else if (jsonKey != "" &&
           jsonKey != null &&
           !(DataEntry.exportData.containsKey(jsonKey))) {
-        DataEntry.exportData[jsonKey] = "0";
+        //DataEntry.exportData[jsonKey] = "0";
       }
 
       double height;
@@ -160,7 +159,12 @@ class DataEntryState extends State<DataEntry> {
             dataEntryState: this,
           );
         case "stopwatch-horizontal":
-          return NRGStopwatchHorizontal();
+          return NRGStopwatch(
+            pageController: controller,
+            pageIndex: currentPage,
+            dataEntryState: this,
+            horizontal: true,
+          );
         case "multispinbox":
           return NRGMultiSpinbox(
               title: title,

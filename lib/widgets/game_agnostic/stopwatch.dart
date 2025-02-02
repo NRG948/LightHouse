@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/data_entry.dart';
@@ -7,12 +8,13 @@ class NRGStopwatch extends StatefulWidget {
   final String title = "Stopwatch";
   final double height = 90;
   final double width = 360;
+  final bool horizontal;
   final int pageIndex;
   final pageController;
   final DataEntryState dataEntryState;
 
 
-  const NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryState});
+  const NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryState, this.horizontal = false});
 
   @override
   State<NRGStopwatch> createState() => _NRGStopwatchState();
@@ -93,56 +95,131 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Row(
         children: [
-          Container(
-            margin: EdgeInsets.only(left: height * 0.1),
-            height: height * 0.8,
-            width: width * 0.6,
-            decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-            child: Center(
-              child: Text(
-                "${stopwatchDisplay.inMinutes} : ${(stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0")} : ${((stopwatchDisplay.inMilliseconds / 100) % 10).toInt()}",
-                textAlign: TextAlign.center,
-                textScaler: TextScaler.linear(height * 3 /100), //For development, we can change the height without having to change this too.
-                
-              ),
-            ),
-          ),
+          HoriVert(height: height, width: width, stopwatchDisplay: stopwatchDisplay, widget: widget, horizontal: widget.horizontal),
           Container(
             margin: EdgeInsets.only(
                 left: width *
                     6 /
                     400), //For development, we can change the width without having to change this too.
-            child: IconButton(
-              onPressed: () {
-                _stopwatch.stop();
-                _stopwatch.reset();
-              },
-              icon: Icon(
-                IconData(0xe514, fontFamily: 'MaterialIcons'),
-                size: 45,
-                color: Constants.pastelGray,
+            child: Transform.rotate(
+              angle: widget.horizontal ? pi/2 : 0,
+              child: IconButton(
+                onPressed: () {
+                  _stopwatch.stop();
+                  _stopwatch.reset();
+                },
+                icon: Icon(
+                  IconData(0xe514, fontFamily: 'MaterialIcons'),
+                  size: 45,
+                  color: Constants.pastelGray,
+                ),
               ),
             ),
           ),
           Container(
             margin: EdgeInsets.only(left: 0),
-            child: IconButton(
-              onPressed: () {
-                if (_stopwatch.isRunning) {
-                  _stopwatch.stop();
-                  return;
-                }
-                _stopwatch.start();
-              },
-              icon: Icon(
-                IconData(0xf2af, fontFamily: 'MaterialIcons'),
-                size: 45,
-                color: Constants.pastelGray,
+            child: Transform.rotate(
+              angle: widget.horizontal ? pi/2 : 0,
+              child: IconButton(
+                onPressed: () {
+                  if (_stopwatch.isRunning) {
+                    _stopwatch.stop();
+                    return;
+                  }
+                  _stopwatch.start();
+                },
+                icon: Icon(
+                  IconData(0xf2af, fontFamily: 'MaterialIcons'),
+                  size: 45,
+                  color: Constants.pastelGray,
+                ),
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class HoriVert extends StatelessWidget {
+  const HoriVert({
+    super.key,
+    required this.height,
+    required this.width,
+    required this.stopwatchDisplay,
+    required this.widget,
+    this.horizontal = false
+  });
+
+  final double height;
+  final double width;
+  final Duration stopwatchDisplay;
+  final NRGStopwatch widget;
+  final bool horizontal;
+
+  @override
+  Widget build(BuildContext context) {
+    return horizontal ? Container(
+      margin: EdgeInsets.only(left: height * 0.1),
+      height: height * 0.8,
+      width: width * 0.6,
+      decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      child: HoriVertText(stopwatchDisplay: stopwatchDisplay, height: height, width: width, horizontal: horizontal,),
+    ) :Container(
+      margin: EdgeInsets.only(left: height * 0.1),
+      height: height * 0.8,
+      width: width * 0.6,
+      decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      child: Center(
+        child: HoriVertText(stopwatchDisplay: stopwatchDisplay, height: height, horizontal: horizontal,),
+      ),
+    )  ;
+  }
+}
+
+class HoriVertText extends StatelessWidget {
+  const HoriVertText({
+    super.key,
+    required this.stopwatchDisplay,
+    required this.height,
+    required this.horizontal,
+    this.width = 0
+  });
+
+  final Duration stopwatchDisplay;
+  final double height;
+  final bool horizontal;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return horizontal ? Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Transform.rotate(
+          angle: pi/2,
+          child: Text(((stopwatchDisplay.inMilliseconds / 100) % 10).toInt().toString(),style: comfortaaBold(20,color: Constants.markerDarkGray),)),
+          Transform.rotate(
+          angle: pi/2,
+          child: Text(".",style: comfortaaBold(20,color: Constants.markerDarkGray))),
+          Transform.rotate(
+          angle: pi/2,
+          child: Text((stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0"),style: comfortaaBold(20,color: Constants.markerDarkGray))),
+          Transform.rotate(
+          angle: pi/2,
+          child: Text(":",style: comfortaaBold(20,color: Constants.markerDarkGray))),
+          Transform.rotate(
+          angle: pi/2,
+          child: Text(stopwatchDisplay.inMinutes.toString(),style: comfortaaBold(20,color: Constants.markerDarkGray))),
+    
+      ],
+    )
+    : Text(
+      "${stopwatchDisplay.inMinutes} : ${(stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0")} . ${((stopwatchDisplay.inMilliseconds / 100) % 10).toInt()}",
+      textAlign: TextAlign.center,
+      textScaler: TextScaler.linear(height * 3 /100), //For development, we can change the height without having to change this too.
+      
     );
   }
 }

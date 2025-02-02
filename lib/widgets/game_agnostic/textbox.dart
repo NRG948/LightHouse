@@ -49,6 +49,7 @@ class _NRGTextboxState extends State<NRGTextbox> {
         DataEntry.exportData[_key] = _controller.text;
       });
     });
+    DataEntry.exportData[_key] = "";
   }
 
   // idk what this one does but gpt demands it
