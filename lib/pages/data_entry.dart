@@ -75,7 +75,6 @@ class DataEntryState extends State<DataEntry> {
 
     deviceWidth = MediaQuery.sizeOf(context).width;
     deviceHeight = MediaQuery.sizeOf(context).height;
-
     //These are such that we can resize widgets based on screen size, but we need a reference point,
     //so we are using a 90 / 200 dp phone as the reference and scaling based upon that.
     // This is 80 by 200 now because idk?? ig it works better
@@ -213,7 +212,7 @@ class DataEntryState extends State<DataEntry> {
           return NRGPlaceholder(
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "rsAutoUntimed":
-          return RSAutoUntimed(width: width);
+          return RSAutoUntimed(width: deviceHeight < 740 ? 325 : width);
         case "rsAutoTimed":
           return RSAutoTimed(width: width);
         case "rsTeleopTimed":

@@ -31,12 +31,15 @@ TextStyle comfortaaBold(double fontSize,
     {bool bold = true,
     Color color = Colors.white,
     FontWeight? customFontWeight,
-    bool italic = false}) {
+    bool italic = false,
+    double? spacing}) {
   return TextStyle(
       fontFamily: "Comfortaa",
       fontWeight:
           customFontWeight ?? (bold ? FontWeight.bold : FontWeight.normal),
       color: color,
       fontSize: fontSize,
-      fontStyle: italic ? FontStyle.italic : FontStyle.normal);
+      fontStyle: italic ? FontStyle.italic : FontStyle.normal,
+      letterSpacing: spacing
+      );
 }

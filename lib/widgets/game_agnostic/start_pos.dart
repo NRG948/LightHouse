@@ -17,6 +17,7 @@ class _NRGStartPosState extends State<NRGStartPos> {
   @override
   void initState() {
     super.initState();
+    DataEntry.exportData["startingPosition"] = "0";
   }
 
   @override

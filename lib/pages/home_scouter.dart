@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/layouts.dart';
+import 'package:lighthouse/splash_texts.dart';
 
 class ScouterHomePage extends StatelessWidget {
   const ScouterHomePage({super.key});
@@ -64,13 +65,13 @@ class ScouterHomePage extends StatelessWidget {
       appBar: AppBar(
         iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
-        title: const Text(
-          "LightHouse",
-          style: TextStyle(
-              fontFamily: "Comfortaa",
-              fontWeight: FontWeight.w900,
-              color: Colors.white),
-        ),
+        // title: const Text(
+        //   "LightHouse",
+        //   style: TextStyle(
+        //       fontFamily: "Comfortaa",
+        //       fontWeight: FontWeight.w900,
+        //       color: Colors.white),
+        // ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -99,8 +100,20 @@ class ScouterHomePage extends StatelessWidget {
                   image: AssetImage("assets/images/background-hires.png"),
                   fit: BoxFit.cover)),
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: getLaunchers())),
+            children: [
+              SizedBox(
+                width: 0.75 * screenWidth,
+                child: AutoSizeText("LightHouse",style: comfortaaBold(60,spacing: -6),maxLines: 1,textAlign: TextAlign.center,),
+              ),
+             SizedBox(
+              height: 0.05 * screenHeight,
+              width: 0.8 * screenWidth,
+              child: AutoSizeText(randomSplashText(),style: comfortaaBold(18,spacing: -1),maxLines: 2,textAlign: TextAlign.center,)),
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: getLaunchers()),
+            ],
+          )),
     );
   }
 }
