@@ -23,12 +23,12 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
     eventKey = configData["eventKey"]!;
     redTeamNumberController.addListener(() {
       setState(() {
-        DataEntry.exportData["redHPTeam"] = redTeamNumberController.text as int;
+        DataEntry.exportData["redHPTeam"] = int.tryParse(redTeamNumberController.text) ?? 0;
       });
     });
     blueTeamNumberController.addListener(() {
       setState(() {
-        DataEntry.exportData["blueHPTeam"] = blueTeamNumberController.text as int;
+        DataEntry.exportData["blueHPTeam"] = int.tryParse(blueTeamNumberController.text) ?? 0;
       });
     });
     DataEntry.exportData["matchNumber"] = 0;
@@ -36,7 +36,6 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
     DataEntry.exportData["blueHPTeam"] = 0;
     DataEntry.exportData["replay"] = false;
     DataEntry.exportData["matchType"] = "Qualifications";
-    DataEntry.exportData["driverStation"] = "Red 1";
   }
   
   @override
@@ -55,7 +54,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
    
     return Container(
       width: 400 * scaleFactor,
-      height: 275 * scaleFactor,
+      height: 225 * scaleFactor,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -135,17 +134,32 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
                   },dropdownColor: Constants.pastelYellow, ),
                 ),
               ),
-              Container(
-                width: 100 * scaleFactor,
-                height: 65 * scaleFactor,
-                decoration: BoxDecoration(color: Constants.pastelYellow,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                child: Center(
-                  child: DropdownButton(value:driverStation,  items: ["Red 1", "Red 2", "Red 3", "Blue 1", "Blue 2", "Blue 3"].map((v) {return DropdownMenuItem(value:v,child: Text(v,style: comfortaaBold(15 * scaleFactor,color: Constants.pastelReddishBrown),));}).toList(), onChanged: (value) {
-                      driverStation = value ?? "Red 1";
-                      DataEntry.exportData["driverStation"] = value;
-                  },dropdownColor: Constants.pastelYellow,),
-                ),
-              ),
+              Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+            SizedBox(width: 50 * scaleFactor,
+                height: 50 * scaleFactor,
+                child: Center(child: AutoSizeText("Replay",style: comfortaaBold(30 * scaleFactor,color: Constants.pastelReddishBrown),maxLines: 1,textAlign: TextAlign.start,)),),
+                Transform.scale(
+                  scale: 1.5,
+                  child: Checkbox(value: replay, onChanged: (v) {setState(() {
+                    replay = v ?? false;
+                    DataEntry.exportData["replay"] = replay;});
+                  },
+                  activeColor: Constants.pastelYellow,),
+                )
+            ],),
+              // Container(
+              //   width: 100 * scaleFactor,
+              //   height: 65 * scaleFactor,
+              //   decoration: BoxDecoration(color: Constants.pastelYellow,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+              //   child: Center(
+              //     child: DropdownButton(value:driverStation,  items: ["Red 1", "Red 2", "Red 3", "Blue 1", "Blue 2", "Blue 3"].map((v) {return DropdownMenuItem(value:v,child: Text(v,style: comfortaaBold(15 * scaleFactor,color: Constants.pastelReddishBrown),));}).toList(), onChanged: (value) {
+              //         driverStation = value ?? "Red 1";
+              //         DataEntry.exportData["driverStation"] = value;
+              //     },dropdownColor: Constants.pastelYellow,),
+              //   ),
+              // ),
               SizedBox(
                   height: 65 * scaleFactor,
                   width: 75 * scaleFactor,
@@ -153,7 +167,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (value) {
-                      DataEntry.exportData["matchNumber"] = value as int;
+                      DataEntry.exportData["matchNumber"] = int.tryParse(value) ?? 0;
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -170,21 +184,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
             ],
           ),
           SizedBox(height: 10,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-            SizedBox(width: 200 * scaleFactor,
-                height: 50 * scaleFactor,
-                child: Center(child: AutoSizeText("Replay",style: comfortaaBold(30 * scaleFactor,color: Constants.pastelReddishBrown),maxLines: 1,textAlign: TextAlign.start,)),),
-                Transform.scale(
-                  scale: 1.5,
-                  child: Checkbox(value: replay, onChanged: (v) {setState(() {
-                    replay = v ?? false;
-                    DataEntry.exportData["replay"] = replay;});
-                  },
-                  activeColor: Constants.pastelYellow,),
-                )
-          ],)
+          
         ],
       ),
     );

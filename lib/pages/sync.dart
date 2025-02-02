@@ -5,18 +5,18 @@ import 'package:lighthouse/filemgr.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-class Sync extends StatefulWidget {
-  const Sync({super.key});
+class SyncPage extends StatefulWidget {
+  const SyncPage({super.key});
 
   @override 
-  State<Sync> createState() => SyncState();
+  State<SyncPage> createState() => SyncPageState();
 }
 
-class SyncState extends State<Sync> {
+class SyncPageState extends State<SyncPage> {
   late http.Response response = http.Response("", 200);
 
   Future<void> fetchData(String requestedFileType) async {
-    response = await http.get(Uri.parse("http://169.254.9.38/81"));
+    response = await http.get(Uri.parse("http://169.254.9.48/81"));
     if (response.statusCode == 200) {
       //stuff
     } else {
@@ -87,3 +87,4 @@ class SyncState extends State<Sync> {
       )
     );}
 }
+

@@ -12,7 +12,7 @@ import "package:lighthouse/layouts.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
-import "package:lighthouse/widgets/game_agnostic/data_quality.dart";
+import "package:lighthouse/widgets/game_agnostic/rating.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
 import "package:lighthouse/widgets/game_agnostic/match_info.dart";
@@ -233,8 +233,8 @@ class DataEntryState extends State<DataEntry> {
           return MatchInfo(width: width);
         case "matchInfoHP":
           return MatchInfoHumanPlayer(width: width,);
-        case "dataQuality": 
-          return NRGDataQuality(
+        case "rating": 
+          return NRGRating(
             title: title,
             height: height,
             width: width,
@@ -371,15 +371,15 @@ class DataEntryState extends State<DataEntry> {
                 image: DecorationImage(
                     image: AssetImage("assets/images/background-hires.png"),
                     fit: BoxFit.fill)),
-            child: NotificationListener<UserScrollNotification>(
+            child: NotificationListener<OverscrollNotification>(
               onNotification: (notification) {
-                if (notification.direction == ScrollDirection.forward &&
-                    notification.metrics.pixels <= 0.0) {
+                if (
+                  notification.overscroll < -25
+                    ) {
                   showReturnDialog(context);
                 }
-                if (notification.direction == ScrollDirection.reverse &&
-                    notification.metrics.pixels >=
-                        notification.metrics.maxScrollExtent) {
+                if (notification.overscroll > 25
+                        ) {
                   saveJson(context);
                 }
                 return true;

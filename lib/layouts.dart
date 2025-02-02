@@ -144,7 +144,7 @@ Map<String, dynamic> atlascout = {
             }
           ]
         },
-        {"title": "Data Quality", "type": "dataQuality", "jsonKey": "dataQuality"},
+        {"title": "Data Quality", "type": "rating", "jsonKey": "rating"},
         {"title": "Comments", "type": "textbox", "jsonKey": "comments","height":"10","fontSize":15.0,"maxLines":3},
         {
           "title": "Team crossed over midline?",
@@ -228,8 +228,8 @@ Map<String, dynamic> chronoscout = {
         },
         {
           "title": "Data Quality",
-          "type": "dataQuality",
-          "jsonKey": "dataQuality"
+          "type": "rating",
+          "jsonKey": "rating"
         },
         {"title": "Comments", "type": "textbox", "jsonKey": "comments","maxLines":20,"fontSize":15.0,"height":"100"}
       ]
@@ -502,6 +502,11 @@ Map<String, dynamic> hpscout = {
           "boxNames": [
             ["Red Algae", "Blue Algae"]
           ]
+        },
+        {
+          "title": "Data Quality",
+          "type": "rating",
+          "jsonKey": "dataQuality"
         }
       ]
     }

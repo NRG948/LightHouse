@@ -23,14 +23,15 @@ class _MatchInfoState extends State<MatchInfo> {
     eventKey = configData["eventKey"]!;
     teamNumberController.addListener(() {
       setState(() {
-        DataEntry.exportData["teamNumber"] = teamNumberController.text as int;
+        DataEntry.exportData["teamNumber"] = int.tryParse(teamNumberController.text) ?? 0;
       });
     });
-    DataEntry.exportData["matchNumber"] = 0;
-    DataEntry.exportData["teamNumber"] = 0;
-    DataEntry.exportData["replay"] = false;
-    DataEntry.exportData["matchType"] = "Qualifications";
-    DataEntry.exportData["driverStation"] = "Red 1";
+    print("INIT STATE");
+    DataEntry.exportData["matchNumber"] ??= 0;
+    DataEntry.exportData["teamNumber"] ??= 0;
+    DataEntry.exportData["replay"] ??= false;
+    DataEntry.exportData["matchType"] ??= "Qualifications";
+    DataEntry.exportData["driverStation"] ??= "Red 1";
   }
   
   @override
@@ -137,7 +138,7 @@ class _MatchInfoState extends State<MatchInfo> {
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onChanged: (value) {
-                      DataEntry.exportData["matchNumber"] = value as int;
+                      DataEntry.exportData["matchNumber"] = int.tryParse(value) ?? 0;
                     },
                     decoration: InputDecoration(
                       border: OutlineInputBorder(

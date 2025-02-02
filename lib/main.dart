@@ -41,7 +41,7 @@ class MainWidget extends StatelessWidget {
         "/settings": (context) => SettingsPage(),
         "/saved_data": (context) => SavedData(),
         "/home-data-viewer": (context) => DataViewerHome(),
-        "/sync": (context) => Sync()
+        "/sync": (context) => SyncPage()
       },
     );
   }

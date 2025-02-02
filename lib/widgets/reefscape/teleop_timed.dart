@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+//TODO: Bugfixes
+// Timer starts at 2:00 instead of 2:15
+// Start climb should be a button and also stay on
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
@@ -135,7 +139,7 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
             child: Transform.rotate(
                 angle: pi / 2,
                 child: Text(
-                  "Score\nProcessor",
+                  "Processor",
                   style: comfortaaBold(12),
                   textAlign: TextAlign.center,
                 ))));

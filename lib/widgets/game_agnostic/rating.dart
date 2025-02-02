@@ -4,12 +4,12 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 
-class NRGDataQuality extends StatefulWidget {
+class NRGRating extends StatefulWidget {
   final String title;
   final String jsonKey;
   final double height;
   final double width;
-  const NRGDataQuality(
+  const NRGRating(
       {super.key,
       required this.title,
       required this.jsonKey,
@@ -18,10 +18,10 @@ class NRGDataQuality extends StatefulWidget {
       });
 
   @override
-  State<NRGDataQuality> createState() => _NRGDataQualityState(); 
+  State<NRGRating> createState() => _NRGRatingState(); 
 }
 
-class _NRGDataQualityState extends State<NRGDataQuality> {
+class _NRGRatingState extends State<NRGRating> {
 
   @override void initState() {
     super.initState();

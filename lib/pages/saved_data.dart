@@ -203,10 +203,10 @@ class _SavedFileState extends State<SavedFile> {
             SizedBox(
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                AutoSizeText(savedFileJson["teamNumber"],style: comfortaaBold(40, color:Colors.black),),
+                AutoSizeText(savedFileJson["teamNumber"].toString(),style: comfortaaBold(40, color:Colors.black),),
                 Column(children: [
                   AutoSizeText(savedFileJson["matchType"],style: comfortaaBold(16,color:Colors.black),),
-                  AutoSizeText(savedFileJson["matchNumber"],style: comfortaaBold(35,color:Colors.black),)
+                  AutoSizeText(savedFileJson["matchNumber"].toString(),style: comfortaaBold(35,color:Colors.black),)
                 ],)
               ],),
             ),
