@@ -43,3 +43,9 @@ TextStyle comfortaaBold(double fontSize,
       letterSpacing: spacing
       );
 }
+
+
+final Map<int,String> responseCodes = {
+  200:"OK",
+  404:"File Not Found"
+};

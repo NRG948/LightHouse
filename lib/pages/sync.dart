@@ -1,4 +1,5 @@
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
@@ -13,8 +14,10 @@ class SyncPage extends StatefulWidget {
 }
 
 class SyncPageState extends State<SyncPage> {
-  late http.Response response = http.Response("", 200);
-
+  late http.Response response;
+  static late double sizeScaleFactor;
+  late double screenWidth;
+  late double screenHeight;
   Future<void> fetchData(String requestedFileType) async {
     response = await http.get(Uri.parse("http://169.254.9.48/81"));
     if (response.statusCode == 200) {
@@ -23,12 +26,17 @@ class SyncPageState extends State<SyncPage> {
       debugPrint(response.statusCode.toString());
     }
   }
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    final sizeScaleFactor = screenWidth / 400;
+    screenWidth = MediaQuery.of(context).size.width;
+    screenHeight = MediaQuery.of(context).size.height;
+    sizeScaleFactor = screenWidth / 400;
     debugPrint("size scale factor: $sizeScaleFactor");
     return Scaffold(
       appBar: AppBar(
@@ -76,11 +84,11 @@ class SyncPageState extends State<SyncPage> {
                     color: Constants.pastelWhite,
                     borderRadius: BorderRadius.circular(Constants.borderRadius)
                   ),
-                child: Text(
-                  response.statusCode.toString(),
-                  style: comfortaaBold(40, color: Constants.pastelReddishBrown), 
-                ),
-              ) 
+               
+              ) ,
+              ServerConnectStatus(),
+              SizedBox(height: 10,),
+              UploadButton()
             ],
           ), 
         ),
@@ -88,3 +96,241 @@ class SyncPageState extends State<SyncPage> {
     );}
 }
 
+class UploadButton extends StatefulWidget {
+  const UploadButton({super.key});
+
+  @override
+  State<UploadButton> createState() => _UploadButtonState();
+}
+
+class _UploadButtonState extends State<UploadButton> {
+  late Future<List<dynamic>> uploadQueue;
+
+  @override
+  void initState() {
+    super.initState();
+    uploadQueue = getUploadQueue();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: uploadQueue,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {return Placeholder();}
+        return Container(
+          width: 350 * SyncPageState.sizeScaleFactor,
+          height: 100 * SyncPageState.sizeScaleFactor,
+          decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+          child: TextButton(onPressed: () {openUploadDialog(context,snapshot.data ?? []);}, child: Column(
+            children: [
+              Text("UPLOAD"),
+              Text("Upload ${(snapshot.data ?? []).length} items to server")
+            ],
+          )),
+        );
+      }
+    );
+  }
+
+  void openUploadDialog(BuildContext context, List<dynamic> queue) {showDialog(context: context, builder: (context) {
+    return UploadDialog(queue:queue);
+  });}
+
+}
+
+class UploadDialog extends StatefulWidget {
+  final List<dynamic> queue;
+  const UploadDialog({super.key, required this.queue});
+
+  @override
+  State<UploadDialog> createState() => _UploadDialogState();
+}
+
+class _UploadDialogState extends State<UploadDialog> {
+  late String currentFile;
+  Map<String,String> uploadedFiles = {};
+  @override
+  void initState() {
+    super.initState();
+    uploadFiles();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 350 * SyncPageState.sizeScaleFactor,
+        height: 400 * SyncPageState.sizeScaleFactor,
+        decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: ListView(
+        children: buildUploadedFiles(),),
+      ),
+    );
+  }
+
+  void uploadFiles() async {
+    if (widget.queue.isEmpty) {return;} 
+    currentFile = widget.queue[0];
+    for (String file in widget.queue) {
+      setState(() {
+        currentFile = file;
+      }); 
+      String code = await uploadFile(file);
+      setState(() {
+        uploadedFiles.addEntries([MapEntry(file, code)]);
+      });
+    }
+    currentFile = "";
+    if (mounted) {
+    // TODO: Add function to clear upload queue
+    Navigator.pop(context);
+    }
+  }
+
+  List<Widget> buildUploadedFiles() {
+    final List<Widget> list = uploadedFiles.keys.map((key) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 350 * SyncPageState.sizeScaleFactor,
+            color: uploadedFiles[key] == "OK" ? null : Colors.red,
+            child: AutoSizeText("${key.split("/").last} uploaded, status ${uploadedFiles[key]}",maxLines: 1,)),
+        ],
+      );
+    }).toList();
+    if (currentFile != "") {
+    list.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            AutoSizeText("Uploading ${currentFile.split("/").last}"),
+            SizedBox(
+              height: 20 * SyncPageState.sizeScaleFactor,
+              width: 20 * SyncPageState.sizeScaleFactor,
+              child: CircularProgressIndicator(),
+            ) 
+           
+          ],
+        ),
+     );
+    }
+    return list;
+  }
+
+  Future<String> uploadFile(String fileName) async {
+    await Future.delayed(Duration(milliseconds: 200));
+    String fileContent = await loadFileForUpload(fileName);
+    if (fileContent == "") {
+      return Future.value("File Missing");
+    }
+    late String api;
+    if (fileName.contains("Atlas")) {api = "atlas";}
+    else if (fileName.contains("Chronos")) {api = "chronos";}
+    else if (fileName.contains("Pit")) {api = "pit";}
+    else if (fileName.contains("Human Player")) {api = "hp";}
+    else {api = "none";}
+    final response = await http.post((Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
+    headers: {
+      "Content-Type":"application/json"
+    },
+    body: fileContent
+    );
+    return Future.value(responseCodes[response.statusCode] ?? response.statusCode.toString());
+  }
+  
+}
+
+class ServerConnectStatus extends StatefulWidget {
+  const ServerConnectStatus({super.key});
+
+  @override
+  State<ServerConnectStatus> createState() => _ServerConnectStatusState();
+}
+
+class _ServerConnectStatusState extends State<ServerConnectStatus> {
+  final controller = TextEditingController();
+  late Future<String> responseCode;
+  @override
+  void initState() {
+    super.initState();
+    controller.text = configData["serverIP"] ?? "";
+    responseCode = testConnection(controller.text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 350 * SyncPageState.sizeScaleFactor,
+      height: 150 * SyncPageState.sizeScaleFactor,
+      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: 250 * SyncPageState.sizeScaleFactor,
+                  height: 50 * SyncPageState.sizeScaleFactor,
+                  child: TextField(
+                    autocorrect: false,
+                    controller: controller,
+                    decoration: InputDecoration(
+                      fillColor: Constants.pastelRed,
+                      filled: true,
+                      labelText: "Server IP",
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 50 * SyncPageState.sizeScaleFactor,
+                  height: 50 * SyncPageState.sizeScaleFactor,
+                  decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                  child: TextButton(onPressed: () {setState(() {
+                    configData["serverIP"] = controller.text;
+                    saveConfig();
+                    responseCode = testConnection(controller.text);
+                  });
+                  }, child: Text("GO")))
+              ],
+             
+            ),
+            FutureBuilder(future: responseCode, builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Row(children: [
+                  Text("Attempting Connection...",style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
+                  CircularProgressIndicator()
+                ],);
+              } else { 
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                  Text("Recieved code ${snapshot.data}",style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
+                  Container(
+                    width: 30 * SyncPageState.sizeScaleFactor,
+                    height: 30 * SyncPageState.sizeScaleFactor,
+                    decoration: BoxDecoration(
+                      color: snapshot.data == "200" ? Colors.lightGreen : Colors.red,
+                      shape: BoxShape.circle
+                    ),
+                  )
+                ],);
+              }
+            })
+            
+          ],
+        ),
+      ),
+    );
+  }
+  Future<String> testConnection(String url) async {
+    final uri  = Uri.tryParse(url);
+    if (uri == null) {return "";}
+    final response = await http.get(uri);
+    return response.statusCode.toString();
+  }
+
+}

@@ -131,6 +131,15 @@ void addToUploadQueue(String file) async {
   }
 }
 
+Future<List<dynamic>> getUploadQueue() async{
+  final queueFile = File("$configFolder/uploadQueue.nrg");
+  if (!(await queueFile.exists())) {
+    return [];
+  }
+  final List<dynamic> queue = jsonDecode(queueFile.readAsStringSync());
+  return queue;
+}
+
 Future<int> saveConfig() async {
   final configFile = File("$configFolder/config.nrg");
   configFile.writeAsString(jsonEncode(configData));
@@ -152,9 +161,17 @@ List<String> getFiles() {
       .toList();
 }
 
-Map<String, dynamic> loadFile(String eventKey, String layout, String fileName) {
+Map<String, dynamic> loadFileIntoSavedData(String eventKey, String layout, String fileName,) {
   return jsonDecode(
       File("$configFolder/$eventKey/$layout/$fileName").readAsStringSync());
+}
+
+Future<String> loadFileForUpload(String fileName) async {
+  final file = File(fileName);
+  if (!(await file.exists())) {
+    return "";
+  }
+  return await file.readAsString();
 }
 
 int deleteFile(String eventKey, String layout, String fileName) {
@@ -168,5 +185,6 @@ int deleteFile(String eventKey, String layout, String fileName) {
 
 final Map<String, String> defaultConfig = {
   "eventKey": "2025nrg",
-  "scouterName": "barebonesNRG"
+  "scouterName": "Scouter",
+  "serverIP": "http://169.254.9.48:8080"
 };

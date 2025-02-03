@@ -193,7 +193,7 @@ class _SavedFileState extends State<SavedFile> {
   @override
   Widget build(BuildContext context) {
     print("${SavedData.sharedState.activeEvent}, ${SavedData.sharedState.activeLayout}, ${widget.fileName}");
-    savedFileJson = loadFile(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
+    savedFileJson = loadFileIntoSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
     if (["matchType","matchNumber","driverStation","scouterName","teamNumber"].every((value) => savedFileJson.containsKey(value))) {
       matchInfo = Padding(
         padding: const EdgeInsets.all(8.0),

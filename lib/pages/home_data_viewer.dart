@@ -45,7 +45,7 @@ class _DataViewerHomeState extends State<DataViewerHome> {
         getFilesInLayout(configData["eventKey"]!, layout);
     return dataFilePaths
         .map<Map<String, dynamic>>(
-            (String path) => loadFile(configData["eventKey"]!, layout, path))
+            (String path) => loadFileIntoSavedData(configData["eventKey"]!, layout, path))
         .toList();
   }
 
