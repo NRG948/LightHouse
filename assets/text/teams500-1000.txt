@@ -1,0 +1,3422 @@
+[
+    {
+        "city": "New London",
+        "country": "USA",
+        "key": "frc500",
+        "name": "U.S. Coast Guard Academy, USCG Foundation, USCG Alumni Association & Local Supporters & Grosso Regional Vocational Technical High School & Local Home School Community & New London Magnet High School & Westerly, RI  High School",
+        "nickname": "Team 500/Team USA",
+        "state_prov": "CT",
+        "team_number": 500
+    },
+    {
+        "city": "Manchester/Goffstown",
+        "country": "USA",
+        "key": "frc501",
+        "name": "AC Trust/NH Department of Education/Louis P. Cote Inc./Stu, Sam & Lexxie/L3/Harris/TCI/FIRST NH/Heritage Helps Foundation/Macy Industries/BAE Systems/Serge Marchesseault Memorial Fund&4-H&Goffstown High School&Manchester High School-West",
+        "nickname": "The PowerKnights",
+        "state_prov": "New Hampshire",
+        "team_number": 501
+    },
+    {
+        "city": "Rockville Centre",
+        "country": "USA",
+        "key": "frc502",
+        "name": "Team 502",
+        "nickname": "Robo Rockers",
+        "state_prov": "NY",
+        "team_number": 502
+    },
+    {
+        "city": "Novi",
+        "country": "USA",
+        "key": "frc503",
+        "name": "Magna Seating Systems (Primary Sponsor)/Panasonic/REV Robotics/The Nissan Foundation/Bosch/Novi Community School District/NGK Sparkplugs/Azoth/Michigan Department of Education&Novi High School",
+        "nickname": "25 Years of Frog Force",
+        "state_prov": "Michigan",
+        "team_number": 503
+    },
+    {
+        "city": "Little Silver",
+        "country": "USA",
+        "key": "frc504",
+        "name": "Team 504",
+        "nickname": "Team 504",
+        "state_prov": "NJ",
+        "team_number": 504
+    },
+    {
+        "city": "Yonkers",
+        "country": "USA",
+        "key": "frc505",
+        "name": "Con Edison/Westchester Community College & Saunders Trades and Technical High School",
+        "nickname": "Team 505",
+        "state_prov": "NY",
+        "team_number": 505
+    },
+    {
+        "city": "South Huntington",
+        "country": "USA",
+        "key": "frc506",
+        "name": "NASA/Wire to Water Inc./Power Aisle, Inc/Cadin Contracting Corp. & St. Anthony's High School",
+        "nickname": "BroBots",
+        "state_prov": "NY",
+        "team_number": 506
+    },
+    {
+        "city": "Greenville",
+        "country": "USA",
+        "key": "frc507",
+        "name": "Walmart/Electrolock/Computer Dynamics & Carolina Academy",
+        "nickname": "Solid Orange Academy of Robotics (SOAR)",
+        "state_prov": "SC",
+        "team_number": 507
+    },
+    {
+        "city": "Avon",
+        "country": "USA",
+        "key": "frc508",
+        "name": "Team 508",
+        "nickname": "Team 508",
+        "state_prov": "CT",
+        "team_number": 508
+    },
+    {
+        "city": "Bedford",
+        "country": "USA",
+        "key": "frc509",
+        "name": "Bedford School District/NASA/Masi Plumbing and Heating/BAE Systems&Bedford High School",
+        "nickname": "Red Storm",
+        "state_prov": "New Hampshire",
+        "team_number": 509
+    },
+    {
+        "city": "Highland Springs",
+        "country": "USA",
+        "key": "frc510",
+        "name": "Infineon Technologies, Richmond & Highland Springs Technical Center",
+        "nickname": "Hawaii Five-10",
+        "state_prov": "VA",
+        "team_number": 510
+    },
+    {
+        "city": "Granada Hills",
+        "country": "USA",
+        "key": "frc511",
+        "name": "Granada Hills Charter High",
+        "nickname": "The Robodox",
+        "state_prov": "California",
+        "team_number": 511
+    },
+    {
+        "city": "Hull",
+        "country": "USA",
+        "key": "frc512",
+        "name": "Team 512",
+        "nickname": "Team 512",
+        "state_prov": "MA",
+        "team_number": 512
+    },
+    {
+        "city": "Oklahoma City",
+        "country": "USA",
+        "key": "frc513",
+        "name": "OSU-OKC & OKC Public Schools",
+        "nickname": "Renegade Robotics",
+        "state_prov": "OK",
+        "team_number": 513
+    },
+    {
+        "city": "Miller Place",
+        "country": "USA",
+        "key": "frc514",
+        "name": "Wendy's Miller Place/VMWare Foundation/Harbor Freight Tools/Riverhead Building Supply/Millennium Limited Contracting, Inc./Davis Aircraft/Miller Place Robotics Booster Club/Miller Place family donors & supporters/Gravity Cheer/Sound Beach Plumbing and Heating&Miller Place High School",
+        "nickname": "Entropy",
+        "state_prov": "New York",
+        "team_number": 514
+    },
+    {
+        "city": "Detroit",
+        "country": "USA",
+        "key": "frc515",
+        "name": "Gallagher-Kaiser  Corporation/Prevention Network and Skillman Foundation/GM-MAAC & Osborn Educational Complex",
+        "nickname": "TechnoKnights",
+        "state_prov": "MI",
+        "team_number": 515
+    },
+    {
+        "city": "New Providence",
+        "country": "USA",
+        "key": "frc517",
+        "name": "Team 517",
+        "nickname": "Team 517",
+        "state_prov": "NJ",
+        "team_number": 517
+    },
+    {
+        "city": "Grand Rapids",
+        "country": "USA",
+        "key": "frc518",
+        "name": "GRAPCEP Davenport/Gumbo/Steelcase/GE Aviation Systems/IST & Ottawa Hills High School",
+        "nickname": "Blue Steel",
+        "state_prov": "MI",
+        "team_number": 518
+    },
+    {
+        "city": "Detroit",
+        "country": "USA",
+        "key": "frc519",
+        "name": "General Motors Foundation-GM CCRW/Harvey Industries/ITT Technical Institute/Detroit Public Schools/American Integrated Supply",
+        "nickname": "Robo Masters",
+        "state_prov": "MI",
+        "team_number": 519
+    },
+    {
+        "city": "Deer Park",
+        "country": "USA",
+        "key": "frc520",
+        "name": "Team 520",
+        "nickname": "Team 520",
+        "state_prov": "TX",
+        "team_number": 520
+    },
+    {
+        "city": "Waterford",
+        "country": "USA",
+        "key": "frc521",
+        "name": "Dominion Millstone Power Station &  Waterford High School",
+        "nickname": "L33T CREW (\"leet crew\")",
+        "state_prov": "CT",
+        "team_number": 521
+    },
+    {
+        "city": "Staten Island",
+        "country": "USA",
+        "key": "frc522",
+        "name": "Ralph Mckee Career & Tech HS",
+        "nickname": "ROBO WIZARDS",
+        "state_prov": "New York",
+        "team_number": 522
+    },
+    {
+        "city": "Bakersfield",
+        "country": "USA",
+        "key": "frc524",
+        "name": "Team 524",
+        "nickname": "Team 524",
+        "state_prov": "CA",
+        "team_number": 524
+    },
+    {
+        "city": "Cedar Falls",
+        "country": "USA",
+        "key": "frc525",
+        "name": "Cedar Valley Dental Associates/John Deere/Cedar Falls Community Schools&Cedar Falls High School",
+        "nickname": "Swartdogs",
+        "state_prov": "Iowa",
+        "team_number": 525
+    },
+    {
+        "city": "Massapequa",
+        "country": "USA",
+        "key": "frc527",
+        "name": "Plainedge HS & Plainedge High School",
+        "nickname": "Red Dragons",
+        "state_prov": "New York",
+        "team_number": 527
+    },
+    {
+        "city": "Lansdale",
+        "country": "USA",
+        "key": "frc528",
+        "name": "Visteon Corp. & North Montco Technical Career Center & North Penn High School",
+        "nickname": "The Persuaders",
+        "state_prov": "PA",
+        "team_number": 528
+    },
+    {
+        "city": "Mansfield",
+        "country": "USA",
+        "key": "frc529",
+        "name": "NASA/Invensys Process Systems",
+        "nickname": "The Mansfield Hornets",
+        "state_prov": "MA",
+        "team_number": 529
+    },
+    {
+        "city": "Lindenhurst",
+        "country": "USA",
+        "key": "frc533",
+        "name": "Lindenhurst Union Free School District/NY Assembly Kimberly Jean-Pierre/Cahill Strategies, LLC/L3-Harris Corporation/SIMS STEEL/Altice & Lindenhurst Senior High School",
+        "nickname": "The PSIcotics",
+        "state_prov": "New York",
+        "team_number": 533
+    },
+    {
+        "city": "Markle",
+        "country": "USA",
+        "key": "frc535",
+        "name": "Wabash Technologies & Huntington County Schools",
+        "nickname": "G-Force",
+        "state_prov": "IN",
+        "team_number": 535
+    },
+    {
+        "city": "San Francisco",
+        "country": "USA",
+        "key": "frc536",
+        "name": "Team 536",
+        "nickname": "Team 536",
+        "state_prov": "CA",
+        "team_number": 536
+    },
+    {
+        "city": "Sussex",
+        "country": "USA",
+        "key": "frc537",
+        "name": "Wisconsin Department of Public Instruction/Clarios/Regal Rexnord Corporation/Johnson Controls/Lannon Stone Products/The Woods Family&Hamilton High School",
+        "nickname": "Charger Robotics",
+        "state_prov": "Wisconsin",
+        "team_number": 537
+    },
+    {
+        "city": "Athens",
+        "country": "USA",
+        "key": "frc538",
+        "name": "NASA/Steelcase Foundation/Boeing/Gene Haas Foundation/AUVSI Pathfinder&Athens Renaissance School",
+        "nickname": "Renaissance Robotics",
+        "state_prov": "Alabama",
+        "team_number": 538
+    },
+    {
+        "city": "Richmond",
+        "country": "USA",
+        "key": "frc539",
+        "name": "OrthoVirginia/QEI Engineers&Trinity Episcopal School",
+        "nickname": "Titan Robotics",
+        "state_prov": "Virginia",
+        "team_number": 539
+    },
+    {
+        "city": "Henrico",
+        "country": "USA",
+        "key": "frc540",
+        "name": "ShowBest Fixture Inc./Piedmont Metal Fabricators Inc./DuPont Spruance /TKL/Henrico Education Foundation&Mills Godwin High School",
+        "nickname": "TALON 540 Godwin Robotics",
+        "state_prov": "Virginia",
+        "team_number": 540
+    },
+    {
+        "city": "Cleveland",
+        "country": "USA",
+        "key": "frc541",
+        "name": "MBNA Foundation/NASA-Glenn Research Center/RML Tool & Die Inc./Accurate Instrument Service Co./WorkForce Investment Act/ASSET of Northeast Ohio/Diamond Wheel & Fabricating Inc. & Max S. Hayes Vocational Career Center",
+        "nickname": "Surgeons of Steel",
+        "state_prov": "OH",
+        "team_number": 541
+    },
+    {
+        "city": "Levittown",
+        "country": "USA",
+        "key": "frc545",
+        "name": "Gene Haas Foundation/Mike & Paula Rich/Allstate Sign & Plaque/Autotech Diagnostic Corp/Embassy Diner/Final Touch Auto Collision/HOTWORX Bethpage/Jackie Reilly's Irish Pub & Restaurant/Marc & Denise Rich/Mario's Pizza Levittown/Souvlaki Street/The Kravitz Family/The Rolling Spring Roll/The Rotondo Family/Thom Thom Steak & Seafood/Villa Maria Pizza&Island Trees High School",
+        "nickname": "ROBO-DAWGS",
+        "state_prov": "New York",
+        "team_number": 545
+    },
+    {
+        "city": "Woodbridge",
+        "country": "USA",
+        "key": "frc546",
+        "name": "UTC Sikorsky & Amity Regional & Harding High School",
+        "nickname": "Technotics",
+        "state_prov": "CT",
+        "team_number": 546
+    },
+    {
+        "city": "Fayetteville",
+        "country": "USA",
+        "key": "frc547",
+        "name": "Aerojet Rocketdyne/FRANKE/STEDTRAIN/Avion Solutions Inc./Brown - Foreman/Lincoln Paving/Bank of Lincoln County/Redstone Federal Credit Union/Copperweld/Higgins Funeral Home/Gallant Riverview Funeral Home/Stovall's/Mathis Wholesale Flooring/Kiwanis International of Fayetteville, TN&Lincoln Co Senior High School",
+        "nickname": "Falcon Engineering And Robotics",
+        "state_prov": "Tennessee",
+        "team_number": 547
+    },
+    {
+        "city": "Northville",
+        "country": "USA",
+        "key": "frc548",
+        "name": "General Motors/Bosch/Ford/State of Michigan/Autokiniton/Siemens/Danlaw, Inc./LO Eye Care/Pratt Miller/Cisco/Alro Metals Outlet/Northville Public Schools&Northville High School",
+        "nickname": "Robostangs",
+        "state_prov": "Michigan",
+        "team_number": 548
+    },
+    {
+        "city": "Leominster",
+        "country": "USA",
+        "key": "frc549",
+        "name": "Raytheon/BOSE/Solidus Technical Solutions/Steel Fab inc & Leominster High School",
+        "nickname": "DevilDawgs",
+        "state_prov": "MA",
+        "team_number": 549
+    },
+    {
+        "city": "Washington",
+        "country": "USA",
+        "key": "frc550",
+        "name": "Warren County Technical School",
+        "nickname": "NanKnights",
+        "state_prov": "NJ",
+        "team_number": 550
+    },
+    {
+        "city": "Belvidere",
+        "country": "USA",
+        "key": "frc551",
+        "name": "Team 551",
+        "nickname": "Team 551",
+        "state_prov": "NJ",
+        "team_number": 551
+    },
+    {
+        "city": "Ft. Thomas",
+        "country": "USA",
+        "key": "frc554",
+        "name": "For Team 554: Tom Jones Academic Competition Fund; Highlands High School, Fort Thomas, Kentucky; Kentucky First/Headquarters Event Center/Fort Thomas Education Foundation, Fort Thomas, Kentucky&Highlands High School",
+        "nickname": "The Blue Grease Crew",
+        "state_prov": "Kentucky",
+        "team_number": 554
+    },
+    {
+        "city": "Montclair",
+        "country": "USA",
+        "key": "frc555",
+        "name": "Josh and Judy Weston/Picatinny Arsenal/BAE Systems/Montclair Board of Education/Montclair State University&Montclair High",
+        "nickname": "Montclair Robotics",
+        "state_prov": "New Jersey",
+        "team_number": 555
+    },
+    {
+        "city": "Detroit",
+        "country": "USA",
+        "key": "frc557",
+        "name": "Ford Motor Company & Cooley High School",
+        "nickname": "Flaming Cardinals",
+        "state_prov": "MI",
+        "team_number": 557
+    },
+    {
+        "city": "New Haven",
+        "country": "USA",
+        "key": "frc558",
+        "name": "Yale University/United Illuminating-Avangrid/Raytheon XT/Comcast NBCUniversal&Hill Regional Career Magnet HS",
+        "nickname": "Elm City Robo Squad",
+        "state_prov": "Connecticut",
+        "team_number": 558
+    },
+    {
+        "city": "Detroit",
+        "country": "USA",
+        "key": "frc560",
+        "name": "Ford Motor Company & Cody High School",
+        "nickname": "Camdenton 4-H LASER HWE #3",
+        "state_prov": "MI",
+        "team_number": 560
+    },
+    {
+        "city": "Phila",
+        "country": "USA",
+        "key": "frc561",
+        "name": "Rohm and Haas & Frankford High School",
+        "nickname": "Camdenton 4-H LASER HWE #4",
+        "state_prov": "PA",
+        "team_number": 561
+    },
+    {
+        "city": "Fitchburg",
+        "country": "USA",
+        "key": "frc562",
+        "name": "Montachusett Regional Vocational Technical School",
+        "nickname": "SPARK - Students Pursuing Applied Robotics Knowledge",
+        "state_prov": "MA",
+        "team_number": 562
+    },
+    {
+        "city": "Phila",
+        "country": "USA",
+        "key": "frc563",
+        "name": "BOK Tech High School & Sunrise Foundation",
+        "nickname": "Thrashers",
+        "state_prov": "PA",
+        "team_number": 563
+    },
+    {
+        "city": "Middle Island",
+        "country": "USA",
+        "key": "frc564",
+        "name": "Longwood Central School District/Optimum/U.S. Navy/Szuster Farms/Alternative Parts Inc.&Longwood High School",
+        "nickname": "Longwood RoboLions",
+        "state_prov": "New York",
+        "team_number": 564
+    },
+    {
+        "city": "Newark",
+        "country": "USA",
+        "key": "frc565",
+        "name": "Team 565",
+        "nickname": "Camdenton 4-H LASER ORI #3",
+        "state_prov": "DE",
+        "team_number": 565
+    },
+    {
+        "city": "Centereach",
+        "country": "USA",
+        "key": "frc566",
+        "name": "Middle Country School District",
+        "nickname": "Hot Wired 566",
+        "state_prov": "NY",
+        "team_number": 566
+    },
+    {
+        "city": "Anchorage",
+        "country": "USA",
+        "key": "frc568",
+        "name": "JEDC/ASD C&TE/UAA College of Engineering/Alaska Airlines/VIPER Transitions/Boeing Foundation/Alaska Airlines Foundation/FIRST & Family/Community",
+        "nickname": "Nerds of the North",
+        "state_prov": "Alaska",
+        "team_number": 568
+    },
+    {
+        "city": "Westbury",
+        "country": "USA",
+        "key": "frc569",
+        "name": "W Tresper Clarke High School",
+        "nickname": "Rambots 569",
+        "state_prov": "New York",
+        "team_number": 569
+    },
+    {
+        "city": "Glen Cove",
+        "country": "USA",
+        "key": "frc570",
+        "name": "Glen Cove High School",
+        "nickname": "Team Phoenix",
+        "state_prov": "NY",
+        "team_number": 570
+    },
+    {
+        "city": "Windsor",
+        "country": "USA",
+        "key": "frc571",
+        "name": "The Town of Windsor Connecticut/RTX-Raytheon&Windsor High School",
+        "nickname": "Team Paragon Robotics",
+        "state_prov": "Connecticut",
+        "team_number": 571
+    },
+    {
+        "city": "Bloomfield Hills",
+        "country": "USA",
+        "key": "frc573",
+        "name": "General Motors/Aptiv/Brother Rice Class of 1996/Ford Motor Company/Lawrence Technological University/Diversified Tooling Group/BAE Systems/SolidWorks/The Clark Family/Allison Transmission/Jackson Dawson/Profil/GraphX&Brother Rice High School&Marian High School",
+        "nickname": "Mech Warriors",
+        "state_prov": "Michigan",
+        "team_number": 573
+    },
+    {
+        "city": "Bronx",
+        "country": "USA",
+        "key": "frc574",
+        "name": "Team 574",
+        "nickname": "Team 574",
+        "state_prov": "NY",
+        "team_number": 574
+    },
+    {
+        "city": "North Hills",
+        "country": "USA",
+        "key": "frc575",
+        "name": "Team 575",
+        "nickname": "Frankfort First Lego League #1",
+        "state_prov": "CA",
+        "team_number": 575
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc576",
+        "name": "UCLA & University High School & Emerson Middle School",
+        "nickname": "Nerd Kings",
+        "state_prov": "CA",
+        "team_number": 576
+    },
+    {
+        "city": "Tujunga",
+        "country": "USA",
+        "key": "frc577",
+        "name": "Team 577",
+        "nickname": "Tiger Techs",
+        "state_prov": "CA",
+        "team_number": 577
+    },
+    {
+        "city": "Fairport",
+        "country": "USA",
+        "key": "frc578",
+        "name": "Fairport Central School District/Bausch & Lomb/Microsoft/Xerox Corporation/L3 HARRIS/DxSelect/Clawson's Deli&Fairport High School",
+        "nickname": "Fairport Robotics",
+        "state_prov": "New York",
+        "team_number": 578
+    },
+    {
+        "city": "Laveen",
+        "country": "USA",
+        "key": "frc579",
+        "name": "Team 579",
+        "nickname": "Team 579",
+        "state_prov": "AZ",
+        "team_number": 579
+    },
+    {
+        "city": "Studio City",
+        "country": "USA",
+        "key": "frc580",
+        "name": "Campbell Hall School&Campbell Hall School",
+        "nickname": "Viking Robotics",
+        "state_prov": "California",
+        "team_number": 580
+    },
+    {
+        "city": "San Jose",
+        "country": "USA",
+        "key": "frc581",
+        "name": "Johnson & Johnson MedTech/Google/UST/Salas O'Brien/John Deere/Apple/Gene Haas Foundation/Raytheon/TE Connectivity/Intuitive Foundation/BAE Systems/PTC/West Coast Products/Fabworks&San Jose High School",
+        "nickname": "Blazing Bulldogs",
+        "state_prov": "California",
+        "team_number": 581
+    },
+    {
+        "city": "Jacksonville",
+        "country": "USA",
+        "key": "frc582",
+        "name": "Duval County Schools/William M Raines High School/Communities in Schools",
+        "nickname": "Viking Electros",
+        "state_prov": "FL",
+        "team_number": 582
+    },
+    {
+        "city": "Seattle",
+        "country": "USA",
+        "key": "frc583",
+        "name": "Team 583",
+        "nickname": "Team 583",
+        "state_prov": "WA",
+        "team_number": 583
+    },
+    {
+        "city": "Tehachapi",
+        "country": "USA",
+        "key": "frc585",
+        "name": "NASA Armstrong Flight Research Center/Northrop Grumman/United Technologies Corporation/Boeing/Lockheed Martin Skunkworks/NDEP/National Instruments&Tehachapi High School",
+        "nickname": "Cyber Penguins",
+        "state_prov": "California",
+        "team_number": 585
+    },
+    {
+        "city": "Alhambra",
+        "country": "USA",
+        "key": "frc586",
+        "name": "Team 586",
+        "nickname": "Robo Mustangs",
+        "state_prov": "CA",
+        "team_number": 586
+    },
+    {
+        "city": "Hillsborough",
+        "country": "USA",
+        "key": "frc587",
+        "name": "John Deere/REV Robotics/JW Faircloth & Son/Orange County Schools/Gene Haas Foundation/Kiwanis Club of Hillsborough/Fidelity Investments&Cedar Ridge High School&Family/Community&Orange High School",
+        "nickname": "The Hedgehogs",
+        "state_prov": "North Carolina",
+        "team_number": 587
+    },
+    {
+        "city": "Jacksonville",
+        "country": "USA",
+        "key": "frc588",
+        "name": "CIS  & AP Randolph Academies of Technology",
+        "nickname": "Jagtronx",
+        "state_prov": "FL",
+        "team_number": 588
+    },
+    {
+        "city": "La Crescenta",
+        "country": "USA",
+        "key": "frc589",
+        "name": "Jet Propulsion Laboratory/Boeing/Walt Disney Imagineering/L3Harris/Mary Pinola & Crescenta Valley Chamber Education Fund/J's Maintenance/J. Park/Gene Haas Foundation/Intuitive Foundation/Los Angeles Breakfast Club/Friends of Falkon Robotics, Inc./Ruth the Cat/Latte and Lani the Dogs/Bernie and Leo the Dogs&Crescenta Valley High School",
+        "nickname": "Falkon Robotics",
+        "state_prov": "California",
+        "team_number": 589
+    },
+    {
+        "city": "Choctaw",
+        "country": "USA",
+        "key": "frc590",
+        "name": "NASA / Stennis Space Center & Choctaw Central Bia High Sch",
+        "nickname": "Chahta Warriors",
+        "state_prov": "Mississippi",
+        "team_number": 590
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc591",
+        "name": "Team 591",
+        "nickname": "Power Surge",
+        "state_prov": "CA",
+        "team_number": 591
+    },
+    {
+        "city": "Sacramento",
+        "country": "USA",
+        "key": "frc592",
+        "name": "Team 592",
+        "nickname": "Team 592",
+        "state_prov": "CA",
+        "team_number": 592
+    },
+    {
+        "city": "Houston",
+        "country": "USA",
+        "key": "frc593",
+        "name": "Team 593",
+        "nickname": "Joe Walker - B.R.O.S. (Brothers Reaching Over Success)",
+        "state_prov": "TX",
+        "team_number": 593
+    },
+    {
+        "city": "Flint",
+        "country": "USA",
+        "key": "frc594",
+        "name": "Team 594",
+        "nickname": "Joe Walker - Whiplash",
+        "state_prov": "MI",
+        "team_number": 594
+    },
+    {
+        "city": "Hopkinton",
+        "country": "USA",
+        "key": "frc596",
+        "name": "Hopkinton High School",
+        "nickname": "SciClones",
+        "state_prov": "MA",
+        "team_number": 596
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc597",
+        "name": "The Boeing Company/BAE Systems/Vertirbi School of Engineering/USC-MESA/X-treme Solutions/Perkins Grant/Foshay Learning Center/Citizen Business Bank/Robnett Education Foundation/American Institute of Aerospace & Astronautics/City of Los Angeles Council District 8&James a Foshay Learning Ctr",
+        "nickname": "The Wolverines",
+        "state_prov": "California",
+        "team_number": 597
+    },
+    {
+        "city": "Woodland Hills",
+        "country": "USA",
+        "key": "frc598",
+        "name": "H & R Machining/Matt Sweeney Special Effects/C & M Relocation & William Howard Taft High School",
+        "nickname": "Team Duct Tape",
+        "state_prov": "CA",
+        "team_number": 598
+    },
+    {
+        "city": "Granada Hills",
+        "country": "USA",
+        "key": "frc599",
+        "name": "Walt Disney Animation Studios/Gene Haas Foundation/Northrop Grumman/Granada Hills South Neighborhood Council/Chris Siegert/SolidWorks&Granada Hills Charter High Sch",
+        "nickname": "The Robodox",
+        "state_prov": "California",
+        "team_number": 599
+    },
+    {
+        "city": "Lynchburg",
+        "country": "USA",
+        "key": "frc600",
+        "name": "Central Virginia Community College/AREVA/Region 2000 Technology Council & Lynchburg City Schools",
+        "nickname": "RamRod Robotics",
+        "state_prov": "VA",
+        "team_number": 600
+    },
+    {
+        "city": "Hampton Bays",
+        "country": "USA",
+        "key": "frc601",
+        "name": "Hampton Bays UFSD / ACE Shinnecock Hardware / Pooltastic & Hampton Bays High School",
+        "nickname": "BayBots",
+        "state_prov": "New York",
+        "team_number": 601
+    },
+    {
+        "city": "Leesburg",
+        "country": "USA",
+        "key": "frc602",
+        "name": "Diversified Educational Systems & Loudoun County Public Schools",
+        "nickname": "MTC",
+        "state_prov": "VA",
+        "team_number": 602
+    },
+    {
+        "city": "Daytona Beach",
+        "country": "USA",
+        "key": "frc603",
+        "name": "Team 603",
+        "nickname": "FBI - Fascinating Bot Intelligence",
+        "state_prov": "FL",
+        "team_number": 603
+    },
+    {
+        "city": "San Jose",
+        "country": "USA",
+        "key": "frc604",
+        "name": "Leland High School FRC Team 604 Quixilver/Apple/Society of Women Engineers/BAE Systems/Gene Haas Foundation/Intuitive Surgical Foundation/West Coast Products/Lockheed Martin/Leland Bridge/Qualcomm/NorCal FIRST/PGE/Almaden Valley Women's Club/604 Alumni and Parents/In-Kind: Hurricane Electric Internet Services-SolidWorks-OnShape&Leland High School",
+        "nickname": "Quixilver",
+        "state_prov": "California",
+        "team_number": 604
+    },
+    {
+        "city": "Hayward",
+        "country": "USA",
+        "key": "frc605",
+        "name": "Real Protection Fire/West Coast Cabinets & Eden Area Regional Occupational Program",
+        "nickname": "Astromechs",
+        "state_prov": "CA",
+        "team_number": 605
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc606",
+        "name": "Raytheon/Aerospace Corporation/Northrop Grumman/Los Angeles Trade Technical College/Boys and Girls Club of King Drew/The William C. Bannerman Foundation/Walt Disney Imagineering&King-Drew Medical Magnet HS",
+        "nickname": "Cyber Eagles",
+        "state_prov": "California",
+        "team_number": 606
+    },
+    {
+        "city": "Piney Woods",
+        "country": "USA",
+        "key": "frc607",
+        "name": "Team 607",
+        "nickname": "Mindstorm Overlords",
+        "state_prov": "MS",
+        "team_number": 607
+    },
+    {
+        "city": "Atlanta",
+        "country": "USA",
+        "key": "frc608",
+        "name": "Team 608",
+        "nickname": "Team 608",
+        "state_prov": "GA",
+        "team_number": 608
+    },
+    {
+        "city": "Santa Rosa",
+        "country": "USA",
+        "key": "frc609",
+        "name": "Team 609",
+        "nickname": "VentureBOTS",
+        "state_prov": "CA",
+        "team_number": 609
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc610",
+        "name": "Crescent School/Doc-Chef Culinary Enterprise/Heliolytics/Telus/Taplytics/Extrude-A-Trim&Crescent School",
+        "nickname": "Crescent Coyotes",
+        "state_prov": "Ontario",
+        "team_number": 610
+    },
+    {
+        "city": "Mc Lean",
+        "country": "USA",
+        "key": "frc611",
+        "name": "Leidos / Booz Allen Hamilton / South49 Solutions & Langley High School",
+        "nickname": "Saxons",
+        "state_prov": "Virginia",
+        "team_number": 611
+    },
+    {
+        "city": "Chantilly",
+        "country": "USA",
+        "key": "frc612",
+        "name": "Leidos&Chantilly Academy",
+        "nickname": "Chantilly Robotics",
+        "state_prov": "Virginia",
+        "team_number": 612
+    },
+    {
+        "city": "Somerset",
+        "country": "USA",
+        "key": "frc613",
+        "name": "Picatinny STEM / Franklin Township Public Schools & Franklin Twp High",
+        "nickname": "NeoWarriors",
+        "state_prov": "New Jersey",
+        "team_number": 613
+    },
+    {
+        "city": "Alexandria",
+        "country": "USA",
+        "key": "frc614",
+        "name": "Targeted Approach/Raytheon/Boeing/Polygon/Kwaik Auto Body/Gene Haas Foundation&Hayfield Secondary School",
+        "nickname": "Night Hawks",
+        "state_prov": "Virginia",
+        "team_number": 614
+    },
+    {
+        "city": "Washington",
+        "country": "USA",
+        "key": "frc615",
+        "name": "Google / Bezos Family Foundation / National Defense Education Partnership & Ballou Senior High School",
+        "nickname": "Knights",
+        "state_prov": "District of Columbia",
+        "team_number": 615
+    },
+    {
+        "city": "Courtland",
+        "country": "USA",
+        "key": "frc616",
+        "name": "International Paper Corp/ODEC/Baggett Metal/ELectrical Motor Company/Nucor Steel/LRIG & Southampton Technical Career Center",
+        "nickname": "Southampton Indians",
+        "state_prov": "VA",
+        "team_number": 616
+    },
+    {
+        "city": "Highland Springs ",
+        "country": "USA",
+        "key": "frc617",
+        "name": "Highland Springs High School",
+        "nickname": "Enginerds",
+        "state_prov": "Virginia",
+        "team_number": 617
+    },
+    {
+        "city": "Philadelphia",
+        "country": "USA",
+        "key": "frc618",
+        "name": "School District of Philadelphia / Everite Machine Products, Inc. / JMI Software Consultants Inc. / ITT Technical Institute / Applied Industrial Technologies & GEAR-UP & Edison Fareira High School",
+        "nickname": "E.A.R.T.H. Squad (Edison Achieving Real Technological Heights)",
+        "state_prov": "PA",
+        "team_number": 618
+    },
+    {
+        "city": "Charlottesville",
+        "country": "USA",
+        "key": "frc619",
+        "name": "Charlottesville Area Robotics/Piedmont Virginia Community College Industrial Electronics Technology/University of Virginia School of Engineering and Applied Science/Gene Haas Foundation/Re:discovery Software/Virginia Space Grant Consortium/LD&B Insurance and Financial Services/Axiom/Virginia National Bank&Charlottesville Albemarle Robotics",
+        "nickname": "Cavalier Robotics",
+        "state_prov": "Virginia",
+        "team_number": 619
+    },
+    {
+        "city": "Vienna",
+        "country": "USA",
+        "key": "frc620",
+        "name": "Friends & Family of 620 Students/The Gene Haas Foundation/Kajeet/Optimist Club of Greater Vienna/Vienna Primary and Preventative Medicine/Sheetz/Zurka Interactive/RPG&Madison High School",
+        "nickname": "Warbots",
+        "state_prov": "Virginia",
+        "team_number": 620
+    },
+    {
+        "city": "Falls Church",
+        "country": "USA",
+        "key": "frc621",
+        "name": "Team 621",
+        "nickname": "Team 621",
+        "state_prov": "VA",
+        "team_number": 621
+    },
+    {
+        "city": "Manassas",
+        "country": "USA",
+        "key": "frc622",
+        "name": "Team 622",
+        "nickname": "Team 622",
+        "state_prov": "VA",
+        "team_number": 622
+    },
+    {
+        "city": "Vienna",
+        "country": "USA",
+        "key": "frc623",
+        "name": "Lockheed Martin/OHS PSTA/Leidos/Octo Consulting Group/Alarm.com/Optimist Club of Greater Vienna&Oakton High School",
+        "nickname": "Oakton Cougar Robotics",
+        "state_prov": "Virginia",
+        "team_number": 623
+    },
+    {
+        "city": "Katy",
+        "country": "USA",
+        "key": "frc624",
+        "name": "BP America/Transocean/Schneider Electric/AVEVA/Bechtel/Gene Haas Foundation/Apache/HESS Petroleum/Long Wave/Technip Energy/IMC/Microsoft/Texas Workforce Commission/Chevron/National Instruments/Shell/SolidWorks/Autodesk & Cinco Ranch High School",
+        "nickname": "CRyptonite",
+        "state_prov": "Texas",
+        "team_number": 624
+    },
+    {
+        "city": "Palmer",
+        "country": "USA",
+        "key": "frc625",
+        "name": "Team 625",
+        "nickname": "Team 625",
+        "state_prov": "AK",
+        "team_number": 625
+    },
+    {
+        "city": "Falls Church",
+        "country": "USA",
+        "key": "frc627",
+        "name": "Team 627",
+        "nickname": "Team 627",
+        "state_prov": "VA",
+        "team_number": 627
+    },
+    {
+        "city": "Fairbanks",
+        "country": "USA",
+        "key": "frc628",
+        "name": "NASA/Ryan Machinery/University of Alaska Fairbanks & Lathrop High School",
+        "nickname": "Northern RobArctic",
+        "state_prov": "AK",
+        "team_number": 628
+    },
+    {
+        "city": "McLean",
+        "country": "USA",
+        "key": "frc630",
+        "name": "Team 630",
+        "nickname": "Team 630",
+        "state_prov": "VA",
+        "team_number": 630
+    },
+    {
+        "city": "Union City",
+        "country": "USA",
+        "key": "frc632",
+        "name": "Able-Baker Automation Inc./Agile Automation/TriCed & James Logan High School",
+        "nickname": "J-Lo",
+        "state_prov": "CA",
+        "team_number": 632
+    },
+    {
+        "city": "Tacoma",
+        "country": "USA",
+        "key": "frc633",
+        "name": "NASA/Vedimex Inc. & Henry Foss High School",
+        "nickname": "Falcon Robotics",
+        "state_prov": "WA",
+        "team_number": 633
+    },
+    {
+        "city": "Van Nuys",
+        "country": "USA",
+        "key": "frc634",
+        "name": "Van Nuys High School",
+        "nickname": "Rage",
+        "state_prov": "CA",
+        "team_number": 634
+    },
+    {
+        "city": "Buda",
+        "country": "USA",
+        "key": "frc635",
+        "name": "Team 635",
+        "nickname": "Team 635",
+        "state_prov": "TX",
+        "team_number": 635
+    },
+    {
+        "city": "Waipahu",
+        "country": "USA",
+        "key": "frc636",
+        "name": "McInerny Foundation/University of Hawaii School of Ocean and Earth Science and Technology/The Estate of James Campbell/Hawaiian Electric Company/Goodwin Services/Del Monte Foods/Tanioka's Seafood  and Catering/Castle and Cooke Hawaii Homes, Inc./Friends of Pearl City Library/IEEE Hawaii & Waipahu High School",
+        "nickname": "Rascals",
+        "state_prov": "HI",
+        "team_number": 636
+    },
+    {
+        "city": "Montville Township",
+        "country": "USA",
+        "key": "frc637",
+        "name": "Marotta Controls, Inc. & Montville Twp. High School",
+        "nickname": "MR. T",
+        "state_prov": "NJ",
+        "team_number": 637
+    },
+    {
+        "city": "Midlothian",
+        "country": "USA",
+        "key": "frc638",
+        "name": "Chesterfield County Public Schools",
+        "nickname": "Operation Oxidation",
+        "state_prov": "VA",
+        "team_number": 638
+    },
+    {
+        "city": "Ithaca",
+        "country": "USA",
+        "key": "frc639",
+        "name": "Vector Magnetics/BAE Systems/Cornell University/BorgWarner/IthacaSTEM Advocates&Ithaca High School",
+        "nickname": "Code Red Robotics",
+        "state_prov": "New York",
+        "team_number": 639
+    },
+    {
+        "city": "Jamaica",
+        "country": "USA",
+        "key": "frc640",
+        "name": "Con Edison&Thomas Edison Career & Tech HS",
+        "nickname": "Edison Robotics",
+        "state_prov": "New York",
+        "team_number": 640
+    },
+    {
+        "city": "Sanborn",
+        "country": "USA",
+        "key": "frc641",
+        "name": "Team 641",
+        "nickname": "Team 641",
+        "state_prov": "NY",
+        "team_number": 641
+    },
+    {
+        "city": "Parkersburg",
+        "country": "USA",
+        "key": "frc642",
+        "name": "DuPont/Simonton Windows/Pickering and Associates/McHenry Electric/Murray's Sheet Metal/Parkersburg Tool Company/St. Joseph's Hospital/Lowe's & Parkersburg High School",
+        "nickname": "BRR(Big Red Robotics)",
+        "state_prov": "WV",
+        "team_number": 642
+    },
+    {
+        "city": "Allentown",
+        "country": "USA",
+        "key": "frc643",
+        "name": "Team 643",
+        "nickname": "Team 643",
+        "state_prov": "PA",
+        "team_number": 643
+    },
+    {
+        "city": "Pearl River",
+        "country": "USA",
+        "key": "frc644",
+        "name": "Kelly Gene Cook, Sr Charitable Foundation/So'Moda, Inc/Defense Information Systems Agency & Pearl River High School",
+        "nickname": "Team Mambo",
+        "state_prov": "LA",
+        "team_number": 644
+    },
+    {
+        "city": "San Rafael",
+        "country": "USA",
+        "key": "frc645",
+        "name": "Jackson's Hardware & Terra Linda High School",
+        "nickname": "Team 645",
+        "state_prov": "CA",
+        "team_number": 645
+    },
+    {
+        "city": "West Sayville",
+        "country": "USA",
+        "key": "frc646",
+        "name": "Team 646",
+        "nickname": "Team 646",
+        "state_prov": "NY",
+        "team_number": 646
+    },
+    {
+        "city": "Killeen",
+        "country": "USA",
+        "key": "frc647",
+        "name": "Texas Workforce Commission / Northrup Grumman / Dynamic Designs / Killeen Independent School District / GEAR UP & Robert M Shoemaker High School",
+        "nickname": "CYBERWOLVES",
+        "state_prov": "Texas",
+        "team_number": 647
+    },
+    {
+        "city": "Moline",
+        "country": "USA",
+        "key": "frc648",
+        "name": "John Deere/NASA/Macerich - SouthPark Mall/Bayer/Constellation - Quad Cities Station/3M/Arconic & Family/Community",
+        "nickname": "QC ELITE  Flaming Squirrels",
+        "state_prov": "Illinois",
+        "team_number": 648
+    },
+    {
+        "city": "Saratoga",
+        "country": "USA",
+        "key": "frc649",
+        "name": "KLA/Micron/Qualcomm/MSET Families & Friends/Trial & Error Robotics/Intuitive Surgical/Gorman Group/PG&E/Rotary Club of Saratoga/SolidWorks/GrabCAD&Saratoga High School",
+        "nickname": "MSET Fish",
+        "state_prov": "California",
+        "team_number": 649
+    },
+    {
+        "city": "Flora",
+        "country": "USA",
+        "key": "frc650",
+        "name": "Hella Electronics Corporation/Illinois Eastern Community Colleges/Wabash Valley College & FLora High School & Clay City High School & Louiisville High School & Cisne High School",
+        "nickname": "Hella's Angels",
+        "state_prov": "IL",
+        "team_number": 650
+    },
+    {
+        "city": "Mar Lin",
+        "country": "USA",
+        "key": "frc651",
+        "name": "Schuylkill Technology Centers",
+        "nickname": "Yo Bot",
+        "state_prov": "PA",
+        "team_number": 651
+    },
+    {
+        "city": "Erie",
+        "country": "USA",
+        "key": "frc652",
+        "name": "NASA Goddard Space Flight Center & Seneca  High School",
+        "nickname": "Bobcats",
+        "state_prov": "PA",
+        "team_number": 652
+    },
+    {
+        "city": "San Antonio",
+        "country": "USA",
+        "key": "frc653",
+        "name": "Boeing / Texas Workforce Commission & FIRST in Texas / Bezos Foundation & Edison High School",
+        "nickname": "NOSIDE",
+        "state_prov": "Texas",
+        "team_number": 653
+    },
+    {
+        "city": "Tallahassee",
+        "country": "USA",
+        "key": "frc654",
+        "name": "National High Magnetic Field Labratory/Tallahassee Welding and Machine Shop & Maclay School",
+        "nickname": "Mechateuthis Dux",
+        "state_prov": "FL",
+        "team_number": 654
+    },
+    {
+        "city": "Brooklyn",
+        "country": "USA",
+        "key": "frc655",
+        "name": "Team 655",
+        "nickname": "Team 655",
+        "state_prov": "NY",
+        "team_number": 655
+    },
+    {
+        "city": "Wyoming",
+        "country": "USA",
+        "key": "frc658",
+        "name": "General Motors & Godwin Public Schools",
+        "nickname": "B.E.A.S.T.  - Bringing Excitement and Science Together",
+        "state_prov": "MI",
+        "team_number": 658
+    },
+    {
+        "city": "Houston",
+        "country": "USA",
+        "key": "frc659",
+        "name": "Team 659",
+        "nickname": "Team 659",
+        "state_prov": "TX",
+        "team_number": 659
+    },
+    {
+        "city": "Round Rock",
+        "country": "USA",
+        "key": "frc660",
+        "name": "BAE SYSTEMS & Round Rock High School",
+        "nickname": "Dragons",
+        "state_prov": "TX",
+        "team_number": 660
+    },
+    {
+        "city": "USAF Academy",
+        "country": "USA",
+        "key": "frc662",
+        "name": "Academy School District 20 / Verizon / National Defense Education Program / United States Air Force Academy STEM Outreach Program / The Niedringhaus Family / Northrup Grumman / Marco's Pizza / Alvin Fishman, CPA / Fastenal / Red Rock Technologies / Broadcom Limited & Air Academy High School & Discovery Canyon Campus HS & Pine Creek High School & Rampart High School & Tca College Pathways",
+        "nickname": "Rocky Mountain Robotics",
+        "state_prov": "Colorado",
+        "team_number": 662
+    },
+    {
+        "city": "Whitinsville",
+        "country": "USA",
+        "key": "frc663",
+        "name": "Whitinsville Christian School/Bach Knives/WRT Management Corp./Koopman Lumber/EMX Controls/Peter B. Plumb, CPA/iAUTOMATION&Whitinsville Christian School",
+        "nickname": "Power Sharks",
+        "state_prov": "Massachusetts",
+        "team_number": 663
+    },
+    {
+        "city": "Harvard",
+        "country": "USA",
+        "key": "frc664",
+        "name": "Team 664",
+        "nickname": "Team 664",
+        "state_prov": "IL",
+        "team_number": 664
+    },
+    {
+        "city": "Orlando",
+        "country": "USA",
+        "key": "frc665",
+        "name": "Lockheed Martin / DeVry University / Walt Disney World / Fluid Power Society & OAK RIDGE HIGH",
+        "nickname": "Motor Monkeys",
+        "state_prov": "FL",
+        "team_number": 665
+    },
+    {
+        "city": "Hell",
+        "country": "USA",
+        "key": "frc666",
+        "name": "The TorMentors",
+        "nickname": "The TorMentors",
+        "state_prov": "CT",
+        "team_number": 666
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc667",
+        "name": "Team 667",
+        "nickname": "Team 667",
+        "state_prov": "CA",
+        "team_number": 667
+    },
+    {
+        "city": "San Jose",
+        "country": "USA",
+        "key": "frc668",
+        "name": "Gilbert-Greenstein Family/KLA - Foundation/BAE/Qualcomm/Intuitive Foundation/Pacific Gas & Electric Co./FIRST NorCal&Pioneer High School&Family/Community",
+        "nickname": "The Apes of Wrath",
+        "state_prov": "California",
+        "team_number": 668
+    },
+    {
+        "city": "Cupertino",
+        "country": "USA",
+        "key": "frc670",
+        "name": "FUHSD Foundation/Ronald Crane Trust/KLA Foundation/Ford/Anonymous/Corning Foundation/Applied Materials/Evil Mad Scientist&Homestead High School",
+        "nickname": "Homestead Robotics",
+        "state_prov": "California",
+        "team_number": 670
+    },
+    {
+        "city": "San Francisco",
+        "country": "USA",
+        "key": "frc671",
+        "name": "Team 671",
+        "nickname": "Team 671",
+        "state_prov": "CA",
+        "team_number": 671
+    },
+    {
+        "city": "Manchester",
+        "country": "USA",
+        "key": "frc674",
+        "name": "Team 674",
+        "nickname": "Team 674",
+        "state_prov": "CA",
+        "team_number": 674
+    },
+    {
+        "city": "Rohnert Park",
+        "country": "USA",
+        "key": "frc675",
+        "name": "MV Transportation / Tellabs / Transit Maintenance Consultants / Goebel Paving / Unicorn Properties & Technology High School",
+        "nickname": "Tech High Robotics",
+        "state_prov": "California",
+        "team_number": 675
+    },
+    {
+        "city": "El Paso",
+        "country": "USA",
+        "key": "frc676",
+        "name": "Team 676",
+        "nickname": "Team 676",
+        "state_prov": "TX",
+        "team_number": 676
+    },
+    {
+        "city": "Columbus",
+        "country": "USA",
+        "key": "frc677",
+        "name": "Ohio State University/American Electric Power/Northrop Grumman & Columbus School for Girls",
+        "nickname": "Murphy's Outlaws",
+        "state_prov": "Ohio",
+        "team_number": 677
+    },
+    {
+        "city": "New York",
+        "country": "USA",
+        "key": "frc679",
+        "name": "Team 679",
+        "nickname": "Team 679",
+        "state_prov": "NY",
+        "team_number": 679
+    },
+    {
+        "city": "Chicago",
+        "country": "USA",
+        "key": "frc681",
+        "name": "Team 681",
+        "nickname": "Team 681",
+        "state_prov": "IL",
+        "team_number": 681
+    },
+    {
+        "city": "Sylmar",
+        "country": "USA",
+        "key": "frc684",
+        "name": "Team 684",
+        "nickname": "Team 684",
+        "state_prov": "CA",
+        "team_number": 684
+    },
+    {
+        "city": "Coconut Creek",
+        "country": "USA",
+        "key": "frc685",
+        "name": "First Service Realty Int'l & Atlantic Technical Center Magnet High School",
+        "nickname": "Team 685",
+        "state_prov": "FL",
+        "team_number": 685
+    },
+    {
+        "city": "Frederick",
+        "country": "USA",
+        "key": "frc686",
+        "name": "Mount St. Mary's University/Leonardo DRS/Delaplaine Foundation/Maryland Space Business Roundtable/Phoenix Mecano/INPRO Technologies/Sheetz/Maryland Robotics Center&Brunswick High&Catoctin High School&Linganore High School&Walkersville High School&Oakdale High School&Family/Community",
+        "nickname": "Bovine Intervention",
+        "state_prov": "Maryland",
+        "team_number": 686
+    },
+    {
+        "city": "Carson",
+        "country": "USA",
+        "key": "frc687",
+        "name": "Gene Haas Foundation/Norris Foundation/Honda/Boeing/Raytheon/NASA/PG&E Corporate Foundation/DreamMakers Fund/CAMS PTSO/Raising Cane's/OurOwnStyle&California Academy Math & Sci",
+        "nickname": "The Nerd Herd",
+        "state_prov": "California",
+        "team_number": 687
+    },
+    {
+        "city": "Flint",
+        "country": "USA",
+        "key": "frc688",
+        "name": "Team 688",
+        "nickname": "Team 688",
+        "state_prov": "MI",
+        "team_number": 688
+    },
+    {
+        "city": "Northampton",
+        "country": "USA",
+        "key": "frc690",
+        "name": "Team 690",
+        "nickname": "Team 690",
+        "state_prov": "MA",
+        "team_number": 690
+    },
+    {
+        "city": "Stevenson Ranch",
+        "country": "USA",
+        "key": "frc691",
+        "name": "Northrop Grumman/Walt Disney Imagineering/DoD/Raytheon Technologies/Boeing&Valencia High School&Hart High School&Saugus High School&Academy of the Canyons&West Ranch High School",
+        "nickname": "Project 691 Robotics",
+        "state_prov": "California",
+        "team_number": 691
+    },
+    {
+        "city": "Sacramento",
+        "country": "USA",
+        "key": "frc692",
+        "name": "St. Francis Catholic High School / Interstate Plastics / Apple / The Brin Wojcicki Foundation / Bishop-Wisecarver Corporation / Blue Collar Supply & St Francis High School",
+        "nickname": "The Fembots",
+        "state_prov": "California",
+        "team_number": 692
+    },
+    {
+        "city": "New York",
+        "country": "USA",
+        "key": "frc694",
+        "name": "Stuyvesant Parents' Association/Stuyvesant Alumni Association/Navid Kashem/Julian Moore/L3 Harris/Bloomberg/ConEdison/Gene Haas Foundation/Ferguson Family/Belliveau Family&Stuyvesant High School",
+        "nickname": "StuyPulse",
+        "state_prov": "New York",
+        "team_number": 694
+    },
+    {
+        "city": "Beachwood",
+        "country": "USA",
+        "key": "frc695",
+        "name": "Board of Education & Beachwood High School",
+        "nickname": "Bison Robotics",
+        "state_prov": "Ohio",
+        "team_number": 695
+    },
+    {
+        "city": "La Crescenta",
+        "country": "USA",
+        "key": "frc696",
+        "name": "JPL/Glendale Unified School District/Gene Haas Foundation/Walt Disney Imagineering/Boeing/Myers Machining/FMI Aerostructures/Payton Group&Clark Magnet High School",
+        "nickname": "Circuit Breakers",
+        "state_prov": "California",
+        "team_number": 696
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc697",
+        "name": "Immaculate Heart High School",
+        "nickname": "Panda Robotics",
+        "state_prov": "CA",
+        "team_number": 697
+    },
+    {
+        "city": "Chandler",
+        "country": "USA",
+        "key": "frc698",
+        "name": "Microchip Technology Inc./Industrial Metal Supply/Heatsync Labs/Tan Pants Media/Gene Haas Foundation/Intel/Intuitive/Harbor Freight/Waymo/Arizona Diamondbacks/Boeing/Arizona Public School Tax Credits/Wells Fargo/Valley Robotics Program/Association for Manufacturing Technology&Hamilton High School",
+        "nickname": "Hamilton Microbots",
+        "state_prov": "Arizona",
+        "team_number": 698
+    },
+    {
+        "city": "Chatsworth",
+        "country": "USA",
+        "key": "frc699",
+        "name": "Team 699",
+        "nickname": "Team 699",
+        "state_prov": "CA",
+        "team_number": 699
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc700",
+        "name": "Team 700",
+        "nickname": "Team 700",
+        "state_prov": "CA",
+        "team_number": 700
+    },
+    {
+        "city": "Fairfield",
+        "country": "USA",
+        "key": "frc701",
+        "name": "Vanden High",
+        "nickname": "RoboVikes",
+        "state_prov": "California",
+        "team_number": 701
+    },
+    {
+        "city": "Culver City",
+        "country": "USA",
+        "key": "frc702",
+        "name": "JPL/NASA/Culver City Educational Foundation/Culver City Rotary Club/Culver City Exchange Club/Pinnacle Industrial Supply/Culver City Unified School District&Culver City High School",
+        "nickname": "Bagel Bytes",
+        "state_prov": "California",
+        "team_number": 702
+    },
+    {
+        "city": "Saginaw",
+        "country": "USA",
+        "key": "frc703",
+        "name": "Dow/FIRST in Michigan/FIRST of the Great Lakes Bay Region /FIRST Robotics/Fullerton Tool Company/Glastender Inc./Michigan Department of Education/Mid-State Bolt & Screw/Netsource One, Inc./Nexteer/Remer Plumbing, Heating, & Air Conditioning, Inc./Saginaw Industries, LLC/Saginaw Career Complex/Serra/Toyota/U.S. Sheet Metal&Saginaw Career Complex",
+        "nickname": "Team Phoenix",
+        "state_prov": "Michigan",
+        "team_number": 703
+    },
+    {
+        "city": "Grand Prairie",
+        "country": "USA",
+        "key": "frc704",
+        "name": "Lockheed Martin/Grand Prairie Ed Foundation/Ricks Consulting/Texas Workforce Commission/Decals Plus/Control Products Corporation/Grand Prairie ISD/Pratt & Whitney&South Grand Prairie High Sch",
+        "nickname": "Warriors",
+        "state_prov": "Texas",
+        "team_number": 704
+    },
+    {
+        "city": "Hartland",
+        "country": "USA",
+        "key": "frc706",
+        "name": "Rockwell Automation/Axis Automation/GE&Arrowhead Union High School",
+        "nickname": "Cyberhawks",
+        "state_prov": "Wisconsin",
+        "team_number": 706
+    },
+    {
+        "city": "Horsham",
+        "country": "USA",
+        "key": "frc708",
+        "name": "Johnson & Johnson/Globus Medical/Lockheed Martin/Hatboro-Horsham Education Foundation/The Landreth Family&Hatboro-Horsham Sr High School",
+        "nickname": "Hatters Robotics",
+        "state_prov": "Pennsylvania",
+        "team_number": 708
+    },
+    {
+        "city": "Bryn Mawr",
+        "country": "USA",
+        "key": "frc709",
+        "name": "The Boeing Company&Agnes Irwin School",
+        "nickname": "Femme Tech Fatale",
+        "state_prov": "Pennsylvania",
+        "team_number": 709
+    },
+    {
+        "city": "Fort Lauderdale",
+        "country": "USA",
+        "key": "frc710",
+        "name": "Pine Crest School",
+        "nickname": "Panther Bot",
+        "state_prov": "FL",
+        "team_number": 710
+    },
+    {
+        "city": "Brooklyn",
+        "country": "USA",
+        "key": "frc711",
+        "name": "Bezos Family/Citigroup  & Paul Robeson high School",
+        "nickname": "Robeson full force",
+        "state_prov": "NY",
+        "team_number": 711
+    },
+    {
+        "city": "New York City",
+        "country": "USA",
+        "key": "frc713",
+        "name": "Con Edison/A&M Industrial Supply Company/City College of New York (CUNY) & Rice High School",
+        "nickname": "Steel Raiders",
+        "state_prov": "NY",
+        "team_number": 713
+    },
+    {
+        "city": "Newark",
+        "country": "USA",
+        "key": "frc714",
+        "name": "Newark Public Schools District/CAROL FORD RACING/INVENTIONDX&Technology High School",
+        "nickname": "Panthera",
+        "state_prov": "New Jersey",
+        "team_number": 714
+    },
+    {
+        "city": "NY",
+        "country": null,
+        "key": "frc715",
+        "name": "Team 715",
+        "nickname": "Team 715",
+        "state_prov": "USA",
+        "team_number": 715
+    },
+    {
+        "city": "Falls Village",
+        "country": "USA",
+        "key": "frc716",
+        "name": "21st Century Fund/C. A. Lindell & Son Inc./Freund's Farm Market and Bakery&Housatonic Valley Reg High Sch",
+        "nickname": "Who'sCTEKS",
+        "state_prov": "Connecticut",
+        "team_number": 716
+    },
+    {
+        "city": null,
+        "country": null,
+        "key": "frc731",
+        "name": "Team 731",
+        "nickname": "Team 731",
+        "state_prov": null,
+        "team_number": 731
+    },
+    {
+        "city": "Bronx",
+        "country": "USA",
+        "key": "frc743",
+        "name": "Sony/Bloomberg/Con Edison & HS of Computers & Technology",
+        "nickname": "Technobots",
+        "state_prov": "New York",
+        "team_number": 743
+    },
+    {
+        "city": "Fort Lauderdale",
+        "country": "USA",
+        "key": "frc744",
+        "name": "apex machine company/Motorola Solutions Foundation/United Technologies Corporation - Otis Elevator/Loucks Engineering/Hill York Air Conditioning Services & Energy Solutions/The State of Florida&Westminster Academy",
+        "nickname": "Shark Attack",
+        "state_prov": "Florida",
+        "team_number": 744
+    },
+    {
+        "city": "North York",
+        "country": "Canada",
+        "key": "frc746",
+        "name": "Toronto District School Board/Westview Centennial Secondary School/Microsoft Canada/Thorne Innovations/RBC Wealth Management-PH&N Investment Counsel & Westview Centennial Secondary School",
+        "nickname": "Gearheads 746",
+        "state_prov": "Ontario",
+        "team_number": 746
+    },
+    {
+        "city": "Middlesex",
+        "country": "USA",
+        "key": "frc747",
+        "name": "ANSUN Protective Metals/Picatinny Arsenal/Veolia Environmental Services/Nokia Bell Labs/Quality Sheet Metal & Welding/Central Jersey Powder Coat&Family/Community",
+        "nickname": "Flight Crew",
+        "state_prov": "New Jersey",
+        "team_number": 747
+    },
+    {
+        "city": "Kingsville",
+        "country": "Canada",
+        "key": "frc748",
+        "name": "KINGSVILLE DISTRICT HIGH SCHOOL",
+        "nickname": "Kingsville CavalGears",
+        "state_prov": "Ontario",
+        "team_number": 748
+    },
+    {
+        "city": "Corvallis",
+        "country": "USA",
+        "key": "frc749",
+        "name": "Crescent Valley High School",
+        "nickname": "Ctrl V",
+        "state_prov": "Oregon",
+        "team_number": 749
+    },
+    {
+        "city": "Picayune",
+        "country": "USA",
+        "key": "frc750",
+        "name": "NASA Stennis Space Center/Valspar/Exxon Oil Corp./Datastar, Inc./Picayune Industrial Supply/Q & G Supply/USM  Physics Dept & Picayune Career & Technology Center",
+        "nickname": "TechnoTide",
+        "state_prov": "MS",
+        "team_number": 750
+    },
+    {
+        "city": "Portola Valley",
+        "country": "USA",
+        "key": "frc751",
+        "name": "Woodside Priory School/Woodside Priory Parents/Gene Haas Foundation/Google (employee in kind donation)&Woodside Priory School",
+        "nickname": "barn2robotics",
+        "state_prov": "California",
+        "team_number": 751
+    },
+    {
+        "city": "Newark",
+        "country": "USA",
+        "key": "frc752",
+        "name": "Newark Board of Education/Comcast/Panasonic&Science Park High School",
+        "nickname": "The Chargers",
+        "state_prov": "New Jersey",
+        "team_number": 752
+    },
+    {
+        "city": "Bend",
+        "country": "USA",
+        "key": "frc753",
+        "name": "iFixit/Outback Manufacturing/FIA Custom CNC/Zamp Solar/McDonald's Corporation&Mountain View Sr High School",
+        "nickname": "High Desert Droids",
+        "state_prov": "Oregon",
+        "team_number": 753
+    },
+    {
+        "city": "Marinette",
+        "country": "USA",
+        "key": "frc754",
+        "name": "NWTC/MMC/M&M Foundation & Marinette HS & Menominee HS & Peshtigo HS",
+        "nickname": "FROSTBYTE",
+        "state_prov": "WI",
+        "team_number": 754
+    },
+    {
+        "city": "Washington",
+        "country": "USA",
+        "key": "frc755",
+        "name": "NASA/Kansas Space Grant Consortium & Washington High School",
+        "nickname": "Team 755",
+        "state_prov": "KS",
+        "team_number": 755
+    },
+    {
+        "city": "Newton",
+        "country": "USA",
+        "key": "frc757",
+        "name": "Newton Sr High",
+        "nickname": "Crazy Train",
+        "state_prov": "Kansas",
+        "team_number": 757
+    },
+    {
+        "city": "Blenheim",
+        "country": "Canada",
+        "key": "frc758",
+        "name": "ArvinMeritor / Meritor Suspension Systems / Ridge Landfill Community Trust / Chathm-Kent Community Foundation & The High Schools of South Kent",
+        "nickname": "South-Kent Youth Robotics",
+        "state_prov": "ON",
+        "team_number": 758
+    },
+    {
+        "city": "Cambridge",
+        "country": "Kingdom",
+        "key": "frc759",
+        "name": "Sputnik LLC/Caterpillar/CITRIX Systems/ARM/metapurple Ltd. & Hills Road Sixth Form College",
+        "nickname": "Systemetric",
+        "state_prov": "ENG",
+        "team_number": 759
+    },
+    {
+        "city": null,
+        "country": null,
+        "key": "frc760",
+        "name": "Team 760",
+        "nickname": "Team 760",
+        "state_prov": null,
+        "team_number": 760
+    },
+    {
+        "city": "Altamonte Springs",
+        "country": "USA",
+        "key": "frc762",
+        "name": "Disney/Metal Essence, Inc. & Lake Brantley High School",
+        "nickname": "Patriots",
+        "state_prov": "FL",
+        "team_number": 762
+    },
+    {
+        "city": "Sturgis",
+        "country": "USA",
+        "key": "frc764",
+        "name": "South Dakota Space Grant Consortium & Sturgis Brown High School",
+        "nickname": "Scoopers",
+        "state_prov": "SD",
+        "team_number": 764
+    },
+    {
+        "city": "Rapid City",
+        "country": "USA",
+        "key": "frc765",
+        "name": "South Dakota Space Grant Consortium & Rapid City Central High School",
+        "nickname": "Cobblers",
+        "state_prov": "SD",
+        "team_number": 765
+    },
+    {
+        "city": "Atherton",
+        "country": "USA",
+        "key": "frc766",
+        "name": "John Deere/Lambda Labs/Nimble Robotics/Lockheed Martin/Molex/Gene Haas Foundation/SolidWorks/DreamMaker Fund/PG&E Foundation&Menlo-Atherton High School",
+        "nickname": "M-A Bears",
+        "state_prov": "California",
+        "team_number": 766
+    },
+    {
+        "city": "Baltimore",
+        "country": "USA",
+        "key": "frc768",
+        "name": "Brauckman Family",
+        "nickname": "TechnoWarriors",
+        "state_prov": "MD",
+        "team_number": 768
+    },
+    {
+        "city": "Virginia Beach",
+        "country": "USA",
+        "key": "frc769",
+        "name": "ITT Tech & Landstown High School",
+        "nickname": "Eaglebotics",
+        "state_prov": "VA",
+        "team_number": 769
+    },
+    {
+        "city": "Rapid City",
+        "country": "USA",
+        "key": "frc770",
+        "name": "NASA/South Dakota Space Grant Consortium & Rapid City Stevens High School",
+        "nickname": "Team 770",
+        "state_prov": "SD",
+        "team_number": 770
+    },
+    {
+        "city": "Oakville",
+        "country": "Canada",
+        "key": "frc771",
+        "name": "Raytheon Technologies - Collins Aerospace/Hatch/Shaw Almex/ArcelorMittal & St. Mildred's-Lightbourn School",
+        "nickname": "SWAT",
+        "state_prov": "Ontario",
+        "team_number": 771
+    },
+    {
+        "city": "LaSalle",
+        "country": "Canada",
+        "key": "frc772",
+        "name": "Sandwich Secondary School",
+        "nickname": "Sabre Bytes Robotics",
+        "state_prov": "Ontario",
+        "team_number": 772
+    },
+    {
+        "city": "Kingsville",
+        "country": "Canada",
+        "key": "frc773",
+        "name": "Fiat Chrysler Automotive Group/Centerline/St. Clair College/University of Windsor&KINGSVILLE DISTRICT HIGH SCHOOL",
+        "nickname": "Kingsville CavalGears",
+        "state_prov": "Ontario",
+        "team_number": 773
+    },
+    {
+        "city": "Tecumseh",
+        "country": "Canada",
+        "key": "frc776",
+        "name": "Anchor Lamina Inc./Geo. T White Ltd./University of Windsor/St. Anne Parents Club & St Anne HS",
+        "nickname": "SATech Saints",
+        "state_prov": "ON",
+        "team_number": 776
+    },
+    {
+        "city": "Cuyahoga Heights",
+        "country": "USA",
+        "key": "frc779",
+        "name": "Team 779",
+        "nickname": "Team 779",
+        "state_prov": "OH",
+        "team_number": 779
+    },
+    {
+        "city": "Bayamon",
+        "country": "USA",
+        "key": "frc780",
+        "name": "NASA Dryden Flight Research Center/Inter American University & Colegio La Salle & Academia Bautista & Francisco Gaztambide",
+        "nickname": "TigerBots",
+        "state_prov": "PR",
+        "team_number": 780
+    },
+    {
+        "city": "Kincardine",
+        "country": "Canada",
+        "key": "frc781",
+        "name": "Kinetic Knights Youth Robotics/Bruce Power&Family/Community",
+        "nickname": "Kinetic Knights",
+        "state_prov": "Ontario",
+        "team_number": 781
+    },
+    {
+        "city": "Hartford",
+        "country": "USA",
+        "key": "frc782",
+        "name": "University of Hartford/PKT Development Inc & The Watkinson School",
+        "nickname": "Kilowatts",
+        "state_prov": "CT",
+        "team_number": 782
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc783",
+        "name": "Mowat C.I.",
+        "nickname": "Mobotics",
+        "state_prov": "ON",
+        "team_number": 783
+    },
+    {
+        "city": "Redmond",
+        "country": "USA",
+        "key": "frc800",
+        "name": "NASA/Oregon Space Grant Consortium & Redmond High School",
+        "nickname": "The HazBots",
+        "state_prov": "OR",
+        "team_number": 800
+    },
+    {
+        "city": "Merritt Island",
+        "country": "USA",
+        "key": "frc801",
+        "name": "Kerschner Family/W&J Construction/Brevard Public Schools/Axient/Brevard County Fire Rescue Station 43/Lockheed Martin/All Points Logistics/Crest Cleaners/BrightAI/Excell Coatings Inc./Alro Steel/ST6 Hydro Cutting/Trade Wind Builders/Miller and Hunt Wealth Advisors&Edgewood Jr Sr High School",
+        "nickname": "Horsepower",
+        "state_prov": "Florida",
+        "team_number": 801
+    },
+    {
+        "city": "Sudbury",
+        "country": "USA",
+        "key": "frc802",
+        "name": "Team 802",
+        "nickname": "Team 802",
+        "state_prov": "MA",
+        "team_number": 802
+    },
+    {
+        "city": "Berkeley County",
+        "country": "USA",
+        "key": "frc803",
+        "name": "Trident Technical College & Hanahan High School",
+        "nickname": "Lowcountry Castaways",
+        "state_prov": "SC",
+        "team_number": 803
+    },
+    {
+        "city": "Rock Hill",
+        "country": "USA",
+        "key": "frc804",
+        "name": "Chick-fil-A Dave Lyle/Williams and Fudge & Applied Technology Center & Rock Hill District 3 High Schools",
+        "nickname": "MetalMorphosis/Mad Scientists",
+        "state_prov": "SC",
+        "team_number": 804
+    },
+    {
+        "city": "Salem",
+        "country": "USA",
+        "key": "frc805",
+        "name": "NASA /Oregon Space Grant Consortium/Zephyr Engineering & South Salem High School",
+        "nickname": "Igniters",
+        "state_prov": "OR",
+        "team_number": 805
+    },
+    {
+        "city": "Brooklyn",
+        "country": "USA",
+        "key": "frc806",
+        "name": "Gene Haas Foundation/Bloomberg/NYC FIRST/S&P Global/The Beinert Family/Optimum/D'Onofrio General Contractors Corp.&Xaverian High School",
+        "nickname": "The Brooklyn Blacksmiths",
+        "state_prov": "New York",
+        "team_number": 806
+    },
+    {
+        "city": "Huntsville",
+        "country": "USA",
+        "key": "frc807",
+        "name": "NASA/Digital Fusion, Inc./CFD Research Corporation & New Century Technology High School & Columbia High School",
+        "nickname": "Monster Mechanics",
+        "state_prov": "AL",
+        "team_number": 807
+    },
+    {
+        "city": "Alliance",
+        "country": "USA",
+        "key": "frc808",
+        "name": "Westmont, Inc./Lake Erie Electric Loomis Division/SES, LLC Steel Engineering Specialists/Sarchione Sales and Service/G Weimer/D & J Burdett/Hill's Heating and Cooling & Alliance High School",
+        "nickname": "Mechanical Mayhem",
+        "state_prov": "OH",
+        "team_number": 808
+    },
+    {
+        "city": "Manchester",
+        "country": "USA",
+        "key": "frc809",
+        "name": "Stanley Works/Pratt & Whitney/Cheney Tech PTO & Cheney Tech",
+        "nickname": "The TechnoWizards",
+        "state_prov": "CT",
+        "team_number": 809
+    },
+    {
+        "city": "Smithtown",
+        "country": "USA",
+        "key": "frc810",
+        "name": "Smithtown Central School District/Gene Haas Foundation/BAE Systems/Optimum/Festo&Smithtown High School-West&Smithtown High School-East",
+        "nickname": "The Mechanical Bulls",
+        "state_prov": "New York",
+        "team_number": 810
+    },
+    {
+        "city": "Nashua",
+        "country": "USA",
+        "key": "frc811",
+        "name": "Analog Devices Corporation/Darren & Tuyet Martin/Brady Sullivan Properties/BAE Systems/Society of Woman Engineers - Southern NH&Bishop Guertin High School",
+        "nickname": "Wild Cards",
+        "state_prov": "New Hampshire",
+        "team_number": 811
+    },
+    {
+        "city": "La Jolla",
+        "country": "USA",
+        "key": "frc812",
+        "name": "General Motors Foundation / Qualcomm / Solar Turbines / LEIDOS / Nordson ASYMTEK / Abbott / The Preuss School UCSD / University of California at San Diego / Irwin and Joan Jacobs & Preuss School",
+        "nickname": "The Midnight Mechanics",
+        "state_prov": "California",
+        "team_number": 812
+    },
+    {
+        "city": "Napa",
+        "country": "USA",
+        "key": "frc814",
+        "name": "TBL Capital & RETURN OF 814",
+        "nickname": "Megaforce",
+        "state_prov": "CA",
+        "team_number": 814
+    },
+    {
+        "city": "Allen Park",
+        "country": "USA",
+        "key": "frc815",
+        "name": "Ford Motor Company/J&B Precision/Michigan Department of Education/DADARA&Allen Park High School&Inter City Baptist School",
+        "nickname": "Advanced Power",
+        "state_prov": "Michigan",
+        "team_number": 815
+    },
+    {
+        "city": "Mount Holly",
+        "country": "USA",
+        "key": "frc816",
+        "name": "Burlington County Institute of Technology Foundation/Comcast NBCUniversal/Biraluci Italian Restaurant and Pizzeria/CSD Design & Fabrication/Volpe Charitable Trust/National Gypsum/Gene Haas Foundation&Burlington Co Tech-Westampton",
+        "nickname": "Anomaly",
+        "state_prov": "New Jersey",
+        "team_number": 816
+    },
+    {
+        "city": "Warren",
+        "country": "USA",
+        "key": "frc818",
+        "name": "General Motors/McNaughton-McKay/Michigan Department of Education/Casadei Steel, Inc./ProForm/All American Pet Resort/Warren Consolidated Schools & Sterling Heights High School",
+        "nickname": "The Steel Armadillos",
+        "state_prov": "Michigan",
+        "team_number": 818
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc820",
+        "name": "iisnet networks/PEO-North Toronto Chapter/Ready Honda & North Toronto Collegiate Institute & Toronto District School Board",
+        "nickname": "Team DeltaTech",
+        "state_prov": "ON",
+        "team_number": 820
+    },
+    {
+        "city": "Detroit",
+        "country": "USA",
+        "key": "frc822",
+        "name": "Ford Motor Company & Mackenzie High School & Henry Ford High School",
+        "nickname": "Team 822",
+        "state_prov": "MI",
+        "team_number": 822
+    },
+    {
+        "city": "Seattle",
+        "country": "USA",
+        "key": "frc824",
+        "name": "University of Washington & Roosevelt High School",
+        "nickname": "SWAT Robotics",
+        "state_prov": "WA",
+        "team_number": 824
+    },
+    {
+        "city": "Dublin",
+        "country": "USA",
+        "key": "frc825",
+        "name": "Verizon Virginia Inc./Radford University & Southwest Virginia Governor School",
+        "nickname": "SWiVaGus Maximus",
+        "state_prov": "VA",
+        "team_number": 825
+    },
+    {
+        "city": "Fremont",
+        "country": "USA",
+        "key": "frc827",
+        "name": "MCI & California School for the Deaf",
+        "nickname": "Robotics Eagle",
+        "state_prov": "CA",
+        "team_number": 827
+    },
+    {
+        "city": "Indianapolis",
+        "country": "USA",
+        "key": "frc829",
+        "name": "DoD Stem/Motorola Solutions/the Gene Haas Foundation/Bayer Fund/Colors Inc&Walker Career Center",
+        "nickname": "The Digital Goats",
+        "state_prov": "Indiana",
+        "team_number": 829
+    },
+    {
+        "city": "Ann Arbor",
+        "country": "USA",
+        "key": "frc830",
+        "name": "Bosch/Michigan Department of Education/Thomson Reuters/Maker Works/Harbor Freight/Ann Arbor Public Schools&Huron High School&Early College Alliance",
+        "nickname": "The RatPack",
+        "state_prov": "Michigan",
+        "team_number": 830
+    },
+    {
+        "city": "Mililani",
+        "country": "USA",
+        "key": "frc831",
+        "name": "Castle & Cooke/Leeward Community College & Mililani High School",
+        "nickname": "Ka Mikini Hui O Mililani",
+        "state_prov": "HI",
+        "team_number": 831
+    },
+    {
+        "city": "Roswell",
+        "country": "USA",
+        "key": "frc832",
+        "name": "Fulton County Schools/92 Threads/Roswell High School Robotics Booster Club, Inc/Kennesaw State University/Novelis & Family/Community & Roswell High School",
+        "nickname": "OSCAR",
+        "state_prov": "Georgia",
+        "team_number": 832
+    },
+    {
+        "city": "Kamuela",
+        "country": "USA",
+        "key": "frc833",
+        "name": "Hawaii Preparatory Academy",
+        "nickname": "HPA Robotics",
+        "state_prov": "HI",
+        "team_number": 833
+    },
+    {
+        "city": "Center Valley",
+        "country": "USA",
+        "key": "frc834",
+        "name": "The SparTechs Foundation/Lutron/Bosch/Reliable Equipment/Texas Instruments/Knoll/Demco Automation/Bergey's/Sumitomo/Langan/CHL Systems/MSA&Southern Lehigh High School",
+        "nickname": "SparTechs",
+        "state_prov": "Pennsylvania",
+        "team_number": 834
+    },
+    {
+        "city": "Beverly Hills",
+        "country": "USA",
+        "key": "frc835",
+        "name": "DENSO & Detroit Country Day High Sch",
+        "nickname": "The Sting",
+        "state_prov": "Michigan",
+        "team_number": 835
+    },
+    {
+        "city": "Hollywood",
+        "country": "USA",
+        "key": "frc836",
+        "name": "Stachelczyk-Shemeta Team - Century 21 New Millennium /The Patuxent Partnership/BAE Systems/Northrop Gruman/DOD STEM/Naval Air Warfare Center Aircraft Division (NAWCAD)/growingSTEMS&Family/Community",
+        "nickname": "The RoboBees",
+        "state_prov": "Maryland",
+        "team_number": 836
+    },
+    {
+        "city": "Oxford",
+        "country": "USA",
+        "key": "frc837",
+        "name": "Plastic Ingenuity & Granville County Schools",
+        "nickname": "Webbinators",
+        "state_prov": "NC",
+        "team_number": 837
+    },
+    {
+        "city": "Feeding Hills",
+        "country": "USA",
+        "key": "frc839",
+        "name": "RTX/Pratt and Whitney/Agawam Robotics Education Association Inc./Agawam Public Schools/General Dynamics Mission Systems/TW Metals/The Center for Surrogacy and Egg Donation&Agawam Senior High School",
+        "nickname": "Rosie Robotics",
+        "state_prov": "Massachusetts",
+        "team_number": 839
+    },
+    {
+        "city": "San Mateo",
+        "country": "USA",
+        "key": "frc840",
+        "name": "Friends and Family of Aragon Robotics/Gene Haas Foundation/Aragon High School PTSO/San Mateo Union High School District/Intuitive Surgical/Qualcomm/PGE / DreamMakers Fund/FutureBytes/FIRST NorCal/Architectural Glass and Aluminum/Shaper Tools/KiwiCo/FabWorks/CAM.EDU&Aragon High School",
+        "nickname": "Aragon Robotics Team",
+        "state_prov": "California",
+        "team_number": 840
+    },
+    {
+        "city": "Richmond",
+        "country": "USA",
+        "key": "frc841",
+        "name": "Chevron/Apple/BAE Systems/Intuitive Surgical/Applied Materials/Engineering Partnership Academy & College and Career Center/Applied Lasers LLC/M. Welding Creations and Industrial Finishing&Richmond High School",
+        "nickname": "The BioMechs",
+        "state_prov": "California",
+        "team_number": 841
+    },
+    {
+        "city": "Phoenix",
+        "country": "USA",
+        "key": "frc842",
+        "name": "Arizona Charitable Tax Credit Donors/Simrex Corporation/Shebbie Jacques/Southwest Fasteners/SOLIDWORKS/SolidCAM&Carl Hayden Cmty High School",
+        "nickname": "Falcon Robotics",
+        "state_prov": "Arizona",
+        "team_number": 842
+    },
+    {
+        "city": "Oakville",
+        "country": "Canada",
+        "key": "frc843",
+        "name": "Davis Web LLP / BMP Metals / Baumeier Corp. / Sheridan College / BMP Metals / Enable Training and Consulting & Pathways & SHSM & White Oaks Secondary School & Halton District School Board",
+        "nickname": "Wildcats",
+        "state_prov": "ON",
+        "team_number": 843
+    },
+    {
+        "city": "Pendleton",
+        "country": "USA",
+        "key": "frc845",
+        "name": "Accu Tech & Pendleton High School",
+        "nickname": "Cutting Edge",
+        "state_prov": "SC",
+        "team_number": 845
+    },
+    {
+        "city": "San Jose",
+        "country": "USA",
+        "key": "frc846",
+        "name": "FUHS Foundation/Boeing/Apple/Western Digital Foundation/Intuitive Surgical Inc/Gene Haas Foundation/BAE P&S/Corning Foundation/Qualcomm/ARM/NASA/FIRST NorCal/FIRST NorCal/KLA-Tencor/Autodesk/PG&E/Tool Technologies Distributors&Lynbrook High School",
+        "nickname": "The Funky Monkeys",
+        "state_prov": "California",
+        "team_number": 846
+    },
+    {
+        "city": "Philomath",
+        "country": "USA",
+        "key": "frc847",
+        "name": "Foundation for Rural Services/Philomath Boosters Club/Gene Hass Foundation/Lam Research/Mattress World Northwest/Oregon State Credit Union/Maxfield Family Foundation/Cycle Oregon/Autodesk/Argosy Foundation/IBEW 280/Alyrica/Hollingsworth and Vose/Chipotle/Philomath Lions Club/Philomath Rental/Corvallis Clinic/Citizens Bank/Pioneer Connect&Philomath High School",
+        "nickname": "PHRED",
+        "state_prov": "Oregon",
+        "team_number": 847
+    },
+    {
+        "city": "San Pedro",
+        "country": "USA",
+        "key": "frc848",
+        "name": "NASA & Rolling Hills Preparatory Sch",
+        "nickname": "HuskyBots",
+        "state_prov": "California",
+        "team_number": 848
+    },
+    {
+        "city": "Unionville",
+        "country": "Canada",
+        "key": "frc849",
+        "name": "PowerStream & Unionville High School",
+        "nickname": "Wolfpack",
+        "state_prov": "Ontario",
+        "team_number": 849
+    },
+    {
+        "city": "La Canada",
+        "country": "USA",
+        "key": "frc850",
+        "name": "Team 850",
+        "nickname": "Team 850",
+        "state_prov": "CA",
+        "team_number": 850
+    },
+    {
+        "city": "Torrance",
+        "country": "USA",
+        "key": "frc851",
+        "name": "JT Academy",
+        "nickname": "Froggers",
+        "state_prov": "CA",
+        "team_number": 851
+    },
+    {
+        "city": "Danville",
+        "country": "USA",
+        "key": "frc852",
+        "name": "Intuitive/Norcal Robotics&Athenian School",
+        "nickname": "ARC Robotics",
+        "state_prov": "California",
+        "team_number": 852
+    },
+    {
+        "city": "Phoenix",
+        "country": "USA",
+        "key": "frc853",
+        "name": "Team 853",
+        "nickname": "Thunderstorms",
+        "state_prov": "AZ",
+        "team_number": 853
+    },
+    {
+        "city": "Etobicoke",
+        "country": "Canada",
+        "key": "frc854",
+        "name": "TDSB/Hatch Ltd/Google & Martingrove Collegiate Institute",
+        "nickname": "Iron Bears",
+        "state_prov": "Ontario",
+        "team_number": 854
+    },
+    {
+        "city": "Houghton",
+        "country": "USA",
+        "key": "frc857",
+        "name": "General Motors/State of Michigan/Great Lakes Sound and Vibration/ThermoAnalytics, Inc./Superior Graphics/GS Engineering/Xeratec Software Development/Michigan Technological University - Computer Engineering Department/Solidworks/David Kent Consulting/Koppers/Calumet Electronics/Copper Country Robotics&Houghton High School",
+        "nickname": "Superior Roboworks",
+        "state_prov": "Michigan",
+        "team_number": 857
+    },
+    {
+        "city": "Wyoming",
+        "country": "USA",
+        "key": "frc858",
+        "name": "Pridgeon & Clay/Wyoming Public Schools/GE Aerospace&Wyoming High School",
+        "nickname": "Demons Robotics",
+        "state_prov": "Michigan",
+        "team_number": 858
+    },
+    {
+        "city": "Morgantown",
+        "country": "USA",
+        "key": "frc859",
+        "name": "West Virginia University & Monongalia County Board of Education & Morgantown High School",
+        "nickname": "BOING",
+        "state_prov": "WV",
+        "team_number": 859
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc861",
+        "name": "USC & Venice High School",
+        "nickname": "Gondobots",
+        "state_prov": "CA",
+        "team_number": 861
+    },
+    {
+        "city": "Canton",
+        "country": "USA",
+        "key": "frc862",
+        "name": "Jabil/Nissan/BOSCH/Amazon&Plymouth High School&Salem High School&Canton High School",
+        "nickname": "Lightning Robotics",
+        "state_prov": "Michigan",
+        "team_number": 862
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc863",
+        "name": "Team 863",
+        "nickname": "The Queens of Modnar",
+        "state_prov": "ON",
+        "team_number": 863
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc865",
+        "name": "Toronto District School Board/Motorola Solutions Foundation/The Optimist Club of Etobicoke/FIRST Robotics Canada/Intelliware/Studica/WARP7 Parents & Supporters&Western Technical-Commercial School",
+        "nickname": "WARP7",
+        "state_prov": "Ontario",
+        "team_number": 865
+    },
+    {
+        "city": "Caguas",
+        "country": "USA",
+        "key": "frc866",
+        "name": "NASA/Nypro Puerto Rico/Autoware Corporation & SmartTeens",
+        "nickname": "The SmartTeens of the Turabo Valley",
+        "state_prov": "PR",
+        "team_number": 866
+    },
+    {
+        "city": "Arcadia",
+        "country": "USA",
+        "key": "frc867",
+        "name": "NASA JPL & Arcadia High",
+        "nickname": "Absolute Value",
+        "state_prov": "California",
+        "team_number": 867
+    },
+    {
+        "city": "Carmel",
+        "country": "USA",
+        "key": "frc868",
+        "name": "APTIV Foundation/Lockheed Martin & Carmel Senior High School",
+        "nickname": "TechHOUNDS",
+        "state_prov": "Indiana",
+        "team_number": 868
+    },
+    {
+        "city": "Middlesex",
+        "country": "USA",
+        "key": "frc869",
+        "name": "Ansun Protective Metals / Micro / Veolia & Middlesex High School",
+        "nickname": "PowerCord",
+        "state_prov": "New Jersey",
+        "team_number": 869
+    },
+    {
+        "city": "Southold",
+        "country": "USA",
+        "key": "frc870",
+        "name": "Beachwood Masonry Supply/Charles & Helen Reichert Family Foundation, Inc./WM. J. Mills & Co./Crowley Marine Contracting/UltraMotion/Ferretti & Odell, CPAs PLLC/Woodside Orchards/Lakeside Landscaping/Suffolk Times/Costello Marine Contracting/Dylan Newman Forever 5 Foundation/North Fork Country Club/North Fork Welding & Steel Supply, Inc./North Fork Woodworks/Port of Egypt Marine, Inc./Sea Tow International/Binkis Property Development/Albertson Marine/Cabinets Plus/Condon Engineering/Country Corner Cafe/The Crean Family/Gary Despres, P.T./Goldsmith's Boat Shop/John McLane & Eileen McGuire/Northeastern Equipment Unlimited, Inc/North Fork Sanitation Inc./Southold Hardware/Southold Town PBA/STIDD Systems Inc./FIT Foods/DJK Heating & Cooling/Eastern Rentals/Hetro LLC/Island Fiberglass/Island Martial Arts/North Fork Animal Hospital/Peconic Landing/Riverhead Building Supply/Roman's Tile & Marble Inc./Southold Fish Market/Reflective Images&Southold Jr Sr High School",
+        "nickname": "TEAM  R. I. C. E.",
+        "state_prov": "New York",
+        "team_number": 870
+    },
+    {
+        "city": "West Islip",
+        "country": "USA",
+        "key": "frc871",
+        "name": "West Islp School District/Zebra Technologies/West Islip Robotics Booster Club, Inc./The DiStefano Family/West Islip Country Fair/Ondrives US/Microchip/Gran Prints/EnerSys/Premier Payroll Solutions/C&D Marine Service Inc. & West Islip Senior High School",
+        "nickname": "Robotechs",
+        "state_prov": "New York",
+        "team_number": 871
+    },
+    {
+        "city": "Columbus",
+        "country": "USA",
+        "key": "frc872",
+        "name": "columbus state community college & marion franklin boosters",
+        "nickname": "Techno-Devils",
+        "state_prov": "OH",
+        "team_number": 872
+    },
+    {
+        "city": "Dickinson",
+        "country": "USA",
+        "key": "frc873",
+        "name": "Team 873",
+        "nickname": "Team 873",
+        "state_prov": "ND",
+        "team_number": 873
+    },
+    {
+        "city": "Alexander",
+        "country": "USA",
+        "key": "frc874",
+        "name": "Alexander Public School",
+        "nickname": "Isis",
+        "state_prov": "ND",
+        "team_number": 874
+    },
+    {
+        "city": "Hatton",
+        "country": "USA",
+        "key": "frc875",
+        "name": "NASA /North Dakota Space Grant Consortium & Hatton Public School",
+        "nickname": "Team FrostByte",
+        "state_prov": "ND",
+        "team_number": 875
+    },
+    {
+        "city": "Hatton-Northwood",
+        "country": "USA",
+        "key": "frc876",
+        "name": "ND Space Grant/John Deere Inspire/Brent Pederson/Dr. Mary Aaland M.D./Northwood Mens Club/Sue Lloyd/Hatton Mens Club/Kathy LaFleur/Phil/Trish Gisi/Northwood American Legion Post 92/Haas Corporation/Valley United Coop/Land O' Lakes/Northern Minnesota Robotics Conference/Derek/Robin Lloyd/ND Career and TechEd&Hatton Eileson School&Northwood School",
+        "nickname": "Thunder Robotics",
+        "state_prov": "North Dakota",
+        "team_number": 876
+    },
+    {
+        "city": "Cando",
+        "country": "USA",
+        "key": "frc877",
+        "name": "UND Space Grant Consortium/North Dakota Career and Technical Education&North Star Public School",
+        "nickname": "Pi Rho 'botics @ North Star",
+        "state_prov": "North Dakota",
+        "team_number": 877
+    },
+    {
+        "city": "Rugby",
+        "country": "USA",
+        "key": "frc878",
+        "name": "North Dakota Space Grant Consortium / Rugby Welding & Machine / Rugby Truck Bodies & Equipment / Dakota Prairie Supply / Rugby Eagles Aerie #3834 & Rugby High School",
+        "nickname": "Metal Gear",
+        "state_prov": "ND",
+        "team_number": 878
+    },
+    {
+        "city": "New Town",
+        "country": "USA",
+        "key": "frc879",
+        "name": "NASA/North Dakota Space Grant Consortium/Cenex of New Town/Northrop Grumman - New Town Site/DJ Consulting & New Town High School",
+        "nickname": "Team 879",
+        "state_prov": "ND",
+        "team_number": 879
+    },
+    {
+        "city": "Fairmount",
+        "country": "USA",
+        "key": "frc880",
+        "name": "Fairmount Public School",
+        "nickname": "Border Patrol",
+        "state_prov": "ND",
+        "team_number": 880
+    },
+    {
+        "city": "Bismarck",
+        "country": "USA",
+        "key": "frc881",
+        "name": "Team 881",
+        "nickname": "Team 881",
+        "state_prov": "ND",
+        "team_number": 881
+    },
+    {
+        "city": "Cleveland",
+        "country": "USA",
+        "key": "frc883",
+        "name": "Cleveland Central Catholic High School",
+        "nickname": "Ironmen",
+        "state_prov": "OH",
+        "team_number": 883
+    },
+    {
+        "city": "Malverne",
+        "country": "USA",
+        "key": "frc884",
+        "name": "Malverne School District&Malverne High School",
+        "nickname": "Mechanical Mules",
+        "state_prov": "New York",
+        "team_number": 884
+    },
+    {
+        "city": "Randolph Center",
+        "country": "USA",
+        "key": "frc885",
+        "name": "Vermont Technical College/H2O Innovations&Vermont Academy of Science and Technology",
+        "nickname": "Ro-bovines",
+        "state_prov": "Vermont",
+        "team_number": 885
+    },
+    {
+        "city": "North York",
+        "country": "Canada",
+        "key": "frc886",
+        "name": "Toronto District School Board / Westview Centennial Secondary School / Rockwell Automation & Westview Centennial Secondary School",
+        "nickname": "Wildcats",
+        "state_prov": "Ontario",
+        "team_number": 886
+    },
+    {
+        "city": "Goffstown",
+        "country": "USA",
+        "key": "frc887",
+        "name": "Team 887",
+        "nickname": "Team 887",
+        "state_prov": "NH",
+        "team_number": 887
+    },
+    {
+        "city": "Glenelg",
+        "country": "USA",
+        "key": "frc888",
+        "name": "NASA Goddard/Whiting-Turner Contracting Company/Maryland Space Business Roundtable(MSBR)/Gene Haas Foundation/Intuitive Foundation/SRC Technologies/Maryland State Department of Education MSDE/Identity Promotions/J. David Mullinix and Sons&Glenelg High School",
+        "nickname": "Robotiators",
+        "state_prov": "Maryland",
+        "team_number": 888
+    },
+    {
+        "city": "West Islip",
+        "country": "USA",
+        "key": "frc889",
+        "name": "Team 889",
+        "nickname": "The Cougars",
+        "state_prov": "NY",
+        "team_number": 889
+    },
+    {
+        "city": "Syracuse",
+        "country": "USA",
+        "key": "frc891",
+        "name": "Syracuse Research Corporation & Central Tech Vocational School",
+        "nickname": "Neverending Chaos",
+        "state_prov": "NY",
+        "team_number": 891
+    },
+    {
+        "city": "Canal Winchester",
+        "country": "USA",
+        "key": "frc892",
+        "name": "American Electric Power/SAVvy Engineering LLC/David's United Church of Christ & Canal Winchester High School",
+        "nickname": "Team ASCII",
+        "state_prov": "OH",
+        "team_number": 892
+    },
+    {
+        "city": "Flint",
+        "country": "USA",
+        "key": "frc894",
+        "name": "Kettering University/General Motors/Michigan Departmnet of Education/Mannor Law Group/Last Anvil&Powers Catholic High School",
+        "nickname": "The Power Chargers",
+        "state_prov": "Michigan",
+        "team_number": 894
+    },
+    {
+        "city": "Newark",
+        "country": "USA",
+        "key": "frc896",
+        "name": "CENTRAL & CENTRAL",
+        "nickname": "Blue Steel",
+        "state_prov": "New Jersey",
+        "team_number": 896
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc897",
+        "name": "Team 897",
+        "nickname": "Team 4",
+        "state_prov": "ON",
+        "team_number": 897
+    },
+    {
+        "city": "Glendale",
+        "country": "USA",
+        "key": "frc898",
+        "name": "Ironwood High School",
+        "nickname": "Team Desert Storm",
+        "state_prov": "AZ",
+        "team_number": 898
+    },
+    {
+        "city": "Houston",
+        "country": "USA",
+        "key": "frc899",
+        "name": "Team 899",
+        "nickname": "Team 6",
+        "state_prov": "TX",
+        "team_number": 899
+    },
+    {
+        "city": "Durham",
+        "country": "USA",
+        "key": "frc900",
+        "name": "NCSSM Foundation/John Deere/Corning&North Carolina School of Science and Mathematics&Durham Public Schools&Local Home Schools",
+        "nickname": "The Zebracorns",
+        "state_prov": "North Carolina",
+        "team_number": 900
+    },
+    {
+        "city": "Miami",
+        "country": "USA",
+        "key": "frc901",
+        "name": "Team 901",
+        "nickname": "Team 8",
+        "state_prov": "FL",
+        "team_number": 901
+    },
+    {
+        "city": "Saginaw",
+        "country": "USA",
+        "key": "frc902",
+        "name": "Delphi Saginaw Steering Systems & Heritage High School",
+        "nickname": "Delphi Heritage RoboHawks",
+        "state_prov": "MI",
+        "team_number": 902
+    },
+    {
+        "city": "Detroit",
+        "country": "USA",
+        "key": "frc903",
+        "name": "University of Michigan/Skillman Foundation/Marathon Oil Company/General Motors Foundation/Ford Motor Company/PTC & Detroit Public Schools & Southwestern High School",
+        "nickname": "RoboTroopers",
+        "state_prov": "MI",
+        "team_number": 903
+    },
+    {
+        "city": "Grand Rapids",
+        "country": "USA",
+        "key": "frc904",
+        "name": "ArtiFlex/GVSU/Miller Welding Supply Co./Lincoln Electric/Magnum Powder Coating/Grand Rapids Public Schools/State of Michigan&Southeast Career Pathways Sch&Grand Rapids Univ Prep Academy&Grand Rapids Public Museum High School&Grand Rapids Montessori HS&C a Frost Environ Sci Mid HS",
+        "nickname": "D Cubed",
+        "state_prov": "Michigan",
+        "team_number": 904
+    },
+    {
+        "city": "Milford",
+        "country": "USA",
+        "key": "frc905",
+        "name": "Platt Tech Parent Faculty Organization & Platt Technical High School",
+        "nickname": "Platt Tech Panthers",
+        "state_prov": "CT",
+        "team_number": 905
+    },
+    {
+        "city": "Rolla",
+        "country": "USA",
+        "key": "frc906",
+        "name": "The University of Missouri - Rolla Robotics Competition Team & Rolla High School",
+        "nickname": "UMR",
+        "state_prov": "MO",
+        "team_number": 906
+    },
+    {
+        "city": "East York",
+        "country": "Canada",
+        "key": "frc907",
+        "name": "Toronto District School Board/Amada Canada Ltd./East York Collegiate SAC&East York Collegiate Institute",
+        "nickname": "East York Cybernetics \"The Cybernauts\"",
+        "state_prov": "Ontario",
+        "team_number": 907
+    },
+    {
+        "city": "North Charleston",
+        "country": "USA",
+        "key": "frc908",
+        "name": "Charleston County School District & Garrett Academy of Technology & Wando High School",
+        "nickname": "Botz of Prey",
+        "state_prov": "SC",
+        "team_number": 908
+    },
+    {
+        "city": "Lawrence",
+        "country": "USA",
+        "key": "frc909",
+        "name": "Ewing Marion Kauffman Foundation & Lawrence High School",
+        "nickname": "Junkyard Crew",
+        "state_prov": "KS",
+        "team_number": 909
+    },
+    {
+        "city": "Madison Heights",
+        "country": "USA",
+        "key": "frc910",
+        "name": "General Motors&Bishop Foley Catholic High Sch",
+        "nickname": "The Foley Freeze",
+        "state_prov": "Michigan",
+        "team_number": 910
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc912",
+        "name": "TDSB & William Lyon Mackenzie CI",
+        "nickname": "Iron Lyons",
+        "state_prov": "ON",
+        "team_number": 912
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc913",
+        "name": "Bendale BTI",
+        "nickname": "Bendale Robotics",
+        "state_prov": "ON",
+        "team_number": 913
+    },
+    {
+        "city": "Aurora",
+        "country": "Canada",
+        "key": "frc914",
+        "name": "Magna/Clover Tool Manufacturing/Rotary Club of Aurora/LKM Parts Manufacturing LTD./Magellan Aerospace/De Ville Electric/Optimist Club of Aurora/Irwin Industrial/Balluff/TACC Developments/STEM Minds/MaxTech 4343&Family/Community&NextGen",
+        "nickname": "NextGen",
+        "state_prov": "Ontario",
+        "team_number": 914
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc915",
+        "name": "Team 915",
+        "nickname": "Team 915",
+        "state_prov": "ON",
+        "team_number": 915
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc917",
+        "name": "Dishon Limited/Toronto District School Board & Lawrence Park Collegiate",
+        "nickname": "Team 917",
+        "state_prov": "ON",
+        "team_number": 917
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc918",
+        "name": "Team 918",
+        "nickname": "Team 918",
+        "state_prov": "ON",
+        "team_number": 918
+    },
+    {
+        "city": "Toronto",
+        "country": "Canada",
+        "key": "frc919",
+        "name": "LENOVO/CDW/The Pereira Foundation/Harbord Robotics Boosters&Harbord Collegiate Institute",
+        "nickname": "PANTHERA TIGRIS",
+        "state_prov": "Ontario",
+        "team_number": 919
+    },
+    {
+        "city": "Philadelphia",
+        "country": "USA",
+        "key": "frc920",
+        "name": "Team 920",
+        "nickname": "Team 920",
+        "state_prov": "PA",
+        "team_number": 920
+    },
+    {
+        "city": "Laredo",
+        "country": "USA",
+        "key": "frc922",
+        "name": "Texas Workforce Commission/AEP/jcpenney/TxDOT",
+        "nickname": "ULTIMATE:  United Longhorn Team Inspiring Mental Attitude Towards Engineering",
+        "state_prov": "TX",
+        "team_number": 922
+    },
+    {
+        "city": "China Grove",
+        "country": "USA",
+        "key": "frc925",
+        "name": "Team 925",
+        "nickname": "Code Red",
+        "state_prov": "NC",
+        "team_number": 925
+    },
+    {
+        "city": "Raleigh",
+        "country": "USA",
+        "key": "frc926",
+        "name": "Cisco Systems/ABB/GSK & Broughton HS",
+        "nickname": "The Capacitors",
+        "state_prov": "NC",
+        "team_number": 926
+    },
+    {
+        "city": "Reston",
+        "country": "USA",
+        "key": "frc927",
+        "name": "Team 927",
+        "nickname": "Team 927",
+        "state_prov": "VA",
+        "team_number": 927
+    },
+    {
+        "city": "Washington",
+        "country": "USA",
+        "key": "frc928",
+        "name": "Motorola Foundation & Benjamin Banneker Academic HS",
+        "nickname": "Hounds of Steel",
+        "state_prov": "DC",
+        "team_number": 928
+    },
+    {
+        "city": "Mukwonago",
+        "country": "USA",
+        "key": "frc930",
+        "name": "Komatsu/TAPCO/NEXT Electric/West Coast Products/The Thrifty Bot&Mukwonago High School",
+        "nickname": "Mukwonago BEARs",
+        "state_prov": "Wisconsin",
+        "team_number": 930
+    },
+    {
+        "city": "Saint Louis",
+        "country": "USA",
+        "key": "frc931",
+        "name": "Boeing/Rockwell Automation/St. Louis Public Schools Foundation/Bayer Fund/Custom Machine Works/J-KEM Scientific Inc./Shapiro Supply/Hartwig, Inc./Bates Sales/Tech Manufacturing/Saint Louis Public Schools&Gateway STEM High School",
+        "nickname": "Perpetual Chaos",
+        "state_prov": "Missouri",
+        "team_number": 931
+    },
+    {
+        "city": "Tulsa",
+        "country": "USA",
+        "key": "frc932",
+        "name": "TD Williamson / AEP-PSO / DOD STEM / RTI / SISU Engineering / Allied Fence Company of Tulsa / Delta Lodge #425 / Oklahoma Science & Engineering Foundation / Tulsa Engineering Foundation / Memorial Robotics Booster Club & Memorial High School",
+        "nickname": "The Circuit Chargers",
+        "state_prov": "Oklahoma",
+        "team_number": 932
+    },
+    {
+        "city": "Rockford",
+        "country": "USA",
+        "key": "frc933",
+        "name": "IEEE/Hamilton Sundstrand & Christian Life High Schools",
+        "nickname": "Trigos",
+        "state_prov": "IL",
+        "team_number": 933
+    },
+    {
+        "city": "Lawrence",
+        "country": "USA",
+        "key": "frc934",
+        "name": "Team 934",
+        "nickname": "Team 934",
+        "state_prov": "KS",
+        "team_number": 934
+    },
+    {
+        "city": "Newton",
+        "country": "USA",
+        "key": "frc935",
+        "name": "Wickiser Family/Millennium Machine/Moridge Manufacturing/Horn's Auto Repair/Kansas Electric/Dillons&Newton Senior High School",
+        "nickname": "RaileRobotics",
+        "state_prov": "Kansas",
+        "team_number": 935
+    },
+    {
+        "city": "Osborne",
+        "country": "USA",
+        "key": "frc936",
+        "name": "NASA/Kansas Space Grant Consortium/Osborne Industries, Inc./Don Moore Electric & Osborne High School",
+        "nickname": "Big Dogs",
+        "state_prov": "KS",
+        "team_number": 936
+    },
+    {
+        "city": "Overland Park",
+        "country": "USA",
+        "key": "frc937",
+        "name": "Kieva/KC STEM Alliance/Shawnee Mission North Booster Club/AirParts Inc/Hy-Vee/Mack Hardware/EcoDc Solutions&Shawnee Mission North High Sch",
+        "nickname": "Nerd Herd",
+        "state_prov": "Kansas",
+        "team_number": 937
+    },
+    {
+        "city": "Richmond",
+        "country": "USA",
+        "key": "frc938",
+        "name": "American Eagle Outfitters/Kalmar Global/Walmart D.C./Extreme Defensive Options LLC/Don d'Augereau Family/Ortiz Family/Ms. Fixit Computer Repair LLC/Home Base/W. W. Grainger, Inc.&Central Heights High School",
+        "nickname": "Code Gold",
+        "state_prov": "Kansas",
+        "team_number": 938
+    },
+    {
+        "city": "Sisseton",
+        "country": "USA",
+        "key": "frc939",
+        "name": "Sisseton High School",
+        "nickname": "Hiphopanonymous",
+        "state_prov": "SD",
+        "team_number": 939
+    },
+    {
+        "city": "Brookings",
+        "country": "USA",
+        "key": "frc940",
+        "name": "NASA/South Dakota Space Grant Consortium/Larson Manufacturing & Brookings High School",
+        "nickname": "Digital Demolition",
+        "state_prov": "SD",
+        "team_number": 940
+    },
+    {
+        "city": "Watertown",
+        "country": "USA",
+        "key": "frc941",
+        "name": "NASA /South Dakota Space Grant Consortium/Lake Area Technical Institute & Watertown High School",
+        "nickname": "Arrow Robotics",
+        "state_prov": "SD",
+        "team_number": 941
+    },
+    {
+        "city": "Woonsocket",
+        "country": "USA",
+        "key": "frc942",
+        "name": "NASA/South Dakota Space Grant Consortium & Woonsocket  High School",
+        "nickname": "Roboteers",
+        "state_prov": "SD",
+        "team_number": 942
+    },
+    {
+        "city": "Volga",
+        "country": "USA",
+        "key": "frc943",
+        "name": "South Dakota Space Grant Consortium & Sioux Valley High School",
+        "nickname": "Great Balls of Fire",
+        "state_prov": "SD",
+        "team_number": 943
+    },
+    {
+        "city": "Orlando",
+        "country": "USA",
+        "key": "frc945",
+        "name": "SIM of Central Florida/Colonial High School SAC committee/State of Florida/Walt Disney World/Fluid Power Society of Central Florida&Colonial High School",
+        "nickname": "Team Banana",
+        "state_prov": "Florida",
+        "team_number": 945
+    },
+    {
+        "city": "Coral Springs",
+        "country": "USA",
+        "key": "frc946",
+        "name": "Team 946",
+        "nickname": "Creepy Crafters",
+        "state_prov": "FL",
+        "team_number": 946
+    },
+    {
+        "city": "Daytona Beach",
+        "country": "USA",
+        "key": "frc947",
+        "name": "Team 947",
+        "nickname": "Hannibal Gear Gals",
+        "state_prov": "FL",
+        "team_number": 947
+    },
+    {
+        "city": "Bellevue",
+        "country": "USA",
+        "key": "frc948",
+        "name": "NASA/The Boeing Company/Microsoft/Google/Bellevue Schools Foundation&Newport High School",
+        "nickname": "NRG (Newport Robotics Group)",
+        "state_prov": "Washington",
+        "team_number": 948
+    },
+    {
+        "city": "Bellevue",
+        "country": "USA",
+        "key": "frc949",
+        "name": "OSPI/Boeing/FIRST Washington/Bellevue High PTSA/SPEEA/Bellevue Schools Foundation/HAAS&Bellevue High School",
+        "nickname": "Wolverine Robotics",
+        "state_prov": "Washington",
+        "team_number": 949
+    },
+    {
+        "city": "Reno",
+        "country": "USA",
+        "key": "frc950",
+        "name": "NASA /Nevada Space Grant Consortium & Reed High School",
+        "nickname": "Team 950",
+        "state_prov": "NV",
+        "team_number": 950
+    },
+    {
+        "city": "Reno",
+        "country": "USA",
+        "key": "frc953",
+        "name": "NASA/Nevada Space Grant Consortium & Reno High School",
+        "nickname": "Team Illuminati",
+        "state_prov": "NV",
+        "team_number": 953
+    },
+    {
+        "city": "Reno",
+        "country": "USA",
+        "key": "frc954",
+        "name": "NASA/Nevada Space Grant Consortium & Sage Ridge School",
+        "nickname": "Scorpion Robotics",
+        "state_prov": "NV",
+        "team_number": 954
+    },
+    {
+        "city": "Corvallis",
+        "country": "USA",
+        "key": "frc955",
+        "name": "Corvallis School District/Corvallis Elks Lodge #1413/Autzen Foundation/HP/Argosy Foundation/Batteries Plus Bulbs&Crescent Valley High School",
+        "nickname": "Ctrl C",
+        "state_prov": "Oregon",
+        "team_number": 955
+    },
+    {
+        "city": "Adair Village",
+        "country": "USA",
+        "key": "frc956",
+        "name": "Boeing / Burcham's Metals / State Farm-Justin Kruse / Society of Cable Telecommunication Engineers Cascade Range Chapter / MSS, Inc. Engineering / Robnett's Hardware & SANTIAM CHRISTIAN SCHOOL",
+        "nickname": "Eagle Cybertechnology ",
+        "state_prov": "OR",
+        "team_number": 956
+    },
+    {
+        "city": "Albany",
+        "country": "USA",
+        "key": "frc957",
+        "name": "Albany Public Schools Foundation/HP Inc./No Dinx/Argosy Foundation/LAM Research/Autodesk/Tektronix/Linn County Fair, Albany, OR/Benton County Fair Corvallis, OR/Albany Parks & Recreation/Harbor Freight/First Force/FIRST WA/Oregon Robotics Tournament & Outreach Program/Selmet Inc/Marie Lamfrom Foundation/Ram Steelco/Central Welding Supply/Burcham's Metals/Albany American Legion Post 10/Nathan Guthrie/West Albany High School/South Albany High School/LBCC Mechatronics/K & D Engineering/Christmas Storybook Land/Oregon Community Foundation/Albany Optimist Club/Ramage, Michelle/Yutzie, Jason/Coastal Farm and Ranch/Wheeler Family Foundation/Takena and Central PTC/Pacific Cast Technologies/See's Candy/Red Robin/Chipotle/Panda Express/Burgerville/Viper Northwest/Sherwin Williams/Campbell family&West Albany High School&South Albany High School",
+        "nickname": "SWARM - South and West Albany Robotics Maniacs",
+        "state_prov": "Oregon",
+        "team_number": 957
+    },
+    {
+        "city": "Palmer",
+        "country": "USA",
+        "key": "frc959",
+        "name": "Matanuska Telephone Association (MTA) & Palmer High School",
+        "nickname": "Team 959",
+        "state_prov": "AK",
+        "team_number": 959
+    },
+    {
+        "city": "Anchorage",
+        "country": "USA",
+        "key": "frc960",
+        "name": "Team 960",
+        "nickname": "Circuit Breakers",
+        "state_prov": "AK",
+        "team_number": 960
+    },
+    {
+        "city": "Winnemucca",
+        "country": "USA",
+        "key": "frc961",
+        "name": "NASA & Lowry High School & Lowry High School",
+        "nickname": "Buckaroo Brutes",
+        "state_prov": "NV",
+        "team_number": 961
+    },
+    {
+        "city": "Bullhead City",
+        "country": "USA",
+        "key": "frc962",
+        "name": "BBC Industrial Supply CO & Mohave High School",
+        "nickname": "Thunderbots",
+        "state_prov": "AZ",
+        "team_number": 962
+    },
+    {
+        "city": "Columbus",
+        "country": "USA",
+        "key": "frc963",
+        "name": "NASA/Ohio State University/jcpenney/AEP-American Electric Power & Columbus City Schools, South High School",
+        "nickname": "South Bulldogs Robotics",
+        "state_prov": "OH",
+        "team_number": 963
+    },
+    {
+        "city": "Bedford",
+        "country": "USA",
+        "key": "frc964",
+        "name": "Bedford Schools Foundation & Bedford High School",
+        "nickname": "Bearcat Robotics",
+        "state_prov": "OH",
+        "team_number": 964
+    },
+    {
+        "city": "Cleveland Heights",
+        "country": "USA",
+        "key": "frc966",
+        "name": "Cleveland Heights High School",
+        "nickname": "Heights Tigers",
+        "state_prov": "OH",
+        "team_number": 966
+    },
+    {
+        "city": "Marion",
+        "country": "USA",
+        "key": "frc967",
+        "name": "Collins Aerospace/BAE Systems/Gene Haas Foundation/New Leader Manufacturing/Theisens/Linn-Mar Booster Club/Iowa Solutions/Carpet King Carpet One/ITC Midwest/ShermCo Industries&Linn-Mar High School",
+        "nickname": "Iron Lions",
+        "state_prov": "Iowa",
+        "team_number": 967
+    },
+    {
+        "city": "West Covina",
+        "country": "USA",
+        "key": "frc968",
+        "name": "RM Industries/Central Powder Coating/Tennant Foundation/Ride and Show Engineering&West Covina High School",
+        "nickname": "RAWC (Robotics Alliance Of West Covina)",
+        "state_prov": "California",
+        "team_number": 968
+    },
+    {
+        "city": "Lebanon",
+        "country": "USA",
+        "key": "frc969",
+        "name": "Team 969",
+        "nickname": "Hollis Lightning",
+        "state_prov": "TN",
+        "team_number": 969
+    },
+    {
+        "city": "East Cleveland",
+        "country": "USA",
+        "key": "frc970",
+        "name": "Concept XXI/ECCS/21st Century CLC/Earthman's Education Services, Inc./R P Carbone & Shaw High School",
+        "nickname": "The Cardinals",
+        "state_prov": "OH",
+        "team_number": 970
+    },
+    {
+        "city": "Mountain View",
+        "country": "USA",
+        "key": "frc971",
+        "name": "NASA/Blue River Technologies/Google/John Deere/Plug and Play Information Technology/Mountain View High School PTSA/Intuitive Foundation/West Coast Products/InOrbit/PG&E/Dream Maker Fund/eBay&Mountain View High School",
+        "nickname": "Spartan Robotics",
+        "state_prov": "California",
+        "team_number": 971
+    },
+    {
+        "city": "Los Gatos",
+        "country": "USA",
+        "key": "frc972",
+        "name": "Los Gatos High School Wildcat Foundation/Iron Claw Family and Friends/Lynx Properties/HAAS Foundation/Intuitive Surgical/Campus Insurance/FIRST NorCal/Los Gatos Saratoga Union High School District&Los Gatos High School",
+        "nickname": "Iron Claw",
+        "state_prov": "California",
+        "team_number": 972
+    },
+    {
+        "city": "Atascadero",
+        "country": "USA",
+        "key": "frc973",
+        "name": "Family/Community",
+        "nickname": "Greybots",
+        "state_prov": "California",
+        "team_number": 973
+    },
+    {
+        "city": "Los Angeles",
+        "country": "USA",
+        "key": "frc974",
+        "name": "Mr. & Mrs. Stephen Petty/Gerald Oppenheimer Family Foundation/Raytheon & MARYMOUNT HIGH SCHOOL LOS ANGELES",
+        "nickname": "Nautae",
+        "state_prov": "CA",
+        "team_number": 974
+    },
+    {
+        "city": "Midlothian",
+        "country": "USA",
+        "key": "frc975",
+        "name": "Dominion/PEER Tech Prep Consortium/John Tyler Community College & James River High School",
+        "nickname": "Synergy Robotics",
+        "state_prov": "VA",
+        "team_number": 975
+    },
+    {
+        "city": "Nottoway",
+        "country": "USA",
+        "key": "frc976",
+        "name": "AB's Welding/Longwood ITTTIP/Virginia Business Education Partnership & Nottoway High School",
+        "nickname": "Circuit Breakerz",
+        "state_prov": "VA",
+        "team_number": 976
+    },
+    {
+        "city": "South Boston",
+        "country": "USA",
+        "key": "frc977",
+        "name": "Microsoft/Hitachi/Mid-Atlantic Automation Solutions/Halifax County Heritage Festival&Halifax Co High School",
+        "nickname": "Cometbots",
+        "state_prov": "Virginia",
+        "team_number": 977
+    },
+    {
+        "city": "Dayton",
+        "country": "USA",
+        "key": "frc979",
+        "name": "NASA Glenn Research Center/Delphi Automative Systems Dayton Technical Center/Sinclair Community College/Wright Patterson Air Force Base & Dayton Public School District & Trotwood Madison City School District & Kettering City School District & Jefferson Township School District & Dayton Christian School District & Northridge School District & Miamisburg Public School District & Springfield City School District",
+        "nickname": "Team 979",
+        "state_prov": "OH",
+        "team_number": 979
+    },
+    {
+        "city": "Burbank",
+        "country": "USA",
+        "key": "frc980",
+        "name": "NASA/JPL/Walt Disney Imagineering/Raytheon Intelligence & Space/Gene Haas Foundation/NAF Engineering Academy - Burbank Unified School District&Burbank High School&John Burroughs High School&FRC Team 980 ThunderBots",
+        "nickname": "ThunderBots",
+        "state_prov": "California",
+        "team_number": 980
+    },
+    {
+        "city": "Lebec",
+        "country": "USA",
+        "key": "frc981",
+        "name": "NASA/NASA JPL/Boston Scientific/MountainLyonsX&Frazier Mountain High School",
+        "nickname": "Snobotics",
+        "state_prov": "California",
+        "team_number": 981
+    },
+    {
+        "city": "Sioux Falls",
+        "country": "USA",
+        "key": "frc982",
+        "name": "South Dakota Space Grant Consortium/NASA/Augustana College & O'Gorman High School",
+        "nickname": "The Knights",
+        "state_prov": "SD",
+        "team_number": 982
+    },
+    {
+        "city": "Wellesley",
+        "country": "USA",
+        "key": "frc984",
+        "name": "Team 984",
+        "nickname": "Team 984",
+        "state_prov": "MA",
+        "team_number": 984
+    },
+    {
+        "city": "Las Vegas",
+        "country": "USA",
+        "key": "frc987",
+        "name": "Steve and Susan Philpott/Limelight/Purvis Industries/Thompson Family/Gene Haas Foundation/REV Robotics/Tesla/BAE Systems/All American Finishing/Switch/4 The Team!  LLC/Mark Jones/Bosze Welding/Mike and Nancy Barry/Martin Sprocket/Polymershapes&Cimarron-Memorial High School",
+        "nickname": "HIGHROLLERS",
+        "state_prov": "Nevada",
+        "team_number": 987
+    },
+    {
+        "city": "Las Vegas",
+        "country": "USA",
+        "key": "frc988",
+        "name": "&Edward W Clark High School",
+        "nickname": "Steel Phoenix",
+        "state_prov": "Nevada",
+        "team_number": 988
+    },
+    {
+        "city": "Las Vegas",
+        "country": "USA",
+        "key": "frc989",
+        "name": "Palo Verde High School Science &Technology Club",
+        "nickname": "Palo",
+        "state_prov": "NV",
+        "team_number": 989
+    },
+    {
+        "city": "Las Vegas",
+        "country": "USA",
+        "key": "frc990",
+        "name": "Bechtel Nevada/University Nevada Las Vegas & Advanced Technologies Academy",
+        "nickname": "The Deadly Viper Assassination Squad",
+        "state_prov": "NV",
+        "team_number": 990
+    },
+    {
+        "city": "Phoenix",
+        "country": "USA",
+        "key": "frc991",
+        "name": "Brophy College Preparatory Sch",
+        "nickname": "BroncoBots",
+        "state_prov": "Arizona",
+        "team_number": 991
+    },
+    {
+        "city": "North Hollywood",
+        "country": "USA",
+        "key": "frc992",
+        "name": "NASA & Oakwood School",
+        "nickname": "Oakwood Robotics",
+        "state_prov": "CA",
+        "team_number": 992
+    },
+    {
+        "city": "Alhambra",
+        "country": "USA",
+        "key": "frc995",
+        "name": "NASA/Beckman Coulter & MARK KEPPEL HIGH",
+        "nickname": "Monkey Wrenchers",
+        "state_prov": "California",
+        "team_number": 995
+    },
+    {
+        "city": "Casa Grande",
+        "country": "USA",
+        "key": "frc996",
+        "name": "Nissan Technical Center North America &Casa Grande Union High School",
+        "nickname": "Mecha Knights",
+        "state_prov": "Arizona",
+        "team_number": 996
+    },
+    {
+        "city": "Corvallis",
+        "country": "USA",
+        "key": "frc997",
+        "name": "HP, Inc /HAAS /Corvallis Public School Foundation /LAM Research/Argosy Foundation /Factorywiz/Autodesk/Corvallis High School /OSU CEOAS/Grocery Outlet & Corvallis High School",
+        "nickname": "Spartan Robotics",
+        "state_prov": "Oregon",
+        "team_number": 997
+    },
+    {
+        "city": "Soldotna",
+        "country": "USA",
+        "key": "frc998",
+        "name": "The Challenger Learning Center of Alaska/British Petroleum & Soldotna High School",
+        "nickname": "The Overcookers",
+        "state_prov": "AK",
+        "team_number": 998
+    },
+    {
+        "city": "Cheshire",
+        "country": "USA",
+        "key": "frc999",
+        "name": "OTIS/Cheshire Public Schools/Bozzuto's Inc/RTX/Medtronic/Lockheed Martin/East Coast Mechanical/HW Green/Heavy Weight/Marion Manufacturing/Savin Group&Cheshire High School",
+        "nickname": "MechaRAMS",
+        "state_prov": "Connecticut",
+        "team_number": 999
+    }
+]

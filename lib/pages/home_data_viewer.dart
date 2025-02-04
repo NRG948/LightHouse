@@ -4,11 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
-import 'package:lighthouse/pages/saved_data.dart';
 import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
-import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/scrollable_box.dart';
-import 'package:path/path.dart';
 
 class DataViewerHome extends StatefulWidget {
   const DataViewerHome({super.key});

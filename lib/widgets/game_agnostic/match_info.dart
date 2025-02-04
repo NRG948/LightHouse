@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,6 +26,7 @@ class _MatchInfoState extends State<MatchInfo> {
     teamNumberController.addListener(() {
       setState(() {
         DataEntry.exportData["teamNumber"] = int.tryParse(teamNumberController.text) ?? 0;
+        getTeamInfo(int.tryParse(teamNumberController.text) ?? 0);
       });
     });
     print("INIT STATE");
@@ -40,6 +43,8 @@ class _MatchInfoState extends State<MatchInfo> {
     teamNumberController.dispose();
   }
   late String eventKey;
+  String? teamName;
+  String? teamLocation;
   bool replay = false;
   String matchType = "Qualifications";
   String driverStation = "Red 1";
@@ -49,7 +54,7 @@ class _MatchInfoState extends State<MatchInfo> {
    
     return Container(
       width: 400 * scaleFactor,
-      height: 225 * scaleFactor,
+      height: 275 * scaleFactor,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -59,14 +64,45 @@ class _MatchInfoState extends State<MatchInfo> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
-              height: 55 * scaleFactor,
+              height: 105 * scaleFactor,
               width: 390 * scaleFactor,
               decoration: BoxDecoration(
               color: Constants.pastelGray,
                     borderRadius: BorderRadius.circular(Constants.borderRadius)
                   ),
-              child: Center(child: AutoSizeText("Match - $eventKey".toUpperCase(),style: comfortaaBold(35,color:Colors.white),textAlign: TextAlign.center,)),
-                  
+              child: Center(
+                child: Column(children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                    Icon(Icons.event,size: 30 * scaleFactor,color: Constants.pastelWhite,),
+                    SizedBox(
+                    width: 300 * scaleFactor,
+                    height: 35 * scaleFactor,
+            
+                    child: Center(child: AutoSizeText(eventKey.toUpperCase(),style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,)))
+                  ],),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                    Icon(Icons.person,size: 30 * scaleFactor,color: Constants.pastelWhite,),
+                    SizedBox(
+                    width: 300 * scaleFactor,
+                    height: 35 * scaleFactor,
+                    child: Center(child: AutoSizeText(teamName ?? "No Team Selected",style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,)))
+                  ],),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                    Icon(Icons.location_pin,size: 30 * scaleFactor,color: Constants.pastelWhite,),
+                    SizedBox(
+                    width: 300 * scaleFactor,
+                    height: 35 * scaleFactor,
+                    child: Center(child: AutoSizeText(teamLocation ?? "",style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,)))
+                  ],)
+                ],)
+              ),
+                 
             ),
           ),
           Row(
@@ -158,4 +194,25 @@ class _MatchInfoState extends State<MatchInfo> {
       ),
     );
   }
+
+  void getTeamInfo(int teamNumber) async {
+    final teamPage = jsonDecode(await rootBundle.loadString("assets/text/teams${(teamNumber ~/ 500) * 500}-${(teamNumber ~/ 500) * 500 + 500}.txt"));
+    bool foundTeam = false;
+    for (dynamic teamObject in teamPage) {
+      if (teamObject["key"] == "frc$teamNumber") {
+        if (teamObject["city"] == null) {
+          print('found this team $teamNumber');
+          break;}
+        setState(() {
+          teamName = teamObject["nickname"];
+        teamLocation = "${teamObject["city"]}, ${teamObject["state_prov"]}, ${teamObject["country"]}";
+        foundTeam = true;
+        });
+      }
+    }
+    if (!foundTeam) {
+    teamName = null;
+    teamLocation = null;}
+  }
+
 }
