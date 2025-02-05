@@ -2,6 +2,7 @@ import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
+import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
 class NRGTextbox extends StatefulWidget {
@@ -13,12 +14,14 @@ class NRGTextbox extends StatefulWidget {
   final String defaultText;
   final double fontSize;
   final int maxLines;
+  final String? autoFill;
   const NRGTextbox(
       {super.key,
       required this.title,
       required this.jsonKey,
       required this.height,
       required this.width,
+      this.autoFill,
       this.numeric = false,
       required this.fontSize,
       required this.maxLines,
@@ -50,8 +53,14 @@ class _NRGTextboxState extends State<NRGTextbox> {
       });
     });
     DataEntry.exportData[_key] = "";
+    if (widget.autoFill != null) {
+      switch (widget.autoFill) {
+        case "scouterName":
+          _controller.text = configData["scouterName"] ?? "Scouter";
+      }
+    }
+    
   }
-
   // idk what this one does but gpt demands it
   @override
   void dispose() {
