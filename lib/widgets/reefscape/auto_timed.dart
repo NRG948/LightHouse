@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
@@ -44,42 +45,60 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RSATCoralStation(index: 6),
-                Container(
-                  width: 200,
-                  height: 75,
-                  decoration: BoxDecoration(
-                      color: Constants.pastelGray,
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius)),
-                  child: TextButton(
-                    onPressed: () {
-                      DataEntry.exportData["autoEventList"].add([
-                        "intakeCoral",
-                        (DataEntry.stopwatchMap[1] ?? Duration(milliseconds: 0))
-                            .deciseconds
-                      ]);
-                    },
-                    child: Transform.rotate(
-                      angle: pi / 2,
-                      child: Column(
-                        children: [
-                          Text(
-                            "Coral",
-                            style: comfortaaBold(18),
-                            textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            "Intake",
-                            style: comfortaaBold(18),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                Transform.translate(
+                    offset: Offset(5, 5),
+                    child: Stack(children: [
+                      RSATCoralStation(left: true, index: 7),
+                      Transform.translate(
+                          offset: Offset(14, 10),
+                          child: AutoSizeText("CS", style: comfortaaBold(20))),
+                    ])),
+                Transform.translate(
+                  offset: Offset(0, 5),
+                  child: Container(
+                    width: 175,
+                    height: 75,
+                    decoration: BoxDecoration(
+                        color: Constants.pastelGray,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius)),
+                    child: TextButton(
+                      onPressed: () {
+                        DataEntry.exportData["autoEventList"].add([
+                          "intakeCoral",
+                          (DataEntry.stopwatchMap[1] ??
+                                  Duration(milliseconds: 0))
+                              .deciseconds
+                        ]);
+                      },
+                      child: Transform.rotate(
+                        angle: pi / 2,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Coral",
+                              style: comfortaaBold(18),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "Intake",
+                              style: comfortaaBold(18),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-                RSATCoralStation(left: false, index: 7)
+                Transform.translate(
+                    offset: Offset(-5, 5),
+                    child: Stack(children: [
+                      RSATCoralStation(left: false, index: 7),
+                      Transform.translate(
+                          offset: Offset(30, 10),
+                          child: AutoSizeText("CS", style: comfortaaBold(20))),
+                    ]))
               ],
             ),
           ]),
@@ -125,8 +144,13 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
             }
           });
         },
-        child: CustomPaint(
-          painter: TrianglePainter(left: widget.left, enabled: enabled),
+        child: Stack(
+          children: [
+            CustomPaint(
+              painter: TrianglePainter(left: widget.left, enabled: enabled),
+            ), 
+            Transform.translate(offset: Offset(14, 10), child: AutoSizeText("CS", style: comfortaaBold(20)))
+          ],
         ),
       ),
     );
@@ -137,6 +161,7 @@ class TrianglePainter extends CustomPainter {
   final bool left;
   final bool enabled;
   const TrianglePainter({this.left = true, required this.enabled});
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -144,15 +169,24 @@ class TrianglePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final path = Path();
+    final radius = 10.0; // Adjust the radius for rounded corners
+
     if (left) {
-      path.moveTo(size.width, 0); // Top-right corner (90-degree angle)
-      path.lineTo(0, 0); // Bottom-left corner
-      path.lineTo(0, size.width); // Bottom-right corner
-      path.close(); // Closes the path
+      path.moveTo(size.width - radius, 0); // Top-right corner
+      path.quadraticBezierTo(size.width, 0, size.width, radius);
+      path.lineTo(radius, size.height);
+      path.quadraticBezierTo(0, size.height, 0, size.height - radius);
+      path.lineTo(0, radius);
+      path.quadraticBezierTo(0, 0, radius, 0);
+      path.close();
     } else {
-      path.moveTo(size.width, 0);
-      path.lineTo(0, 0);
-      path.lineTo(size.width, size.height);
+      path.moveTo(size.width - radius, 0); // Top-right corner
+      path.quadraticBezierTo(size.width, 0, size.width, radius);
+      path.lineTo(size.width, size.height - radius);
+      path.quadraticBezierTo(
+          size.width, size.height, size.width - radius, size.height);
+      path.lineTo(0, radius);
+      path.quadraticBezierTo(0, 0, radius, 0);
       path.close();
     }
     canvas.drawPath(path, paint);
