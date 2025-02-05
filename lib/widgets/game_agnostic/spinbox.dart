@@ -38,7 +38,9 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           children: [
-            AutoSizeText(_title, style: comfortaaBold(30,color: Constants.pastelReddishBrown)),
+            SizedBox(
+            width: _width * 0.8,
+            child: AutoSizeText(_title, style: comfortaaBold(30,color: Constants.pastelReddishBrown))),
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
