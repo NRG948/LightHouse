@@ -34,6 +34,10 @@ class SettingsPage extends StatelessWidget {
     );
     }).toList();
     settingsList.add(SaveSettingsButton());
+    settingsList.add(TextButton(onPressed: () {
+      loadConfig(reset:true);
+      Navigator.pushReplacementNamed(context, "/settings");
+    }, child: Text("Reset Configuration")));
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(

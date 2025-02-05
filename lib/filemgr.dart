@@ -29,11 +29,11 @@ Future<void> initConfig() async {
   }
 }
 
-Future<void> loadConfig() async {
+Future<void> loadConfig({bool reset = false}) async {
   configData.clear();
   late Map<String, dynamic> configJson;
   final configFile = File("$configFolder/config.nrg");
-  if (!(await configFile.exists())) {
+  if (!(await configFile.exists()) || reset) {
     configFile.writeAsString(jsonEncode(defaultConfig));
     configJson = defaultConfig;
   } else {

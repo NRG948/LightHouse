@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:typed_data';
 
 //TODO: Bugfixes
-// Timer starts at 2:00 instead of 2:15
-// Start climb should be a button and also stay on
+//  - Timer starts at 2:00 instead of 2:15
+//  - Start climb should be a button and also stay on
+
+//TODO: Make start climb only clickable once
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

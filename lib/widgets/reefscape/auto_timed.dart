@@ -9,6 +9,10 @@ import "dart:ui" as ui;
 
 import 'package:lighthouse/pages/data_entry.dart';
 
+// TODO: Turn coral intake into a TextButton
+// TODO: Make Coral Station buttons more evident (add an icon?)
+
+
 class RSAutoTimed extends StatefulWidget {
   final double width;
   const RSAutoTimed({super.key, required this.width});
