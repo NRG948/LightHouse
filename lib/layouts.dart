@@ -265,13 +265,11 @@ Map<String, dynamic> pitscout = {
           "title": "Robot Height (in)",
           "type": "numberbox",
           "jsonKey": "robotHeight",
-          "maxLines":20,
-          "fontSize":25.0
         },
         {
           "title": "Robot Length (in)",
           "type": "numberbox",
-          "jsonKey": "robotLength"
+          "jsonKey": "robotLength",
         },
         {
           "title": "Robot Width (in)",
@@ -291,7 +289,9 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Describe Robot Mechanisms",
           "type": "textbox",
-          "jsonKey": "robotMechanisms"
+          "jsonKey": "robotMechanisms",
+          "maxLines":20,
+          "fontSize":21.0
         }
       ]
     },
@@ -391,44 +391,57 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Driver and Manipulator Experience",
           "type": "textbox",
-          "jsonKey": "driveExperience"
+          "jsonKey": "driveExperience",
+          "maxLines":20,
+          "fontSize":16.5
+
         },
         {
           "title": "Preferred HP Station",
           "type": "dropdown",
           "options": "Processor,Processor Coral Station,Barge Coral Station",
-          "jsonKey": "humanPlayerPreference"
+          "jsonKey": "humanPlayerPreference",
+          
         },
         {
           "type": "row",
           "children": [
             {
-              "title": "Average Coral Cycles",
+              "title": "Average Coral \n Cycles Time",
               "type": "numberbox",
               "jsonKey": "averageCoralCycles",
-              "width": "42"
+              "width": "34",
+              "maxLines":20,
+              "fontSize":17.5
             },
             {
               "type": "spacer",
               "width": "2",
             },
             {
-              "title": "Average Algae Cycles",
+              "title": "Average Algae \n Cycles Time",
               "type": "numberbox",
               "jsonKey": "averageAlgaeCycles",
-              "width": "42"
+              "width": "34",
+              "maxLines":20,
+              "fontSize":17.5
             }
           ]
         },
         {
           "title": "Ideal Qualities in Alliance Partners",
           "type": "textbox",
-          "jsonKey": "idealAlliancePartnerQualities"
+          "jsonKey": "idealAlliancePartnerQualities",
+          "maxLines":20,
+          "fontSize":16.5
         },
         {
           "title": "Other Comments",
           "type": "textbox",
-          "jsonKey": "otherComments"
+          "jsonKey": "otherComments",
+          "maxLines": 25,
+          "height": "35",
+          "fontSize": 20.0
         }
       ]
     }
