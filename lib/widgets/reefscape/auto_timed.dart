@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
@@ -11,7 +12,6 @@ import 'package:lighthouse/pages/data_entry.dart';
 
 // TODO: Turn coral intake into a TextButton
 // TODO: Make Coral Station buttons more evident (add an icon?)
-
 
 class RSAutoTimed extends StatefulWidget {
   final double width;
@@ -30,43 +30,72 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
     scaleFactor = widget.width / 400;
     DataEntry.exportData["autoEventList"] = [];
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
       height: 500 * scaleFactor,
-      decoration: BoxDecoration(color: Constants.pastelWhite, borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      decoration: BoxDecoration(
+          color: Constants.pastelWhite,
+          borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
         children: [
-          Stack(
-            children: [Row(
+          Stack(children: [
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RSATCoralStation(index:6),
-                Container(width: 200,height: 75,decoration: BoxDecoration(color: Constants.pastelGray, borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                child: GestureDetector(
-                  onTap: () {
-                    DataEntry.exportData["autoEventList"].add(
-                      ["intakeCoral", (DataEntry.stopwatchMap[1]??Duration(milliseconds: 0)).deciseconds]
-                    );
-                  },
-                  child: Transform.rotate(angle: pi/2,
-                  child: Column(
-                    children: [
-                      Text("Coral",style: comfortaaBold(18),textAlign: TextAlign.center,),
-                      Text("Intake",style: comfortaaBold(18),textAlign: TextAlign.center,),
-                    ],
-                  ),),
-                ),),
-                RSATCoralStation(left:false, index:7)
+                Transform.translate(
+                    offset: Offset(5, 5),
+                    child: RSATCoralStation(left: true, index: 7)),
+                Transform.translate(
+                  offset: Offset(0, 5),
+                  child: Container(
+                    width: 175,
+                    height: 75,
+                    decoration: BoxDecoration(
+                        color: Constants.pastelGray,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius)),
+                    child: TextButton(
+                      onPressed: () {
+                        DataEntry.exportData["autoEventList"].add([
+                          "intakeCoral",
+                          (DataEntry.stopwatchMap[1] ??
+                                  Duration(milliseconds: 0))
+                              .deciseconds
+                        ]);
+                      },
+                      child: Transform.rotate(
+                        angle: pi / 2,
+                        child: Column(
+                          children: [
+                            Text(
+                              "Coral",
+                              style: comfortaaBold(18),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "Intake",
+                              style: comfortaaBold(18),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Transform.translate(
+                    offset: Offset(-5, 5),
+                    child: RSATCoralStation(left: false, index: 7))
               ],
             ),
-            
-            ]
-          ),
-         // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
-          RSATHexagon(radius: 150,)
+          ]),
+          // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
+          RSATHexagon(
+            radius: 150,
+          )
         ],
       ),
     );
@@ -77,7 +106,7 @@ class RSATCoralStation extends StatefulWidget {
   final bool left;
   final int index;
   const RSATCoralStation({super.key, this.left = true, required this.index});
- 
+
   @override
   State<RSATCoralStation> createState() => _RSATCoralStationState();
 }
@@ -90,18 +119,37 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
       height: 75,
       width: 75,
       child: GestureDetector(
-        onTap: () {setState(() {
-          if (!(_RSAutoTimedState.widgetStates.contains(true) && !_RSAutoTimedState.widgetStates[widget.index])){
-             enabled  = !enabled;
-      _RSAutoTimedState.widgetStates[widget.index] = !_RSAutoTimedState.widgetStates[widget.index];
-      DataEntry.exportData["autoEventList"].add(
-       ["${_RSAutoTimedState.widgetStates[widget.index] ? "enter" : "exit"}${widget.left ? "ProcessorCS" : "BargeCS"}", (DataEntry.stopwatchMap[1]??Duration(milliseconds: 0)).deciseconds]
-     );
-      }
-        });},
-        child: CustomPaint(
-          painter: TrianglePainter(left:widget.left,enabled:enabled),
-          
+        onTap: () {
+          setState(() {
+            if (!(_RSAutoTimedState.widgetStates.contains(true) &&
+                !_RSAutoTimedState.widgetStates[widget.index])) {
+              enabled = !enabled;
+              _RSAutoTimedState.widgetStates[widget.index] =
+                  !_RSAutoTimedState.widgetStates[widget.index];
+              DataEntry.exportData["autoEventList"].add([
+                "${_RSAutoTimedState.widgetStates[widget.index] ? "enter" : "exit"}${widget.left ? "ProcessorCS" : "BargeCS"}",
+                (DataEntry.stopwatchMap[1] ?? Duration(milliseconds: 0))
+                    .deciseconds
+              ]);
+            }
+          });
+        },
+        child: Stack(
+          children: [
+            SizedBox(
+              //I don't know why this is neccesary, but it is...? Otherwise it paints wrong...
+              width: 100, // Set a specific width
+              height: 100, // Set a specific height
+              child: CustomPaint(
+                painter: TrianglePainter(left: widget.left, enabled: enabled),
+              ),
+            ),
+            Transform.translate(
+                offset: Offset(widget.left ? 14 : 30, 10),
+                child: Transform.rotate(
+                    angle: pi / 2,
+                    child: AutoSizeText("CS", style: comfortaaBold(20))))
+          ],
         ),
       ),
     );
@@ -112,6 +160,7 @@ class TrianglePainter extends CustomPainter {
   final bool left;
   final bool enabled;
   const TrianglePainter({this.left = true, required this.enabled});
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -119,15 +168,24 @@ class TrianglePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final path = Path();
+    final radius = 10.0; // Adjust the radius for rounded corners
+
     if (left) {
-    path.moveTo(size.width, 0); // Top-right corner (90-degree angle)
-    path.lineTo(0, 0); // Bottom-left corner
-    path.lineTo(0, size.width); // Bottom-right corner
-    path.close(); // Closes the path
+      path.moveTo(size.width - radius, 0); // Top-right corner
+      path.quadraticBezierTo(size.width, 0, size.width, radius);
+      path.lineTo(radius, size.height);
+      path.quadraticBezierTo(0, size.height, 0, size.height - radius);
+      path.lineTo(0, radius);
+      path.quadraticBezierTo(0, 0, radius, 0);
+      path.close();
     } else {
-      path.moveTo(size.width, 0);
-      path.lineTo(0, 0);
-      path.lineTo(size.width, size.height);
+      path.moveTo(size.width - radius, 0); // Top-right corner
+      path.quadraticBezierTo(size.width, 0, size.width, radius);
+      path.lineTo(size.width, size.height - radius);
+      path.quadraticBezierTo(
+          size.width, size.height, size.width - radius, size.height);
+      path.lineTo(0, radius);
+      path.quadraticBezierTo(0, 0, radius, 0);
       path.close();
     }
     canvas.drawPath(path, paint);
@@ -146,7 +204,14 @@ class RSATHexagon extends StatefulWidget {
 
 class _RSATHexagonState extends State<RSATHexagon> {
   //List<bool> _RSAutoTimedState.widgetStates = List.filled(6, false); // Track state of each section
-  static List<String> triangleLabels = ["IJ","GH","EF","CD","AB","KL",];
+  static List<String> triangleLabels = [
+    "IJ",
+    "GH",
+    "EF",
+    "CD",
+    "AB",
+    "KL",
+  ];
   static List<ui.Image> triangleCache = [];
   bool imagesLoaded = false;
 
@@ -156,9 +221,10 @@ class _RSATHexagonState extends State<RSATHexagon> {
     _loadImages();
   }
 
-   Future<void> _loadImages() async {
+  Future<void> _loadImages() async {
     for (String label in triangleLabels) {
-      ui.Image image = await assetImageToUiImage("assets/images/reef-chronos/$label.png");
+      ui.Image image =
+          await assetImageToUiImage("assets/images/reef-chronos/$label.png");
       triangleCache.add(image);
     }
 
@@ -166,26 +232,31 @@ class _RSATHexagonState extends State<RSATHexagon> {
       imagesLoaded = true; // Ensure repaint after images are ready
     });
   }
+
   void toggleSection(int index) {
     setState(() {
-      if (!(_RSAutoTimedState.widgetStates.contains(true) && !_RSAutoTimedState.widgetStates[index])){
-      _RSAutoTimedState.widgetStates[index] = !_RSAutoTimedState.widgetStates[index];
-      DataEntry.exportData["autoEventList"].add(
-       ["${_RSAutoTimedState.widgetStates[index] ? "enter" : "exit"}${triangleLabels[index]}", (DataEntry.stopwatchMap[1]??Duration(milliseconds: 0)).deciseconds]
-     );
+      if (!(_RSAutoTimedState.widgetStates.contains(true) &&
+          !_RSAutoTimedState.widgetStates[index])) {
+        _RSAutoTimedState.widgetStates[index] =
+            !_RSAutoTimedState.widgetStates[index];
+        DataEntry.exportData["autoEventList"].add([
+          "${_RSAutoTimedState.widgetStates[index] ? "enter" : "exit"}${triangleLabels[index]}",
+          (DataEntry.stopwatchMap[1] ?? Duration(milliseconds: 0)).deciseconds
+        ]);
       }
     });
   }
+
   Future<ui.Image> assetImageToUiImage(String assetPath) async {
-  // Load the asset image as bytes
-  final ByteData data = await rootBundle.load(assetPath);
-  final Uint8List bytes = data.buffer.asUint8List();
+    // Load the asset image as bytes
+    final ByteData data = await rootBundle.load(assetPath);
+    final Uint8List bytes = data.buffer.asUint8List();
 
-  // Decode the image into a ui.Image
-  final Completer<ui.Image> completer = Completer();
-  ui.decodeImageFromList(bytes, (ui.Image img) => completer.complete(img));
+    // Decode the image into a ui.Image
+    final Completer<ui.Image> completer = Completer();
+    ui.decodeImageFromList(bytes, (ui.Image img) => completer.complete(img));
 
-  return completer.future;
+    return completer.future;
   }
 
   @override
@@ -208,10 +279,12 @@ class _RSATHexagonState extends State<RSATHexagon> {
     double size = widget.radius; // Radius of the hexagon
     double centerX = size;
     double centerY = size;
-    List<List<Offset>> triangles = HexagonPainter.getTrianglePoints(centerX, centerY, size);
+    List<List<Offset>> triangles =
+        HexagonPainter.getTrianglePoints(centerX, centerY, size);
 
     for (int i = 0; i < triangles.length; i++) {
-      if (isPointInTriangle(tap, triangles[i][0], triangles[i][1], triangles[i][2])) {
+      if (isPointInTriangle(
+          tap, triangles[i][0], triangles[i][1], triangles[i][2])) {
         return i;
       }
     }
@@ -220,7 +293,8 @@ class _RSATHexagonState extends State<RSATHexagon> {
 
   bool isPointInTriangle(Offset p, Offset a, Offset b, Offset c) {
     double sign(Offset p1, Offset p2, Offset p3) {
-      return (p1.dx - p3.dx) * (p2.dy - p3.dy) - (p2.dx - p3.dx) * (p1.dy - p3.dy);
+      return (p1.dx - p3.dx) * (p2.dy - p3.dy) -
+          (p2.dx - p3.dx) * (p1.dy - p3.dy);
     }
 
     double d1 = sign(p, a, b);
@@ -272,11 +346,13 @@ class HexagonPainter extends CustomPainter {
     }
   }
 
-  static List<List<Offset>> getTrianglePoints(double cx, double cy, double radius) {
+  static List<List<Offset>> getTrianglePoints(
+      double cx, double cy, double radius) {
     List<Offset> hexagonPoints = [];
     for (int i = 0; i < 6; i++) {
       double angle = pi / 3 * i;
-      hexagonPoints.add(Offset(cx + radius * cos(angle), cy + radius * sin(angle)));
+      hexagonPoints
+          .add(Offset(cx + radius * cos(angle), cy + radius * sin(angle)));
     }
 
     return [
@@ -295,22 +371,24 @@ class HexagonPainter extends CustomPainter {
       (triangle[0].dy + triangle[1].dy + triangle[2].dy) / 3,
     );
   }
- 
+
   void drawImage(Canvas canvas, ui.Image image, Offset position) {
     //final image = await assetImageToUiImage("assets/images/reef-chronos/$text.png");
-    paintImage(canvas: canvas, rect: Rect.fromCircle(center: position, radius:30), image: image);
+    paintImage(
+        canvas: canvas,
+        rect: Rect.fromCircle(center: position, radius: 30),
+        image: image);
   }
 
   void drawText(Canvas canvas, String text, Offset position) {
     TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: text,
-        style: comfortaaBold(18,color: Constants.pastelReddishBrown),
+        style: comfortaaBold(18, color: Constants.pastelReddishBrown),
       ),
       textDirection: TextDirection.ltr,
-
     );
-    
+
     textPainter.layout();
 
     Offset textOffset = Offset(
@@ -323,4 +401,3 @@ class HexagonPainter extends CustomPainter {
   @override
   bool shouldRepaint(HexagonPainter oldDelegate) => true;
 }
-
