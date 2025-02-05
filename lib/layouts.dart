@@ -16,6 +16,7 @@ Map<String, dynamic> atlascout = {
           "title": "Scouter Name",
           "type": "textbox",
           "jsonKey": "scouterName",
+          "autoFill":"scouterName"
         },
         {
           "type": "matchInfo",
@@ -167,6 +168,7 @@ Map<String, dynamic> chronoscout = {
           "title": "Scouter Name",
           "type": "textbox",
           "jsonKey": "scouterName",
+          "autoFill": "scouterName"
         },
         {
           "type": "matchInfo",
@@ -253,7 +255,8 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Interviewer Name",
           "type": "textbox",
-          "jsonKey": "interviewerName"
+          "jsonKey": "interviewerName",
+          "autoFill":"scouterName"
         }
       ]
     },
@@ -264,7 +267,9 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Robot Height (in)",
           "type": "numberbox",
-          "jsonKey": "robotHeight"
+          "jsonKey": "robotHeight",
+          "maxLines":20,
+          "fontSize":25.0
         },
         {
           "title": "Robot Length (in)",
@@ -440,7 +445,7 @@ Map<String, dynamic> hpscout = {
       "title": "Setup",
       "icon": CustomIcons.wrench,
       "widgets": [
-        {"title": "Scouter Name", "type": "textbox", "jsonKey": "scouterName"},
+        {"title": "Scouter Name", "type": "textbox", "jsonKey": "scouterName","autoFill":"scouterName"},
         {"type": "matchInfoHP"}
       ]
     },

@@ -178,8 +178,9 @@ class DataEntryState extends State<DataEntry> {
         case "textbox":
           final int maxLines = widgetData["maxLines"] ?? 1;
           final double fontSize = widgetData["fontSize"] ?? 30.0;
+          final String? autoFill = widgetData["autoFill"];
           return NRGTextbox(
-              title: title, jsonKey: jsonKey, height: height, width: width, maxLines: maxLines,fontSize: fontSize,);
+              title: title, jsonKey: jsonKey, height: height, width: width, maxLines: maxLines,fontSize: fontSize,autoFill: autoFill,);
         case "checkbox":
           return NRGCheckbox(
               title: title, jsonKey: jsonKey, height: height, width: width);

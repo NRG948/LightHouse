@@ -47,5 +47,16 @@ TextStyle comfortaaBold(double fontSize,
 
 final Map<int,String> responseCodes = {
   200:"OK",
-  404:"File Not Found"
+  301:"Permanantly Moved",
+  404:"File Not Found",
 };
+
+extension StringExtensions on String {
+  String get toSentenceCase => replaceAllMapped(
+    RegExp(r'([a-z])([A-Z])'),
+    (Match m) => '${m[1]} ${m[2]}',
+  ).replaceFirstMapped(
+    RegExp(r'^[a-z]'),
+    (Match m) => m[0]!.toUpperCase(),
+  );
+}

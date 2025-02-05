@@ -20,7 +20,7 @@ class SettingsPage extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(top: 8.0),
-            child: Text(setting, style: Constants.comfortaaBold20pt)
+            child: Text(setting.toSentenceCase, style: Constants.comfortaaBold20pt)
           ),
           TextField(
             controller: TextEditingController(text: configData[setting]),
