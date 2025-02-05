@@ -47,5 +47,6 @@ TextStyle comfortaaBold(double fontSize,
 
 final Map<int,String> responseCodes = {
   200:"OK",
-  404:"File Not Found"
+  301:"Permanantly Moved",
+  404:"File Not Found",
 };

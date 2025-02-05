@@ -264,7 +264,9 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Robot Height (in)",
           "type": "numberbox",
-          "jsonKey": "robotHeight"
+          "jsonKey": "robotHeight",
+          "maxLines":20,
+          "fontSize":25.0
         },
         {
           "title": "Robot Length (in)",
