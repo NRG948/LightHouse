@@ -39,6 +39,7 @@ final List<String> splashTexts = [
         "Accept cookies? \\(•ω•`)o",
         "error 1002: ; Expected",
         "Did we cook?",
+        "I think political comments are the best thing to put on splash texts -Krish", 
         "Now with 95% less consistent variable names!",
         "Can you hear the music?",
         "Also try Terraria!",
