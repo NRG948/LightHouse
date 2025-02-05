@@ -47,12 +47,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
               children: [
                 Transform.translate(
                     offset: Offset(5, 5),
-                    child: Stack(children: [
-                      RSATCoralStation(left: true, index: 7),
-                      Transform.translate(
-                          offset: Offset(14, 10),
-                          child: AutoSizeText("CS", style: comfortaaBold(20))),
-                    ])),
+                    child: RSATCoralStation(left: true, index: 7)),
                 Transform.translate(
                   offset: Offset(0, 5),
                   child: Container(
@@ -93,12 +88,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                 ),
                 Transform.translate(
                     offset: Offset(-5, 5),
-                    child: Stack(children: [
-                      RSATCoralStation(left: false, index: 7),
-                      Transform.translate(
-                          offset: Offset(30, 10),
-                          child: AutoSizeText("CS", style: comfortaaBold(20))),
-                    ]))
+                    child: RSATCoralStation(left: false, index: 7))
               ],
             ),
           ]),
@@ -146,10 +136,19 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
         },
         child: Stack(
           children: [
-            CustomPaint(
-              painter: TrianglePainter(left: widget.left, enabled: enabled),
-            ), 
-            Transform.translate(offset: Offset(14, 10), child: AutoSizeText("CS", style: comfortaaBold(20)))
+            SizedBox(
+              //I don't know why this is neccesary, but it is...? Otherwise it paints wrong...
+              width: 100, // Set a specific width
+              height: 100, // Set a specific height
+              child: CustomPaint(
+                painter: TrianglePainter(left: widget.left, enabled: enabled),
+              ),
+            ),
+            Transform.translate(
+                offset: Offset(widget.left ? 14 : 30, 10),
+                child: Transform.rotate(
+                    angle: pi / 2,
+                    child: AutoSizeText("CS", style: comfortaaBold(20))))
           ],
         ),
       ),
