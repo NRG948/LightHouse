@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 //TODO: Bugfixes
 //  - Timer starts at 2:00 instead of 2:15

@@ -15,10 +15,7 @@ class Constants {
   static const Color pastelGray = Color.fromARGB(255, 199, 185, 186);
   static const Color pastelReddishBrown = Color.fromARGB(255, 103, 50, 47);
   static const Color pastelRedMuted = Color.fromARGB(255, 162, 90, 83);
-  static TextStyle comfortaaBold30pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:30);
-  static TextStyle comfortaaBold20pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:20);
-  static TextStyle comfortaaBold10pt = TextStyle(fontFamily: "Comfortaa", fontWeight: FontWeight.bold, color: Colors.white,fontSize:10);
-
+  
   static final double borderRadius = 8;
 
   /// There is alwasy a delay between the end of, for example, 

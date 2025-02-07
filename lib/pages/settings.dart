@@ -20,14 +20,14 @@ class SettingsPage extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(top: 8.0),
-            child: Text(setting.toSentenceCase, style: Constants.comfortaaBold20pt)
+            child: Text(setting.toSentenceCase, style: comfortaaBold(20))
           ),
           TextField(
             controller: TextEditingController(text: configData[setting]),
             onChanged: (text) {
               configData[setting] = text;
             },
-            decoration: InputDecoration(labelText: "Enter Text", labelStyle: Constants.comfortaaBold20pt, border: OutlineInputBorder()),
+            decoration: InputDecoration(labelText: "Enter Text", labelStyle: comfortaaBold(20), border: OutlineInputBorder()),
           ) 
         ],
       )
