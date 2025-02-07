@@ -5,6 +5,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:lighthouse/pages/data_entry.dart';
 
 class SyncPage extends StatefulWidget {
   const SyncPage({super.key});
@@ -338,7 +339,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
       "Content-Type":"application/json"
     },
     );
-    
+    saveDatabaseFile(configData["eventKey"] ?? "", layout,response.body);
     return Future.value(0);
   }
 }

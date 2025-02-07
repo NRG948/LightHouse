@@ -32,9 +32,15 @@ class DataViewerHome extends StatelessWidget {
           child: Column(children: [
         TextButton(onPressed: () {
           Navigator.pushNamed(context, "/data-viewer-tony");
-        }, child: Text("Tony's Data Viewer Page"))
+        }, child: Text("Tony's Data Viewer Page")),
+         TextButton(onPressed: () {
+          Navigator.pushNamed(context, "/data-viewer-amongview");
+        }, child: Text("Amongview")),
       ],),
       ),
+
+
+
       appBar: AppBar(
         backgroundColor: Constants.pastelRed,
         title: const Text(

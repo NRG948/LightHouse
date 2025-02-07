@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/pages/amongview.dart";
 import "package:lighthouse/pages/data_entry.dart";
 import "package:lighthouse/pages/home_data_viewer.dart";
 import "package:lighthouse/pages/home_scouter.dart";
@@ -44,6 +45,7 @@ class MainWidget extends StatelessWidget {
         "/home-data-viewer": (context) => DataViewerHome(),
         "/sync": (context) => SyncPage(),
         "/data-viewer-tony" : (context) => TonyDataViewerPage(),
+        "/data-viewer-amongview": (context) => DataViewerAmongView()
       },
     );
   }
