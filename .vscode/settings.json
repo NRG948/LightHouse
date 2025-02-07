@@ -1,4 +1,7 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "dart.flutterRunAdditionalArgs": [ "--no-enable-impeller" ]
+    "dart.flutterRunAdditionalArgs": [
+        "--no-enable-impeller"
+    ],
+    "java.compile.nullAnalysis.mode": "disabled"
 }

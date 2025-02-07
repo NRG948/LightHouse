@@ -95,10 +95,10 @@ class _RSAUReefState extends State<RSAUReef> with AutomaticKeepAliveClientMixin 
         children: [
         Text("Section ${widget.sharedState.activeTriangle}",
         textAlign: TextAlign.center,
-        style: comfortaaBold(18 * widget.scaleFactor, color: Colors.black)),
+        style: comfortaaBold(18 * widget.scaleFactor, color: const Color.fromARGB(255, 0, 0, 0))),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[0]}4",scaleFactor: widget.scaleFactor,),
+          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[0]}4",scaleFactor: widget.scaleFactor ),
           RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[1]}4",scaleFactor: widget.scaleFactor),
         ],),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -153,9 +153,9 @@ class _RSAUTroughState extends State<RSAUTrough> {
         height: 96 * widget.scaleFactor,
         width: 302 * widget.scaleFactor,
         decoration: BoxDecoration(
-          color: counter > 0 ? Constants.pastelRed : Colors.grey,
+          color: counter > 0 ? Constants.pastelRed : Constants.pastelBlue,
           border: Border.all(
-            color: Colors.black,
+            color: const Color.fromARGB(255, 228, 231, 41),
             width: widget.scaleFactor
           )
         ),
@@ -167,8 +167,8 @@ class _RSAUTroughState extends State<RSAUTrough> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CoralAlgaeIcons.coral, size: 24 * widget.scaleFactor,),
-                  Text("Coral Scored L1 (Trough)", textAlign: TextAlign.center,style: comfortaaBold(15 * widget.scaleFactor, color: Colors.black),),
+                  Icon(CoralAlgaeIcons.coral, size: 24 * widget.scaleFactor,color: Colors.white,),
+                  Text("Coral Scored L1 (Trough)", textAlign: TextAlign.center,style: comfortaaBold(15 * widget.scaleFactor, color: const Color.fromARGB(255, 255, 255, 255)),),
                 ],
               ),
               GestureDetector(
@@ -180,10 +180,10 @@ class _RSAUTroughState extends State<RSAUTrough> {
                     children: [
                     SizedBox(
                       width: 250 * widget.scaleFactor,
-                      child: Text(counter.toString(),style: comfortaaBold(23 * widget.scaleFactor, color: Colors.black),textAlign: TextAlign.center,)),
+                      child: Text(counter.toString(),style: comfortaaBold(23 * widget.scaleFactor, color: const Color.fromARGB(255, 255, 251, 22)),textAlign: TextAlign.center,)),
                     SizedBox(
                       width: 24,
-                      child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down, size: 25 * widget.scaleFactor),highlightColor: Colors.transparent,splashColor: Colors.transparent,iconSize: 25 * widget.scaleFactor))
+                      child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down, size: 25 * widget.scaleFactor),highlightColor: const Color.fromARGB(255, 0, 0, 0),splashColor: const Color.fromARGB(255, 0, 0, 0),iconSize: 25 * widget.scaleFactor))
                   ],),
                 ),
               )
@@ -242,7 +242,7 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
         height: 60 * widget.scaleFactor,
         width:  (widget.algae ? 75 : 100) * widget.scaleFactor,
         decoration: BoxDecoration(
-          color: active ? Constants.pastelRed : Colors.grey,
+          color: active ? Constants.pastelRed : Constants.pastelGray,
           border: Border.all(
             color: Colors.black,
             width: widget.scaleFactor
@@ -250,7 +250,7 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
         child: Center(
           child: IconButton(onPressed: setActive, icon: Icon(widget.icon, size: 45 * widget.scaleFactor),
           iconSize: 45 * widget.scaleFactor,
-          color: Colors.black,
+          color: Colors.yellow,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,),
         )
@@ -364,7 +364,7 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
       behavior: HitTestBehavior.translucent,
       onTap: () {widget.sharedState.setActiveTriangle(widget.label);},
       child: Container(
-        color: Colors.grey,
+        color: Constants.pastelGray,
          child: Text(widget.label, style: comfortaaBold(14 * widget.scaleFactor,color:Colors.black),)
        ),
     ) : GestureDetector(
