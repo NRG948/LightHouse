@@ -22,18 +22,26 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   late List<Map<String, dynamic>> pitData;
 
   int currentTeamNumber = 0;
-  late List<int> teamsInDatabase;
+  late Set<int> teamsInDatabase;
 
-  List<int> getTeamsInDatabase() {
+  Set<int> getTeamsInDatabase() {
     SplayTreeSet<int> teams = SplayTreeSet();
 
-    for (Map<String, dynamic> matchData
-        in atlasData + chronosData + humanPlayerData) {
-      teams.add(int.parse(matchData["teamNumber"]));
+    for (Map<String, dynamic> matchData in atlasData) {
+      teams.add(matchData["teamNumber"]);
+    }
+    for (Map<String, dynamic> matchData in chronosData) {
+      teams.add(matchData["teamNumber"]);
+    }
+    for (Map<String, dynamic> matchData in pitData) {
+      teams.add(matchData["teamNumber"]);
+    }
+    for (Map<String, dynamic> matchData in humanPlayerData) {
+      teams.add(matchData["teamNumber"]);
     }
     // Include pit data?
 
-    return teams.toList();
+    return teams.toSet();
   }
 
   List<Map<String, dynamic>> getDataAsMap(String layout) {
@@ -41,8 +49,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     List<String> dataFilePaths =
         getFilesInLayout(configData["eventKey"]!, layout);
     return dataFilePaths
-        .map<Map<String, dynamic>>(
-            (String path) => loadFileIntoSavedData(configData["eventKey"]!, layout, path))
+        .map<Map<String, dynamic>>((String path) =>
+            loadFileIntoSavedData(configData["eventKey"]!, layout, path))
         .toList();
   }
 
@@ -74,7 +82,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     int totalMatches = 0;
 
     for (Map<String, dynamic> matchData in atlasData) {
-      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
         if (matchData["robotDisabled"] == "true") {
           disabledMatches++;
         }
@@ -108,12 +116,12 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     List<List<String>> comments = [];
 
     for (Map<String, dynamic> matchData in atlasData) {
-      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
         if (matchData["robotDisableReason"] != "0") {
           comments.add([
             matchData["scouterName"],
             matchData["robotDisableReason"],
-            matchData["matchNumber"]
+            matchData["matchNumber"].toString()
           ]);
         }
       }
@@ -129,12 +137,40 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   Widget getCommentBox() {
     List<List<String>> comments = [];
-    for (Map<String, dynamic> matchData in atlasData + chronosData) {
-      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
+    //TODO: Make 4 of these for chronosData, pit data, etc
+    for (Map<String, dynamic> matchData in atlasData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
         comments.add([
           matchData["scouterName"],
           matchData["comments"],
-          matchData["matchNumber"]
+          matchData["matchNumber"].toString()
+        ]);
+      }
+    }
+    for (Map<String, dynamic> matchData in chronosData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        comments.add([
+          matchData["scouterName"],
+          matchData["comments"],
+          matchData["matchNumber"].toString()
+        ]);
+      }
+    }
+    for (Map<String, dynamic> matchData in pitData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        comments.add([
+          matchData["scouterName"],
+          matchData["comments"],
+          matchData["matchNumber"].toString()
+        ]);
+      }
+    }
+    for (Map<String, dynamic> matchData in humanPlayerData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        comments.add([
+          matchData["scouterName"],
+          matchData["comments"],
+          matchData["matchNumber"].toString()
         ]);
       }
     }
@@ -154,13 +190,13 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     String label = "AVERAGE CLIMB TIME";
 
     for (Map<String, dynamic> matchData in atlasData) {
-      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
-        chartData[int.parse(matchData["matchNumber"])] =
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        chartData[matchData["matchNumber"]] =
             double.parse(matchData["climbStartTime"]);
         if (matchData["robotDisabled"] == "true" ||
             matchData["attemptedClimb"] == "0") {
           // TODO: Fix json boolean value formatting.
-          removedData.add(int.parse(matchData["matchNumber"]));
+          removedData.add(matchData["matchNumber"]);
         }
       }
     }
@@ -182,18 +218,18 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     List<String> labels = ["AVERAGE NET", "AVERAGE PROCESSOR"];
 
     for (Map<String, dynamic> matchData in atlasData) {
-      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
         // Get algae scored for processor and barge in teleop.
         List<double> scoreDistribution = [
-          double.parse(matchData["algaescoreProcessor"]),
-          double.parse(matchData["algaescoreNet"])
+          matchData["algaescoreProcessor"].toDouble(),
+          matchData["algaescoreNet"].toDouble()
         ];
-        chartData[int.parse(matchData["matchNumber"])] = scoreDistribution;
+        chartData[matchData["matchNumber"]] = scoreDistribution;
 
         // Get matches where robot disabled
         if (matchData["robotDisabled"] == "true") {
           // TODO: Fix json boolean value formatting.
-          removedData.add(int.parse(matchData["matchNumber"]));
+          removedData.add(matchData["matchNumber"]);
         }
       }
     }
@@ -225,21 +261,21 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     ];
 
     for (Map<String, dynamic> matchData in atlasData) {
-      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
         // Get coral scored for each level in auto and teleop.
         List<double> scoreDistribution = [0, 0, 0, 0];
         for (String reefBranch in matchData["autoCoralScored"]) {
           scoreDistribution[int.parse(reefBranch[1]) - 1] += 1;
         }
         for (int i = 1; i <= 4; i++) {
-          scoreDistribution[i - 1] += int.parse(matchData["coralScoredL$i"]);
+          scoreDistribution[i - 1] += matchData["coralScoredL$i"];
         }
-        chartData[int.parse(matchData["matchNumber"])] = scoreDistribution;
+        chartData[matchData["matchNumber"]] = scoreDistribution;
 
         // Get matches where robot disabled
         if (matchData["robotDisabled"] == "true") {
           // TODO: Fix json boolean value formatting.
-          removedData.add(int.parse(matchData["matchNumber"]));
+          removedData.add(matchData["matchNumber"]);
         }
       }
     }
@@ -262,7 +298,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     pitData = getDataAsMap("Unknown");
     teamsInDatabase = getTeamsInDatabase();
     if (currentTeamNumber == 0) {
-      currentTeamNumber = teamsInDatabase[0];
+      currentTeamNumber = teamsInDatabase.first;
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -270,7 +306,6 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     scaleFactor = screenHeight / 914;
     return Scaffold(
       backgroundColor: Constants.pastelRed,
-      
       appBar: AppBar(
         backgroundColor: Constants.pastelRed,
         title: const Text(
@@ -281,10 +316,11 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               color: Colors.white),
         ),
         centerTitle: true,
-        leading: IconButton(onPressed: () {
-          Navigator.pushNamed(context, "/home-data-viewer");
-        }, icon: Icon(Icons.home)),
-       
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, "/home-data-viewer");
+            },
+            icon: Icon(Icons.home)),
       ),
       body: Container(
           width: screenWidth,
