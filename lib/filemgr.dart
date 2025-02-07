@@ -183,10 +183,19 @@ Future<String> loadFileForUpload(String fileName) async {
   return await file.readAsString();
 }
 
-Future<int> saveFileForDownload(String fileName, dynamic content) async {
-  final file = File(fileName);
-  
+
+Future<int> saveDatabaseFile(String eventKey, String layout, String content) async {
+  final databaseDirectory = Directory("$configFolder/$eventKey/database");
+  if (!(databaseDirectory.existsSync())) {await databaseDirectory.create();}
+  final dbFile = File("$configFolder/$eventKey/database/$layout.json");
+  await dbFile.writeAsString(content);
   return Future.value(0);
+}
+
+String loadDatabaseFile(String eventKey, String layout) {
+  final dbFile = File("$configFolder/$eventKey/database/$layout.json");
+  if (!(dbFile.existsSync())) {return "";}
+  return dbFile.readAsStringSync();
 }
 
 int deleteFile(String eventKey, String layout, String fileName) {

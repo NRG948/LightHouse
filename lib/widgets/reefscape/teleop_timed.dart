@@ -130,7 +130,7 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
                 !_RSTeleopTimedState.widgetStates[7])) {setState(() {
                   enabled = !enabled;
                   DataEntry.exportData["teleopEventList"].add([
-                "scoreProcessor",
+                "${enabled ? "enter" : "exit"}Processor",
                 (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
                     .deciseconds
               ]);
