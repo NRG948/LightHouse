@@ -402,7 +402,7 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Preferred HP Station",
           "type": "dropdown",
-          "options": "Processor,Processor CS,Barge CS",
+          "options": "Processor,Coral Station",
           "jsonKey": "humanPlayerPreference",
 
         },
@@ -490,27 +490,15 @@ Map<String, dynamic> hpscout = {
           ]
         },
         {
-          "type": "row",
-          "height": "25",
-          "children": [
-            {
-              "title": "Red Miss",
-              "type": "spinbox",
-              "jsonKey": "redMiss",
-              "width": "34",
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Blue Miss",
-              "type": "spinbox",
-              "jsonKey": "blueMiss",
-              "width": "34",
-            }
-          ]
+          "type": "multispinbox",
+          "title": "Missing",
+          "jsonKey": ["redMiss", "blueMiss"],
+          "height": "20",
+          "boxNames": [
+            ["Red Miss", "Blue Miss"]
+            ]
         },
+        // TODO: Make this automatically update based on red/blue score
         {
           "title": "Algae in Net",
           "type": "multispinbox",
@@ -524,6 +512,13 @@ Map<String, dynamic> hpscout = {
           "title": "Data Quality",
           "type": "rating",
           "jsonKey": "dataQuality"
+        },
+        {
+          "title": "Comments",
+          "type": "textbox",
+          "jsonKey": "comments",
+          "fontSize": 12.0,
+          "maxLines": 3
         }
       ]
     }

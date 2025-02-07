@@ -16,12 +16,16 @@ class MatchInfoHumanPlayer extends StatefulWidget {
   State<MatchInfoHumanPlayer> createState() => _MatchInfoHumanPlayerState();
 }
 
-class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
+class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with AutomaticKeepAliveClientMixin{
   static late double scaleFactor;
   String? redTeamName;
   String? redTeamLocation;
   String? blueTeamName;
   String? blueTeamLocation;
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();

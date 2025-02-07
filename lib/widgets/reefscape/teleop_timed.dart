@@ -3,7 +3,7 @@ import 'dart:async';
 //TODO: Bugfixes
 //  - Timer starts at 2:00 instead of 2:15
 //  - Start climb should be a button and also stay on
-
+// TODO: Add score net button
 //TODO: Make start climb only clickable once
 
 

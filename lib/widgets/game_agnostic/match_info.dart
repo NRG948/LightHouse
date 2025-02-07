@@ -16,8 +16,12 @@ class MatchInfo extends StatefulWidget {
   State<MatchInfo> createState() => _MatchInfoState();
 }
 
-class _MatchInfoState extends State<MatchInfo> {
+class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixin{
   static late double scaleFactor;
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();

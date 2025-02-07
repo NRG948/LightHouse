@@ -270,7 +270,7 @@ class RSAUHexagon extends StatelessWidget {
     // TODO: Change these labels to more accurately match reef locations (top ones are flipped)
     final triangleLabels = ["IJ","GH","EF","CD","AB","KL",];
     return Container(
-      color: const Color.fromARGB(255, 255, 255, 255),
+      color: Constants.pastelWhite,
       height: 275 * scaleFactor,
       width: 275 * scaleFactor,
       alignment: Alignment.center,
