@@ -466,56 +466,30 @@ Map<String, dynamic> hpscout = {
       "title": "Scoring",
       "icon": CustomIcons.gamepad,
       "widgets": [
+        {
+          "type": "multispinbox",
+          "title": "Scoring",
+          "jsonKey": ["redScore", "blueScore"],
+          "height": "20",
+          "boxNames": [
+            ["Red Score", "Blue Score"]
+            ]
+        },
+        {
+          "type": "multispinbox",
+          "title": "Missing",
+          "jsonKey": ["redMiss", "blueMiss"],
+          "height": "20",
+          "boxNames": [
+            ["Red Miss", "Blue Miss"]
+            ]
+        },
        // TODO: Add HP multi spinbox
-        {
-          "type": "row",
-          "height": "25",
-          "children": [
-            {
-              "title": "Red Score",
-              "type": "spinbox",
-              "jsonKey": "redScore",
-              "width": "34",
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Blue Score",
-              "type": "spinbox",
-              "jsonKey": "blueScore",
-              "width": "34",
-            }
-          ]
-        },
-        {
-          "type": "row",
-          "height": "25",
-          "children": [
-            {
-              "title": "Red Miss",
-              "type": "spinbox",
-              "jsonKey": "redMiss",
-              "width": "34",
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Blue Miss",
-              "type": "spinbox",
-              "jsonKey": "blueMiss",
-              "width": "34",
-            }
-          ]
-        },
         {
           "title": "Algae in Net",
           "type": "multispinbox",
           "jsonKey": ["redNetAlgae", "blueNetAlgae"],
-          "height": "40",
+          "height": "20",
           "boxNames": [
             ["Red Algae", "Blue Algae"]
           ]

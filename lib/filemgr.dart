@@ -166,6 +166,15 @@ Map<String, dynamic> loadFileIntoSavedData(String eventKey, String layout, Strin
       File("$configFolder/$eventKey/$layout/$fileName").readAsStringSync());
 }
 
+
+int saveFileFromSavedData(String eventKey, String layout, String fileName, Map<String,dynamic> content) {
+  try {
+    final file = File("$configFolder/$eventKey/$layout/$fileName");
+    file.writeAsString(jsonEncode(content));
+    return 0;
+  } catch (_) {return 1;}
+}
+
 Future<String> loadFileForUpload(String fileName) async {
   final file = File(fileName);
   if (!(await file.exists())) {
@@ -173,6 +182,7 @@ Future<String> loadFileForUpload(String fileName) async {
   }
   return await file.readAsString();
 }
+
 
 int deleteFile(String eventKey, String layout, String fileName) {
   File fileToDelete = File("$configFolder/$eventKey/$layout/$fileName");

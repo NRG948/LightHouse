@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
@@ -7,6 +9,7 @@ import 'package:lighthouse/filemgr.dart';
 class SavedData extends StatelessWidget {
   const SavedData({super.key});
   static final SharedState sharedState = SharedState();
+  static String? activeLayout;
   static late double screenWidth;
   static late double screenHeight;
   static late double scaleFactor;
@@ -14,12 +17,15 @@ class SavedData extends StatelessWidget {
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
+    activeLayout = ModalRoute.of(context)?.settings.arguments as String?;
+    if (!["Atlas","Chronos","Pit","Human Player"].any((e) => activeLayout == e)) {activeLayout = null;}
     scaleFactor = screenWidth / 411;
+   
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
-        title: const Text("SavedData", style: TextStyle(
+        title: const Text("Saved Data", style: TextStyle(
            fontFamily: "Comfortaa",
            fontWeight: FontWeight.w900,
            color: Colors.white
@@ -45,7 +51,7 @@ class SavedData extends StatelessWidget {
           ],
         ))
     );
-  }
+  } 
 }
 class EventKeyDropdown extends StatefulWidget {
   const EventKeyDropdown({super.key,});
@@ -102,7 +108,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
   void initState() {
     super.initState();
     layouts = getLayouts(SavedData.sharedState.activeEvent);
-    selectedValue = layouts[0];
+    selectedValue = SavedData.activeLayout ?? layouts[0];
     SavedData.sharedState.activeLayout = selectedValue;
     SavedData.sharedState.addListener(() {setState(() {
     });});
@@ -161,7 +167,8 @@ class _SavedFileListState extends State<SavedFileList> {
     List<SavedFile> savedFiles = fileListStrings.map((file) {
         return SavedFile(fileName: file,);}).toList();
     return SizedBox(
-      height: 600,
+      height: 600 * SavedData.scaleFactor,
+      width: 400 * SavedData.scaleFactor,
       child: ListView.builder(
         itemCount: savedFiles.length,
         itemBuilder: (context,index) {
@@ -196,17 +203,17 @@ class _SavedFileState extends State<SavedFile> {
     savedFileJson = loadFileIntoSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
     if (["matchType","matchNumber","driverStation","scouterName","teamNumber"].every((value) => savedFileJson.containsKey(value))) {
       matchInfo = Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0 * SavedData.scaleFactor),
         child: Column(
           
           children: [
             SizedBox(
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                AutoSizeText(savedFileJson["teamNumber"].toString(),style: comfortaaBold(40, color:Colors.black),),
+                AutoSizeText(savedFileJson["teamNumber"].toString(),style: comfortaaBold(40 * SavedData.scaleFactor, color:Colors.black),),
                 Column(children: [
-                  AutoSizeText(savedFileJson["matchType"],style: comfortaaBold(16,color:Colors.black),),
-                  AutoSizeText(savedFileJson["matchNumber"].toString(),style: comfortaaBold(35,color:Colors.black),)
+                  AutoSizeText(savedFileJson["matchType"],style: comfortaaBold(16 * SavedData.scaleFactor,color:Colors.black),),
+                  AutoSizeText(savedFileJson["matchNumber"].toString(),style: comfortaaBold(35 * SavedData.scaleFactor,color:Colors.black),)
                 ],)
               ],),
             ),
@@ -214,20 +221,20 @@ class _SavedFileState extends State<SavedFile> {
             children: [
               Column(
                 children: [
-                  Container(height: 50,
-                  width: 100,
+                  Container(height: 50 * SavedData.scaleFactor,
+                  width: 100 * SavedData.scaleFactor,
                   color: savedFileJson["driverStation"].toString().contains("Red") ? Constants.pastelRed : Constants.pastelBlue,
-                  child: Center(child: AutoSizeText(savedFileJson["driverStation"], textAlign: TextAlign.center,style: comfortaaBold(30),)),),
+                  child: Center(child: AutoSizeText(savedFileJson["driverStation"], textAlign: TextAlign.center,style: comfortaaBold(30 * SavedData.scaleFactor),)),),
                   SizedBox(
-                    height: 50,
-                    width: 100,
+                    height: 50 * SavedData.scaleFactor,
+                    width: 100 * SavedData.scaleFactor,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                       Icon(Icons.data_object,size:30),
                       SizedBox(
-                        width: 70,
-                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25,color: Colors.black),maxLines: 1,))
+                        width: 70 * SavedData.scaleFactor,
+                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,))
                     ],),
                   ),
                 ],
@@ -238,14 +245,14 @@ class _SavedFileState extends State<SavedFile> {
                   children: [
                   Icon(Icons.schedule),
                   SizedBox(
-                    width: 185,
+                    width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
                     // 
                 ],),
                 Row(children: [
                   Icon(Icons.account_circle),
                   SizedBox(
-                    width: 185,
+                    width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["scouterName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
                   
                 ],)
@@ -258,8 +265,8 @@ class _SavedFileState extends State<SavedFile> {
       matchInfo = Text("doesn't satisfy");
     }
     return Padding(
-      padding: const EdgeInsets.only(
-        bottom: 10
+      padding: EdgeInsets.only(
+        bottom: 10 * SavedData.scaleFactor
       ),
       child: Container(
         width: 400 * SavedData.scaleFactor,
@@ -271,11 +278,11 @@ class _SavedFileState extends State<SavedFile> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          SizedBox(width: 325, height: 195,child: matchInfo,),
-          SizedBox(width: 65, height: 195,child: Column(
+          SizedBox(width: 325 * SavedData.scaleFactor, height: 195 * SavedData.scaleFactor,child: matchInfo,),
+          SizedBox(width: 65 * SavedData.scaleFactor, height: 195 * SavedData.scaleFactor,child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.edit_note,size:50)),
+              IconButton(onPressed: () {showDialog(context: context, builder: (context) {return DataEdit(fileName: widget.fileName,);});}, icon: Icon(Icons.edit_note,size:50 * SavedData.scaleFactor)),
               IconButton(onPressed: () {
                 showDialog(context: context, builder: (BuildContext context) {
                   return AlertDialog(title:Text("Delete Data"),
@@ -286,7 +293,7 @@ class _SavedFileState extends State<SavedFile> {
                     }, child: Text("No")),
                     TextButton(onPressed: () {
                       if (deleteFile(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName) == 0) {
-                        Navigator.pushReplacementNamed(context, "/saved_data");
+                        Navigator.pushReplacementNamed(context, "/saved_data",arguments: SavedData.sharedState.activeLayout);
                       } else {
                         showDialog(context: context, builder: (BuildContext context) {return AlertDialog(content: Text("Error"));});
                       }
@@ -295,7 +302,7 @@ class _SavedFileState extends State<SavedFile> {
                   ],
                   );
                 });
-              }, icon: Icon(Icons.delete,size:50))
+              }, icon: Icon(Icons.delete,size:50 * SavedData.scaleFactor))
             ],
           ),),
         ],),
@@ -304,6 +311,80 @@ class _SavedFileState extends State<SavedFile> {
   }
 }
 
+class DataEdit extends StatefulWidget {
+  final String fileName;
+  const DataEdit({super.key, required this.fileName});
+
+  @override
+  State<DataEdit> createState() => _DataEditState();
+}
+
+class _DataEditState extends State<DataEdit> {
+  late Map<String, dynamic> jsonFile;
+  late String activeKey;
+  TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    jsonFile = loadFileIntoSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
+    activeKey = jsonFile.keys.toList()[0];
+    controller.text = jsonFile[activeKey];
+    controller.addListener(() {setState(() {
+      try {
+      jsonFile[activeKey] = jsonDecode(controller.text);
+      } catch (_) {
+        jsonFile[activeKey] = controller.text;
+      }
+    });});
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Constants.pastelWhite,
+      child: Center(
+        child: Container(
+        height: 500 * SavedData.scaleFactor,
+        width: 350 * SavedData.scaleFactor,
+        decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: SizedBox(
+          width: 300 * SavedData.scaleFactor,
+          child: Column(
+            children: [
+              AutoSizeText("Edit Data",style: comfortaaBold(30 * SavedData.scaleFactor,color: Constants.pastelReddishBrown),),
+              DropdownButton(items: 
+              jsonFile.keys.map(
+                (file) {
+                  return DropdownMenuItem(value:file,child: Text(file));}
+              ).toList(),
+              value: activeKey,
+              onChanged: (value) {setState(() {
+                activeKey = value ?? "";
+                controller.text = jsonFile[activeKey].toString();
+              });
+              }),
+              SizedBox(
+                height: 300 * SavedData.scaleFactor,
+                width: 300 * SavedData.scaleFactor,
+                child: TextField(
+                  controller: controller,
+                  maxLines: 10,
+                ),
+              ),
+              SizedBox(
+              height: 100 * SavedData.scaleFactor,
+              child: TextButton(onPressed: () {
+                saveFileFromSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName, jsonFile);
+                
+                Navigator.pushReplacementNamed(context,"/home-scouter");
+              }, child: Text("Save")))
+            ],
+          ),
+        )
+      ),),
+    );
+  }
+}
 
 class SharedState extends ChangeNotifier {
   late String activeEvent;
