@@ -183,6 +183,11 @@ Future<String> loadFileForUpload(String fileName) async {
   return await file.readAsString();
 }
 
+Future<int> saveFileForDownload(String fileName, dynamic content) async {
+  final file = File(fileName);
+  
+  return Future.value(0);
+}
 
 int deleteFile(String eventKey, String layout, String fileName) {
   File fileToDelete = File("$configFolder/$eventKey/$layout/$fileName");

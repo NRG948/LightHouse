@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class SyncPage extends StatefulWidget {
@@ -87,7 +88,9 @@ class SyncPageState extends State<SyncPage> {
               ) ,
               ServerConnectStatus(),
               SizedBox(height: 10,),
-              UploadButton()
+              UploadButton(),
+              SizedBox(height:10),
+              DownloadButton()
             ],
           ), 
         ),
@@ -239,6 +242,105 @@ class _UploadDialogState extends State<UploadDialog> {
     return Future.value(responseCodes[response.statusCode] ?? response.statusCode.toString());
   }
   
+}
+
+class DownloadButton extends StatefulWidget {
+  const DownloadButton({super.key});
+  
+
+  @override
+  State<DownloadButton> createState() => _DownloadButtonState();
+}
+
+class _DownloadButtonState extends State<DownloadButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 350 * SyncPageState.sizeScaleFactor,
+      height:100 * SyncPageState.sizeScaleFactor ,
+      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      child: TextButton(
+        onPressed: () {
+          showDialog(context: context, builder: (context) {
+            return DownloadDialog();
+          });
+        },
+        child: Column(children: [
+          Text("DOWNLOAD"),
+          Text("Download Items from server")]
+        ),
+      ),
+    );
+  }
+}
+
+
+class DownloadDialog extends StatefulWidget {
+  const DownloadDialog({super.key});
+
+  @override
+  State<DownloadDialog> createState() => _DownloadDialogState();
+}
+
+class _DownloadDialogState extends State<DownloadDialog> {
+  Map<String,String> downloadStatuses = {};
+  String currentlyDownloading = "";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 350 * SyncPageState.sizeScaleFactor,
+        height: 500 * SyncPageState.sizeScaleFactor,
+        decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: Column(children: showDownloadStatuses(),),
+      ),
+    );
+  }
+  List<Widget> showDownloadStatuses() {
+    List<Widget> statuses = [];
+    for (String status in downloadStatuses.keys) {
+      statuses.add(Text("Database $status downloaded w/ code ${downloadStatuses[status]}"));
+    }
+    statuses.add(
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text("Downloading $currentlyDownloading"),
+          CircularProgressIndicator()
+        ],
+      )
+    );
+    return statuses;
+  }
+
+  void downloadDatabases() async {
+    for (String layout in ["Atlas","Chronos","Pit","Human Player"]) {
+      downloadDatabase(layout);
+    }
+  }
+
+  Future<int> downloadDatabase(String layout) async {
+    await Future.delayed(Duration(milliseconds: 100));
+    late String api;
+    if (layout == "Atlas") {api = "atlas";}
+    else if (layout == "Chronos") {api = "chronos";}
+    else if (layout == "Pit") {api = "pit";}
+    else if (layout == "Human Player") {api = "hp";}
+    else {api = "none";}
+    final response = await http.get((Uri.tryParse("${configData["serverIP"]!}/int/$api") ?? Uri.base),
+    headers: {
+      "Content-Type":"application/json"
+    },
+    );
+    
+    return Future.value(0);
+  }
 }
 
 class ServerConnectStatus extends StatefulWidget {

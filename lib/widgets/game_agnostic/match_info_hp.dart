@@ -62,7 +62,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> {
    
     return Container(
       width: 400 * scaleFactor,
-      height: 400 * scaleFactor,
+      height: 340 * scaleFactor,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
