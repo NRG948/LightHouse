@@ -508,7 +508,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
     counter = 0;
   }
   void updateState() {
-    DataEntry.exportData[jsonKey] = counter.toString();
+    DataEntry.exportData[jsonKey] = counter;
   }
   void increment() {setState(() {
     if (counter<99) {
