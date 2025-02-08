@@ -16,7 +16,7 @@ class DataViewerAmongView extends StatefulWidget {
 }
 
 class _DataViewerAmongViewState extends State<DataViewerAmongView> {
-  static late AmongViewSharedState state;
+  late AmongViewSharedState state;
   late ValueNotifier<bool> sortCheckbox;
   late ScrollController scrollController;
   @override
@@ -33,13 +33,13 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     state.loadDatabase();
     state.setActiveSortKey(sortKeys[state.enabledLayouts[0]]!.keys.toList()[0]);
     state.addListener(() {setState(() {
-      
     });});
     
     }
 
   }
- 
+
+
   static late double scaleFactor;
   late double chartWidth;
   @override
@@ -57,134 +57,140 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
     chartWidth = state.teamsInEvent.length < 5 ? 350 : state.teamsInEvent.length * 75;
-    return Scaffold(
-      backgroundColor: Constants.pastelRed,
-      
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Constants.pastelWhite),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
         backgroundColor: Constants.pastelRed,
-        title: const Text(
-          "LightHouse",
-          style: TextStyle(
-              fontFamily: "Comfortaa",
-              fontWeight: FontWeight.w900,
-              color: Colors.white),
+        
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Constants.pastelWhite),
+          backgroundColor: Constants.pastelRed,
+          title: const Text(
+            "LightHouse",
+            style: TextStyle(
+                fontFamily: "Comfortaa",
+                fontWeight: FontWeight.w900,
+                color: Colors.white),
+          ),
+          centerTitle: true,
+          leading: IconButton(onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(context, "/home-data-viewer", (route) => false,);
+          }, icon: Icon(Icons.home)),
+         
         ),
-        centerTitle: true,
-        leading: IconButton(onPressed: () {
-          Navigator.pushNamed(context, "/home-data-viewer");
-        }, icon: Icon(Icons.home)),
-       
-      ),
-      body: Container(
-          width: screenWidth,
-          height: screenHeight,
-
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/background-hires.png"),
-                  fit: BoxFit.cover)),
-          child: 
-          Column(children: [
-            Container(
-              width: 350 * scaleFactor,
-              height: 550 * scaleFactor,
-              decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-              child: Column(children: [
-                Text("Showing data for ${state.activeEvent}: "),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Layout:"),
-                    DropdownButton(
-                      value: state.activeLayout,
-                      items: state.enabledLayouts.map((e) {
-                      return DropdownMenuItem(
-                      value:e,
-                      child: Text(e));}).toList(),
-                    onChanged: (newValue) {setState(() {
-                      state.setActiveLayout(newValue??"");
-                      
-                    });
-                    }),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                  Text("Sort by"),
-                  DropdownButton(
-                      value: state.activeSortKey,
-                      items: state.getSortKeys().map((e) {
-                      return DropdownMenuItem(
-                      value:e,
-                      child: Text(e));}).toList(),
-                    onChanged: (newValue) {setState(() {
-                      state.setActiveSortKey(newValue ?? "");
-                    });
-                    }),
-                ],),
-                GestureDetector(
-                  onTap: () {
-                        sortCheckbox.value = !sortCheckbox.value;
-                        setState(() {
-                          state.updateChartData(sort: sortCheckbox.value);
-                        });
-                      },
-                  child: Container(
-                    width: 325 * scaleFactor,
-                    height: 40 * scaleFactor,
-                    decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                      ValueListenableBuilder(valueListenable: sortCheckbox, builder: (a,b,c) {
-                        return Checkbox(value: b, onChanged: (value) {
-                          sortCheckbox.value = value ?? false;
-                        });
+        body: Container(
+            width: screenWidth,
+            height: screenHeight,
+      
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/background-hires.png"),
+                    fit: BoxFit.cover)),
+            child: 
+            Column(children: [
+              Container(
+                width: 350 * scaleFactor,
+                height: 550 * scaleFactor,
+                decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                child: Column(children: [
+                  Text("Showing data for ${state.activeEvent}: "),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("Layout:"),
+                      DropdownButton(
+                        value: state.activeLayout,
+                        items: state.enabledLayouts.map((e) {
+                        return DropdownMenuItem(
+                        value:e,
+                        child: Text(e));}).toList(),
+                      onChanged: (newValue) {setState(() {
+                        state.setActiveLayout(newValue??"");
+                        
+                      });
                       }),
-                      SizedBox(
-                        height: 40 * scaleFactor,
-                        child: AutoSizeText("Sort data?",style: comfortaaBold(18 * scaleFactor),),
-                      )
-                    ],),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  height: 300 * scaleFactor,
-                  width: 350 * scaleFactor,
-                  child: Scrollbar(
-                    controller: scrollController,
-                    thumbVisibility: true,
-                    child: ListView(
-                      controller: scrollController,
-                      scrollDirection: Axis.horizontal,
-                      children:[ NRGBarChart(title: "Data", height: 300 * scaleFactor, width: chartWidth * scaleFactor,
-                      data:state.chartData,
-                      color: Constants.pastelRed,
-                      amongviewTeams: state.teamsInEvent,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                    Text("Sort by"),
+                    DropdownButton(
+                        value: state.activeSortKey,
+                        items: state.getSortKeys().map((e) {
+                        return DropdownMenuItem(
+                        value:e,
+                        child: Text(e));}).toList(),
+                      onChanged: (newValue) {setState(() {
+                        state.setActiveSortKey(newValue ?? "");
+                      });
+                      }),
+                  ],),
+                  GestureDetector(
+                    onTap: () {
+                          sortCheckbox.value = !sortCheckbox.value;
+                          setState(() {
+                            state.updateChartData(sort: sortCheckbox.value);
+                          }); 
                       
-                      ),
-                      ]
+                        },
+                    child: Container(
+                      width: 325 * scaleFactor,
+                      height: 40 * scaleFactor,
+                      decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                        ValueListenableBuilder(valueListenable: sortCheckbox, builder: (a,b,c) {
+                          return Checkbox(value: b, onChanged: (value) {
+                            sortCheckbox.value = value ?? false;
+                            setState(() => state.updateChartData(sort: sortCheckbox.value));
+                          });
+                        }),
+                        SizedBox(
+                          height: 40 * scaleFactor,
+                          child: Center(child: AutoSizeText("Sort Data?",style: comfortaaBold(18 * scaleFactor),)),
+                        )
+                      ],),
                     ),
                   ),
+                  SizedBox(
+                    height: 300 * scaleFactor,
+                    width: 350 * scaleFactor,
+                    child: Scrollbar(
+                      controller: scrollController,
+                      thumbVisibility: true,
+                      child: ListView(
+                        controller: scrollController,
+                        scrollDirection: Axis.horizontal,
+                        children:[ NRGBarChart(title: state.activeSortKey.toSentenceCase, height: 300 * scaleFactor, width: chartWidth * scaleFactor,
+                        data:state.chartData,
+                        color: Constants.pastelRed,
+                        amongviewTeams: state.teamsInEvent,
+                        hashMap: state.hashMap,
+                        
+                        ),
+                        ]
+                      ),
+                    ),
+                  ),
+      
+                  if (AmongViewSharedState.clickedTeam != 0)
+                  Container(
+                    width: 325 * scaleFactor,
+                    height: 60 * scaleFactor,
+                    decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                    child: TextButton(onPressed: () {
+                      print("GOING TO PAGE");
+                    }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}")),
+                  )
+                  
+                  ]
                 ),
-
-                if (AmongViewSharedState.clickedTeam != 0)
-                Container(
-                  width: 325 * scaleFactor,
-                  height: 60 * scaleFactor,
-                  decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                  child: TextButton(onPressed: () {
-                    print("GOING TO PAGE");
-                  }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}")),
-                )
-                
-                ]
-              ),
-            )
-          ],)
-      ));}
+              )
+            ],)
+        )),
+    );}
 }
 class AmongViewSharedState extends ChangeNotifier {
   late String activeEvent;
@@ -194,18 +200,19 @@ class AmongViewSharedState extends ChangeNotifier {
   late List<dynamic> data;
   List<int> teamsInEvent = [];
   SplayTreeMap<int,double> chartData = SplayTreeMap();
+  LinkedHashMap<int,double>? hashMap;
   static int clickedTeam = 0;
 
 
-  static void setClickedTeam(int team) {
-    clickedTeam = team;
-    _instance.notifyListeners();
-  }
+  // static void setClickedTeam(int team) {
+  //   clickedTeam = team;
+  //   _instance.notifyListeners();
+  // }
 
-  // Singleton pattern to allow notifying listeners despite static properties
-  static final AmongViewSharedState _instance = AmongViewSharedState._internal();
-  factory AmongViewSharedState() => _instance;
-  AmongViewSharedState._internal();
+  // // Singleton pattern to allow notifying listeners despite static properties
+  // static final AmongViewSharedState _instance = AmongViewSharedState._internal();
+  // factory AmongViewSharedState() => _instance;
+  // AmongViewSharedState._internal();
 
 
   void getEnabledLayouts() {
@@ -317,8 +324,14 @@ class AmongViewSharedState extends ChangeNotifier {
         }
     }
     if (sort == true) {
-       // figure out how to sort aaaaaaaaaa
-    } 
+      List<MapEntry<int, double>> sortedEntries = chartData.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+      hashMap = LinkedHashMap<int,double>.fromEntries(sortedEntries);
+      teamsInEvent = hashMap != null ? hashMap!.keys.toList() : [];
+    } else {
+      hashMap = null;
+      teamsInEvent.sort();
+    }
   }
 
   List<String> getSortKeys() {

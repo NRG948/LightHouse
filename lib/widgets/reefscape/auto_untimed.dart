@@ -1,5 +1,6 @@
 import "dart:math" as math;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
@@ -36,6 +37,12 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
           RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,),
         ],),
         SizedBox(height: 5 * scaleFactor),
+        Container(
+          height: 15 * scaleFactor,
+          width: 300 * scaleFactor,
+          decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+          child: AutoSizeText("DRIVER STATION",textAlign: TextAlign.center,style: comfortaaBold(10 * scaleFactor),),
+        ),
         RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
         RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] ;
     return Container(
