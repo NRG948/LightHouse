@@ -44,7 +44,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return teams.toSet();
   }
 
-  List<Map<String, dynamic>> getDataAsMap(String layout) {
+  List<Map<String, dynamic>> getDataAsMapFromSavedMatches(String layout) {
     assert(configData["eventKey"] != null);
     List<String> dataFilePaths =
         getFilesInLayout(configData["eventKey"]!, layout);
@@ -52,6 +52,16 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         .map<Map<String, dynamic>>((String path) =>
             loadFileIntoSavedData(configData["eventKey"]!, layout, path))
         .toList();
+  }
+
+  List<Map<String, dynamic>> getDataAsMapFromDatabase(String layout) {
+    assert(configData["eventKey"] != null);
+    var file = loadDatabaseFile(configData["eventKey"]!, layout);
+    if (file == "") return [];
+    List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(
+        jsonDecode(loadDatabaseFile(configData["eventKey"]!, layout))
+            .map((item) => Map<String, dynamic>.from(item)));
+    return data;
   }
 
   Widget getTeamSelectDropdown() {
@@ -192,7 +202,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         chartData[matchData["matchNumber"]] =
-            double.parse(matchData["climbStartTime"]);
+            matchData["climbStartTime"].toDouble();
         if (matchData["robotDisabled"] || !matchData["attemptedClimb"]) {
           removedData.add(matchData["matchNumber"]);
         }
@@ -288,11 +298,22 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   @override
   Widget build(BuildContext context) {
-    atlasData = getDataAsMap("Atlas");
-    chronosData = getDataAsMap("Chronos");
-    humanPlayerData = getDataAsMap("Unknown");
-    pitData = getDataAsMap("Unknown");
+    atlasData = getDataAsMapFromDatabase("Atlas");
+    chronosData = getDataAsMapFromDatabase("Chronos");
+    humanPlayerData = getDataAsMapFromDatabase("Unknown");
+    pitData = getDataAsMapFromDatabase("Unknown");
     teamsInDatabase = getTeamsInDatabase();
+
+    if (teamsInDatabase.isEmpty) {
+      return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back)),
+          ),
+          body: Text("No data"));
+    }
+
     if (currentTeamNumber == 0) {
       currentTeamNumber = teamsInDatabase.first;
     }
