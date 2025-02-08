@@ -109,7 +109,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
                   _stopwatch.reset();
                 },
                 icon: Icon(
-                  IconData(0xe514, fontFamily: 'MaterialIcons'),
+                  const IconData(0xe514, fontFamily: 'MaterialIcons'),
                   size: 45,
                   color: Constants.pastelGray,
                 ),
@@ -129,7 +129,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
                   _stopwatch.start();
                 },
                 icon: Icon(
-                  IconData(0xf2af, fontFamily: 'MaterialIcons'),
+                  const IconData(0xf2af, fontFamily: 'MaterialIcons'),
                   size: 45,
                   color: Constants.pastelGray,
                 ),

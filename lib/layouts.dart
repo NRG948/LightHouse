@@ -144,7 +144,7 @@ Map<String, dynamic> atlascout = {
             }
           ]
         },
-        {"title": "Data Quality", "type": "rating", "jsonKey": "rating"},
+        {"title": "Data Quality", "type": "rating", "jsonKey": "dataQuality"},
         {"title": "Comments", "type": "textbox", "jsonKey": "comments","height":"10","fontSize":15.0,"maxLines":3},
         {
           "title": "Team crossed over midline?",
@@ -472,7 +472,7 @@ Map<String, dynamic> hpscout = {
           "title": "Scoring",
           "jsonKey": ["redScore", "blueScore"],
           "otherJsonKey": ["redNetAlgae","blueNetAlgae"],
-          "height": "20",
+          "height": "25",
           "boxNames": [
             ["Red Score", "Blue Score"]
             ]
@@ -481,7 +481,7 @@ Map<String, dynamic> hpscout = {
           "type": "multispinbox",
           "title": "Missing",
           "jsonKey": ["redMiss", "blueMiss"],
-          "height": "20",
+          "height": "25",
           "boxNames": [
             ["Red Miss", "Blue Miss"]
             ]
@@ -491,7 +491,7 @@ Map<String, dynamic> hpscout = {
           "title": "Algae in Net",
           "type": "multispinbox",
           "jsonKey": ["redNetAlgae", "blueNetAlgae"],
-          "height": "40",
+          "height": "25",
           "boxNames": [
             ["Red Algae", "Blue Algae"]
           ],
@@ -652,7 +652,7 @@ Map<String, Map> layoutMap = {
   "Human Player": hpscout,
 };
 
-Map<String, IconData> iconMap = {
+const Map<String, IconData> iconMap = {
   "Atlas": Icons.public,
   "Chronos": Icons.timer,
   "Pit": Icons.analytics_rounded,
