@@ -166,7 +166,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
-            height: _height * 0.75,
+            height: _height * (_multiData == null || _multiData!.values.isEmpty ? 0.75 : 0.75 - 0.05 * _multiData!.values.first.length),
             margin: EdgeInsets.only(right: 20),
             child: BarChart(BarChartData(
                 titlesData: FlTitlesData(
