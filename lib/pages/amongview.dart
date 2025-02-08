@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
@@ -16,10 +17,14 @@ class DataViewerAmongView extends StatefulWidget {
 
 class _DataViewerAmongViewState extends State<DataViewerAmongView> {
   static late AmongViewSharedState state;
+  late ValueNotifier<bool> sortCheckbox;
+  late ScrollController scrollController;
   @override
   void initState() {
     super.initState();
     state = AmongViewSharedState();
+    scrollController = ScrollController();
+    sortCheckbox = ValueNotifier<bool>(false);
     if (configData["activeEvent"] == "") {return;}
     state.setActiveEvent(configData["eventKey"]!);
     state.getEnabledLayouts();
@@ -30,11 +35,13 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     state.addListener(() {setState(() {
       
     });});
+    
     }
 
   }
  
   static late double scaleFactor;
+  late double chartWidth;
   @override
   Widget build(BuildContext context) {
     
@@ -49,6 +56,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
+    chartWidth = state.teamsInEvent.length < 5 ? 350 : state.teamsInEvent.length * 75;
     return Scaffold(
       backgroundColor: Constants.pastelRed,
       
@@ -116,11 +124,60 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                     });
                     }),
                 ],),
-                NRGBarChart(title: "Data", height: 300 * scaleFactor, width: 350 * scaleFactor,
-                data:state.chartData,
-                color: Constants.pastelRed,
-                amongviewAllTeams: true,
+                GestureDetector(
+                  onTap: () {
+                        sortCheckbox.value = !sortCheckbox.value;
+                        setState(() {
+                          state.updateChartData(sort: sortCheckbox.value);
+                        });
+                      },
+                  child: Container(
+                    width: 325 * scaleFactor,
+                    height: 40 * scaleFactor,
+                    decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                      ValueListenableBuilder(valueListenable: sortCheckbox, builder: (a,b,c) {
+                        return Checkbox(value: b, onChanged: (value) {
+                          sortCheckbox.value = value ?? false;
+                        });
+                      }),
+                      SizedBox(
+                        height: 40 * scaleFactor,
+                        child: AutoSizeText("Sort data?",style: comfortaaBold(18 * scaleFactor),),
+                      )
+                    ],),
+                  ),
+                ),
+                SizedBox(
+                  height: 300 * scaleFactor,
+                  width: 350 * scaleFactor,
+                  child: Scrollbar(
+                    controller: scrollController,
+                    thumbVisibility: true,
+                    child: ListView(
+                      controller: scrollController,
+                      scrollDirection: Axis.horizontal,
+                      children:[ NRGBarChart(title: "Data", height: 300 * scaleFactor, width: chartWidth * scaleFactor,
+                      data:state.chartData,
+                      color: Constants.pastelRed,
+                      amongviewTeams: state.teamsInEvent,
+                      
+                      ),
+                      ]
+                    ),
+                  ),
+                ),
 
+                if (AmongViewSharedState.clickedTeam != 0)
+                Container(
+                  width: 325 * scaleFactor,
+                  height: 60 * scaleFactor,
+                  decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                  child: TextButton(onPressed: () {
+                    print("GOING TO PAGE");
+                  }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}")),
                 )
                 
                 ]
@@ -137,6 +194,19 @@ class AmongViewSharedState extends ChangeNotifier {
   late List<dynamic> data;
   List<int> teamsInEvent = [];
   SplayTreeMap<int,double> chartData = SplayTreeMap();
+  static int clickedTeam = 0;
+
+
+  static void setClickedTeam(int team) {
+    clickedTeam = team;
+    _instance.notifyListeners();
+  }
+
+  // Singleton pattern to allow notifying listeners despite static properties
+  static final AmongViewSharedState _instance = AmongViewSharedState._internal();
+  factory AmongViewSharedState() => _instance;
+  AmongViewSharedState._internal();
+
 
   void getEnabledLayouts() {
     for (String i in ["Atlas","Chronos","Human Player"]) {
@@ -165,7 +235,7 @@ class AmongViewSharedState extends ChangeNotifier {
     print("Going to page ${teamsInEvent[index]}");
   }
 
-  void updateChartData() {
+  void updateChartData({bool? sort}) {
     chartData.clear();
     teamsInEvent.clear();
     for (dynamic i in data) {
@@ -245,9 +315,12 @@ class AmongViewSharedState extends ChangeNotifier {
           chartData.addEntries([MapEntry(team, (timeDiffs.sum / timeDiffs.length))]);
           }
         }
-        
     }
+    if (sort == true) {
+       // figure out how to sort aaaaaaaaaa
+    } 
   }
+
   List<String> getSortKeys() {
     return sortKeys[activeLayout]!.keys.toList();
   }
@@ -284,7 +357,28 @@ Map<String,dynamic> sortKeys = {
   "Teleop CS Cycle Time" : "cycleTime",
   "Teleop Processor Cycle Time" : "cycleTime"
 },
-"Human Player":{}
+"Human Player":{
+  "redScore": "average",
+  "blueScore": "average",
+  "redMiss": "average",
+  "blueMiss": "average",
+  "redNetAlgae": "average",
+  "blueNetAlgae": "average"
+}
 };
 
 
+class AmongViewBarChart extends StatefulWidget {
+  const AmongViewBarChart({super.key});
+
+  @override
+  State<AmongViewBarChart> createState() => _AmongViewBarChartState();
+}
+
+class _AmongViewBarChartState extends State<AmongViewBarChart> {
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+  
+}

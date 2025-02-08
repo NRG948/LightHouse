@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/pages/amongview.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
 /// A horizontal bar chart widget that dislays numbers, automatically sorting by key.
@@ -18,7 +19,7 @@ class NRGBarChart extends StatefulWidget {
   List<Color> multiColor;
   String dataLabel;
   List<String> dataLabels;
-  bool amongviewAllTeams;
+  List<int> amongviewTeams;
 
   NRGBarChart(
       {super.key,
@@ -32,7 +33,7 @@ class NRGBarChart extends StatefulWidget {
       List<Color>? multiColor,
       String? dataLabel,
       List<String>? dataLabels,
-      bool? amongviewAllTeams})
+      List<int>? amongviewTeams})
       : removedData = removedData ?? [],
         color = color ?? Colors.transparent,
         data = data ?? SplayTreeMap(),
@@ -40,7 +41,7 @@ class NRGBarChart extends StatefulWidget {
         multiColor = multiColor ?? [],
         dataLabel = dataLabel ?? "AVERAGE",
         dataLabels = dataLabels ?? ["AVERAGE"],
-        amongviewAllTeams = amongviewAllTeams ?? false;
+        amongviewTeams = amongviewTeams ?? [];
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();
@@ -161,72 +162,80 @@ class _NRGBarChartState extends State<NRGBarChart> {
       child: Column(
         children: [
           // Title Text.
-          Text(_title, style: comfortaaBold(_width / 10, color: Colors.black)),
+          Text(_title, style: comfortaaBold(_height / 10, color: Colors.black)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
-          AspectRatio(
-              aspectRatio: 2,
-              child: Container(
-                margin: EdgeInsets.only(right: 20),
-                child: BarChart(BarChartData(
-                    titlesData: FlTitlesData(
-                      show: true,
-                      topTitles: AxisTitles(),
-                      rightTitles: AxisTitles(),
-                      leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (double value, TitleMeta meta) {
-                          return SideTitleWidget(
-                              meta: meta,
-                              space: 4,
-                              child: Text('${value.toInt()}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: _width / 20)));
-                        },
-                      )),
-                      bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (double value, TitleMeta meta) {
-                          return SideTitleWidget(
-                              meta: meta,
-                              space: 4,
-                              child: Text('${value.toInt()}',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: !_removedData.contains(value)
-                                          ? Colors.black
-                                          : Colors.grey,
-                                      fontSize: _width / 20)));
-                        },
-                      )),
+          Container(
+            width: _width,
+            height: _height * 0.75,
+            margin: EdgeInsets.only(right: 20),
+            child: BarChart(BarChartData(
+                titlesData: FlTitlesData(
+                  show: true,
+                  topTitles: AxisTitles(),
+                  rightTitles: AxisTitles(),
+                  leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (double value, TitleMeta meta) {
+                      return SideTitleWidget(
+                          meta: meta,
+                          space: 4,
+                          child: Text('${value.toInt()}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: _height / 20)));
+                    },
+                  )),
+                  bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (double value, TitleMeta meta) {
+                      return SideTitleWidget(
+                          meta: meta,
+                          space: 4,
+                          child: Text('${value.toInt()}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: !_removedData.contains(value)
+                                      ? Colors.black
+                                      : Colors.grey,
+                                  fontSize: _height / 20)));
+                    },
+                  )),
+                ),
+                barTouchData: widget.amongviewTeams.isNotEmpty ? BarTouchData(
+                  enabled: true,
+                  touchTooltipData: BarTouchTooltipData(
+                      getTooltipColor: (group) =>
+                          Color.fromARGB(200, 255, 255, 255),
                     ),
-                    barTouchData: widget.amongviewAllTeams ? BarTouchData(
-                      touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
-                        if (!event.isInterestedForInteractions || response == null) {
-                            return;
-                        }
-                    
-
-                      },
-                    ) : BarTouchData(
-                        enabled: true,
-                        touchTooltipData: BarTouchTooltipData(
-                          getTooltipColor: (group) =>
-                              Color.fromARGB(200, 255, 255, 255),
-                        )),
-                    barGroups: _multiData!.isEmpty
-                        ? getBarGroups()
-                        : getMultiBarGroups(),
-                    gridData: FlGridData(
-                        drawVerticalLine: false,
-                        horizontalInterval: 1,
-                        getDrawingHorizontalLine: (x) =>
-                            const FlLine(color: Colors.grey, strokeWidth: 1)))),
-              )),
+                  touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
+                    if (!event.isInterestedForInteractions || response == null || response.spot == null) {
+                        return;
+                    }
+                    //print("Sending to page ${widget.amongviewTeams[response.spot!.touchedBarGroupIndex]}");
+                    // This is a very roundabout way of doing this but idc
+                    AmongViewSharedState.setClickedTeam(widget.amongviewTeams[response.spot!.touchedBarGroupIndex]);
+                    //AmongViewSharedState.clickedTeam = widget.amongviewTeams[response.spot!.touchedBarGroupIndex];
+                  },
+                ) : BarTouchData(
+                    enabled: true,
+                    touchTooltipData: BarTouchTooltipData(
+                      getTooltipColor: (group) =>
+                          Color.fromARGB(200, 255, 255, 255),
+                    )),
+                barGroups: _multiData!.isEmpty
+                    ? getBarGroups()
+                    : getMultiBarGroups(),
+                gridData: FlGridData(
+                    drawVerticalLine: false,
+                    horizontalInterval: 1,
+                    getDrawingHorizontalLine: (x) =>
+                        const FlLine(color: Colors.grey, strokeWidth: 1)))),
+          ),
           // Average value text.
+          if (widget.amongviewTeams.isEmpty)
           getAverageText()
         ],
       ),
