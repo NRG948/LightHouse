@@ -70,9 +70,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 child: Text("$team",
                     style: comfortaaBold(12, color: Colors.black))))
             .toList(),
-        onChanged: (num) {
+        onChanged: (n) {
           setState(() {
-            currentTeamNumber = num!;
+            currentTeamNumber = n!;
           });
         });
   }
@@ -83,7 +83,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
-        if (matchData["robotDisabled"] == "true") {
+        if (matchData["robotDisabled"]) {
           disabledMatches++;
         }
         totalMatches++;
@@ -100,7 +100,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     Map<String, int> frequencyMap = {};
 
     for (Map<String, dynamic> matchData in chronosData) {
-      if (int.parse(matchData["teamNumber"]) == currentTeamNumber) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
         frequencyMap[matchData["generalStrategy"]] =
             (frequencyMap[matchData["generalStrategy"]] ?? 0) + 1;
       }
@@ -117,7 +117,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
-        if (matchData["robotDisableReason"] != "0") {
+        if (matchData["robotDisableReason"] != "") {
           comments.add([
             matchData["scouterName"],
             matchData["robotDisableReason"],
@@ -193,9 +193,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       if (matchData["teamNumber"] == currentTeamNumber) {
         chartData[matchData["matchNumber"]] =
             double.parse(matchData["climbStartTime"]);
-        if (matchData["robotDisabled"] == "true" ||
-            matchData["attemptedClimb"] == "0") {
-          // TODO: Fix json boolean value formatting.
+        if (matchData["robotDisabled"] || !matchData["attemptedClimb"]) {
           removedData.add(matchData["matchNumber"]);
         }
       }
@@ -227,8 +225,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         chartData[matchData["matchNumber"]] = scoreDistribution;
 
         // Get matches where robot disabled
-        if (matchData["robotDisabled"] == "true") {
-          // TODO: Fix json boolean value formatting.
+        if (matchData["robotDisabled"]) {
           removedData.add(matchData["matchNumber"]);
         }
       }
@@ -236,7 +233,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Algae",
-        height: 200,
+        height: 230,
         width: 190,
         removedData: removedData,
         multiData: chartData,
@@ -273,8 +270,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         chartData[matchData["matchNumber"]] = scoreDistribution;
 
         // Get matches where robot disabled
-        if (matchData["robotDisabled"] == "true") {
-          // TODO: Fix json boolean value formatting.
+        if (matchData["robotDisabled"]) {
           removedData.add(matchData["matchNumber"]);
         }
       }
@@ -282,7 +278,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Coral",
-        height: 200,
+        height: 230,
         width: 190,
         removedData: removedData,
         multiData: chartData,
@@ -342,29 +338,12 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               Row(
                 spacing: 10,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Constants.pastelWhite,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(Constants.borderRadius))),
-                    child: getCoralBarChart(),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Constants.pastelWhite,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(Constants.borderRadius))),
-                    child: getAlgaeBarChart(),
-                  ),
+                  getCoralBarChart(),
+                  getAlgaeBarChart(),
                 ],
               ),
               Row(spacing: 10, children: [
-                Container(
-                    decoration: BoxDecoration(
-                        color: Constants.pastelWhite,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(Constants.borderRadius))),
-                    child: getClimbStartTimeBarChart()),
+                getClimbStartTimeBarChart(),
                 Container(
                   padding: EdgeInsets.all(10),
                   width: 190,
@@ -380,23 +359,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                   ),
                 )
               ]),
-              Container(
-                decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(Constants.borderRadius))),
-                child: getCommentBox(),
-              ),
+              getCommentBox(),
               Row(
                 spacing: 10,
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                          color: Constants.pastelWhite,
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(Constants.borderRadius))),
-                      child: getDisableReasonCommentBox())
-                ],
+                children: [getDisableReasonCommentBox()],
               )
             ],
           )),
