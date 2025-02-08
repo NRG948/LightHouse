@@ -1,6 +1,7 @@
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
+import "package:lighthouse/layouts.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
 /// A horizontal group of spinboxes, which are manual counters that count integers between 0-999 inclusive.
@@ -10,14 +11,19 @@ class NRGMultiSpinbox extends StatefulWidget {
   final double height;
   final double width;
   final List<List<String>> boxNames;
-  
+  final List<String>? updateOtherFields;
+  final DESharedState? sharedState;
+
   const NRGMultiSpinbox(
       {super.key,
       required this.title,
       required this.jsonKey,
       required this.height,
       required this.width,
-      required this.boxNames});
+      required this.boxNames,
+      this.updateOtherFields,
+      this.sharedState
+      });
 
   @override
   State<NRGMultiSpinbox> createState() => _NRGMultiSpinboxState();
@@ -39,6 +45,11 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
     super.initState();
     for (String i in _keys) {
       DataEntry.exportData[i] = 0;
+    }
+    if (widget.sharedState != null) {
+      widget.sharedState!.addListener(() => setState(() {
+        build(context);
+      }));
     }
   }
 
@@ -83,8 +94,14 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
             // This breaks if you name more than one spinbox the same thing
             // sooooooo
             // don't do that
+            if (widget.updateOtherFields == null) {
             return NRGMultiSpinChild(
                 title: title, jsonKey: keyList[nameList.indexOf(title)],scaleFactor: scaleFactor,);
+            } else {
+            return NRGMultiSpinChild(
+                title: title, jsonKey: keyList[nameList.indexOf(title)],scaleFactor: scaleFactor,otherJsonKey: widget.updateOtherFields![nameList.indexOf(title)],sharedState: widget.sharedState,);
+
+            }
           }).toList() as List<Widget>);
     }).toList();
     return Column(children: rowList);
@@ -95,8 +112,10 @@ class NRGMultiSpinChild extends StatefulWidget {
   final String title;
   final String jsonKey;
   final double scaleFactor;
+  final String? otherJsonKey;
+  final DESharedState? sharedState;
   const NRGMultiSpinChild(
-      {super.key, required this.title, required this.jsonKey, required this.scaleFactor});
+      {super.key, required this.title, required this.jsonKey, required this.scaleFactor, this.otherJsonKey,this.sharedState});
 
   @override
   State<NRGMultiSpinChild> createState() => _NRGMultiSpinChildState();
@@ -110,6 +129,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
 
   @override
   Widget build(BuildContext context) {
+    _counter = DataEntry.exportData[_key];
     return SizedBox(
       width: 225 * _scaleFactor,
       height: 95 * _scaleFactor,
@@ -171,6 +191,12 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
     setState(() {
       if (_counter > 0) {
         _counter--;
+        if (widget.otherJsonKey != null) {
+          if (DataEntry.exportData[widget.otherJsonKey]! > 0) {
+            DataEntry.exportData[widget.otherJsonKey!] = DataEntry.exportData[widget.otherJsonKey] - 1;
+            widget.sharedState!.triggerUpdate();
+          }
+        }
         updateState();
       }
     });
@@ -181,6 +207,12 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
     setState(() {
       if (_counter < 999) {
         _counter++;
+        if (widget.otherJsonKey != null) {
+          if (DataEntry.exportData[widget.otherJsonKey]! < 999) {
+            DataEntry.exportData[widget.otherJsonKey!] = DataEntry.exportData[widget.otherJsonKey] + 1;
+            widget.sharedState!.triggerUpdate();
+          }
+        }
         updateState();
       }
     });

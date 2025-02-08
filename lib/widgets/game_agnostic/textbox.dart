@@ -1,3 +1,5 @@
+import "dart:convert";
+
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -49,7 +51,11 @@ class _NRGTextboxState extends State<NRGTextbox> {
     super.initState();
     _controller.addListener(() {
       setState(() {
-        DataEntry.exportData[_key] = _controller.text;
+        try {
+        DataEntry.exportData[_key] =jsonDecode(_controller.text);
+        } catch (_) {
+          DataEntry.exportData[_key] = _controller.text;
+        }
       });
     });
     DataEntry.exportData[_key] = "";

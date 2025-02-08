@@ -55,7 +55,7 @@ class DataEntryState extends State<DataEntry> {
   int currentPage = 0;
   double startDrag = 0.0;
   late PageController controller;
-
+  static final DESharedState sharedState = DESharedState();
   bool isUnderGuidance = false;
   // This is because stopwatches on different pages need to start 
   // at different times, sooooo... the stopwatches can simply look
@@ -166,6 +166,7 @@ class DataEntryState extends State<DataEntry> {
             horizontal: true,
           );
         case "multispinbox":
+          final List<String>? otherJsonKeys = widgetData["otherJsonKey"];
           return NRGMultiSpinbox(
               title: title,
               jsonKey: jsonKey,
@@ -174,7 +175,9 @@ class DataEntryState extends State<DataEntry> {
               boxNames: widgetData["boxNames"] ??
                   [
                     ["NO OPTIONS SPECIFIED"]
-                  ]);
+                  ],
+              updateOtherFields: otherJsonKeys,
+              sharedState: sharedState,);
         case "textbox":
           final int maxLines = widgetData["maxLines"] ?? 1;
           final double fontSize = widgetData["fontSize"] ?? 30.0;

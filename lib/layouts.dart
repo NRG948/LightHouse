@@ -468,26 +468,14 @@ Map<String, dynamic> hpscout = {
       "widgets": [
        // TODO: Add HP multi spinbox
         {
-          "type": "row",
-          "height": "25",
-          "children": [
-            {
-              "title": "Red Score",
-              "type": "spinbox",
-              "jsonKey": "redScore",
-              "width": "34",
-            },
-            {
-              "type": "spacer",
-              "width": "2",
-            },
-            {
-              "title": "Blue Score",
-              "type": "spinbox",
-              "jsonKey": "blueScore",
-              "width": "34",
-            }
-          ]
+          "type": "multispinbox",
+          "title": "Scoring",
+          "jsonKey": ["redScore", "blueScore"],
+          "otherJsonKey": ["redNetAlgae","blueNetAlgae"],
+          "height": "20",
+          "boxNames": [
+            ["Red Score", "Blue Score"]
+            ]
         },
         {
           "type": "multispinbox",
@@ -506,7 +494,7 @@ Map<String, dynamic> hpscout = {
           "height": "40",
           "boxNames": [
             ["Red Algae", "Blue Algae"]
-          ]
+          ],
         },
         {
           "title": "Data Quality",
@@ -682,4 +670,8 @@ Map<String, Color> colorMap = {
   "Sync to Server": Constants.pastelBlueAgain
 };
 
-
+class DESharedState extends ChangeNotifier {
+  void triggerUpdate() {
+    notifyListeners();
+  }
+}
