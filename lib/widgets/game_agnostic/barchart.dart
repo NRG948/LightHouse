@@ -230,10 +230,9 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
                     if (!event.isInterestedForInteractions || response == null || response.spot == null) {
                         return;
                     }
-                    //print("Sending to page ${widget.amongviewTeams[response.spot!.touchedBarGroupIndex]}");
-                    // This is a very roundabout way of doing this but idc
-                    //AmongViewSharedState.setClickedTeam(widget.amongviewTeams[response.spot!.touchedBarGroupIndex]);
-                    //AmongViewSharedState.clickedTeam = widget.amongviewTeams[response.spot!.touchedBarGroupIndex];
+                  if (widget.sharedState != null) {
+                      widget.sharedState!.setClickedTeam(widget.amongviewTeams[response.spot!.touchedBarGroupIndex]);
+                    }
                   },
                 ) : BarTouchData(
                     enabled: true,
