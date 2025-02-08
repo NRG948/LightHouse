@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/pages/data_entry.dart';
 
 /// A horizontal bar chart widget that dislays numbers, automatically sorting by key.
 class NRGBarChart extends StatefulWidget {
@@ -202,7 +203,15 @@ class _NRGBarChartState extends State<NRGBarChart> {
                         },
                       )),
                     ),
-                    barTouchData: BarTouchData(
+                    barTouchData: widget.amongviewAllTeams ? BarTouchData(
+                      touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
+                        if (!event.isInterestedForInteractions || response == null) {
+                            return;
+                        }
+                    
+
+                      },
+                    ) : BarTouchData(
                         enabled: true,
                         touchTooltipData: BarTouchTooltipData(
                           getTooltipColor: (group) =>

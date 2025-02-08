@@ -135,6 +135,7 @@ class AmongViewSharedState extends ChangeNotifier {
   late String activeSortKey;
   List<String> enabledLayouts = [];
   late List<dynamic> data;
+  List<int> teamsInEvent = [];
   SplayTreeMap<int,double> chartData = SplayTreeMap();
 
   void getEnabledLayouts() {
@@ -159,11 +160,14 @@ class AmongViewSharedState extends ChangeNotifier {
     updateChartData();
     notifyListeners();
   }
-
+  
+  void navToIndividualPage(int index) {
+    print("Going to page ${teamsInEvent[index]}");
+  }
 
   void updateChartData() {
     chartData.clear();
-    List<int> teamsInEvent = [];
+    teamsInEvent.clear();
     for (dynamic i in data) {
       if (!(teamsInEvent.contains(i["teamNumber"]!))) {
         teamsInEvent.add(i["teamNumber"]!);
