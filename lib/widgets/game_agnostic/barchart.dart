@@ -17,6 +17,7 @@ class NRGBarChart extends StatefulWidget {
   List<Color> multiColor;
   String dataLabel;
   List<String> dataLabels;
+  bool amongviewAllTeams;
 
   NRGBarChart(
       {super.key,
@@ -29,14 +30,16 @@ class NRGBarChart extends StatefulWidget {
       SplayTreeMap<int, List<double>>? multiData,
       List<Color>? multiColor,
       String? dataLabel,
-      List<String>? dataLabels})
+      List<String>? dataLabels,
+      bool? amongviewAllTeams})
       : removedData = removedData ?? [],
         color = color ?? Colors.transparent,
         data = data ?? SplayTreeMap(),
         multiData = multiData ?? SplayTreeMap(),
         multiColor = multiColor ?? [],
         dataLabel = dataLabel ?? "AVERAGE",
-        dataLabels = dataLabels ?? ["AVERAGE"];
+        dataLabels = dataLabels ?? ["AVERAGE"],
+        amongviewAllTeams = amongviewAllTeams ?? false;
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();

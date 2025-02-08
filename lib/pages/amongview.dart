@@ -22,12 +22,15 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     state = AmongViewSharedState();
     if (configData["activeEvent"] == "") {return;}
     state.setActiveEvent(configData["eventKey"]!);
-    state.setActiveLayout("Atlas");
+    state.getEnabledLayouts();
+    if (state.enabledLayouts.isNotEmpty) {
+    state.setActiveLayout(state.enabledLayouts[0]);
     state.loadDatabase();
-    state.setActiveSortKey(sortKeys["Atlas"]!.keys.toList()[0]);
+    state.setActiveSortKey(sortKeys[state.enabledLayouts[0]]!.keys.toList()[0]);
     state.addListener(() {setState(() {
       
     });});
+    }
 
   }
  
@@ -35,6 +38,13 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
   @override
   Widget build(BuildContext context) {
     
+    if (state.enabledLayouts.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back)),
+        ),
+        body: Text("No data"));
+    }
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -66,7 +76,8 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
               image: DecorationImage(
                   image: AssetImage("assets/images/background-hires.png"),
                   fit: BoxFit.cover)),
-          child: Column(children: [
+          child: 
+          Column(children: [
             Container(
               width: 350 * scaleFactor,
               height: 550 * scaleFactor,
@@ -74,21 +85,25 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
               child: Column(children: [
                 Text("Showing data for ${state.activeEvent}: "),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text("Layout:"),
                     DropdownButton(
                       value: state.activeLayout,
-                      items: ["Atlas","Chronos","Human Player"].map((e) {
+                      items: state.enabledLayouts.map((e) {
                       return DropdownMenuItem(
                       value:e,
                       child: Text(e));}).toList(),
                     onChanged: (newValue) {setState(() {
-                      state.activeLayout = newValue ?? "";
+                      state.setActiveLayout(newValue??"");
+                      
                     });
                     }),
                   ],
                 ),
-                Row(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
                   Text("Sort by"),
                   DropdownButton(
                       value: state.activeSortKey,
@@ -103,7 +118,8 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                 ],),
                 NRGBarChart(title: "Data", height: 300 * scaleFactor, width: 350 * scaleFactor,
                 data:state.chartData,
-                color: Colors.red,
+                color: Constants.pastelRed,
+                amongviewAllTeams: true,
 
                 )
                 
@@ -117,16 +133,25 @@ class AmongViewSharedState extends ChangeNotifier {
   late String activeEvent;
   late String activeLayout;
   late String activeSortKey;
+  List<String> enabledLayouts = [];
   late List<dynamic> data;
   SplayTreeMap<int,double> chartData = SplayTreeMap();
 
-
+  void getEnabledLayouts() {
+    for (String i in ["Atlas","Chronos","Human Player"]) {
+      if (loadDatabaseFile(activeEvent, i) != "") {
+        enabledLayouts.add(i);
+      }
+    }
+  }
   void setActiveEvent(String event) {
     activeEvent = event;
     notifyListeners();
   }
   void setActiveLayout(String layout) {
     activeLayout = layout;
+    loadDatabase();
+    setActiveSortKey(sortKeys[activeLayout]!.keys.toList()[0]);
     notifyListeners();
   }
   void setActiveSortKey(String key) {
@@ -134,6 +159,8 @@ class AmongViewSharedState extends ChangeNotifier {
     updateChartData();
     notifyListeners();
   }
+
+
   void updateChartData() {
     chartData.clear();
     List<int> teamsInEvent = [];
@@ -156,7 +183,65 @@ class AmongViewSharedState extends ChangeNotifier {
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average)]);
         }
+      case "averagebyitems":
+        for (int team in teamsInEvent) {
+          List<double> dataPoints = [];
+          for (dynamic match in data) {
+          if (match["teamNumber"]! == team) {
+            dataPoints.add(match[activeSortKey]!.length.toDouble());
+          }
+        }
+        final average = dataPoints.sum / dataPoints.length;
+        chartData.addEntries([MapEntry(team, average)]);
+        }
+      case "cycleTime":
+        List searchTerms = [];
+        if (activeSortKey.contains("Reef")) {
+          searchTerms = ["AB","CD","EF","GH","IJ","KL"];
+        } else if (activeSortKey.contains("CS")) {
+          searchTerms = ["BargeCS","ProcessorCS"];
+        } else if (activeSortKey.contains("Processor")) {
+          searchTerms = ["Processor"];
+        }
 
+
+        for (int team in teamsInEvent) {
+          List<dynamic> eventList = [];
+          for (dynamic match in data) {
+            if (match["teamNumber"]! == team) {
+              // subEventList is a full list of events in the match
+              // that is filtered later
+              final List subEventList;
+            
+              // pulls either auto or teleop events depending on sort key
+              if (activeSortKey.contains("Auto")) {
+                subEventList = match["autoEventList"]!;
+              } else if (activeSortKey.contains("Teleop")) {
+                subEventList = match["teleopEventList"]!;
+              } else {
+                subEventList = [];
+              }
+              
+              for (List event in subEventList) {
+                if (searchTerms.any((e) => (event[0] == "enter$e") || (event[0] == "exit$e"))) {
+                  eventList.add(event);
+                }
+              }
+            }
+          }
+          List<double> timeDiffs = [];
+          // Iterates through every other event (only the enter area events)
+          for (int eventIndex = 0; eventIndex < eventList.length; eventIndex = eventIndex + 2) {
+            // Accounts for edge case in which last enter event has no corresponding exit event
+            if (eventIndex == eventList.length - 1) {continue;}
+            // Gets time difference between this event (enter) and next event (exit)
+            timeDiffs.add(eventList[eventIndex + 1][1] - eventList[eventIndex][1]);
+          }
+          if (timeDiffs.isNotEmpty) {
+          chartData.addEntries([MapEntry(team, (timeDiffs.sum / timeDiffs.length))]);
+          }
+        }
+        
     }
   }
   List<String> getSortKeys() {
@@ -184,10 +269,18 @@ Map<String,dynamic> sortKeys = {
   "algaemissProcessor": "average",
   "algaemissNet": "average",
   "autoProcessorCS": "average",
-  "climbStartTime": "average"
+  "climbStartTime": "average",
+  "autoCoralScored":"averagebyitems",
+  "autoAlgaeRemoved":"averagebyitems",
 },
-"Chronos": [],
-"Human Player":[]
+"Chronos": {
+  "Auto Reef Cycle Time" : "cycleTime",
+  "Auto CS Cycle Time" : "cycleTime",
+  "Teleop Reef Cycle Time" : "cycleTime",
+  "Teleop CS Cycle Time" : "cycleTime",
+  "Teleop Processor Cycle Time" : "cycleTime"
+},
+"Human Player":{}
 };
 
 
