@@ -52,6 +52,7 @@ class SettingsPage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width; //gets screen width
     final screenHeight = MediaQuery.of(context).size.height; //gets screen height
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         // App bar with back navigation and title.
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),

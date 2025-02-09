@@ -45,6 +45,7 @@ class ScouterHomePage extends StatelessWidget {
     scaleFactor = screenHeight / 914;
     loadConfig();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
       // Drawer menu with navigation options
       drawer: Drawer(

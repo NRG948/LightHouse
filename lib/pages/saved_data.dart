@@ -22,6 +22,7 @@ class SavedData extends StatelessWidget {
     scaleFactor = screenWidth / 411;
    
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,

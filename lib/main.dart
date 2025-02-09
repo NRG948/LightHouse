@@ -16,6 +16,10 @@ import "package:lighthouse/pages/tony_data_viewer.dart";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initConfig();
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Constants.pastelYellow,
+    systemNavigationBarIconBrightness: Brightness.light
+  ));
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((_){
