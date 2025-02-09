@@ -20,7 +20,11 @@ class SavedData extends StatelessWidget {
     activeLayout = ModalRoute.of(context)?.settings.arguments as String?; // get layouts
     if (!["Atlas","Chronos","Pit","Human Player"].any((e) => activeLayout == e)) {activeLayout = null;} // check if layout is valid
     scaleFactor = screenWidth / 411;
-   
+    if (!configData.containsKey("eventKey") || !ensureSavedDataExists(configData["eventKey"]!)) {
+      return Scaffold(
+        appBar: AppBar(leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new)),),
+        body: Text("NO DATA"),);
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -76,7 +80,7 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
     
     return Container(
       width: 400 * SavedData.scaleFactor,
-      height: 100 * SavedData.scaleFactor,
+      height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -121,7 +125,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
     
     return Container(
       width: 400 * SavedData.scaleFactor,
-      height: 100 * SavedData.scaleFactor,
+      height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -168,7 +172,7 @@ class _SavedFileListState extends State<SavedFileList> {
     List<SavedFile> savedFiles = fileListStrings.map((file) {
         return SavedFile(fileName: file,);}).toList();
     return SizedBox(
-      height: 600 * SavedData.scaleFactor,
+      height: 0.6 * SavedData.screenHeight,
       width: 400 * SavedData.scaleFactor,
       child: ListView.builder(
         itemCount: savedFiles.length,
@@ -232,7 +236,7 @@ class _SavedFileState extends State<SavedFile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                      Icon(Icons.data_object,size:30),
+                      Icon(Icons.data_object,size:30 * SavedData.scaleFactor),
                       SizedBox(
                         width: 70 * SavedData.scaleFactor,
                         child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,))
@@ -244,14 +248,14 @@ class _SavedFileState extends State<SavedFile> {
                 children: [
                 Row(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                  Icon(Icons.schedule),
+                  Icon(Icons.schedule,size: 2 * SavedData.scaleFactor),
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
                     // 
                 ],),
                 Row(children: [
-                  Icon(Icons.account_circle),
+                  Icon(Icons.account_circle,size: 23 * SavedData.scaleFactor,),
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["scouterName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))

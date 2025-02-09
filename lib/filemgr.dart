@@ -50,6 +50,10 @@ List<String> getSavedEvents() {
   }).toList();
 }
 
+bool ensureSavedDataExists(String eventKey) {
+  return Directory("$configFolder/$eventKey").existsSync();
+}
+
 List<String> getLayouts(String eventKey) {
   final eventKeyDir = Directory("$configFolder/$eventKey");
   // DO NOT REMOVE THIS DEBUGPRINT STATEMENT!!!
