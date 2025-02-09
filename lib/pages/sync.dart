@@ -61,25 +61,7 @@ class SyncPageState extends State<SyncPage> {
         child: Center(
           child: Column (
             children: [
-              GestureDetector(
-                onTap: () {
-                  fetchData("hi!").timeout(Duration(seconds: 10), onTimeout: () => {throw UnimplementedError("HELP!")});
-                },
-                child: Container(
-                  height: 50,
-                  width: 350 * sizeScaleFactor,
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius)
-                  ),
-                  child: Text(
-                    "Sync", 
-                    style: comfortaaBold(40, color: Constants.pastelReddishBrown),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10 * sizeScaleFactor), 
+             
               Container(
                 decoration: BoxDecoration(
                     color: Constants.pastelWhite,
