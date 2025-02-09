@@ -147,7 +147,6 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   Widget getCommentBox() {
     List<List<String>> comments = [];
-    //TODO: Make 4 of these for chronosData, pit data, etc
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         comments.add([
