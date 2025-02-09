@@ -290,6 +290,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
   @override
   void initState() {
     super.initState();
+    downloadDatabases();
   }
 
   @override
@@ -322,7 +323,15 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
   void downloadDatabases() async {
     for (String layout in ["Atlas","Chronos","Pit","Human Player"]) {
-      downloadDatabase(layout);
+      currentlyDownloading = layout;
+      int code = await downloadDatabase(layout);
+      setState(() {
+         downloadStatuses.addEntries([MapEntry(layout, responseCodes[code]??code.toString())]);
+      });
+     
+    }
+    if (mounted) {
+    Navigator.pop(context);
     }
   }
 
@@ -334,7 +343,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
     else if (layout == "Pit") {api = "pit";}
     else if (layout == "Human Player") {api = "hp";}
     else {api = "none";}
-    final response = await http.get((Uri.tryParse("${configData["serverIP"]!}/int/$api") ?? Uri.base),
+    final response = await http.get((Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
     headers: {
       "Content-Type":"application/json"
     },

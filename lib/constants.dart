@@ -45,6 +45,7 @@ TextStyle comfortaaBold(double fontSize,
 final Map<int,String> responseCodes = {
   200:"OK",
   301:"Permanantly Moved",
+  400: "Bad Request",
   404:"File Not Found",
 };
 
@@ -56,4 +57,7 @@ extension StringExtensions on String {
     RegExp(r'^[a-z]'),
     (Match m) => m[0]!.toUpperCase(),
   );
+}
+extension DoubleExtensions on double {
+  double get fourDigits => double.parse(toStringAsFixed(4));
 }

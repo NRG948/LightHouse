@@ -556,7 +556,7 @@ Map<String,List<String>> missingFieldMap = {
   "Atlas": ["scouterName","matchNumber","teamNumber","matchType","driverStation","dataQuality"],
   "Chronos": ["scouterName","matchNumber","teamNumber","matchType","driverStation","dataQuality"],
   "Pit": ["interviewerName","teamNumber","humanPlayerPreference"],
-  "Human Player": ["scouterName","matchNumber","redHPTeam","blueHPTeam","matchType","driverStation","dataQuality"]
+  "Human Player": ["scouterName","matchNumber","redHPTeam","blueHPTeam","matchType","dataQuality"]
 };
 
 

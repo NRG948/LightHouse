@@ -1,5 +1,6 @@
 import "dart:math" as math;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
@@ -36,6 +37,12 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
           RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,),
         ],),
         SizedBox(height: 5 * scaleFactor),
+        Container(
+          height: 15 * scaleFactor,
+          width: 300 * scaleFactor,
+          decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+          child: AutoSizeText("DRIVER STATION",textAlign: TextAlign.center,style: comfortaaBold(10 * scaleFactor),),
+        ),
         RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
         RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] ;
     return Container(
@@ -475,7 +482,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
         children: [
           Container(
             width: 100 * widget.scaleFactor,
-            height: 50 * widget.scaleFactor,
+            height: 40 * widget.scaleFactor,
              decoration: BoxDecoration(
               color: Constants.pastelGray,
               borderRadius: BorderRadius.only(
@@ -485,14 +492,14 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
             ),
             child: Column(
               children: [
-                Text(title, style: comfortaaBold(16 * widget.scaleFactor),textAlign: TextAlign.center,),
-                Text(counter.toString(),style: comfortaaBold(18 * widget.scaleFactor),)
+                Text(title, style: comfortaaBold(12 * widget.scaleFactor),textAlign: TextAlign.center,),
+                Text(counter.toString(),style: comfortaaBold(15.4 * widget.scaleFactor),)
               ],
             ),
           ),
           Container(
             width: 50 * widget.scaleFactor,
-            height: 50 * widget.scaleFactor,
+            height: 40 * widget.scaleFactor,
             decoration: BoxDecoration(
               color: Constants.pastelGray,
               borderRadius: BorderRadius.only(topRight:Radius.circular(Constants.borderRadius),bottomRight: Radius.circular(Constants.borderRadius)),
