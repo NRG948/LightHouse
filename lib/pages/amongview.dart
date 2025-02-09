@@ -268,7 +268,6 @@ class AmongViewSharedState extends ChangeNotifier {
             if (match["teamNumber"]! == team) {
               dataPoints.add(match[activeSortKey]!.toDouble());
             }
-          }
         }
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
