@@ -20,12 +20,16 @@ class NRGRating extends StatefulWidget {
   State<NRGRating> createState() => _NRGRatingState(); 
 }
 
-class _NRGRatingState extends State<NRGRating> {
+class _NRGRatingState extends State<NRGRating> with AutomaticKeepAliveClientMixin {
 
   @override void initState() {
     super.initState();
     DataEntry.exportData[widget.jsonKey] = 0.0;
   }
+
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
