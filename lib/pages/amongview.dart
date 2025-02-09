@@ -263,10 +263,11 @@ class AmongViewSharedState extends ChangeNotifier {
     switch (sortKeys[activeLayout][activeSortKey]) {
       case "average":
         for (int team in teamsInEvent) {
-        List<double> dataPoints = [];
-        for (dynamic match in data) {
-          if (match["teamNumber"]! == team) {
-            dataPoints.add(match[activeSortKey]!.toDouble());
+          List<double> dataPoints = [];
+          for (dynamic match in data) {
+            if (match["teamNumber"]! == team) {
+              dataPoints.add(match[activeSortKey]!.toDouble());
+            }
           }
         }
         final average = dataPoints.sum / dataPoints.length;
@@ -306,8 +307,6 @@ class AmongViewSharedState extends ChangeNotifier {
         } else if (activeSortKey.contains("Processor")) {
           searchTerms = ["Processor"];
         }
-
-
         for (int team in teamsInEvent) {
           List<dynamic> eventList = [];
           for (dynamic match in data) {
@@ -343,6 +342,25 @@ class AmongViewSharedState extends ChangeNotifier {
           if (timeDiffs.isNotEmpty) {
           chartData.addEntries([MapEntry(team, (timeDiffs.sum / timeDiffs.length).fourDigits)]);
           }
+        }
+      case "coralIntakeAverage":
+        for (int team in teamsInEvent) {
+          List<double> dataPoints = [];
+          for (dynamic match in data) {
+            int totalIntakeCoral = 0;
+            if (match["teamNumber"]! == team) {
+              List eventLists = match["teleopEventList"];
+              for (List entry in eventLists) {
+                if (entry[0] == "intakeCoral") {
+                  totalIntakeCoral += 1;
+                  print(totalIntakeCoral);
+                }
+              }
+              dataPoints.add(totalIntakeCoral.toDouble());
+            }
+          }
+          final average = dataPoints.sum / dataPoints.length;
+          chartData.addEntries([MapEntry(team, average)]);
         }
     }
     if (sort == true) {
@@ -390,7 +408,8 @@ Map<String,dynamic> sortKeys = {
   "Auto CS Cycle Time" : "cycleTime",
   "Teleop Reef Cycle Time" : "cycleTime",
   "Teleop CS Cycle Time" : "cycleTime",
-  "Teleop Processor Cycle Time" : "cycleTime"
+  "Teleop Processor Cycle Time" : "cycleTime", 
+  "Coral Intake Average" : "coralIntakeAverage"
 },
 "Human Player":{
   "redScore": "hpaverage",
