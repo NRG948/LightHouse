@@ -194,6 +194,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getClimbStartTimeBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, double> chartData = SplayTreeMap();
     List<int> removedData = [];
     Color color = Constants.pastelRed;
@@ -220,6 +224,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAlgaeBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
     List<Color> colors = [Constants.pastelBlue, Constants.pastelBlueAgain];
@@ -252,6 +260,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getCoralBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
     List<Color> colors = [
@@ -297,6 +309,19 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAutoPreview() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+    if (chronosData[0].isEmpty) {
+      return Container();
+    }
+    if(chronosData[0]["startingPosition"].isEmpty) {
+      return Container();
+    }
+    if (chronosData[0]["autoEventList"]) {
+      return Container();
+    }
+
     return AnimatedAutoReplay(
       height: 200,
       width: 400,
