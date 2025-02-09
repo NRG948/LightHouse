@@ -61,25 +61,7 @@ class SyncPageState extends State<SyncPage> {
         child: Center(
           child: Column (
             children: [
-              GestureDetector(
-                onTap: () {
-                  fetchData("hi!").timeout(Duration(seconds: 10), onTimeout: () => {throw UnimplementedError("HELP!")});
-                },
-                child: Container(
-                  height: 50,
-                  width: 350 * sizeScaleFactor,
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius)
-                  ),
-                  child: Text(
-                    "Sync", 
-                    style: comfortaaBold(40, color: Constants.pastelReddishBrown),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10 * sizeScaleFactor), 
+             
               Container(
                 decoration: BoxDecoration(
                     color: Constants.pastelWhite,
@@ -290,6 +272,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
   @override
   void initState() {
     super.initState();
+    downloadDatabases();
   }
 
   @override
@@ -322,7 +305,15 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
   void downloadDatabases() async {
     for (String layout in ["Atlas","Chronos","Pit","Human Player"]) {
-      downloadDatabase(layout);
+      currentlyDownloading = layout;
+      int code = await downloadDatabase(layout);
+      setState(() {
+         downloadStatuses.addEntries([MapEntry(layout, responseCodes[code]??code.toString())]);
+      });
+     
+    }
+    if (mounted) {
+    Navigator.pop(context);
     }
   }
 
@@ -334,7 +325,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
     else if (layout == "Pit") {api = "pit";}
     else if (layout == "Human Player") {api = "hp";}
     else {api = "none";}
-    final response = await http.get((Uri.tryParse("${configData["serverIP"]!}/int/$api") ?? Uri.base),
+    final response = await http.get((Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
     headers: {
       "Content-Type":"application/json"
     },

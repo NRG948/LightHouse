@@ -90,7 +90,7 @@ class _RSAUReefState extends State<RSAUReef> with AutomaticKeepAliveClientMixin 
     }
     String at = widget.sharedState.activeTriangle!;
     return Container(
-      height: 330 * widget.scaleFactor,
+      height: 308 * widget.scaleFactor,
       width: 318 * widget.scaleFactor,
       padding: EdgeInsets.all(8 * widget.scaleFactor),
       decoration: BoxDecoration(
@@ -144,12 +144,12 @@ class _RSAUTroughState extends State<RSAUTrough> {
 
   void increment() {setState( () {
     if (counter < 99) {counter++;}
-    DataEntry.exportData["coralScoredL1"] = counter.toString();});
+    DataEntry.exportData["autoCoralScoredL1"] = counter.toString();});
   }
 
   void decrement() {setState(() {
     if (counter>0) {counter--;}
-    DataEntry.exportData["coralScoredL1"] = counter.toString();});
+    DataEntry.exportData["autoCoralScoredL1"] = counter.toString();});
   }
 
   @override
@@ -157,7 +157,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
     return GestureDetector(
       onTap: increment,
       child: Container(
-        height: 96 * widget.scaleFactor,
+        height: 75 * widget.scaleFactor,
         width: 302 * widget.scaleFactor,
         decoration: BoxDecoration(
           color: counter > 0 ? Constants.pastelRed : Constants.pastelGray,
@@ -181,7 +181,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: SizedBox(
-                  height: 70 * widget.scaleFactor,
+                  height: 49 * widget.scaleFactor,
                   child: Row(
                     spacing: 0,
                     children: [
@@ -482,7 +482,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
         children: [
           Container(
             width: 100 * widget.scaleFactor,
-            height: 50 * widget.scaleFactor,
+            height: 40 * widget.scaleFactor,
              decoration: BoxDecoration(
               color: Constants.pastelGray,
               borderRadius: BorderRadius.only(
@@ -492,14 +492,14 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
             ),
             child: Column(
               children: [
-                Text(title, style: comfortaaBold(16 * widget.scaleFactor),textAlign: TextAlign.center,),
-                Text(counter.toString(),style: comfortaaBold(18 * widget.scaleFactor),)
+                Text(title, style: comfortaaBold(12 * widget.scaleFactor),textAlign: TextAlign.center,),
+                Text(counter.toString(),style: comfortaaBold(15.4 * widget.scaleFactor),)
               ],
             ),
           ),
           Container(
             width: 50 * widget.scaleFactor,
-            height: 50 * widget.scaleFactor,
+            height: 40 * widget.scaleFactor,
             decoration: BoxDecoration(
               color: Constants.pastelGray,
               borderRadius: BorderRadius.only(topRight:Radius.circular(Constants.borderRadius),bottomRight: Radius.circular(Constants.borderRadius)),

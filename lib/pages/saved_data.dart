@@ -17,11 +17,16 @@ class SavedData extends StatelessWidget {
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = MediaQuery.of(context).size.height;
-    activeLayout = ModalRoute.of(context)?.settings.arguments as String?;
-    if (!["Atlas","Chronos","Pit","Human Player"].any((e) => activeLayout == e)) {activeLayout = null;}
+    activeLayout = ModalRoute.of(context)?.settings.arguments as String?; // get layouts
+    if (!["Atlas","Chronos","Pit","Human Player"].any((e) => activeLayout == e)) {activeLayout = null;} // check if layout is valid
     scaleFactor = screenWidth / 411;
-   
+    if (!configData.containsKey("eventKey") || !ensureSavedDataExists(configData["eventKey"]!)) {
+      return Scaffold(
+        appBar: AppBar(leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new)),),
+        body: Text("NO DATA"),);
+    }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
@@ -39,14 +44,14 @@ class SavedData extends StatelessWidget {
         decoration: BoxDecoration(
                 image: DecorationImage(
                     image: AssetImage("assets/images/background-hires.png"),
-                    fit: BoxFit.cover)),
+                    fit: BoxFit.cover)), // set background image
         child: Column(
           children: [
-            EventKeyDropdown(),
+            EventKeyDropdown(), //dropdown for event selection
+            SizedBox(height: 5,), 
+            LayoutDropdown(), // dropdown for layout selection 
             SizedBox(height: 5,),
-            LayoutDropdown(),
-            SizedBox(height: 5,),
-            SavedFileList()
+            SavedFileList() // Display saved files for the selected event and layout
 
           ],
         ))
@@ -64,8 +69,8 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
   @override
   void initState() {
     super.initState();
-    SavedData.sharedState.activeEvent = configData["eventKey"]!;
-    selectedValue = SavedData.sharedState.activeEvent;
+    SavedData.sharedState.activeEvent = configData["eventKey"]!; // Set active event from config
+    selectedValue = SavedData.sharedState.activeEvent; // Initialize selected value for dropdown
     SavedData.sharedState.addListener(() {setState(() {
     });});
   }
@@ -75,7 +80,7 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
     
     return Container(
       width: 400 * SavedData.scaleFactor,
-      height: 100 * SavedData.scaleFactor,
+      height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -87,8 +92,8 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
             items: getSavedEvents().map((item) {
             return DropdownMenuItem<String>(value: item,child: Text(item),);
           }).toList(), onChanged:(eventKey){setState(() {
-            selectedValue = eventKey ?? SavedData.sharedState.activeEvent;
-            SavedData.sharedState.setActiveEvent(selectedValue);
+            selectedValue = eventKey ?? SavedData.sharedState.activeEvent; // update selected event
+            SavedData.sharedState.setActiveEvent(selectedValue); // set active event
           });}),
         ],
       ),
@@ -107,11 +112,11 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
   @override
   void initState() {
     super.initState();
-    layouts = getLayouts(SavedData.sharedState.activeEvent);
-    selectedValue = SavedData.activeLayout ?? layouts[0];
-    SavedData.sharedState.activeLayout = selectedValue;
+    layouts = getLayouts(SavedData.sharedState.activeEvent); //get layouts for the active event
+    selectedValue = SavedData.activeLayout ?? layouts[0]; // initialize selected layout
+    SavedData.sharedState.activeLayout = selectedValue; // set active layout
     SavedData.sharedState.addListener(() {setState(() {
-    });});
+    });}); 
   }
 
   @override
@@ -120,7 +125,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
     
     return Container(
       width: 400 * SavedData.scaleFactor,
-      height: 100 * SavedData.scaleFactor,
+      height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -132,8 +137,8 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
             items: layouts.map((item) {
             return DropdownMenuItem<String>(value: item,child: Text(item),);
           }).toList(), onChanged:(layout){setState(() {
-            selectedValue = layout ?? layouts[0];
-            SavedData.sharedState.setActiveLayout(selectedValue);
+            selectedValue = layout ?? layouts[0]; // Update selected layout
+            SavedData.sharedState.setActiveLayout(selectedValue); // Set active layout
           });}),
         ],
       ),
@@ -157,17 +162,17 @@ class _SavedFileListState extends State<SavedFileList> {
   }
   @override
   Widget build(BuildContext context) {
-    if (SavedData.sharedState.activeLayout == "No Data") {return Text("No layouts");}
+    if (SavedData.sharedState.activeLayout == "No Data") {return Text("No layouts");} // check if there's no layout
     
     List<String> fileListStrings = getFilesInLayout(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout);
     if (fileListStrings.isEmpty) {
       
-      return Text("No matches for layout ${SavedData.sharedState.activeLayout}");
+      return Text("No matches for layout ${SavedData.sharedState.activeLayout}"); //display message if no files found
       }
     List<SavedFile> savedFiles = fileListStrings.map((file) {
         return SavedFile(fileName: file,);}).toList();
     return SizedBox(
-      height: 600 * SavedData.scaleFactor,
+      height: 0.6 * SavedData.screenHeight,
       width: 400 * SavedData.scaleFactor,
       child: ListView.builder(
         itemCount: savedFiles.length,
@@ -231,7 +236,7 @@ class _SavedFileState extends State<SavedFile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                      Icon(Icons.data_object,size:30),
+                      Icon(Icons.data_object,size:30 * SavedData.scaleFactor),
                       SizedBox(
                         width: 70 * SavedData.scaleFactor,
                         child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,))
@@ -243,14 +248,14 @@ class _SavedFileState extends State<SavedFile> {
                 children: [
                 Row(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                  Icon(Icons.schedule),
+                  Icon(Icons.schedule,size: 2 * SavedData.scaleFactor),
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
                     // 
                 ],),
                 Row(children: [
-                  Icon(Icons.account_circle),
+                  Icon(Icons.account_circle,size: 23 * SavedData.scaleFactor,),
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["scouterName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))

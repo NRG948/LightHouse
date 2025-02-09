@@ -15,13 +15,13 @@ class DataViewerHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double scaleFactor;
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    scaleFactor = screenHeight / 914;
+    final screenWidth = MediaQuery.of(context).size.width; // gets screen width
+    final screenHeight = MediaQuery.of(context).size.height; // gets screen height
+    scaleFactor = screenHeight / 914; //calculate scaling factor based on height
     loadConfig();
     
     return Scaffold(
-      
+      resizeToAvoidBottomInset: false,
       body: Container(
           width: screenWidth,
           height: screenHeight,
@@ -31,7 +31,7 @@ class DataViewerHome extends StatelessWidget {
                   fit: BoxFit.cover)),
           child: Column(children: [
         TextButton(onPressed: () {
-          Navigator.pushNamed(context, "/data-viewer-tony");
+          Navigator.pushNamed(context, "/data-viewer-tony"); // Navigates to Tony's Data Viewer Page.
         }, child: Text("Tony's Data Viewer Page")),
          TextButton(onPressed: () {
           Navigator.pushReplacementNamed(context, "/data-viewer-amongview");
@@ -42,7 +42,7 @@ class DataViewerHome extends StatelessWidget {
 
 
       appBar: AppBar(
-        backgroundColor: Constants.pastelRed,
+        backgroundColor: Constants.pastelRed, // Sets the app bar color.
         title: const Text(
           "LightHouse",
           style: TextStyle(
@@ -50,11 +50,12 @@ class DataViewerHome extends StatelessWidget {
               fontWeight: FontWeight.w900,
               color: Colors.white),
         ),
-        centerTitle: true,
+        centerTitle: true, // Centers the title in the app bar.
         iconTheme: IconThemeData(
           color: Constants.pastelWhite
         ),
         actions: [
+          // Button to display JSON config data in a dialog.
           IconButton(
             icon: Icon(Icons.javascript_outlined),
             onPressed: (() {
@@ -66,6 +67,7 @@ class DataViewerHome extends StatelessWidget {
                   });
             }),
           ),
+          // Button to navigate to settings page.
           IconButton(
               icon: Icon(Icons.settings),
               onPressed: () {
@@ -73,6 +75,8 @@ class DataViewerHome extends StatelessWidget {
               })
         ],
       ),
+
+      // Drawer menu for navigation between different app modes.
       drawer: Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
@@ -88,7 +92,7 @@ class DataViewerHome extends StatelessWidget {
                   leading: Icon(Icons.bar_chart),
                   title: Text("Data Viewer Home"),
                   onTap: () {
-                    Navigator.pop(context);
+                    Navigator.pop(context); // Closes the drawer, since the user is already on this page.
                   })
             ],
           ),
