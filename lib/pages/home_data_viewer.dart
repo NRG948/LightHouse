@@ -34,7 +34,7 @@ class DataViewerHome extends StatelessWidget {
           Navigator.pushNamed(context, "/data-viewer-tony");
         }, child: Text("Tony's Data Viewer Page")),
          TextButton(onPressed: () {
-          Navigator.pushNamed(context, "/data-viewer-amongview");
+          Navigator.pushReplacementNamed(context, "/data-viewer-amongview");
         }, child: Text("Amongview")),
       ],),
       ),

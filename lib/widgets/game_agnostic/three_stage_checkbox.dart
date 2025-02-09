@@ -32,9 +32,9 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
     if (checkboxNotifier.value == CheckboxStage.unable) {
       return null;
     } else if (checkboxNotifier.value == CheckboxStage.able) {
-      return IconData(0xe156, fontFamily: 'MaterialIcons');
+      return const IconData(0xe156, fontFamily: 'MaterialIcons');
     } else {
-      return IconData(0xe25b, fontFamily: 'MaterialIcons');
+      return const IconData(0xe25b, fontFamily: 'MaterialIcons');
     }
   }
 

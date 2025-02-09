@@ -20,6 +20,8 @@ class NRGBarChart extends StatefulWidget {
   String dataLabel;
   List<String> dataLabels;
   List<int> amongviewTeams;
+  LinkedHashMap hashMap;
+  AmongViewSharedState? sharedState;
 
   NRGBarChart(
       {super.key,
@@ -33,7 +35,9 @@ class NRGBarChart extends StatefulWidget {
       List<Color>? multiColor,
       String? dataLabel,
       List<String>? dataLabels,
-      List<int>? amongviewTeams})
+      LinkedHashMap? hashMap,
+      List<int>? amongviewTeams,
+      this.sharedState})
       : removedData = removedData ?? [],
         color = color ?? Colors.transparent,
         data = data ?? SplayTreeMap(),
@@ -41,7 +45,8 @@ class NRGBarChart extends StatefulWidget {
         multiColor = multiColor ?? [],
         dataLabel = dataLabel ?? "AVERAGE",
         dataLabels = dataLabels ?? ["AVERAGE"],
-        amongviewTeams = amongviewTeams ?? [];
+        amongviewTeams = amongviewTeams ?? [],
+        hashMap = hashMap ?? LinkedHashMap();
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();
@@ -60,7 +65,15 @@ class _NRGBarChartState extends State<NRGBarChart> {
   List<String> get _dataLabels => widget.dataLabels;
 
   /// Converts the [SplayTreeMap] dataset [_data] into a [BarChartGroupData] list to display.
-  List<BarChartGroupData> getBarGroups() => _data!.keys
+List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widget.hashMap.keys.map<BarChartGroupData>((key) => BarChartGroupData(x: key, barRods: [
+            BarChartRodData(
+                toY: widget.hashMap[key]!,
+                color: !_removedData.contains(key) ? _color : Colors.grey,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(7), topRight: Radius.circular(7)),
+                width: (_width - 20) / widget.hashMap.length * 0.6),
+          ]))
+      .toList() : _data!.keys
       .map((int key) => BarChartGroupData(x: key, barRods: [
             BarChartRodData(
                 toY: _data![key]!,
@@ -70,6 +83,9 @@ class _NRGBarChartState extends State<NRGBarChart> {
                 width: (_width - 20) / _data!.length * 0.6),
           ]))
       .toList();
+  }
+
+
 
   List<BarChartGroupData> getMultiBarGroups() => _multiData!.keys
       .map((int key) => BarChartGroupData(
@@ -214,10 +230,9 @@ class _NRGBarChartState extends State<NRGBarChart> {
                     if (!event.isInterestedForInteractions || response == null || response.spot == null) {
                         return;
                     }
-                    //print("Sending to page ${widget.amongviewTeams[response.spot!.touchedBarGroupIndex]}");
-                    // This is a very roundabout way of doing this but idc
-                    AmongViewSharedState.setClickedTeam(widget.amongviewTeams[response.spot!.touchedBarGroupIndex]);
-                    //AmongViewSharedState.clickedTeam = widget.amongviewTeams[response.spot!.touchedBarGroupIndex];
+                  if (widget.sharedState != null) {
+                      widget.sharedState!.setClickedTeam(widget.amongviewTeams[response.spot!.touchedBarGroupIndex]);
+                    }
                   },
                 ) : BarTouchData(
                     enabled: true,
@@ -226,7 +241,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                           Color.fromARGB(200, 255, 255, 255),
                     )),
                 barGroups: _multiData!.isEmpty
-                    ? getBarGroups()
+                    ? getBarGroups(widget.hashMap.isNotEmpty)
                     : getMultiBarGroups(),
                 gridData: FlGridData(
                     drawVerticalLine: false,

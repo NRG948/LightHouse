@@ -502,6 +502,8 @@ void saveJson(BuildContext context) async {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
+                  List<String> missingFields = dataVerification();
+                  if (missingFields.isEmpty) {
                   if (await saveExport() == 0) {
                     showDialog(
                         context: context,
@@ -519,12 +521,44 @@ void saveJson(BuildContext context) async {
                           );
                         });
                   }
+                  } else {
+                    showDialog(context: context, builder: (context) {
+                      return AlertDialog(
+                        content: Text("MISSING DATA:\n$missingFields"),
+                        actions: [
+                          TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))
+                        ],
+                      );
+                    });
+                  }
                 },
                 child: Text("Yes")),
           ],
         );
       });
 }
+
+List<String> dataVerification() {
+  List<String> missingFields = [];
+  for (String i in missingFieldMap[DataEntry.activeConfig]!) {
+    if (DataEntry.exportData[i] == null 
+    || DataEntry.exportData[i] == "" 
+    || DataEntry.exportData[i] == 0.0
+    || DataEntry.exportData[i] == 0
+    ) {
+      missingFields.add(i);
+    }
+  }
+  return missingFields;
+}
+
+Map<String,List<String>> missingFieldMap = {
+  "Atlas": ["scouterName","matchNumber","teamNumber","matchType","driverStation","dataQuality"],
+  "Chronos": ["scouterName","matchNumber","teamNumber","matchType","driverStation","dataQuality"],
+  "Pit": ["interviewerName","teamNumber","humanPlayerPreference"],
+  "Human Player": ["scouterName","matchNumber","redHPTeam","blueHPTeam","matchType","dataQuality"]
+};
+
 
 void showReturnDialog(BuildContext context) {
   showDialog(
