@@ -74,6 +74,7 @@ class ScouterHomePage extends StatelessWidget {
         backgroundColor: Constants.pastelRed,
         centerTitle: true,
         actions: [
+          IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
           IconButton(
             icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
             onPressed: (() {
