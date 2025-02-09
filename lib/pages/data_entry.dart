@@ -326,6 +326,7 @@ class DataEntryState extends State<DataEntry> {
     return PopScope(
       canPop: false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Constants.pastelRed,
             title: FittedBox(

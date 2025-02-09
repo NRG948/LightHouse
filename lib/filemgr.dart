@@ -50,6 +50,10 @@ List<String> getSavedEvents() {
   }).toList();
 }
 
+bool ensureSavedDataExists(String eventKey) {
+  return Directory("$configFolder/$eventKey").existsSync();
+}
+
 List<String> getLayouts(String eventKey) {
   final eventKeyDir = Directory("$configFolder/$eventKey");
   // DO NOT REMOVE THIS DEBUGPRINT STATEMENT!!!
@@ -67,6 +71,12 @@ List<String> getLayouts(String eventKey) {
   }).toList();
   if (layoutList.isEmpty) {
     layoutList.add("No Data");
+  }
+
+  // oops didn't think about database folder when designing this
+  // luckily this works as a band-aid
+  if (layoutList.contains("database")) {
+    layoutList.remove("database");
   }
   return layoutList;
 }

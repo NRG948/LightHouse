@@ -7,9 +7,11 @@ import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/layouts.dart';
 import 'package:lighthouse/splash_texts.dart';
 
+//stateless widget representing the home screen of the app
 class ScouterHomePage extends StatelessWidget {
   const ScouterHomePage({super.key});
   static late double scaleFactor;
+  // This method generates a list of Launcher widgets based on layouts.
   List<Launcher> getLaunchers() {
     final enabledLayouts = layoutMap.keys;
     final enabledLaunchers = enabledLayouts.map((layout) {
@@ -19,6 +21,7 @@ class ScouterHomePage extends StatelessWidget {
         color: colorMap[layout] ?? Colors.black,
       );
     }).toList();
+    // Adding extra launchers for viewing saved data and syncing to the server.
     enabledLaunchers.add(Launcher(
       icon: Icons.folder,
       title: "View Saved Data",
@@ -36,12 +39,15 @@ class ScouterHomePage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions and set scale factor
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
     loadConfig();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
+      // Drawer menu with navigation options
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -62,16 +68,10 @@ class ScouterHomePage extends StatelessWidget {
           ],
         ),
       ),
+      // App bar with icons for settings and displaying config data
       appBar: AppBar(
         iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
-        // title: const Text(
-        //   "LightHouse",
-        //   style: TextStyle(
-        //       fontFamily: "Comfortaa",
-        //       fontWeight: FontWeight.w900,
-        //       color: Colors.white),
-        // ),
         centerTitle: true,
         actions: [
           IconButton(
@@ -92,6 +92,7 @@ class ScouterHomePage extends StatelessWidget {
               })
         ],
       ),
+      // Main body of the page with a background image
       body: Container(
           width: screenWidth,
           height: screenHeight,
@@ -99,6 +100,7 @@ class ScouterHomePage extends StatelessWidget {
               image: DecorationImage(
                   image: AssetImage("assets/images/background-hires.png"),
                   fit: BoxFit.cover)),
+          // Column containing title, splash text, and launcher buttons
           child: Column(
             children: [
               SizedBox(
@@ -118,6 +120,7 @@ class ScouterHomePage extends StatelessWidget {
   }
 }
 
+// Launcher widget represents a button that navigates to different app sections.
 class Launcher extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -133,6 +136,7 @@ class Launcher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // Navigates to the specified route when tapped
       onTap: () {
         Navigator.pushNamed(context, route, arguments: title);
       },
@@ -173,6 +177,7 @@ class Launcher extends StatelessWidget {
                 ),
               ),
 
+              // Icon positioned on the right side
               Padding(
                 padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 child: Icon(

@@ -55,6 +55,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
       appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),

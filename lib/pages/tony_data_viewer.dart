@@ -149,7 +149,6 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   Widget getCommentBox() {
     List<List<String>> comments = [];
-    //TODO: Make 4 of these for chronosData, pit data, etc
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         comments.add([
@@ -346,6 +345,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
       appBar: AppBar(
         backgroundColor: Constants.pastelRed,
