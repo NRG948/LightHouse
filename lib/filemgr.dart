@@ -68,6 +68,12 @@ List<String> getLayouts(String eventKey) {
   if (layoutList.isEmpty) {
     layoutList.add("No Data");
   }
+
+  // oops didn't think about database folder when designing this
+  // luckily this works as a band-aid
+  if (layoutList.contains("database")) {
+    layoutList.remove("database");
+  }
   return layoutList;
 }
 
