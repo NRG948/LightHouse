@@ -25,7 +25,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     state = AmongViewSharedState();
     scrollController = ScrollController();
     sortCheckbox = ValueNotifier<bool>(false);
-    if (configData["activeEvent"] == "") {return;}
+
     state.setActiveEvent(configData["eventKey"]!);
     state.getEnabledLayouts();
     if (state.enabledLayouts.isNotEmpty) {
@@ -61,7 +61,6 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
       canPop: false,
       child: Scaffold(
         backgroundColor: Constants.pastelRed,
-        
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
           backgroundColor: Constants.pastelRed,
@@ -155,7 +154,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                     ),
                   ),
                   SizedBox(
-                    height: 300 * scaleFactor,
+                    height: 350 * scaleFactor,
                     width: 350 * scaleFactor,
                     child: Scrollbar(
                       controller: scrollController,
@@ -168,7 +167,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                         color: Constants.pastelRed,
                         amongviewTeams: state.teamsInEvent,
                         hashMap: state.hashMap,
-                        
+                        sharedState: state,
                         ),
                         ]
                       ),
@@ -178,10 +177,10 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                   if (AmongViewSharedState.clickedTeam != 0)
                   Container(
                     width: 325 * scaleFactor,
-                    height: 60 * scaleFactor,
+                    height: 40 * scaleFactor,
                     decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
                     child: TextButton(onPressed: () {
-                      print("GOING TO PAGE");
+                      Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
                     }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}")),
                   )
                   
@@ -204,10 +203,10 @@ class AmongViewSharedState extends ChangeNotifier {
   static int clickedTeam = 0;
 
 
-  // static void setClickedTeam(int team) {
-  //   clickedTeam = team;
-  //   _instance.notifyListeners();
-  // }
+  void setClickedTeam(int team) {
+    clickedTeam = team;
+    notifyListeners();
+  }
 
   // // Singleton pattern to allow notifying listeners despite static properties
   // static final AmongViewSharedState _instance = AmongViewSharedState._internal();
@@ -246,8 +245,17 @@ class AmongViewSharedState extends ChangeNotifier {
     chartData.clear();
     teamsInEvent.clear();
     for (dynamic i in data) {
+      if (activeLayout != "Human Player") {
       if (!(teamsInEvent.contains(i["teamNumber"]!))) {
         teamsInEvent.add(i["teamNumber"]!);
+      }
+      } else {
+        if (!teamsInEvent.contains(i["redHPTeam"]!)) {
+          teamsInEvent.add(i["redHPTeam"]!);
+        }
+        if (!teamsInEvent.contains(i["blueHPTeam"]!)) {
+          teamsInEvent.add(i["blueHPTeam"]!);
+        }
       }
     }
     // Sorts from smallest to largets
@@ -261,8 +269,23 @@ class AmongViewSharedState extends ChangeNotifier {
               dataPoints.add(match[activeSortKey]!.toDouble());
             }
           }
-          final average = dataPoints.sum / dataPoints.length;
-          chartData.addEntries([MapEntry(team, average)]);
+        }
+        final average = dataPoints.sum / dataPoints.length;
+        chartData.addEntries([MapEntry(team, average.fourDigits)]);
+        }
+       case "hpaverage":
+        for (int team in teamsInEvent) {
+        List<double> dataPoints = [];
+        for (dynamic match in data) {
+          if (match["redHPTeam"]! == team && activeSortKey.contains("red")) {
+            dataPoints.add(match[activeSortKey]!.toDouble());
+          }
+          if (match["blueHPTeam"]! == team && activeSortKey.contains("blue")) {
+            dataPoints.add(match[activeSortKey]!.toDouble());
+          }
+        }
+        final average = dataPoints.sum / dataPoints.length;
+        chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
       case "averagebyitems":
         for (int team in teamsInEvent) {
@@ -273,7 +296,7 @@ class AmongViewSharedState extends ChangeNotifier {
           }
         }
         final average = dataPoints.sum / dataPoints.length;
-        chartData.addEntries([MapEntry(team, average)]);
+        chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
       case "cycleTime":
         List searchTerms = [];
@@ -317,7 +340,7 @@ class AmongViewSharedState extends ChangeNotifier {
             timeDiffs.add(eventList[eventIndex + 1][1] - eventList[eventIndex][1]);
           }
           if (timeDiffs.isNotEmpty) {
-          chartData.addEntries([MapEntry(team, (timeDiffs.sum / timeDiffs.length))]);
+          chartData.addEntries([MapEntry(team, (timeDiffs.sum / timeDiffs.length).fourDigits)]);
           }
         }
       case "coralIntakeAverage":
@@ -389,12 +412,12 @@ Map<String,dynamic> sortKeys = {
   "Coral Intake Average" : "coralIntakeAverage"
 },
 "Human Player":{
-  "redScore": "average",
-  "blueScore": "average",
-  "redMiss": "average",
-  "blueMiss": "average",
-  "redNetAlgae": "average",
-  "blueNetAlgae": "average"
+  "redScore": "hpaverage",
+  "blueScore": "hpaverage",
+  "redMiss": "hpaverage",
+  "blueMiss": "hpaverage",
+  "redNetAlgae": "hpaverage",
+  "blueNetAlgae": "hpaverage"
 }
 };
 

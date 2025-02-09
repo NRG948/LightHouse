@@ -57,3 +57,6 @@ extension StringExtensions on String {
     (Match m) => m[0]!.toUpperCase(),
   );
 }
+extension DoubleExtensions on double {
+  double get fourDigits => double.parse(toStringAsFixed(4));
+}
