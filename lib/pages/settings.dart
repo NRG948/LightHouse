@@ -2,14 +2,20 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 
-// a stateless widget that allows users to modify application settings.
-class SettingsPage extends StatelessWidget {
+// a stateful widget that allows users to modify application settings.
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Creates a list of setting widgets based on configData keys.
-    final List<Widget> settingsList = configData.keys.map<Widget>((setting) {
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  late final List<Widget> settingsList;
+  @override
+  void initState() {
+    super.initState();
+    settingsList = configData.keys.map<Widget>((setting) {
       return Container(
           height: 110, //sets the height of the setting container
           width: 400, // sets the width of the setting container
@@ -49,6 +55,12 @@ class SettingsPage extends StatelessWidget {
           Navigator.pushReplacementNamed(context, "/settings"); //reloads the setting page
         },
         child: Text("Reset Configuration")));
+    
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Creates a list of setting widgets based on configData keys.
     final screenWidth = MediaQuery.of(context).size.width; //gets screen width
     final screenHeight = MediaQuery.of(context).size.height; //gets screen height
     return Scaffold(
@@ -71,7 +83,7 @@ class SettingsPage extends StatelessWidget {
               },
               icon: Icon(Icons.home)),
         ),
-        // ✅ Background container with image.
+        // Background container with image.
         body: Container(
           height: screenHeight,
           width: screenWidth,
