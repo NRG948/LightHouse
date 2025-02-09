@@ -51,12 +51,15 @@ class _NRGTextboxState extends State<NRGTextbox> {
     super.initState();
     _controller.addListener(() {
       setState(() {
+        if (widget.numeric) {
         try {
         DataEntry.exportData[_key] =jsonDecode(_controller.text);
         } catch (_) {
-          DataEntry.exportData[_key] = _controller.text;
+          DataEntry.exportData[_key] = 0;
         }
-      });
+      } else {
+        DataEntry.exportData[_key] = _controller.text;
+      }});
     });
     DataEntry.exportData[_key] = "";
     if (widget.autoFill != null) {

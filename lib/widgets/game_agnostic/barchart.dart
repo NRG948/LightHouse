@@ -202,9 +202,11 @@ class _NRGBarChartState extends State<NRGBarChart> {
                     reservedSize: 30,
                     showTitles: true,
                     getTitlesWidget: (double value, TitleMeta meta) {
-                      if (value ==
-                          _data!.values.reduce((a, b) => a > b ? a : b)) {
-                        return Container();
+                      if (widget.amongviewTeams.isNotEmpty) {
+                        if (value ==
+                            _data!.values.reduce((a, b) => a > b ? a : b)) {
+                          return Container();
+                        }
                       }
                       return SideTitleWidget(
                           meta: meta,
