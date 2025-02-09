@@ -353,14 +353,13 @@ class AmongViewSharedState extends ChangeNotifier {
               for (List entry in eventLists) {
                 if (entry[0] == "intakeCoral") {
                   totalIntakeCoral += 1;
-                  print(totalIntakeCoral);
                 }
               }
               dataPoints.add(totalIntakeCoral.toDouble());
             }
           }
           final average = dataPoints.sum / dataPoints.length;
-          chartData.addEntries([MapEntry(team, average)]);
+          chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
     }
     if (sort == true) {

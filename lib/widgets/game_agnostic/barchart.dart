@@ -65,27 +65,32 @@ class _NRGBarChartState extends State<NRGBarChart> {
   List<String> get _dataLabels => widget.dataLabels;
 
   /// Converts the [SplayTreeMap] dataset [_data] into a [BarChartGroupData] list to display.
-List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widget.hashMap.keys.map<BarChartGroupData>((key) => BarChartGroupData(x: key, barRods: [
-            BarChartRodData(
-                toY: widget.hashMap[key]!,
-                color: !_removedData.contains(key) ? _color : Colors.grey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(7), topRight: Radius.circular(7)),
-                width: (_width - 20) / widget.hashMap.length * 0.6),
-          ]))
-      .toList() : _data!.keys
-      .map((int key) => BarChartGroupData(x: key, barRods: [
-            BarChartRodData(
-                toY: _data![key]!,
-                color: !_removedData.contains(key) ? _color : Colors.grey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(7), topRight: Radius.circular(7)),
-                width: (_width - 20) / _data!.length * 0.6),
-          ]))
-      .toList();
+  List<BarChartGroupData> getBarGroups(bool useHashMap) {
+    return useHashMap
+        ? widget.hashMap.keys
+            .map<BarChartGroupData>((key) =>
+                BarChartGroupData(x: key, barRods: [
+                  BarChartRodData(
+                      toY: widget.hashMap[key]!,
+                      color: !_removedData.contains(key) ? _color : Colors.grey,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(7),
+                          topRight: Radius.circular(7)),
+                      width: (_width - 20) / widget.hashMap.length * 0.6),
+                ]))
+            .toList()
+        : _data!.keys
+            .map((int key) => BarChartGroupData(x: key, barRods: [
+                  BarChartRodData(
+                      toY: _data![key]!,
+                      color: !_removedData.contains(key) ? _color : Colors.grey,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(7),
+                          topRight: Radius.circular(7)),
+                      width: (_width - 20) / _data!.length * 0.6),
+                ]))
+            .toList();
   }
-
-
 
   List<BarChartGroupData> getMultiBarGroups() => _multiData!.keys
       .map((int key) => BarChartGroupData(
@@ -182,7 +187,10 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
-            height: _height * (_multiData == null || _multiData!.values.isEmpty ? 0.75 : 0.75 - 0.05 * _multiData!.values.first.length),
+            height: _height *
+                (_multiData == null || _multiData!.values.isEmpty
+                    ? 0.75
+                    : 0.75 - 0.05 * _multiData!.values.first.length),
             margin: EdgeInsets.only(right: 20),
             child: BarChart(BarChartData(
                 titlesData: FlTitlesData(
@@ -191,12 +199,17 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
                   rightTitles: AxisTitles(),
                   leftTitles: AxisTitles(
                       sideTitles: SideTitles(
+                    reservedSize: 30,
                     showTitles: true,
                     getTitlesWidget: (double value, TitleMeta meta) {
+                      if (value ==
+                          _data!.values.reduce((a, b) => a > b ? a : b)) {
+                        return Container();
+                      }
                       return SideTitleWidget(
                           meta: meta,
                           space: 4,
-                          child: Text('${value.toInt()}',
+                          child: Text(value.toStringAsFixed(1),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
@@ -220,26 +233,33 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
                     },
                   )),
                 ),
-                barTouchData: widget.amongviewTeams.isNotEmpty ? BarTouchData(
-                  enabled: true,
-                  touchTooltipData: BarTouchTooltipData(
-                      getTooltipColor: (group) =>
-                          Color.fromARGB(200, 255, 255, 255),
-                    ),
-                  touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
-                    if (!event.isInterestedForInteractions || response == null || response.spot == null) {
-                        return;
-                    }
-                  if (widget.sharedState != null) {
-                      widget.sharedState!.setClickedTeam(widget.amongviewTeams[response.spot!.touchedBarGroupIndex]);
-                    }
-                  },
-                ) : BarTouchData(
-                    enabled: true,
-                    touchTooltipData: BarTouchTooltipData(
-                      getTooltipColor: (group) =>
-                          Color.fromARGB(200, 255, 255, 255),
-                    )),
+                barTouchData: widget.amongviewTeams.isNotEmpty
+                    ? BarTouchData(
+                        enabled: true,
+                        touchTooltipData: BarTouchTooltipData(
+                          getTooltipColor: (group) =>
+                              Color.fromARGB(200, 255, 255, 255),
+                        ),
+                        touchCallback:
+                            (FlTouchEvent event, BarTouchResponse? response) {
+                          if (!event.isInterestedForInteractions ||
+                              response == null ||
+                              response.spot == null) {
+                            return;
+                          }
+                          if (widget.sharedState != null) {
+                            widget.sharedState!.setClickedTeam(
+                                widget.amongviewTeams[
+                                    response.spot!.touchedBarGroupIndex]);
+                          }
+                        },
+                      )
+                    : BarTouchData(
+                        enabled: true,
+                        touchTooltipData: BarTouchTooltipData(
+                          getTooltipColor: (group) =>
+                              Color.fromARGB(200, 255, 255, 255),
+                        )),
                 barGroups: _multiData!.isEmpty
                     ? getBarGroups(widget.hashMap.isNotEmpty)
                     : getMultiBarGroups(),
@@ -250,8 +270,7 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
                         const FlLine(color: Colors.grey, strokeWidth: 1)))),
           ),
           // Average value text.
-          if (widget.amongviewTeams.isEmpty)
-          getAverageText()
+          if (widget.amongviewTeams.isEmpty) getAverageText()
         ],
       ),
     );
