@@ -6,6 +6,7 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
+import "package:lighthouse/widgets/reefscape/animated_atuo_replay.dart";
 
 class TonyDataViewerPage extends StatefulWidget {
   const TonyDataViewerPage({super.key});
@@ -243,7 +244,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Algae",
-        height: 230,
+        height: 200,
         width: 190,
         removedData: removedData,
         multiData: chartData,
@@ -288,7 +289,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Coral",
-        height: 230,
+        height: 200,
         width: 190,
         removedData: removedData,
         multiData: chartData,
@@ -296,10 +297,20 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         dataLabels: labels);
   }
 
+  Widget getAutoPreview() {
+    return AnimatedAutoReplay(
+      height: 200,
+      width: 400,
+      startingPosition: List<double>.from(chronosData[0]["startingPosition"].split(",").map((x) => double.parse(x)).toList()),
+      waypoints: List<List<dynamic>>.from(chronosData[0]["autoEventList"]),
+      flipStarting: chronosData[0]["driverStation"][0] == "R",
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     atlasData = getDataAsMapFromDatabase("Atlas");
-    chronosData = getDataAsMapFromDatabase("Chronos");
+    chronosData = getDataAsMapFromSavedMatches("Chronos");
     humanPlayerData = getDataAsMapFromDatabase("Unknown");
     pitData = getDataAsMapFromDatabase("Unknown");
     teamsInDatabase = getTeamsInDatabase();
@@ -350,6 +361,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           child: Column(
             spacing: 10,
             children: [
+              getAutoPreview(),
               Container(
                   decoration: BoxDecoration(
                       color: Constants.pastelWhite,
