@@ -23,7 +23,13 @@ class SavedData extends StatelessWidget {
     if (!configData.containsKey("eventKey") || !ensureSavedDataExists(configData["eventKey"]!)) {
       return Scaffold(
         appBar: AppBar(leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new)),),
-        body: Text("NO DATA"),);
+        body: Column(
+          children: [
+            Text("NO DATA"),
+            Text(configData.toString()),
+            TextButton(onPressed: () {build(context);}, child: Text("Reload Page"))
+          ],
+        ),);
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -326,19 +332,40 @@ class DataEdit extends StatefulWidget {
 
 class _DataEditState extends State<DataEdit> {
   late Map<String, dynamic> jsonFile;
+  late Map<String, dynamic> typeReferenceFile;
   late String activeKey;
+  String statusText = "";
   TextEditingController controller = TextEditingController();
   @override
   void initState() {
     super.initState();
     jsonFile = loadFileIntoSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
+    typeReferenceFile = jsonFile;
     activeKey = jsonFile.keys.toList()[0];
     controller.text = jsonFile[activeKey];
+    if (typeReferenceFile[activeKey].runtimeType == List<dynamic>) {
+      controller.text = jsonEncode(jsonFile[activeKey]);
+    }
+
     controller.addListener(() {setState(() {
+      late Type decodedInput;
+      late dynamic decodedReference;
+      try {decodedInput = jsonDecode(controller.text).runtimeType;} catch (_) {decodedInput = String;}
+      try {decodedReference = typeReferenceFile[activeKey].runtimeType;} catch (_) {decodedReference = String;}
       try {
-      jsonFile[activeKey] = jsonDecode(controller.text);
+      if (decodedInput == decodedReference) {
+        jsonFile[activeKey] = jsonDecode(controller.text);
+        statusText = "";
+      } else {
+        statusText = "TYPE MISMATCH: $decodedInput to $decodedReference";
+      }
       } catch (_) {
+        if (decodedReference == String) {
         jsonFile[activeKey] = controller.text;
+        statusText = "";
+        } else {
+          statusText = "INVALID TYPE";
+        }
       }
     });});
   }
@@ -349,7 +376,7 @@ class _DataEditState extends State<DataEdit> {
       backgroundColor: Constants.pastelWhite,
       child: Center(
         child: Container(
-        height: 500 * SavedData.scaleFactor,
+        height: 525 * SavedData.scaleFactor,
         width: 350 * SavedData.scaleFactor,
         decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: SizedBox(
@@ -357,6 +384,7 @@ class _DataEditState extends State<DataEdit> {
           child: Column(
             children: [
               AutoSizeText("Edit Data",style: comfortaaBold(30 * SavedData.scaleFactor,color: Constants.pastelReddishBrown),),
+              AutoSizeText(statusText,style: comfortaaBold(15,color: Colors.red),maxLines: 1,),
               DropdownButton(items: 
               jsonFile.keys.map(
                 (file) {
@@ -366,12 +394,17 @@ class _DataEditState extends State<DataEdit> {
               onChanged: (value) {setState(() {
                 activeKey = value ?? "";
                 controller.text = jsonFile[activeKey].toString();
+                if (typeReferenceFile[activeKey].runtimeType == List<dynamic>) {
+                    controller.text = jsonEncode(jsonFile[activeKey]);
+                  }
               });
               }),
               SizedBox(
                 height: 300 * SavedData.scaleFactor,
                 width: 300 * SavedData.scaleFactor,
                 child: TextField(
+                  smartDashesType: SmartDashesType.disabled,
+                  smartQuotesType: SmartQuotesType.disabled,
                   controller: controller,
                   maxLines: 10,
                 ),
@@ -379,15 +412,21 @@ class _DataEditState extends State<DataEdit> {
               SizedBox(
               height: 100 * SavedData.scaleFactor,
               child: TextButton(onPressed: () {
+                if (statusText == "") {
                 saveFileFromSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName, jsonFile);
+                 Navigator.pushReplacementNamed(context,"/home-scouter");}
                 
-                Navigator.pushReplacementNamed(context,"/home-scouter");
+               
               }, child: Text("Save")))
             ],
           ),
         )
       ),),
     );
+  }
+  List<String> tryParseStringList(String inputString) {
+
+    return [];
   }
 }
 
@@ -402,4 +441,6 @@ class SharedState extends ChangeNotifier {
     activeLayout = layout;
     notifyListeners();
   }
+
+  
 }
