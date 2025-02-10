@@ -20,8 +20,10 @@ class NRGBarChart extends StatefulWidget {
   String dataLabel;
   List<String> dataLabels;
   List<int> amongviewTeams;
+  List<int> amongviewMatches;
   LinkedHashMap hashMap;
-  AmongViewSharedState? sharedState;
+  dynamic sharedState;
+  bool? chartOnly;
 
   NRGBarChart(
       {super.key,
@@ -37,6 +39,8 @@ class NRGBarChart extends StatefulWidget {
       List<String>? dataLabels,
       LinkedHashMap? hashMap,
       List<int>? amongviewTeams,
+      List<int>? amongviewMatches,
+      bool? chartOnly,
       this.sharedState})
       : removedData = removedData ?? [],
         color = color ?? Colors.transparent,
@@ -46,7 +50,9 @@ class NRGBarChart extends StatefulWidget {
         dataLabel = dataLabel ?? "AVERAGE",
         dataLabels = dataLabels ?? ["AVERAGE"],
         amongviewTeams = amongviewTeams ?? [],
-        hashMap = hashMap ?? LinkedHashMap();
+        amongviewMatches = amongviewMatches ?? [],
+        hashMap = hashMap ?? LinkedHashMap(),
+        chartOnly = chartOnly ?? false;
 
   @override
   State<StatefulWidget> createState() => _NRGBarChartState();
@@ -183,7 +189,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
       child: Column(
         children: [
           // Title Text.
-          Text(_title, style: comfortaaBold(_height / 10, color: Colors.black)),
+          if (widget.chartOnly != true) Text(_title, style: comfortaaBold(_height / 10, color: Colors.black)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
@@ -235,7 +241,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                     },
                   )),
                 ),
-                barTouchData: widget.amongviewTeams.isNotEmpty
+                barTouchData: (widget.amongviewTeams.isNotEmpty || widget.amongviewMatches.isNotEmpty)
                     ? BarTouchData(
                         enabled: true,
                         touchTooltipData: BarTouchTooltipData(
@@ -250,9 +256,17 @@ class _NRGBarChartState extends State<NRGBarChart> {
                             return;
                           }
                           if (widget.sharedState != null) {
+                            if (widget.amongviewTeams.isNotEmpty) {
                             widget.sharedState!.setClickedTeam(
                                 widget.amongviewTeams[
                                     response.spot!.touchedBarGroupIndex]);
+                            }
+                            if (widget.amongviewMatches.isNotEmpty) {
+                              widget.sharedState!.setClickedMatch(
+                                 widget.amongviewMatches[
+                                    response.spot!.touchedBarGroupIndex]
+                              );
+                            }
                           }
                         },
                       )
@@ -272,7 +286,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                         const FlLine(color: Colors.grey, strokeWidth: 1)))),
           ),
           // Average value text.
-          if (widget.amongviewTeams.isEmpty) getAverageText()
+          if (widget.chartOnly != true) getAverageText()
         ],
       ),
     );

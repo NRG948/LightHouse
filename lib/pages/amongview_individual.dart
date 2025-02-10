@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
@@ -22,6 +23,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
   late ScrollController scrollController;
   late double chartWidth;
   late bool forceRunOnce;
+
   @override
   void initState() {
     super.initState();
@@ -47,6 +49,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
           setState(() {});
         });
         state.updateChartData();
+
       }
       forceRunOnce = false;
     }
@@ -105,7 +108,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
             child: Column(children: [
               Container(
                   width: 350 * scaleFactor,
-                  height: 550 * scaleFactor,
+                  height: 0.8 * screenHeight,
                   decoration: BoxDecoration(
                       color: Constants.pastelWhite,
                       borderRadius:
@@ -187,7 +190,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
                       ),
                     ),
                     SizedBox(
-                      height: 350 * scaleFactor,
+                      height: 0.25 * screenHeight,
                       width: 350 * scaleFactor,
                       child: Scrollbar(
                         controller: scrollController,
@@ -203,12 +206,35 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
                                 data: state.chartData,
                                 color: Constants.pastelRed,
                                 hashMap: state.hashMap,
+                                amongviewMatches: state.matchesForTeam,
+                                chartOnly: true,
+                                sharedState: state,
                               ),
                             ]),
                       ),
-                    )
+                    ),
+                   Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Container(
+                        height: 0.35 * screenHeight,
+                        width: 350 * scaleFactor,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),border:Border.all(width: scaleFactor * 2)),
+                        child: (state.clickedMatch == null) ? Text("No match selected") :
+                        buildMatchData(context),
+                      ),
+                   )
                   ]))
             ])));
+  }
+
+  Widget buildMatchData(BuildContext context) {
+    Widget matchData = ListView(
+      children: [
+        Text('')
+      ],
+    );
+
+    return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
   }
 }
 
@@ -222,12 +248,13 @@ class AVISharedState extends ChangeNotifier {
   late List<dynamic> data;
   SplayTreeMap<int, double> chartData = SplayTreeMap();
   LinkedHashMap<int, double>? hashMap;
-  static int clickedTeam = 0;
+  int? clickedMatch;
 
-  void setClickedTeam(int team) {
-    clickedTeam = team;
+  void setClickedMatch(int match) {
+    clickedMatch = match;
     notifyListeners();
   }
+ 
 
   void getEnabledLayouts() {
     for (String i in ["Atlas", "Chronos", "Human Player"]) {
@@ -260,8 +287,8 @@ class AVISharedState extends ChangeNotifier {
     chartData.clear();
     matchesForTeam.clear();
     for (dynamic i in data) {
-      if (!(matchesForTeam.contains(i["matchNumber"]!))) {
-        matchesForTeam.add(i["matchNumber"]!);
+      if (!(matchesForTeam.contains(getParsedMatchNumber(i)))) {
+        matchesForTeam.add(getParsedMatchNumber(i));
       }
     }
     matchesForTeam.sort((a, b) => a.compareTo(b));
@@ -270,14 +297,14 @@ class AVISharedState extends ChangeNotifier {
       case "raw":
         for (dynamic match in data) {
           chartData.addEntries([
-            MapEntry(match["matchNumber"], match[activeSortKey]!.toDouble())
+            MapEntry(getParsedMatchNumber(match), match[activeSortKey]!.toDouble())
           ]);
         }
       case "rawbyitems":
         for (dynamic match in data) {
           chartData.addEntries([
             MapEntry(
-                match["matchNumber"], match[activeSortKey]!.length.toDouble())
+                getParsedMatchNumber(match), match[activeSortKey]!.length.toDouble())
           ]);
         }
       case "hpraw":
@@ -285,13 +312,13 @@ class AVISharedState extends ChangeNotifier {
           if (match["redHPTeam"]! == activeTeam &&
               activeSortKey.contains("red")) {
             chartData.addEntries([
-              MapEntry(match["matchNumber"], match[activeSortKey].toDouble())
+              MapEntry(getParsedMatchNumber(match), match[activeSortKey].toDouble())
             ]);
           }
           if (match["blueHPTeam"]! == activeTeam &&
               activeSortKey.contains("blue")) {
             chartData.addEntries([
-              MapEntry(match["matchNumber"], match[activeSortKey].toDouble())
+              MapEntry(getParsedMatchNumber(match), match[activeSortKey].toDouble())
             ]);
           }
         }
@@ -329,7 +356,7 @@ class AVISharedState extends ChangeNotifier {
             timeDiffs.add(filteredEventList[eventIndex + 1][1] - filteredEventList[eventIndex][1]);
           }
             if (timeDiffs.isNotEmpty) {
-            chartData.addEntries([MapEntry(match["matchNumber"], (timeDiffs.sum / timeDiffs.length).fourDigits)]);
+            chartData.addEntries([MapEntry(getParsedMatchNumber(match), (timeDiffs.sum / timeDiffs.length).fourDigits)]);
             }
         }
 
@@ -372,6 +399,19 @@ class AVISharedState extends ChangeNotifier {
   }
 }
 
+int getParsedMatchNumber(dynamic match) {
+  return match["matchType"]! == "Qualifications" ? match["matchNumber"] // Leave match number if Quals
+  : match["matchType"]! == "Playoffs" ? int.parse("991${match["MatchNumber"]}") // Add 991 if Playoffs
+  : int.parse("992${match["MatchNumber"]}"); // Add 992 if Finals
+}
+
+List<dynamic> getParsedMatchInfo(int parsedMatch) {
+  return parsedMatch.toString().startsWith("991") 
+  ? ["Playoffs",int.parse(parsedMatch.toString().substring(3))] : 
+  parsedMatch.toString().startsWith("992") ? ["Finals",int.parse(parsedMatch.toString().substring(3))] 
+  : ["Qualifications",parsedMatch] ;
+}
+
 Map<String, dynamic> sortKeys = {
   "Atlas": {
     "coralScoredL1": "raw",
@@ -409,17 +449,3 @@ Map<String, dynamic> sortKeys = {
     "blueNetAlgae": "hpraw"
   }
 };
-
-class AmongViewBarChart extends StatefulWidget {
-  const AmongViewBarChart({super.key});
-
-  @override
-  State<AmongViewBarChart> createState() => _AmongViewBarChartState();
-}
-
-class _AmongViewBarChartState extends State<AmongViewBarChart> {
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}

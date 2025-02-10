@@ -171,6 +171,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                             amongviewTeams: state.teamsInEvent,
                             hashMap: state.hashMap,
                             sharedState: state,
+                            chartOnly: true,
                             ),
                             ]
                           ),
