@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/amongview.dart';
+import 'package:lighthouse/pages/amongview_individual.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
 /// A horizontal bar chart widget that dislays numbers, automatically sorting by key.
@@ -228,7 +229,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                       sideTitles: SideTitles(
                     showTitles: true,
                     getTitlesWidget: (double value, TitleMeta meta) {
-                      return SideTitleWidget(
+                      return widget.amongviewMatches.isEmpty ? SideTitleWidget(
                           meta: meta,
                           space: 4,
                           child: Text('${value.toInt()}',
@@ -237,7 +238,16 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                   color: !_removedData.contains(value)
                                       ? Colors.black
                                       : Colors.grey,
-                                  fontSize: _height / 20)));
+                                  fontSize: _height / 20))) : SideTitleWidget(meta: meta,
+                                  space: 4,
+                                  child: Text(getParsedMatchInfo(value.toInt(),truncated: true)[0],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: !_removedData.contains(value)
+                                      ? Colors.black
+                                      : Colors.grey,
+                                  fontSize: _height / 20
+                                  ),),);
                     },
                   )),
                 ),

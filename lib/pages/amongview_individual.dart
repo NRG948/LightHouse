@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
@@ -16,11 +15,12 @@ class AmongViewIndividual extends StatefulWidget {
   State<AmongViewIndividual> createState() => _AmongViewIndividualState();
 }
 
-class _AmongViewIndividualState extends State<AmongViewIndividual> {
-  late double scaleFactor;
+class _AmongViewIndividualState extends State<AmongViewIndividual> with SingleTickerProviderStateMixin {
+  static late double scaleFactor;
   late AVISharedState state;
   late ValueNotifier<bool> sortCheckbox;
   late ScrollController scrollController;
+  late TabController matchPitController;
   late double chartWidth;
   late bool forceRunOnce;
 
@@ -29,6 +29,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
     super.initState();
     state = AVISharedState();
     scrollController = ScrollController();
+    matchPitController = TabController(length: 2, vsync: this);
     sortCheckbox = ValueNotifier<bool>(false);
     forceRunOnce = true;
   }
@@ -49,7 +50,6 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
           setState(() {});
         });
         state.updateChartData();
-
       }
       forceRunOnce = false;
     }
@@ -213,28 +213,80 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> {
                             ]),
                       ),
                     ),
-                   Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Container(
-                        height: 0.35 * screenHeight,
-                        width: 350 * scaleFactor,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),border:Border.all(width: scaleFactor * 2)),
-                        child: (state.clickedMatch == null) ? Text("No match selected") :
-                        buildMatchData(context),
+                    TabBar(
+                      controller: matchPitController,
+                      tabs: [
+                      Tab(text: "MATCH",),
+                      Tab(text: "PIT",)
+                    ]),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        width: 400 * scaleFactor,
+                        height: 0.3 * screenHeight,
+                        child: TabBarView(
+                          controller: matchPitController,
+                          children: [
+                          Container(
+                            height: 0.3 * screenHeight,
+                            width: 350 * scaleFactor,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.circular(Constants.borderRadius),
+                                border: Border.all(width: scaleFactor * 2)),
+                            child: (state.clickedMatch == null)
+                                ? Text("No match selected")
+                                : buildMatchData(context),
+                          ),
+                          Container(
+                              height: 0.3 * screenHeight,
+                              width: 350 * scaleFactor,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      Constants.borderRadius),
+                                  border: Border.all(width: scaleFactor * 2)),
+                              child: Text("PIT DATA"))
+                        ]),
                       ),
-                   )
-                  ]))
+                    ),
+                    
+                  ])),
             ])));
   }
 
   Widget buildMatchData(BuildContext context) {
-    Widget matchData = ListView(
-      children: [
-        Text('')
-      ],
-    );
+    dynamic match = {};
+    for (dynamic i in state.data) {
+      if (i["matchType"] == getParsedMatchInfo(state.clickedMatch!)[0] &&
+          i["matchNumber"] == getParsedMatchInfo(state.clickedMatch!)[1]) {
+        match = i;
+      }
+    }
+    if (match == {}) {
+      return Text("how did you get here? email infotech@nrg948.com");
+    }
 
-    return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
+    List<Widget> listViewChildren = [
+      Text(
+        "Team ${match["teamNumber"]} ${match["matchType"]} ${match["matchNumber"]}",
+        textAlign: TextAlign.center,
+        style: comfortaaBold(18, color: Constants.pastelReddishBrown),
+      ),
+    ];
+    for (String i in individualMatchDisplayKeys[state.activeLayout].keys) {
+      switch (individualMatchDisplayKeys[state.activeLayout][i]) {
+        case "raw":
+          listViewChildren.add(AutoSizeText(
+            "${i.toSentenceCase}: ${match[i].toString()}",
+            style: comfortaaBold(14 * scaleFactor,
+                color: Constants.pastelReddishBrown),
+          ));
+      }
+    }
+
+    return ListView(children: listViewChildren);
+    ;
+    //return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
   }
 }
 
@@ -254,7 +306,6 @@ class AVISharedState extends ChangeNotifier {
     clickedMatch = match;
     notifyListeners();
   }
- 
 
   void getEnabledLayouts() {
     for (String i in ["Atlas", "Chronos", "Human Player"]) {
@@ -297,14 +348,15 @@ class AVISharedState extends ChangeNotifier {
       case "raw":
         for (dynamic match in data) {
           chartData.addEntries([
-            MapEntry(getParsedMatchNumber(match), match[activeSortKey]!.toDouble())
+            MapEntry(
+                getParsedMatchNumber(match), match[activeSortKey]!.toDouble())
           ]);
         }
       case "rawbyitems":
         for (dynamic match in data) {
           chartData.addEntries([
-            MapEntry(
-                getParsedMatchNumber(match), match[activeSortKey]!.length.toDouble())
+            MapEntry(getParsedMatchNumber(match),
+                match[activeSortKey]!.length.toDouble())
           ]);
         }
       case "hpraw":
@@ -312,13 +364,15 @@ class AVISharedState extends ChangeNotifier {
           if (match["redHPTeam"]! == activeTeam &&
               activeSortKey.contains("red")) {
             chartData.addEntries([
-              MapEntry(getParsedMatchNumber(match), match[activeSortKey].toDouble())
+              MapEntry(
+                  getParsedMatchNumber(match), match[activeSortKey].toDouble())
             ]);
           }
           if (match["blueHPTeam"]! == activeTeam &&
               activeSortKey.contains("blue")) {
             chartData.addEntries([
-              MapEntry(getParsedMatchNumber(match), match[activeSortKey].toDouble())
+              MapEntry(
+                  getParsedMatchNumber(match), match[activeSortKey].toDouble())
             ]);
           }
         }
@@ -343,23 +397,31 @@ class AVISharedState extends ChangeNotifier {
             fullEventList = [];
           }
           for (List event in fullEventList) {
-            if (searchTerms.any((e) => (event[0] == "enter$e") || (event[0] == "exit$e"))) {
+            if (searchTerms.any(
+                (e) => (event[0] == "enter$e") || (event[0] == "exit$e"))) {
               filteredEventList.add(event);
             }
           }
           List<double> timeDiffs = [];
           //  Iterates through every other event (only the enter area events)
-          for (int eventIndex = 0; eventIndex < filteredEventList.length; eventIndex = eventIndex + 2) {
-          // Accounts for edge case in which last enter event has no corresponding exit event
-          if (eventIndex == filteredEventList.length - 1) {continue;}
-          // Gets time difference between this event (enter) and next event (exit)
-            timeDiffs.add(filteredEventList[eventIndex + 1][1] - filteredEventList[eventIndex][1]);
-          }
-            if (timeDiffs.isNotEmpty) {
-            chartData.addEntries([MapEntry(getParsedMatchNumber(match), (timeDiffs.sum / timeDiffs.length).fourDigits)]);
+          for (int eventIndex = 0;
+              eventIndex < filteredEventList.length;
+              eventIndex = eventIndex + 2) {
+            // Accounts for edge case in which last enter event has no corresponding exit event
+            if (eventIndex == filteredEventList.length - 1) {
+              continue;
             }
+            // Gets time difference between this event (enter) and next event (exit)
+            timeDiffs.add(filteredEventList[eventIndex + 1][1] -
+                filteredEventList[eventIndex][1]);
+          }
+          if (timeDiffs.isNotEmpty) {
+            chartData.addEntries([
+              MapEntry(getParsedMatchNumber(match),
+                  (timeDiffs.sum / timeDiffs.length).fourDigits)
+            ]);
+          }
         }
-
     }
     if (sort == true) {
       List<MapEntry<int, double>> sortedEntries = chartData.entries.toList()
@@ -370,7 +432,6 @@ class AVISharedState extends ChangeNotifier {
       hashMap = null;
       matchesForTeam.sort();
     }
-
   }
 
   List<String> getSortKeys() {
@@ -399,19 +460,7 @@ class AVISharedState extends ChangeNotifier {
   }
 }
 
-int getParsedMatchNumber(dynamic match) {
-  return match["matchType"]! == "Qualifications" ? match["matchNumber"] // Leave match number if Quals
-  : match["matchType"]! == "Playoffs" ? int.parse("991${match["MatchNumber"]}") // Add 991 if Playoffs
-  : int.parse("992${match["MatchNumber"]}"); // Add 992 if Finals
-}
-
-List<dynamic> getParsedMatchInfo(int parsedMatch) {
-  return parsedMatch.toString().startsWith("991") 
-  ? ["Playoffs",int.parse(parsedMatch.toString().substring(3))] : 
-  parsedMatch.toString().startsWith("992") ? ["Finals",int.parse(parsedMatch.toString().substring(3))] 
-  : ["Qualifications",parsedMatch] ;
-}
-
+// These keys are used by the chart to determine how to parse data
 Map<String, dynamic> sortKeys = {
   "Atlas": {
     "coralScoredL1": "raw",
@@ -438,7 +487,6 @@ Map<String, dynamic> sortKeys = {
     "Teleop Reef Cycle Time": "cycleTime",
     "Teleop CS Cycle Time": "cycleTime",
     "Teleop Processor Cycle Time": "cycleTime",
-    
   },
   "Human Player": {
     "redScore": "hpraw",
@@ -449,3 +497,108 @@ Map<String, dynamic> sortKeys = {
     "blueNetAlgae": "hpraw"
   }
 };
+
+// This map is used by the individual match viewer to figure out how to display items
+// Necessary for more complex data types like event lists
+Map<String, dynamic> individualMatchDisplayKeys = {
+  "Atlas": {
+    "scouterName": "raw",
+    "replay": "raw",
+    "driverStation": "raw",
+    // TODO: CHANGE THIS
+    "startingPosition": "raw",
+
+    "preload": "raw",
+
+    // TODO: Change these two
+    "autoCoralScored": "raw",
+    "autoAlgaeRemoved": "raw",
+
+    "coralScoredL1": "raw",
+    "autoBargeCS": "raw",
+    "coralPickupsStation": "raw",
+    "coralPickupsGround": "raw",
+    "coralScoredL2": "raw",
+    "coralScoredL3": "raw",
+    "coralScoredL4": "raw",
+    "algaeremoveL2": "raw",
+    "algaeremoveL3": "raw",
+    "algaescoreProcessor": "raw",
+    "algaescoreNet": "raw",
+    "algaemissProcessor": "raw",
+    "algaemissNet": "raw",
+    "autoProcessorCS": "raw",
+    "endLocation": "raw",
+    "attemptedClimb": "raw",
+
+    // TODO: Find a way to add a "seconds" label to this maybe?
+    // we could spaghetti-code this w/ an if-else statement
+    // or have a more elegant solution
+    "climbStartTime": "raw",
+
+    "robotDisabled": "raw",
+    "robotDisableReason": "raw",
+    "dataQuality": "raw",
+    "comments": "raw",
+    "crossedMidline": "raw",
+    "timestamp": "raw"
+  },
+  "Chronos": {
+    "scouterName": "raw",
+    "replay": "raw",
+    "driverStation": "raw",
+
+    // TODO: Change this
+    "startingPosition": "raw",
+
+    // TODO: Change these
+    "autoEventList": "raw",
+    "teleopEventList": "raw",
+
+    "generalStrategy": "raw",
+    "dataQuality": "raw",
+    "comments": "raw",
+    "timestamp": "raw"
+  },
+  "Human Player": {
+    "scouterName": "raw",
+    "redHPTeam": "raw",
+    "blueHPTeam": "raw",
+    "replay": "raw",
+    "redScore": "raw",
+    "blueScore": "raw",
+    "redMiss": "raw",
+    "blueMiss": "raw",
+    "redNetAlgae": "raw",
+    "blueNetAlgae": "raw",
+    "dataQuality": "raw",
+    "timestamp": "raw"
+  }
+};
+
+// This is a rlly stupid solution to the fact that the BarChart widget only takes an <int,double> map
+// Essentially it just adds a four-digit identifier code (1111 for playoffs, 2222 for finals)
+// if the match is anything other than a qual match
+// in order for this to work, it's VERY important that match numbers are limited to 999 or less
+// which shouldn't be a problem but still
+
+int getParsedMatchNumber(dynamic match) {
+  return match["matchType"]! == "Qualifications"
+      ? match["matchNumber"] // Leave match number if Quals
+      : match["matchType"]! == "Playoffs"
+          ? int.parse("1111${match["matchNumber"]}") // Add 1111 if Playoffs
+          : int.parse("2222${match["matchNumber"]}"); // Add 2222 if Finals
+}
+
+List<dynamic> getParsedMatchInfo(int parsedMatch, {bool? truncated}) {
+  List<dynamic> infoList = parsedMatch.toString().startsWith("1111")
+      ? ["Playoffs", int.parse(parsedMatch.toString().substring(4))]
+      : parsedMatch.toString().startsWith("2222")
+          ? ["Finals", int.parse(parsedMatch.toString().substring(4))]
+          : ["Qualifications", parsedMatch];
+  if (truncated == true) {
+    return ["${infoList[0].toString().substring(0, 1)}${infoList[1]}"];
+  } else {
+    return infoList;
+  }
+}
