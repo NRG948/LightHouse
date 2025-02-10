@@ -55,7 +55,8 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
   TextEditingController teamNumberController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-   
+    super.build(context);
+    
     return Container(
       width: 400 * scaleFactor,
       height: 275 * scaleFactor,
@@ -200,7 +201,16 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
   }
 
   void getTeamInfo(int teamNumber) async {
-    final teamPage = jsonDecode(await rootBundle.loadString("assets/text/teams${(teamNumber ~/ 500) * 500}-${(teamNumber ~/ 500) * 500 + 500}.txt"));
+    dynamic teamPage;
+    try {
+      teamPage = jsonDecode(await rootBundle.loadString("assets/text/teams${(teamNumber ~/ 500) * 500}-${(teamNumber ~/ 500) * 500 + 500}.txt"));
+    }
+    catch (e) {
+      teamName = null;
+      teamNumber = 0;
+      teamLocation = null;
+      return null;
+    }
     bool foundTeam = false;
     for (dynamic teamObject in teamPage) {
       if (teamObject["key"] == "frc$teamNumber") {
@@ -209,8 +219,9 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
           break;}
         setState(() {
           teamName = teamObject["nickname"];
-        teamLocation = "${teamObject["city"]}, ${teamObject["state_prov"]}, ${teamObject["country"]}";
-        foundTeam = true;
+          teamLocation =
+              "${teamObject["city"]}, ${teamObject["state_prov"]}, ${teamObject["country"]}";
+          foundTeam = true;
         });
       }
     }

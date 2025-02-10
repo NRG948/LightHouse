@@ -46,55 +46,61 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                  width: 100,
-                  height: 75,
-                  decoration: BoxDecoration(
-                      color: Constants.pastelGray,
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius)),
-                  child: TextButton(
-                      onPressed: () {
-                        // TODO: Add duplicate data prevention so that only one startClimb
-                        // can be added
-                        DataEntry.exportData["teleopEventList"].add([
-                          "startClimb",
-                          (DataEntry.stopwatchMap[2] ??
-                                  Duration(milliseconds: 0))
-                              .deciseconds
-                        ]);
-                      },
-                      child: Transform.rotate(
-                          angle: pi / 2,
-                          child: Text(
-                            "Start\nClimb",
-                            style: comfortaaBold(18),
-                            textAlign: TextAlign.center,
-                          )))),
-              Container(
-                  width: 100,
-                  height: 75,
-                  decoration: BoxDecoration(
-                      color: Constants.pastelGray,
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius)),
-                  child: TextButton(
-                      onPressed: () {
-                        DataEntry.exportData["teleopEventList"].add([
-                          "intakeCoral",
-                          (DataEntry.stopwatchMap[2] ??
-                                  Duration(milliseconds: 0))
-                              .deciseconds
-                        ]);
-                      },
-                      child: Transform.rotate(
-                          angle: pi / 2,
-                          child: Text(
-                            "Intake\nCoral",
-                            style: comfortaaBold(18),
-                            textAlign: TextAlign.center,
-                          )))),
-                      RSTTProcessor()
+              Transform.translate(
+                offset: Offset(5, 5),
+                child: Container(
+                    width: 100,
+                    height: 75,
+                    decoration: BoxDecoration(
+                        color: Constants.pastelGray,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius)),
+                    child: TextButton(
+                        onPressed: () {
+                          // TODO: Add duplicate data prevention so that only one startClimb
+                          // can be added
+                          DataEntry.exportData["teleopEventList"].add([
+                            "startClimb",
+                            (DataEntry.stopwatchMap[2] ??
+                                    Duration(milliseconds: 0))
+                                .deciseconds
+                          ]);
+                        },
+                        child: Transform.rotate(
+                            angle: pi / 2,
+                            child: Text(
+                              "Start\nClimb",
+                              style: comfortaaBold(18),
+                              textAlign: TextAlign.center,
+                            )))),
+              ),
+              Transform.translate(
+                offset: Offset(0, 5),
+                child: Container(
+                    width: 100,
+                    height: 75,
+                    decoration: BoxDecoration(
+                        color: Constants.pastelGray,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius)),
+                    child: TextButton(
+                        onPressed: () {
+                          DataEntry.exportData["teleopEventList"].add([
+                            "intakeCoral",
+                            (DataEntry.stopwatchMap[2] ??
+                                    Duration(milliseconds: 0))
+                                .deciseconds
+                          ]);
+                        },
+                        child: Transform.rotate(
+                            angle: pi / 2,
+                            child: Text(
+                              "Intake\nCoral",
+                              style: comfortaaBold(18),
+                              textAlign: TextAlign.center,
+                            )))),
+              ),
+                      Transform.translate(offset: Offset(-5, 5), child: RSTTProcessor())
             ],
           ),
           // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
