@@ -85,6 +85,7 @@ class DataEntryState extends State<DataEntry> {
   @override
   void dispose() {
     controller.dispose();
+    guidanceStopwatch.stop();
     super.dispose();
   }
 
@@ -458,6 +459,7 @@ class DataEntryState extends State<DataEntry> {
 
   void checkGuidanceState(Timer guidanceTimer) {
     if (guidanceStopwatch.elapsed.inSeconds >= 135 + Constants.startDelay) {
+      guidanceStopwatch.stop();
       if (guidanceState != GuidanceState.endgame) {
         guidanceState = GuidanceState.endgame;
         guidanceTimer.cancel();
