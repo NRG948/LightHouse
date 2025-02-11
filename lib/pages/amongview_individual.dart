@@ -298,6 +298,7 @@ class AVISharedState extends ChangeNotifier {
   List<String> enabledLayouts = [];
   late List<int> matchesForTeam = [];
   late List<dynamic> data;
+  Map pitData = {};
   SplayTreeMap<int, double> chartData = SplayTreeMap();
   LinkedHashMap<int, double>? hashMap;
   int? clickedMatch;
@@ -457,6 +458,15 @@ class AVISharedState extends ChangeNotifier {
       }
     }
     data = tempData;
+  }
+
+  void loadPitData() {
+    List<dynamic> allPitData = jsonDecode(loadDatabaseFile(activeEvent,"Pit"));
+    if (allPitData == [""]) {return;}
+    for (dynamic data in allPitData) {
+      // cook here
+    }
+
   }
 }
 
