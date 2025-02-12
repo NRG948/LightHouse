@@ -111,8 +111,8 @@ class _UploadButtonState extends State<UploadButton> {
           decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
           child: TextButton(onPressed: () {openUploadDialog(context,snapshot.data ?? []);}, child: Column(
             children: [
-              Text("UPLOAD"),
-              Text("Upload ${(snapshot.data ?? []).length} items to server")
+              Text("UPLOAD",style: comfortaaBold(10)),
+              Text("Upload ${(snapshot.data ?? []).length} items to server",style: comfortaaBold(10))
             ],
           )),
         );
@@ -257,8 +257,8 @@ class _DownloadButtonState extends State<DownloadButton> {
           });
         },
         child: Column(children: [
-          Text("DOWNLOAD"),
-          Text("Download Items from server")]
+          Text("DOWNLOAD",style: comfortaaBold(10)),
+          Text("Download Items from server",style: comfortaaBold(10))]
         ),
       ),
     );
@@ -299,13 +299,13 @@ class _DownloadDialogState extends State<DownloadDialog> {
   List<Widget> showDownloadStatuses() {
     List<Widget> statuses = [];
     for (String status in downloadStatuses.keys) {
-      statuses.add(Text("Database $status downloaded w/ code ${downloadStatuses[status]}"));
+      statuses.add(Text("Database $status downloaded w/ code ${downloadStatuses[status]}",style: comfortaaBold(10))); 
     }
     statuses.add(
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text("Downloading $currentlyDownloading"),
+          Text("Downloading $currentlyDownloading",style: comfortaaBold(10)),
           CircularProgressIndicator()
         ],
       )
@@ -401,7 +401,7 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                       saveConfig();
                       responseCode = testConnection(controller.text);
                     });
-                  }, child: Text("GO"))
+                  }, child: Text("GO",style: comfortaaBold(10)))
                 ),
               ],
             ),
