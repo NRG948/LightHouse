@@ -50,6 +50,15 @@ List<String> getSavedEvents() {
   }).toList();
 }
 
+bool ensureSavedDataExists(String eventKey) {
+  if (Directory("$configFolder/$eventKey").existsSync()) {
+    return Directory("$configFolder/$eventKey").listSync().whereType<Directory>()
+    .map((e) {return basename(e.path);})
+    .any(["Atlas","Chronos","Pit","Human Player"].contains);
+  }
+  return false;
+}
+
 List<String> getLayouts(String eventKey) {
   final eventKeyDir = Directory("$configFolder/$eventKey");
   // DO NOT REMOVE THIS DEBUGPRINT STATEMENT!!!
@@ -71,9 +80,12 @@ List<String> getLayouts(String eventKey) {
 
   // oops didn't think about database folder when designing this
   // luckily this works as a band-aid
-  if (layoutList.contains("database")) {
-    layoutList.remove("database");
+  for (String i in ["database",".Trash"]) {
+    if (layoutList.contains(i)) {
+    layoutList.remove(i);
   }
+  }
+  
   return layoutList;
 }
 

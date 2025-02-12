@@ -21,7 +21,7 @@ class DataViewerHome extends StatelessWidget {
     loadConfig();
     
     return Scaffold(
-      
+      resizeToAvoidBottomInset: false,
       body: Container(
           width: screenWidth,
           height: screenHeight,

@@ -7,6 +7,7 @@ import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/reefscape/animated_atuo_replay.dart";
+import "package:lighthouse/widgets/reefscape/scrollable_auto_paths.dart";
 
 class TonyDataViewerPage extends StatefulWidget {
   const TonyDataViewerPage({super.key});
@@ -16,7 +17,9 @@ class TonyDataViewerPage extends StatefulWidget {
 }
 
 class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
-  late double scaleFactor;
+  late double verticalScaleFactor;
+  late double horizontalScaleFactor;
+  late double marginSize;
   late List<Map<String, dynamic>> atlasData;
   late List<Map<String, dynamic>> chronosData;
   late List<Map<String, dynamic>> humanPlayerData;
@@ -69,7 +72,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return DropdownButtonFormField(
         value: currentTeamNumber,
         dropdownColor: Constants.pastelWhite,
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(marginSize),
         decoration: InputDecoration(
             label: Text('Team Number',
                 style: comfortaaBold(12,
@@ -139,8 +142,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     }
 
     return ScrollableBox(
-        width: 240,
-        height: 110,
+        width: 240 * horizontalScaleFactor,
+        height: 110 * verticalScaleFactor,
         title: "Disable Reason",
         comments: comments,
         sort: Sort.LENGTH_MAX);
@@ -186,14 +189,18 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     }
 
     return ScrollableBox(
-        width: 400,
-        height: 150,
+        width: 400 * horizontalScaleFactor,
+        height: 170 * verticalScaleFactor,
         title: "Comments",
         comments: comments,
         sort: Sort.LENGTH_MAX);
   }
 
   Widget getClimbStartTimeBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, double> chartData = SplayTreeMap();
     List<int> removedData = [];
     Color color = Constants.pastelRed;
@@ -211,8 +218,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Climb Time",
-        height: 160,
-        width: 190,
+        height: 150 * verticalScaleFactor,
+        width: 190 * horizontalScaleFactor,
         removedData: removedData,
         data: chartData,
         color: color,
@@ -220,10 +227,14 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAlgaeBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
     List<Color> colors = [Constants.pastelBlue, Constants.pastelBlueAgain];
-    List<String> labels = ["AVERAGE NET", "AVERAGE PROCESSOR"];
+    List<String> labels = ["NET", "PROC"];
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
@@ -243,8 +254,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Algae",
-        height: 200,
-        width: 190,
+        height: 220 * verticalScaleFactor,
+        width: 190 * horizontalScaleFactor,
         removedData: removedData,
         multiData: chartData,
         multiColor: colors,
@@ -252,6 +263,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getCoralBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
     List<Color> colors = [
@@ -261,10 +276,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       Constants.pastelYellow
     ];
     List<String> labels = [
-      "AVERAGE L1",
-      "AVERAGE L2",
-      "AVERAGE L3",
-      "AVERAGE L4"
+      "L1",
+      "L2",
+      "L3",
+      "L4"
     ];
 
     for (Map<String, dynamic> matchData in atlasData) {
@@ -288,28 +303,40 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Coral",
-        height: 200,
-        width: 190,
+        height: 240 * verticalScaleFactor,
+        width: 190 * horizontalScaleFactor,
         removedData: removedData,
         multiData: chartData,
         multiColor: colors,
         dataLabels: labels);
   }
 
-  Widget getAutoPreview() {
-    return AnimatedAutoReplay(
-      height: 200,
-      width: 400,
-      startingPosition: List<double>.from(chronosData[0]["startingPosition"].split(",").map((x) => double.parse(x)).toList()),
-      waypoints: List<List<dynamic>>.from(chronosData[0]["autoEventList"]),
-      flipStarting: chronosData[0]["driverStation"][0] == "R",
-    );
+  Widget getAutoPreviews() {
+    List<AnimatedAutoReplay> autos = [];
+
+    for (Map<String, dynamic> matchData in chronosData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        autos.add(AnimatedAutoReplay(
+          height: 160 * verticalScaleFactor,
+          width: 160 * horizontalScaleFactor,
+          startingPosition: List<double>.from(matchData["startingPosition"]
+              .split(",")
+              .map((x) => double.parse(x))
+              .toList()),
+          waypoints: List<List<dynamic>>.from(matchData["autoEventList"]),
+          flipStarting: matchData["driverStation"][0] == "R",
+        ));
+      }
+    }
+
+    return ScrollableAutoPaths(
+        height: 220 * verticalScaleFactor, width: 190 * horizontalScaleFactor, title: "Autos", autos: autos);
   }
 
   @override
   Widget build(BuildContext context) {
     atlasData = getDataAsMapFromDatabase("Atlas");
-    chronosData = getDataAsMapFromSavedMatches("Chronos");
+    chronosData = getDataAsMapFromDatabase("Chronos");
     humanPlayerData = getDataAsMapFromDatabase("Unknown");
     pitData = getDataAsMapFromDatabase("Unknown");
     teamsInDatabase = getTeamsInDatabase();
@@ -321,7 +348,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data"));
+          body: Text("No data", style: comfortaaBold(10)));
     }
 
     if (currentTeamNumber == 0) {
@@ -330,8 +357,18 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    scaleFactor = screenHeight / 914;
+    verticalScaleFactor = screenHeight / 914;
+    horizontalScaleFactor = screenWidth / 411;
+    print("$screenWidth, $screenHeight");
+    // 540, 960
+    // 411, 914
+    marginSize = 10 * verticalScaleFactor;
+    print("SCALE FACTOR: $verticalScaleFactor");
+    // 9:16 => 1.0519718771970674
+    // 1:2 => 1
+    
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
       appBar: AppBar(
         backgroundColor: Constants.pastelRed,
@@ -352,49 +389,67 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       body: Container(
           width: screenWidth,
           height: screenHeight,
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.all(marginSize),
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/images/background-hires.png"),
                   fit: BoxFit.cover)),
           child: Column(
-            spacing: 10,
+            spacing: marginSize,
             children: [
-              getAutoPreview(),
-              Container(
-                  decoration: BoxDecoration(
-                      color: Constants.pastelWhite,
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(Constants.borderRadius))),
-                  child: getTeamSelectDropdown()),
               Row(
-                spacing: 10,
+                spacing: marginSize,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   getCoralBarChart(),
-                  getAlgaeBarChart(),
+                  Column(
+                    spacing: marginSize,
+                    children: [
+                      Container(
+                          width: 190 * horizontalScaleFactor,
+                          height: 80 * verticalScaleFactor,
+                          decoration: BoxDecoration(
+                              color: Constants.pastelWhite,
+                              borderRadius: BorderRadius.all(
+                                  Radius.circular(Constants.borderRadius))),
+                          child: getTeamSelectDropdown()),
+                      getClimbStartTimeBarChart(),
+                    ],
+                  )
                 ],
               ),
-              Row(spacing: 10, children: [
-                getClimbStartTimeBarChart(),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: 190,
-                  height: 160,
-                  decoration: BoxDecoration(
-                      color: Constants.pastelWhite,
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(Constants.borderRadius))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 10,
-                    children: [getFunctionalMatches(), getPreferredStrategy()],
-                  ),
-                )
-              ]),
+              Row(
+                spacing: marginSize,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  getAlgaeBarChart(),
+                  getAutoPreviews(),
+                ],
+              ),
               getCommentBox(),
               Row(
-                spacing: 10,
-                children: [getDisableReasonCommentBox()],
+                spacing: marginSize,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  getDisableReasonCommentBox(),
+                  Container(
+                    padding: EdgeInsets.all(marginSize),
+                    width: 140 * horizontalScaleFactor,
+                    height: 110 * verticalScaleFactor,
+                    decoration: BoxDecoration(
+                        color: Constants.pastelWhite,
+                        borderRadius: BorderRadius.all(
+                            Radius.circular(Constants.borderRadius))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: marginSize,
+                      children: [
+                        getFunctionalMatches(),
+                        getPreferredStrategy()
+                      ],
+                    ),
+                  )
+                ],
               )
             ],
           )),

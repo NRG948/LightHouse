@@ -21,8 +21,19 @@ class SavedData extends StatelessWidget {
     activeLayout = ModalRoute.of(context)?.settings.arguments as String?; // get layouts
     if (!["Atlas","Chronos","Pit","Human Player"].any((e) => activeLayout == e)) {activeLayout = null;} // check if layout is valid
     scaleFactor = screenWidth / 411;
-   
+    if (!configData.containsKey("eventKey") || !ensureSavedDataExists(configData["eventKey"]!)) {
+      return Scaffold(
+        appBar: AppBar(leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new)),),
+        body: Column(
+          children: [
+            Text("NO DATA"),
+            Text(configData.toString()),
+            TextButton(onPressed: () {build(context);}, child: Text("Reload Page"))
+          ],
+        ),);
+    }
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Constants.pastelWhite),
         backgroundColor: Constants.pastelRed,
@@ -78,7 +89,7 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
   Widget build(BuildContext context) {
     return Container(
       width: 400 * SavedData.scaleFactor,
-      height: 100 * SavedData.scaleFactor,
+      height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -124,7 +135,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
   Widget build(BuildContext context) {
     return Container(
       width: 400 * SavedData.scaleFactor,
-      height: 100 * SavedData.scaleFactor,
+      height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
         borderRadius: BorderRadius.circular(Constants.borderRadius)
@@ -172,7 +183,7 @@ class _SavedFileListState extends State<SavedFileList> {
     List<SavedFile> savedFiles = fileListStrings.map((file) {
         return SavedFile(fileName: file,);}).toList();
     return SizedBox(
-      height: 600 * SavedData.scaleFactor,
+      height: 0.6 * SavedData.screenHeight,
       width: 400 * SavedData.scaleFactor,
       child: ListView.builder(
         itemCount: savedFiles.length,
@@ -235,7 +246,7 @@ class _SavedFileState extends State<SavedFile> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                      Icon(Icons.data_object,size:30),
+                      Icon(Icons.data_object,size:30 * SavedData.scaleFactor),
                       SizedBox(
                         width: 70 * SavedData.scaleFactor,
                         child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,)),
@@ -247,13 +258,13 @@ class _SavedFileState extends State<SavedFile> {
                 children: [
                 Row(mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                  Icon(Icons.schedule),
+                  Icon(Icons.schedule,size: 2 * SavedData.scaleFactor),
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
                 ],),
                 Row(children: [
-                  Icon(Icons.account_circle),
+                  Icon(Icons.account_circle,size: 23 * SavedData.scaleFactor,),
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["scouterName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
@@ -323,20 +334,41 @@ class DataEdit extends StatefulWidget {
 
 class _DataEditState extends State<DataEdit> {
   late Map<String, dynamic> jsonFile;
+  late Map<String, dynamic> typeReferenceFile;
   late String activeKey;
+  String statusText = "";
   TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     jsonFile = loadFileIntoSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName);
+    typeReferenceFile = jsonFile;
     activeKey = jsonFile.keys.toList()[0];
     controller.text = jsonFile[activeKey];
+    if (typeReferenceFile[activeKey].runtimeType == List<dynamic>) {
+      controller.text = jsonEncode(jsonFile[activeKey]);
+    }
+
     controller.addListener(() {setState(() {
+      late Type decodedInput;
+      late dynamic decodedReference;
+      try {decodedInput = jsonDecode(controller.text).runtimeType;} catch (_) {decodedInput = String;}
+      try {decodedReference = typeReferenceFile[activeKey].runtimeType;} catch (_) {decodedReference = String;}
       try {
-      jsonFile[activeKey] = jsonDecode(controller.text);
+      if (decodedInput == decodedReference) {
+        jsonFile[activeKey] = jsonDecode(controller.text);
+        statusText = "";
+      } else {
+        statusText = "TYPE MISMATCH: $decodedInput to $decodedReference";
+      }
       } catch (_) {
+        if (decodedReference == String) {
         jsonFile[activeKey] = controller.text;
+        statusText = "";
+        } else {
+          statusText = "INVALID TYPE";
+        }
       }
     });});
   }
@@ -347,7 +379,7 @@ class _DataEditState extends State<DataEdit> {
       backgroundColor: Constants.pastelWhite,
       child: Center(
         child: Container(
-        height: 500 * SavedData.scaleFactor,
+        height: 525 * SavedData.scaleFactor,
         width: 350 * SavedData.scaleFactor,
         decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: SizedBox(
@@ -355,6 +387,7 @@ class _DataEditState extends State<DataEdit> {
           child: Column(
             children: [
               AutoSizeText("Edit Data",style: comfortaaBold(30 * SavedData.scaleFactor,color: Constants.pastelReddishBrown),),
+              AutoSizeText(statusText,style: comfortaaBold(15,color: Colors.red),maxLines: 1,),
               DropdownButton(items: 
               jsonFile.keys.map(
                 (file) {
@@ -364,12 +397,17 @@ class _DataEditState extends State<DataEdit> {
               onChanged: (value) {setState(() {
                 activeKey = value ?? "";
                 controller.text = jsonFile[activeKey].toString();
+                if (typeReferenceFile[activeKey].runtimeType == List<dynamic>) {
+                    controller.text = jsonEncode(jsonFile[activeKey]);
+                  }
               });
               }),
               SizedBox(
                 height: 300 * SavedData.scaleFactor,
                 width: 300 * SavedData.scaleFactor,
                 child: TextField(
+                  smartDashesType: SmartDashesType.disabled,
+                  smartQuotesType: SmartQuotesType.disabled,
                   controller: controller,
                   maxLines: 10,
                 ),
@@ -377,14 +415,19 @@ class _DataEditState extends State<DataEdit> {
               SizedBox(
               height: 100 * SavedData.scaleFactor,
               child: TextButton(onPressed: () {
+                if (statusText == "") {
                 saveFileFromSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName, jsonFile);
-                Navigator.pushReplacementNamed(context,"/home-scouter");
+                 Navigator.pushReplacementNamed(context,"/home-scouter");}
               }, child: Text("Save")))
             ],
           ),
         )
       ),),
     );
+  }
+  List<String> tryParseStringList(String inputString) {
+
+    return [];
   }
 }
 
@@ -402,4 +445,6 @@ class SharedState extends ChangeNotifier {
     activeLayout = layout;
     notifyListeners();
   }
+
+  
 }

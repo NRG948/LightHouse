@@ -90,7 +90,7 @@ class _RSAUReefState extends State<RSAUReef> with AutomaticKeepAliveClientMixin 
     }
     String at = widget.sharedState.activeTriangle!;
     return Container(
-      height: 330 * widget.scaleFactor,
+      height: 308 * widget.scaleFactor,
       width: 318 * widget.scaleFactor,
       padding: EdgeInsets.all(8 * widget.scaleFactor),
       decoration: BoxDecoration(
@@ -144,12 +144,12 @@ class _RSAUTroughState extends State<RSAUTrough> {
 
   void increment() {setState( () {
     if (counter < 99) {counter++;}
-    DataEntry.exportData["coralScoredL1"] = counter.toString();});
+    DataEntry.exportData["autoCoralScoredL1"] = counter.toString();});
   }
 
   void decrement() {setState(() {
     if (counter>0) {counter--;}
-    DataEntry.exportData["coralScoredL1"] = counter.toString();});
+    DataEntry.exportData["autoCoralScoredL1"] = counter.toString();});
   }
 
   @override
@@ -157,7 +157,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
     return GestureDetector(
       onTap: increment,
       child: Container(
-        height: 96 * widget.scaleFactor,
+        height: 75 * widget.scaleFactor,
         width: 302 * widget.scaleFactor,
         decoration: BoxDecoration(
           color: counter > 0 ? Constants.pastelRed : Constants.pastelGray,
@@ -181,7 +181,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 child: SizedBox(
-                  height: 70 * widget.scaleFactor,
+                  height: 49 * widget.scaleFactor,
                   child: Row(
                     spacing: 0,
                     children: [

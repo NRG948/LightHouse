@@ -22,14 +22,19 @@ class NRGRating extends StatefulWidget {
   State<NRGRating> createState() => _NRGRatingState(); 
 }
 
+
 // State class for NRGRating
-class _NRGRatingState extends State<NRGRating> {
+class _NRGRatingState extends State<NRGRating> with AutomaticKeepAliveClientMixin {
 
   @override void initState() {
     super.initState();
     // Initialize the rating value in exportData
     DataEntry.exportData[widget.jsonKey] = 0.0;
   }
+
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

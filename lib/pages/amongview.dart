@@ -60,6 +60,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     return PopScope(
       canPop: false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Constants.pastelRed,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
@@ -86,108 +87,113 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                     image: AssetImage("assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
             child: 
-            Column(children: [
-              Container(
-                width: 350 * scaleFactor,
-                height: 550 * scaleFactor,
-                decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                child: Column(children: [
-                  Text("Showing data for ${state.activeEvent}: "),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text("Layout:"),
-                      DropdownButton(
-                        value: state.activeLayout,
-                        items: state.enabledLayouts.map((e) {
-                        return DropdownMenuItem(
-                        value:e,
-                        child: Text(e));}).toList(),
-                      onChanged: (newValue) {setState(() {
-                        state.setActiveLayout(newValue??"");
-                        
-                      });
-                      }),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                    Text("Sort by"),
-                    DropdownButton(
-                        value: state.activeSortKey,
-                        items: state.getSortKeys().map((e) {
-                        return DropdownMenuItem(
-                        value:e,
-                        child: Text(e));}).toList(),
-                      onChanged: (newValue) {setState(() {
-                        state.setActiveSortKey(newValue ?? "");
-                      });
-                      }),
-                  ],),
-                  GestureDetector(
-                    onTap: () {
-                          sortCheckbox.value = !sortCheckbox.value;
-                          setState(() {
-                            state.updateChartData(sort: sortCheckbox.value);
-                          }); 
-                      
-                        },
-                    child: Container(
-                      width: 325 * scaleFactor,
-                      height: 40 * scaleFactor,
-                      decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                      child: Row(
+            Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: 350 * scaleFactor,
+                    height: 0.8 * screenHeight,
+                    decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                    child: Column(children: [
+                      Text("Showing data for ${state.activeEvent}: "),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                        ValueListenableBuilder(valueListenable: sortCheckbox, builder: (a,b,c) {
-                          return Checkbox(value: b, onChanged: (value) {
-                            sortCheckbox.value = value ?? false;
-                            setState(() => state.updateChartData(sort: sortCheckbox.value));
+                          Text("Layout:"),
+                          DropdownButton(
+                            value: state.activeLayout,
+                            items: state.enabledLayouts.map((e) {
+                            return DropdownMenuItem(
+                            value:e,
+                            child: Text(e));}).toList(),
+                          onChanged: (newValue) {setState(() {
+                            state.setActiveLayout(newValue??"");
+                            
                           });
-                        }),
-                        SizedBox(
-                          height: 40 * scaleFactor,
-                          child: Center(child: AutoSizeText("Sort Data?",style: comfortaaBold(18 * scaleFactor),)),
-                        )
-                      ],),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 350 * scaleFactor,
-                    width: 350 * scaleFactor,
-                    child: Scrollbar(
-                      controller: scrollController,
-                      thumbVisibility: true,
-                      child: ListView(
-                        controller: scrollController,
-                        scrollDirection: Axis.horizontal,
-                        children:[ NRGBarChart(title: state.activeSortKey.toSentenceCase, height: 300 * scaleFactor, width: chartWidth * scaleFactor,
-                        data:state.chartData,
-                        color: Constants.pastelRed,
-                        amongviewTeams: state.teamsInEvent,
-                        hashMap: state.hashMap,
-                        sharedState: state,
-                        ),
-                        ]
+                          }),
+                        ],
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                        Text("Sort by"),
+                        DropdownButton(
+                            value: state.activeSortKey,
+                            items: state.getSortKeys().map((e) {
+                            return DropdownMenuItem(
+                            value:e,
+                            child: Text(e));}).toList(),
+                          onChanged: (newValue) {setState(() {
+                            state.setActiveSortKey(newValue ?? "");
+                          });
+                          }),
+                      ],),
+                      GestureDetector(
+                        onTap: () {
+                              sortCheckbox.value = !sortCheckbox.value;
+                              setState(() {
+                                state.updateChartData(sort: sortCheckbox.value);
+                              }); 
+                          
+                            },
+                        child: Container(
+                          width: 325 * scaleFactor,
+                          height: 40 * scaleFactor,
+                          decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                            ValueListenableBuilder(valueListenable: sortCheckbox, builder: (a,b,c) {
+                              return Checkbox(value: b, onChanged: (value) {
+                                sortCheckbox.value = value ?? false;
+                                setState(() => state.updateChartData(sort: sortCheckbox.value));
+                              });
+                            }),
+                            SizedBox(
+                              height: 40 * scaleFactor,
+                              child: Center(child: AutoSizeText("Sort Data?",style: comfortaaBold(18 * scaleFactor),)),
+                            )
+                          ],),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 350 * scaleFactor,
+                        width: 350 * scaleFactor,
+                        child: Scrollbar(
+                          controller: scrollController,
+                          thumbVisibility: true,
+                          child: ListView(
+                            controller: scrollController,
+                            scrollDirection: Axis.horizontal,
+                            children:[ NRGBarChart(title: state.activeSortKey.toSentenceCase, height: 300 * scaleFactor, width: chartWidth * scaleFactor,
+                            data:state.chartData,
+                            color: Constants.pastelRed,
+                            amongviewTeams: state.teamsInEvent,
+                            hashMap: state.hashMap,
+                            sharedState: state,
+                            chartOnly: true,
+                            ),
+                            ]
+                          ),
+                        ),
+                      ),
+                        
+                      if (AmongViewSharedState.clickedTeam != 0)
+                      Container(
+                        width: 325 * scaleFactor,
+                        height: 40 * scaleFactor,
+                        decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                        child: TextButton(onPressed: () {
+                          Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
+                        }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}")),
+                      )
+                      
+                      ]
                     ),
                   ),
-      
-                  if (AmongViewSharedState.clickedTeam != 0)
-                  Container(
-                    width: 325 * scaleFactor,
-                    height: 40 * scaleFactor,
-                    decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                    child: TextButton(onPressed: () {
-                      Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
-                    }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}")),
-                  )
-                  
-                  ]
-                ),
-              )
-            ],)
+                ],
+              ),
+            )
         )),
     );}
 }
@@ -299,6 +305,7 @@ class AmongViewSharedState extends ChangeNotifier {
         }
       case "cycleTime":
         List searchTerms = [];
+        List<double> timeDiffs = [];
         if (activeSortKey.contains("Reef")) {
           searchTerms = ["AB","CD","EF","GH","IJ","KL"];
         } else if (activeSortKey.contains("CS")) {
@@ -307,8 +314,9 @@ class AmongViewSharedState extends ChangeNotifier {
           searchTerms = ["Processor"];
         }
         for (int team in teamsInEvent) {
-          List<dynamic> eventList = [];
+          
           for (dynamic match in data) {
+            List<dynamic> eventList = [];
             if (match["teamNumber"]! == team) {
               // subEventList is a full list of events in the match
               // that is filtered later
@@ -329,15 +337,18 @@ class AmongViewSharedState extends ChangeNotifier {
                 }
               }
             }
-          }
-          List<double> timeDiffs = [];
-          // Iterates through every other event (only the enter area events)
-          for (int eventIndex = 0; eventIndex < eventList.length; eventIndex = eventIndex + 2) {
+            if (eventList.isNotEmpty) {
+            for (int eventIndex = 0; eventIndex < eventList.length; eventIndex = eventIndex + 2) {
             // Accounts for edge case in which last enter event has no corresponding exit event
             if (eventIndex == eventList.length - 1) {continue;}
             // Gets time difference between this event (enter) and next event (exit)
             timeDiffs.add(eventList[eventIndex + 1][1] - eventList[eventIndex][1]);
           }
+            }
+          }
+          
+          // Iterates through every other event (only the enter area events)
+          
           if (timeDiffs.isNotEmpty) {
           chartData.addEntries([MapEntry(team, (timeDiffs.sum / timeDiffs.length).fourDigits)]);
           }
@@ -352,14 +363,13 @@ class AmongViewSharedState extends ChangeNotifier {
               for (List entry in eventLists) {
                 if (entry[0] == "intakeCoral") {
                   totalIntakeCoral += 1;
-                  print(totalIntakeCoral);
                 }
               }
               dataPoints.add(totalIntakeCoral.toDouble());
             }
           }
           final average = dataPoints.sum / dataPoints.length;
-          chartData.addEntries([MapEntry(team, average)]);
+          chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
     }
     if (sort == true) {

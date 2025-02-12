@@ -55,14 +55,18 @@ class _NRGTextboxState extends State<NRGTextbox> {
     // Add listener to update exportData when text changes
     _controller.addListener(() {
       setState(() {
+        if (widget.numeric) {
         try {
           // Try to parse the text as JSON
           DataEntry.exportData[_key] = jsonDecode(_controller.text);
         } catch (_) {
-          // If parsing fails, store the text as is
-          DataEntry.exportData[_key] = _controller.text;
+          // If parsing fails, store number 0
+          DataEntry.exportData[_key] = 0;
+
         }
-      });
+      } else {
+        DataEntry.exportData[_key] = _controller.text;
+      }});
     });
     // Initialize exportData with an empty string
     DataEntry.exportData[_key] = "";

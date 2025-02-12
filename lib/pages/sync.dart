@@ -1,4 +1,3 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
@@ -7,6 +6,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:lighthouse/pages/data_entry.dart';
 
+// Main widget for the Sync page
 class SyncPage extends StatefulWidget {
   const SyncPage({super.key});
 
@@ -19,18 +19,20 @@ class SyncPageState extends State<SyncPage> {
   static late double sizeScaleFactor;
   late double screenWidth;
   late double screenHeight;
+
+  // Fetch data from the server
   Future<void> fetchData(String requestedFileType) async {
     response = await http.get(Uri.parse("http://169.254.9.48/81"));
     if (response.statusCode == 200) {
-      //stuff
+      // Handle successful response
     } else {
       debugPrint(response.statusCode.toString());
     }
   }
+
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -61,32 +63,12 @@ class SyncPageState extends State<SyncPage> {
         child: Center(
           child: Column (
             children: [
-              GestureDetector(
-                onTap: () {
-                  fetchData("hi!").timeout(Duration(seconds: 10), onTimeout: () => {throw UnimplementedError("HELP!")});
-                },
-                child: Container(
-                  height: 50,
-                  width: 350 * sizeScaleFactor,
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius)
-                  ),
-                  child: Text(
-                    "Sync", 
-                    style: comfortaaBold(40, color: Constants.pastelReddishBrown),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10 * sizeScaleFactor), 
               Container(
                 decoration: BoxDecoration(
                     color: Constants.pastelWhite,
                     borderRadius: BorderRadius.circular(Constants.borderRadius)
                   ),
-               
-              ) ,
+              ),
               ServerConnectStatus(),
               SizedBox(height: 10,),
               UploadButton(),
@@ -96,9 +78,11 @@ class SyncPageState extends State<SyncPage> {
           ), 
         ),
       )
-    );}
+    );
+  }
 }
 
+// Widget for the upload button
 class UploadButton extends StatefulWidget {
   const UploadButton({super.key});
 
@@ -127,8 +111,8 @@ class _UploadButtonState extends State<UploadButton> {
           decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
           child: TextButton(onPressed: () {openUploadDialog(context,snapshot.data ?? []);}, child: Column(
             children: [
-              Text("UPLOAD"),
-              Text("Upload ${(snapshot.data ?? []).length} items to server")
+              Text("UPLOAD",style: comfortaaBold(10)),
+              Text("Upload ${(snapshot.data ?? []).length} items to server",style: comfortaaBold(10))
             ],
           )),
         );
@@ -136,12 +120,15 @@ class _UploadButtonState extends State<UploadButton> {
     );
   }
 
-  void openUploadDialog(BuildContext context, List<dynamic> queue) {showDialog(context: context, builder: (context) {
-    return UploadDialog(queue:queue);
-  });}
-
+  // Open the upload dialog
+  void openUploadDialog(BuildContext context, List<dynamic> queue) {
+    showDialog(context: context, builder: (context) {
+      return UploadDialog(queue: queue);
+    });
+  }
 }
 
+// Dialog for uploading files
 class UploadDialog extends StatefulWidget {
   final List<dynamic> queue;
   const UploadDialog({super.key, required this.queue});
@@ -153,6 +140,7 @@ class UploadDialog extends StatefulWidget {
 class _UploadDialogState extends State<UploadDialog> {
   late String currentFile;
   Map<String,String> uploadedFiles = {};
+
   @override
   void initState() {
     super.initState();
@@ -167,11 +155,13 @@ class _UploadDialogState extends State<UploadDialog> {
         height: 400 * SyncPageState.sizeScaleFactor,
         decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: ListView(
-        children: buildUploadedFiles(),),
+          children: buildUploadedFiles(),
+        ),
       ),
     );
   }
 
+  // Upload files to the server
   void uploadFiles() async {
     if (widget.queue.isEmpty) {return;} 
     currentFile = widget.queue[0];
@@ -186,11 +176,12 @@ class _UploadDialogState extends State<UploadDialog> {
     }
     currentFile = "";
     if (mounted) {
-    // TODO: Add function to clear upload queue
-    Navigator.pop(context);
+      // TODO: Add function to clear upload queue
+      Navigator.pop(context);
     }
   }
 
+  // Build the list of uploaded files
   List<Widget> buildUploadedFiles() {
     final List<Widget> list = uploadedFiles.keys.map((key) {
       return Row(
@@ -204,7 +195,7 @@ class _UploadDialogState extends State<UploadDialog> {
       );
     }).toList();
     if (currentFile != "") {
-    list.add(
+      list.add(
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -214,14 +205,14 @@ class _UploadDialogState extends State<UploadDialog> {
               width: 20 * SyncPageState.sizeScaleFactor,
               child: CircularProgressIndicator(),
             ) 
-           
           ],
         ),
-     );
+      );
     }
     return list;
   }
 
+  // Upload a single file to the server
   Future<String> uploadFile(String fileName) async {
     await Future.delayed(Duration(milliseconds: 200));
     String fileContent = await loadFileForUpload(fileName);
@@ -242,12 +233,11 @@ class _UploadDialogState extends State<UploadDialog> {
     );
     return Future.value(responseCodes[response.statusCode] ?? response.statusCode.toString());
   }
-  
 }
 
+// Widget for the download button
 class DownloadButton extends StatefulWidget {
   const DownloadButton({super.key});
-  
 
   @override
   State<DownloadButton> createState() => _DownloadButtonState();
@@ -267,15 +257,15 @@ class _DownloadButtonState extends State<DownloadButton> {
           });
         },
         child: Column(children: [
-          Text("DOWNLOAD"),
-          Text("Download Items from server")]
+          Text("DOWNLOAD",style: comfortaaBold(10)),
+          Text("Download Items from server",style: comfortaaBold(10))]
         ),
       ),
     );
   }
 }
 
-
+// Dialog for downloading files
 class DownloadDialog extends StatefulWidget {
   const DownloadDialog({super.key});
 
@@ -304,16 +294,18 @@ class _DownloadDialogState extends State<DownloadDialog> {
       ),
     );
   }
+
+  // Show the download statuses
   List<Widget> showDownloadStatuses() {
     List<Widget> statuses = [];
     for (String status in downloadStatuses.keys) {
-      statuses.add(Text("Database $status downloaded w/ code ${downloadStatuses[status]}"));
+      statuses.add(Text("Database $status downloaded w/ code ${downloadStatuses[status]}",style: comfortaaBold(10))); 
     }
     statuses.add(
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text("Downloading $currentlyDownloading"),
+          Text("Downloading $currentlyDownloading",style: comfortaaBold(10)),
           CircularProgressIndicator()
         ],
       )
@@ -321,6 +313,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
     return statuses;
   }
 
+  // Download databases from the server
   void downloadDatabases() async {
     for (String layout in ["Atlas","Chronos","Pit","Human Player"]) {
       currentlyDownloading = layout;
@@ -328,13 +321,13 @@ class _DownloadDialogState extends State<DownloadDialog> {
       setState(() {
          downloadStatuses.addEntries([MapEntry(layout, responseCodes[code]??code.toString())]);
       });
-     
     }
     if (mounted) {
-    Navigator.pop(context);
+      Navigator.pop(context);
     }
   }
 
+  // Download a single database from the server
   Future<int> downloadDatabase(String layout) async {
     await Future.delayed(Duration(milliseconds: 100));
     late String api;
@@ -353,6 +346,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
   }
 }
 
+// Widget to display the server connection status
 class ServerConnectStatus extends StatefulWidget {
   const ServerConnectStatus({super.key});
 
@@ -363,6 +357,7 @@ class ServerConnectStatus extends StatefulWidget {
 class _ServerConnectStatusState extends State<ServerConnectStatus> {
   final controller = TextEditingController();
   late Future<String> responseCode;
+
   @override
   void initState() {
     super.initState();
@@ -400,14 +395,15 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                   width: 50 * SyncPageState.sizeScaleFactor,
                   height: 50 * SyncPageState.sizeScaleFactor,
                   decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                  child: TextButton(onPressed: () {setState(() {
-                    configData["serverIP"] = controller.text;
-                    saveConfig();
-                    responseCode = testConnection(controller.text);
-                  });
-                  }, child: Text("GO")))
+                  child: TextButton(onPressed: () {
+                    setState(() {
+                      configData["serverIP"] = controller.text;
+                      saveConfig();
+                      responseCode = testConnection(controller.text);
+                    });
+                  }, child: Text("GO",style: comfortaaBold(10)))
+                ),
               ],
-             
             ),
             FutureBuilder(future: responseCode, builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -419,29 +415,30 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                  Text("Recieved code ${snapshot.data}",style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
-                  Container(
-                    width: 30 * SyncPageState.sizeScaleFactor,
-                    height: 30 * SyncPageState.sizeScaleFactor,
-                    decoration: BoxDecoration(
-                      color: snapshot.data == "200" ? Colors.lightGreen : Colors.red,
-                      shape: BoxShape.circle
-                    ),
-                  )
-                ],);
+                    Text("Recieved code ${snapshot.data}",style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
+                    Container(
+                      width: 30 * SyncPageState.sizeScaleFactor,
+                      height: 30 * SyncPageState.sizeScaleFactor,
+                      decoration: BoxDecoration(
+                        color: snapshot.data == "200" ? Colors.lightGreen : Colors.red,
+                        shape: BoxShape.circle
+                      ),
+                    )
+                  ],
+                );
               }
             })
-            
           ],
         ),
       ),
     );
   }
+
+  // Test the connection to the server
   Future<String> testConnection(String url) async {
     final uri  = Uri.tryParse(url);
     if (uri == null) {return "";}
     final response = await http.get(uri);
     return response.statusCode.toString();
   }
-
 }

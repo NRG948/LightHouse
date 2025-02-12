@@ -47,7 +47,7 @@ final List<String> splashTexts = [
         "'It'll be fineeeeeee' famous last words",
         "ong frfr",
         "TODO: Come up with more splash texts",
-        "`"
+        "Bring back build szn mac n cheese"
 ];
 
 

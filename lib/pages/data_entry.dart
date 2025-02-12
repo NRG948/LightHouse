@@ -4,7 +4,7 @@ import "dart:convert";
 
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
-import "package:flutter/rendering.dart";
+import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
@@ -31,11 +31,13 @@ import "package:lighthouse/widgets/reefscape/auto_timed.dart";
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 import "package:lighthouse/widgets/reefscape/teleop_timed.dart";
 
+// Main widget for the Data Entry page
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
   static final Map<int, Duration> stopwatchMap = {};
   static late String activeConfig;
+
   @override
   State<DataEntry> createState() => DataEntryState();
 }
@@ -85,9 +87,11 @@ class DataEntryState extends State<DataEntry> {
   @override
   void dispose() {
     controller.dispose();
+    guidanceStopwatch.stop();
     super.dispose();
   }
 
+  // Create a list of widgets based on the provided widget data
   List<Widget> createWidgetList(List<dynamic> widgets, [double? desireHeight]) {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
@@ -98,7 +102,6 @@ class DataEntryState extends State<DataEntry> {
           width: 70 * resizeScaleFactorWidth,
           height: height,
           child: Row(
-              spacing: 0,
               children: createWidgetList(widgetData["children"]!, height)),
         );
       }
@@ -326,6 +329,7 @@ class DataEntryState extends State<DataEntry> {
     return PopScope(
       canPop: false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Constants.pastelRed,
             title: FittedBox(
@@ -423,6 +427,10 @@ class DataEntryState extends State<DataEntry> {
       child: BottomNavigationBar(
           onTap: (index) {
             setState(() {
+              if (currentPage != index) {
+                HapticFeedback.vibrate();
+              }
+
               isUnderGuidance = false;
               currentPage = index;
 
@@ -457,6 +465,7 @@ class DataEntryState extends State<DataEntry> {
 
   void checkGuidanceState(Timer guidanceTimer) {
     if (guidanceStopwatch.elapsed.inSeconds >= 135 + Constants.startDelay) {
+      guidanceStopwatch.stop();
       if (guidanceState != GuidanceState.endgame) {
         guidanceState = GuidanceState.endgame;
         guidanceTimer.cancel();
@@ -488,6 +497,7 @@ class DataEntryState extends State<DataEntry> {
 }
 
 void saveJson(BuildContext context) async {
+  HapticFeedback.vibrate();
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -502,6 +512,7 @@ void saveJson(BuildContext context) async {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
+                  HapticFeedback.vibrate();
                   List<String> missingFields = dataVerification();
                   if (missingFields.isEmpty) {
                   if (await saveExport() == 0) {
@@ -561,6 +572,7 @@ Map<String,List<String>> missingFieldMap = {
 
 
 void showReturnDialog(BuildContext context) {
+  HapticFeedback.vibrate();
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -575,6 +587,7 @@ void showReturnDialog(BuildContext context) {
               child: Text("No")),
           TextButton(
             onPressed: () {
+              HapticFeedback.vibrate();
               Navigator.pushNamedAndRemoveUntil(
                   context, "/home-scouter", (Route<dynamic> route) => false);
             },

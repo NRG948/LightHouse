@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/layouts.dart';
@@ -45,6 +46,7 @@ class ScouterHomePage extends StatelessWidget {
     scaleFactor = screenHeight / 914;
     loadConfig();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
       // Drawer menu with navigation options
       drawer: Drawer(
@@ -56,12 +58,14 @@ class ScouterHomePage extends StatelessWidget {
                 leading: Icon(Icons.home),
                 title: Text("Scouter Home"),
                 onTap: () {
+                  HapticFeedback.vibrate();
                   Navigator.pop(context);
                 }),
             ListTile(
                 leading: Icon(Icons.bar_chart),
                 title: Text("Data Viewer Home"),
-                onTap: () {
+                onTap: () async {
+                  HapticFeedback.vibrate();
                   Navigator.pushNamed(context, "/home-data-viewer");
                 })
           ],
@@ -73,6 +77,7 @@ class ScouterHomePage extends StatelessWidget {
         backgroundColor: Constants.pastelRed,
         centerTitle: true,
         actions: [
+          IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
           IconButton(
             icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
             onPressed: (() {
@@ -87,6 +92,7 @@ class ScouterHomePage extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.settings,color: Constants.pastelWhite,),
               onPressed: () {
+                HapticFeedback.vibrate();
                 Navigator.pushNamed(context, "/settings");
               })
         ],
@@ -138,6 +144,7 @@ class Launcher extends StatelessWidget {
       // Navigates to the specified route when tapped
       onTap: () {
         Navigator.pushNamed(context, route, arguments: title);
+        HapticFeedback.vibrate();
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),
