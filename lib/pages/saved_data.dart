@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 
-
+// Main widget for displaying saved data
 class SavedData extends StatelessWidget {
   const SavedData({super.key});
   static final SharedState sharedState = SharedState();
@@ -13,6 +13,7 @@ class SavedData extends StatelessWidget {
   static late double screenWidth;
   static late double screenHeight;
   static late double scaleFactor;
+
   @override
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
@@ -53,6 +54,8 @@ class SavedData extends StatelessWidget {
     );
   } 
 }
+
+// Dropdown for selecting event key
 class EventKeyDropdown extends StatefulWidget {
   const EventKeyDropdown({super.key,});
   @override
@@ -61,6 +64,7 @@ class EventKeyDropdown extends StatefulWidget {
 
 class _EventKeyDropdownState extends State<EventKeyDropdown> {
   late String selectedValue;
+
   @override
   void initState() {
     super.initState();
@@ -72,7 +76,6 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       width: 400 * SavedData.scaleFactor,
       height: 100 * SavedData.scaleFactor,
@@ -95,6 +98,8 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
     );
   }
 }
+
+// Dropdown for selecting layout
 class LayoutDropdown extends StatefulWidget {
   const LayoutDropdown({super.key,});
   @override
@@ -104,6 +109,7 @@ class LayoutDropdown extends StatefulWidget {
 class _LayoutDropdownState extends State<LayoutDropdown> {
   late List<String> layouts;
   late String selectedValue;
+
   @override
   void initState() {
     super.initState();
@@ -116,8 +122,6 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    
-    
     return Container(
       width: 400 * SavedData.scaleFactor,
       height: 100 * SavedData.scaleFactor,
@@ -141,6 +145,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
   }
 }
 
+// List of saved files for the selected event and layout
 class SavedFileList extends StatefulWidget {
   const SavedFileList({super.key});
 
@@ -155,15 +160,15 @@ class _SavedFileListState extends State<SavedFileList> {
     SavedData.sharedState.addListener(() {setState(() {
     });});
   }
+
   @override
   Widget build(BuildContext context) {
     if (SavedData.sharedState.activeLayout == "No Data") {return Text("No layouts");} // check if there's no layout
     
     List<String> fileListStrings = getFilesInLayout(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout);
     if (fileListStrings.isEmpty) {
-      
       return Text("No matches for layout ${SavedData.sharedState.activeLayout}"); //display message if no files found
-      }
+    }
     List<SavedFile> savedFiles = fileListStrings.map((file) {
         return SavedFile(fileName: file,);}).toList();
     return SizedBox(
@@ -179,6 +184,7 @@ class _SavedFileListState extends State<SavedFileList> {
   }
 }
 
+// Widget for displaying individual saved file
 class SavedFile extends StatefulWidget {
   final String fileName;
   const SavedFile({super.key, required this.fileName});
@@ -188,15 +194,14 @@ class SavedFile extends StatefulWidget {
 }
 
 class _SavedFileState extends State<SavedFile> {
-
   late Widget matchInfo;
   late Map<String,dynamic> savedFileJson;
 
   @override
   void initState() {
     super.initState();
-    
   }
+
   @override
   Widget build(BuildContext context) {
     print("${SavedData.sharedState.activeEvent}, ${SavedData.sharedState.activeLayout}, ${widget.fileName}");
@@ -205,7 +210,6 @@ class _SavedFileState extends State<SavedFile> {
       matchInfo = Padding(
         padding: EdgeInsets.all(8.0 * SavedData.scaleFactor),
         child: Column(
-          
           children: [
             SizedBox(
               child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -234,7 +238,7 @@ class _SavedFileState extends State<SavedFile> {
                       Icon(Icons.data_object,size:30),
                       SizedBox(
                         width: 70 * SavedData.scaleFactor,
-                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,))
+                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,)),
                     ],),
                   ),
                 ],
@@ -247,14 +251,12 @@ class _SavedFileState extends State<SavedFile> {
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
-                    // 
                 ],),
                 Row(children: [
                   Icon(Icons.account_circle),
                   SizedBox(
                     width: 185 * SavedData.scaleFactor,
                     child: AutoSizeText(savedFileJson["scouterName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
-                  
                 ],)
               ],)
             ],)
@@ -297,7 +299,6 @@ class _SavedFileState extends State<SavedFile> {
                       } else {
                         showDialog(context: context, builder: (BuildContext context) {return AlertDialog(content: Text("Error"));});
                       }
-                      //
                     }, child: Text("Yes"))
                   ],
                   );
@@ -311,6 +312,7 @@ class _SavedFileState extends State<SavedFile> {
   }
 }
 
+// Dialog for editing data
 class DataEdit extends StatefulWidget {
   final String fileName;
   const DataEdit({super.key, required this.fileName});
@@ -323,6 +325,7 @@ class _DataEditState extends State<DataEdit> {
   late Map<String, dynamic> jsonFile;
   late String activeKey;
   TextEditingController controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -375,7 +378,6 @@ class _DataEditState extends State<DataEdit> {
               height: 100 * SavedData.scaleFactor,
               child: TextButton(onPressed: () {
                 saveFileFromSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName, jsonFile);
-                
                 Navigator.pushReplacementNamed(context,"/home-scouter");
               }, child: Text("Save")))
             ],
@@ -386,13 +388,16 @@ class _DataEditState extends State<DataEdit> {
   }
 }
 
+// Shared state class for managing active event and layout
 class SharedState extends ChangeNotifier {
   late String activeEvent;
   late String activeLayout;
+
   void setActiveEvent(String event) {
     activeEvent = event;
     notifyListeners();
   }
+
   void setActiveLayout(String layout) {
     activeLayout = layout;
     notifyListeners();

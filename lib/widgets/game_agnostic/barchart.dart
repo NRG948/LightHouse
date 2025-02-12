@@ -7,8 +7,9 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/amongview.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
-/// A horizontal bar chart widget that dislays numbers, automatically sorting by key.
+/// A horizontal bar chart widget that displays numbers, automatically sorting by key.
 class NRGBarChart extends StatefulWidget {
+  // Widget properties
   String title;
   double height;
   double width;
@@ -23,6 +24,7 @@ class NRGBarChart extends StatefulWidget {
   LinkedHashMap hashMap;
   AmongViewSharedState? sharedState;
 
+  // Constructor with named parameters and default values
   NRGBarChart(
       {super.key,
       required this.title,
@@ -53,6 +55,7 @@ class NRGBarChart extends StatefulWidget {
 }
 
 class _NRGBarChartState extends State<NRGBarChart> {
+  // Getters for widget properties
   String get _title => widget.title;
   double get _height => widget.height;
   double get _width => widget.width;
@@ -65,7 +68,10 @@ class _NRGBarChartState extends State<NRGBarChart> {
   List<String> get _dataLabels => widget.dataLabels;
 
   /// Converts the [SplayTreeMap] dataset [_data] into a [BarChartGroupData] list to display.
-List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widget.hashMap.keys.map<BarChartGroupData>((key) => BarChartGroupData(x: key, barRods: [
+  List<BarChartGroupData> getBarGroups(bool useHashMap) {
+    // If useHashMap is true, use hashMap keys to create BarChartGroupData
+    return useHashMap
+        ? widget.hashMap.keys.map<BarChartGroupData>((key) => BarChartGroupData(x: key, barRods: [
             BarChartRodData(
                 toY: widget.hashMap[key]!,
                 color: !_removedData.contains(key) ? _color : Colors.grey,
@@ -73,20 +79,21 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
                     topLeft: Radius.circular(7), topRight: Radius.circular(7)),
                 width: (_width - 20) / widget.hashMap.length * 0.6),
           ]))
-      .toList() : _data!.keys
-      .map((int key) => BarChartGroupData(x: key, barRods: [
-            BarChartRodData(
-                toY: _data![key]!,
-                color: !_removedData.contains(key) ? _color : Colors.grey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(7), topRight: Radius.circular(7)),
-                width: (_width - 20) / _data!.length * 0.6),
-          ]))
-      .toList();
+            .toList()
+        // Otherwise, use _data keys to create BarChartGroupData
+        : _data!.keys
+            .map((int key) => BarChartGroupData(x: key, barRods: [
+                  BarChartRodData(
+                      toY: _data![key]!,
+                      color: !_removedData.contains(key) ? _color : Colors.grey,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(7), topRight: Radius.circular(7)),
+                      width: (_width - 20) / _data!.length * 0.6),
+                ]))
+            .toList();
   }
 
-
-
+  /// Converts the [SplayTreeMap] dataset [_multiData] into a [BarChartGroupData] list to display.
   List<BarChartGroupData> getMultiBarGroups() => _multiData!.keys
       .map((int key) => BarChartGroupData(
           x: key,
@@ -135,9 +142,11 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
   /// Gets a column of texts or a single text depending on the type of graph.
   Widget getAverageText() {
     if (_multiData!.isEmpty) {
+      // Single text for non-multi data
       return _getSingleText(
           getAverageData(), _color ?? Colors.black, _dataLabel);
     } else {
+      // Column of texts for multi data
       List<Widget> texts = [];
       List<double> averages = getMultiAverageData();
 
@@ -156,6 +165,7 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
     }
   }
 
+  /// Helper method to create a single text widget.
   Widget _getSingleText(double average, Color color, String label) =>
       Text("$label: ${roundAtPlace(average, 2)}",
           style: comfortaaBold(_width / 20,
@@ -164,6 +174,7 @@ List<BarChartGroupData> getBarGroups(bool useHashMap) {return useHashMap ? widge
   /// Returns the sum of an [Iterable].
   double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
 
+  /// Rounds a number to a specified number of decimal places.
   num roundAtPlace(double number, int place) =>
       num.parse(number.toStringAsFixed(place));
 
