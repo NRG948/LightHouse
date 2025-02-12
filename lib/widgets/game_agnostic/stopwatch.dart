@@ -13,7 +13,7 @@ class NRGStopwatch extends StatefulWidget {
   final pageController;
   final DataEntryState dataEntryState;
 
-
+  // Constructor for NRGStopwatch widget
   const NRGStopwatch({super.key, required this.pageController, required this.pageIndex, required this.dataEntryState, this.horizontal = false});
 
   @override
@@ -26,15 +26,15 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
   double get _height => widget.height;
   double get _width => widget.width;
 
-  //usually, it is enough to just use "double.parse(_height/_width)", but here,
-  //it is used enough times that it's worth it to just make them
-  //individual variables of their own. Due to this however you need to *restart* the
-  //app to see any changes to the dimensions, not just hot reload it.
-  //(I know on vscode you can just press the green circle-arrow to do this. )
+  // Usually, it is enough to just use "double.parse(_height/_width)", but here,
+  // it is used enough times that it's worth it to just make them
+  // individual variables of their own. Due to this however you need to *restart* the
+  // app to see any changes to the dimensions, not just hot reload it.
+  // (I know on vscode you can just press the green circle-arrow to do this. )
   late final double height;
   late final double width;
   
-  //We need this so that we can call setState and have the stopwatch text change.
+  // We need this so that we can call setState and have the stopwatch text change.
   late Duration stopwatchResult;
   late Duration stopwatchDisplay;
   late Timer? _timer;
@@ -51,9 +51,10 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
     width = _width;
 
     stopwatchResult = _stopwatch.elapsed;
-    //value that is displayed. 
+    // Value that is displayed. 
     stopwatchDisplay = widget.dataEntryState.stopwatchInitialValue;
     
+    // Timer that updates the stopwatch display every 100 milliseconds
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
         stopwatchResult = _stopwatch.elapsed;
@@ -66,9 +67,11 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
       });
     });
 
+    // Add listener to pageController to handle page changes
      widget.pageController.addListener(_pageListener);
   }
 
+  // Listener to handle page changes and start/stop the stopwatch accordingly
    void _pageListener() {
     if (widget.dataEntryState.isUnderGuidance) {
       if (widget.pageController.page?.round() != widget.pageIndex) {
@@ -95,12 +98,13 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Row(
         children: [
+          // Custom widget to display the stopwatch time
           HoriVert(height: height, width: width, stopwatchDisplay: stopwatchDisplay, widget: widget, horizontal: widget.horizontal),
           Container(
             margin: EdgeInsets.only(
                 left: width *
                     6 /
-                    400), //For development, we can change the width without having to change this too.
+                    400), // For development, we can change the width without having to change this too.
             child: Transform.rotate(
               angle: widget.horizontal ? pi/2 : 0,
               child: IconButton(
@@ -218,7 +222,7 @@ class HoriVertText extends StatelessWidget {
     : Text(
       "${stopwatchDisplay.inMinutes} : ${(stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0")} . ${((stopwatchDisplay.inMilliseconds / 100) % 10).toInt()}",
       textAlign: TextAlign.center,
-      textScaler: TextScaler.linear(height * 3 /100), //For development, we can change the height without having to change this too.
+      textScaler: TextScaler.linear(height * 3 /100), // For development, we can change the height without having to change this too.
       
     );
   }

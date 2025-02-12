@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
+// Stateful widget for NRG Rating
 class NRGRating extends StatefulWidget {
-  final String title;
-  final String jsonKey;
-  final double height;
-  final double width;
+  final String title; // Title of the rating widget
+  final String jsonKey; // Key for storing the rating value in JSON
+  final double height; // Height of the widget
+  final double width; // Width of the widget
+
   const NRGRating(
       {super.key,
       required this.title,
@@ -20,10 +22,12 @@ class NRGRating extends StatefulWidget {
   State<NRGRating> createState() => _NRGRatingState(); 
 }
 
+// State class for NRGRating
 class _NRGRatingState extends State<NRGRating> {
 
   @override void initState() {
     super.initState();
+    // Initialize the rating value in exportData
     DataEntry.exportData[widget.jsonKey] = 0.0;
   }
 
@@ -42,7 +46,9 @@ class _NRGRatingState extends State<NRGRating> {
             decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: AutoSizeText("DATA QUALITY",style: comfortaaBold(20),textAlign: TextAlign.center,),
           ),
+          // Star rating widget
           StarRating(onRatingChanged: (value) {
+            // Update the rating value in exportData
             DataEntry.exportData["dataQuality"] = value;
           },starSize: 0.15 * widget.width,)
         ],
@@ -51,6 +57,7 @@ class _NRGRatingState extends State<NRGRating> {
   }
 }
 
+// Stateful widget for star rating
 class StarRating extends StatefulWidget {
   final double initialRating; // Initial rating value
   final ValueChanged<double> onRatingChanged; // Callback for rating changes
@@ -71,15 +78,17 @@ class StarRating extends StatefulWidget {
   _StarRatingState createState() => _StarRatingState();
 }
 
+// State class for StarRating
 class _StarRatingState extends State<StarRating> {
-  late double _currentRating;
+  late double _currentRating; // Current rating value
 
   @override
   void initState() {
     super.initState();
-    _currentRating = widget.initialRating;
+    _currentRating = widget.initialRating; // Initialize current rating
   }
 
+  // Update the rating value and notify parent widget
   void _updateRating(double newRating) {
     setState(() {
       _currentRating = newRating;

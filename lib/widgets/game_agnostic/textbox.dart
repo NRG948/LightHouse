@@ -7,16 +7,18 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
+// Stateful widget for a custom text box
 class NRGTextbox extends StatefulWidget {
-  final String title;
-  final String jsonKey;
-  final double height;
-  final double width;
-  final bool numeric;
-  final String defaultText;
-  final double fontSize;
-  final int maxLines;
-  final String? autoFill;
+  final String title; // Title of the text box
+  final String jsonKey; // Key to store the text box data in JSON
+  final double height; // Height of the text box
+  final double width; // Width of the text box
+  final bool numeric; // Whether the text box accepts only numeric input
+  final String defaultText; // Default text to display in the text box
+  final double fontSize; // Font size of the text
+  final int maxLines; // Maximum number of lines for the text box
+  final String? autoFill; // Optional autofill value
+
   const NRGTextbox(
       {super.key,
       required this.title,
@@ -34,6 +36,7 @@ class NRGTextbox extends StatefulWidget {
 }
 
 class _NRGTextboxState extends State<NRGTextbox> {
+  // Getters for widget properties
   String get _title => widget.title;
   String get _key => widget.jsonKey;
   double get _height => widget.height;
@@ -41,39 +44,45 @@ class _NRGTextboxState extends State<NRGTextbox> {
   bool get _numeric => widget.numeric;
   int get _maxLines => widget.maxLines;
   double get _fontSize => widget.fontSize;
+  
+  // Controller for the text field
   final TextEditingController _controller = TextEditingController();
 
-  // Apparently all this TextEditingController BS can just be done by passing a lambda to the onChanged
-  // parameter of a TextField, but this method lets us set an initial value sooooooo
-  // idk
+  // Initialize the state
   @override
   void initState() {
     super.initState();
+    // Add listener to update exportData when text changes
     _controller.addListener(() {
       setState(() {
         try {
-        DataEntry.exportData[_key] =jsonDecode(_controller.text);
+          // Try to parse the text as JSON
+          DataEntry.exportData[_key] = jsonDecode(_controller.text);
         } catch (_) {
+          // If parsing fails, store the text as is
           DataEntry.exportData[_key] = _controller.text;
         }
       });
     });
+    // Initialize exportData with an empty string
     DataEntry.exportData[_key] = "";
+    // Handle autofill if provided
     if (widget.autoFill != null) {
       switch (widget.autoFill) {
         case "scouterName":
           _controller.text = configData["scouterName"] ?? "Scouter";
       }
     }
-    
   }
-  // idk what this one does but gpt demands it
+
+  // Dispose the controller when the widget is disposed
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
   }
 
+  // Build the widget
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -91,14 +100,13 @@ class _NRGTextboxState extends State<NRGTextbox> {
                 inputFormatters:
                     _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
                 controller: _controller,
-                style: comfortaaBold(_fontSize,color: Constants.pastelReddishBrown),
+                style: comfortaaBold(_fontSize, color: Constants.pastelReddishBrown),
                 maxLines: _maxLines,
                 decoration: InputDecoration(
-                  
                     labelText: _title,
-                    labelStyle: comfortaaBold(_fontSize,color: Constants.pastelReddishBrown,italic: true),
+                    labelStyle: comfortaaBold(_fontSize, color: Constants.pastelReddishBrown, italic: true),
                     fillColor: Constants.pastelYellow,
-                    filled:true,
+                    filled: true,
                     floatingLabelBehavior: FloatingLabelBehavior.never,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(Constants.borderRadius),
