@@ -31,11 +31,13 @@ import "package:lighthouse/widgets/reefscape/auto_timed.dart";
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
 import "package:lighthouse/widgets/reefscape/teleop_timed.dart";
 
+// Main widget for the Data Entry page
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
   static final Map<int, Duration> stopwatchMap = {};
   static late String activeConfig;
+
   @override
   State<DataEntry> createState() => DataEntryState();
 }
@@ -89,6 +91,7 @@ class DataEntryState extends State<DataEntry> {
     super.dispose();
   }
 
+  // Create a list of widgets based on the provided widget data
   List<Widget> createWidgetList(List<dynamic> widgets, [double? desireHeight]) {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
@@ -99,7 +102,6 @@ class DataEntryState extends State<DataEntry> {
           width: 70 * resizeScaleFactorWidth,
           height: height,
           child: Row(
-              spacing: 0,
               children: createWidgetList(widgetData["children"]!, height)),
         );
       }

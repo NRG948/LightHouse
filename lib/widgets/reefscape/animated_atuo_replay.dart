@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 
+// This widget animates an object along a predefined path with auto-replay functionality.
 class AnimatedAutoReplay extends StatefulWidget {
   final double height;
   final double width;
@@ -23,6 +24,7 @@ class AnimatedAutoReplay extends StatefulWidget {
 
 class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     with SingleTickerProviderStateMixin {
+  // Define key locations and event mappings.
   Map<String, Offset> keyLocations = {
     "AB": Offset(-0.8, 0),
     "CD": Offset(-0.05, 1.3),
@@ -69,6 +71,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   void initState() {
     super.initState();
 
+    // Initialize robot size and animation controller.
     _robotSideLength = (min(_height, _width) - 20) / 12;
     _controller =
         AnimationController(duration: Duration(seconds: 15), vsync: this);
@@ -107,6 +110,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     super.dispose();
   }
 
+  // Handle single click to start/stop animation.
   void _autoPathSingleClick() {
     if (_controller.isAnimating) {
       _controller.stop();
@@ -115,10 +119,12 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     }
   }
 
+  // Reset the animation path.
   void _resetAutoPath() {
     _controller.reset();
   }
 
+  // Calculate offset from starting location.
   Offset _calculateOffsetFromStartingLocation(List<double> pos, bool flip) {
     assert(pos.length == 2);
     double x = pos[0];
@@ -131,6 +137,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     return Offset(6 - (0.6 - x) * 13 / 6, 2 * (y - 0.5) * 6);
   }
 
+  // Generate animation path based on waypoints.
   Animation<Offset> _getAnimationPath() {
     List<TweenSequenceItem<Offset>> items = [];
     items.add(TweenSequenceItem(
