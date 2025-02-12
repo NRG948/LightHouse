@@ -1,5 +1,6 @@
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/layouts.dart";
 import "package:lighthouse/pages/data_entry.dart";
@@ -146,7 +147,9 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
               height: 37.2,
               width: 37.2,
               child: GestureDetector(
-                onTap: decrement,
+                onTap: () {
+                  decrement();
+                },
                 child: Transform.flip(
                   flipY:true,
                   child: CustomPaint(
@@ -166,7 +169,9 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
               height: 37.2,
               width: 37.2,
               child: GestureDetector(
-                onTap: increment,
+                onTap: () {
+                  increment();
+                },
                 child: CustomPaint(
                   painter: RoundedTrianglePainter(color: Constants.pastelRed),
                   
@@ -190,6 +195,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
   void decrement() {
     setState(() {
       if (_counter > 0) {
+        HapticFeedback.selectionClick();
         _counter--;
         if (widget.otherJsonKey != null) {
           if (DataEntry.exportData[widget.otherJsonKey]! > 0) {
@@ -204,6 +210,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
 
   /// Increments [_counter], and bounds it at 999.
   void increment() {
+    HapticFeedback.selectionClick();
     setState(() {
       if (_counter < 999) {
         _counter++;
