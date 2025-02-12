@@ -3,12 +3,13 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
+// A custom checkbox widget that can be used in different parts of the app.
 class NRGCheckbox extends StatefulWidget {
-  final String title;
-  final String jsonKey;
-  final double height;
-  final double width;
-  final bool vertical;
+  final String title; // The title of the checkbox.
+  final String jsonKey; // The key used to store the checkbox state in exportData.
+  final double height; // The height of the checkbox widget.
+  final double width; // The width of the checkbox widget.
+  final bool vertical; // Determines if the checkbox and title are arranged vertically or horizontally.
   const NRGCheckbox(
       {super.key,
       required this.title,
@@ -22,23 +23,26 @@ class NRGCheckbox extends StatefulWidget {
 }
 
 class _NRGCheckboxState extends State<NRGCheckbox> {
-  String get _key => widget.jsonKey;
-  bool isChecked = false;
+  String get _key => widget.jsonKey; // Getter for the jsonKey.
+  bool isChecked = false; // Initial state of the checkbox.
 
+  // Notifier to update the checkbox state.
   ValueNotifier<bool> checkboxNotifier = ValueNotifier<bool>(false);
-  String get _title => widget.title;
-  double get _height => widget.height;
-  double get _width => widget.width;
+  String get _title => widget.title; // Getter for the title.
+  double get _height => widget.height; // Getter for the height.
+  double get _width => widget.width; // Getter for the width.
 
   @override
   void initState() {
     super.initState();
+    // Initialize the exportData with the checkbox state.
     DataEntry.exportData[widget.jsonKey] = false;
   }
 
 
   @override
   Widget build(BuildContext context) {
+    // Determine the layout based on the vertical property.
     Widget rowOrColumn = widget.vertical
         ? Column(
             children: [
@@ -53,6 +57,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                           value: isChecked,
                           visualDensity: VisualDensity.compact,
                           onChanged: (bool? newValue) {
+                            // Update the checkbox state.
                             checkboxNotifier.value = newValue ?? false;
                           }),
                     );
@@ -78,6 +83,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                     return Checkbox(
                         value: isChecked,
                         onChanged: (bool? newValue) {
+                          // Update the checkbox state.
                           checkboxNotifier.value = newValue ?? false;
                         });
                   }),
@@ -95,9 +101,10 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
     return GestureDetector(
         // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
+          // Toggle the checkbox state.
           checkboxNotifier.value = !checkboxNotifier.value;
-          DataEntry.exportData[_key] =
-              checkboxNotifier.value;
+          // Update the exportData with the new state.
+          DataEntry.exportData[_key] = checkboxNotifier.value;
         },
         child: Container(
             height: _height,
