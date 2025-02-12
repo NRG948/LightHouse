@@ -48,8 +48,8 @@ class NRGBarChart extends StatefulWidget {
         data = data ?? SplayTreeMap(),
         multiData = multiData ?? SplayTreeMap(),
         multiColor = multiColor ?? [],
-        dataLabel = dataLabel ?? "AVERAGE",
-        dataLabels = dataLabels ?? ["AVERAGE"],
+        dataLabel = dataLabel ?? "AVG",
+        dataLabels = dataLabels ?? ["AVG"],
         amongviewTeams = amongviewTeams ?? [],
         amongviewMatches = amongviewMatches ?? [],
         hashMap = hashMap ?? LinkedHashMap(),
@@ -147,13 +147,10 @@ class _NRGBarChartState extends State<NRGBarChart> {
   /// Gets a column of texts or a single text depending on the type of graph.
   Widget getAverageText() {
     if (_multiData!.isEmpty) {
-      return _getSingleText(
-          getAverageData(), _color ?? Colors.black, _dataLabel);
+      return Container();
     } else {
       List<Widget> texts = [];
       List<double> averages = getMultiAverageData();
-
-      texts.add(_getSingleText(averages.sum, Colors.black, "TOTAL AVERAGE"));
 
       for (int i = 0; i < averages.length; i++) {
         texts.add(_getSingleText(
@@ -164,13 +161,13 @@ class _NRGBarChartState extends State<NRGBarChart> {
             _dataLabels.isNotEmpty ? _dataLabels[i % _dataLabels.length] : ""));
       }
 
-      return Column(children: texts.reversed.toList());
+      return Row(spacing: 5, mainAxisAlignment: MainAxisAlignment.center, children: texts.reversed.toList());
     }
   }
 
   Widget _getSingleText(double average, Color color, String label) =>
       Text("$label: ${roundAtPlace(average, 2)}",
-          style: comfortaaBold(_width / 20,
+          style: comfortaaBold(_width / 17,
               color: color, customFontWeight: FontWeight.w900));
 
   /// Returns the sum of an [Iterable].
@@ -190,14 +187,16 @@ class _NRGBarChartState extends State<NRGBarChart> {
       child: Column(
         children: [
           // Title Text.
-          if (widget.chartOnly != true) Text(_title, style: comfortaaBold(_height / 10, color: Colors.black)),
+          if (widget.chartOnly != true)
+            Text("$_title (${_multiData != null && _multiData!.isNotEmpty ? getMultiAverageData().sum : getAverageData()})",
+                style: comfortaaBold(_height / 10, color: Colors.black)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
             height: _height *
                 (_multiData == null || _multiData!.values.isEmpty
-                    ? 0.75
-                    : 0.75 - 0.05 * _multiData!.values.first.length),
+                    ? 0.8
+                    : 0.7),
             margin: EdgeInsets.only(right: 20),
             child: BarChart(BarChartData(
                 titlesData: FlTitlesData(
@@ -222,36 +221,43 @@ class _NRGBarChartState extends State<NRGBarChart> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: _height / 20)));
+                                  fontSize: 12)));
                     },
                   )),
                   bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                     showTitles: true,
                     getTitlesWidget: (double value, TitleMeta meta) {
-                      return widget.amongviewMatches.isEmpty ? SideTitleWidget(
-                          meta: meta,
-                          space: 4,
-                          child: Text('${value.toInt()}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: !_removedData.contains(value)
-                                      ? Colors.black
-                                      : Colors.grey,
-                                  fontSize: _height / 20))) : SideTitleWidget(meta: meta,
-                                  space: 4,
-                                  child: Text(getParsedMatchInfo(value.toInt(),truncated: true)[0],
+                      return widget.amongviewMatches.isEmpty
+                          ? SideTitleWidget(
+                              meta: meta,
+                              space: 4,
+                              child: Text('${value.toInt()}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
+                                      color: !_removedData.contains(value)
+                                          ? Colors.black
+                                          : Colors.grey,
+                                      fontSize: 12)))
+                          : SideTitleWidget(
+                              meta: meta,
+                              space: 4,
+                              child: Text(
+                                getParsedMatchInfo(value.toInt(),
+                                    truncated: true)[0],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
                                     color: !_removedData.contains(value)
-                                      ? Colors.black
-                                      : Colors.grey,
-                                  fontSize: _height / 20
-                                  ),),);
+                                        ? Colors.black
+                                        : Colors.grey,
+                                    fontSize: 12),
+                              ),
+                            );
                     },
                   )),
                 ),
-                barTouchData: (widget.amongviewTeams.isNotEmpty || widget.amongviewMatches.isNotEmpty)
+                barTouchData: (widget.amongviewTeams.isNotEmpty ||
+                        widget.amongviewMatches.isNotEmpty)
                     ? BarTouchData(
                         enabled: true,
                         touchTooltipData: BarTouchTooltipData(
@@ -267,15 +273,14 @@ class _NRGBarChartState extends State<NRGBarChart> {
                           }
                           if (widget.sharedState != null) {
                             if (widget.amongviewTeams.isNotEmpty) {
-                            widget.sharedState!.setClickedTeam(
-                                widget.amongviewTeams[
-                                    response.spot!.touchedBarGroupIndex]);
+                              widget.sharedState!.setClickedTeam(
+                                  widget.amongviewTeams[
+                                      response.spot!.touchedBarGroupIndex]);
                             }
                             if (widget.amongviewMatches.isNotEmpty) {
                               widget.sharedState!.setClickedMatch(
-                                 widget.amongviewMatches[
-                                    response.spot!.touchedBarGroupIndex]
-                              );
+                                  widget.amongviewMatches[
+                                      response.spot!.touchedBarGroupIndex]);
                             }
                           }
                         },
