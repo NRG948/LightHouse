@@ -4,7 +4,7 @@ import "dart:convert";
 
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
-import "package:flutter/rendering.dart";
+import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
@@ -425,6 +425,10 @@ class DataEntryState extends State<DataEntry> {
       child: BottomNavigationBar(
           onTap: (index) {
             setState(() {
+              if (currentPage != index) {
+                HapticFeedback.vibrate();
+              }
+
               isUnderGuidance = false;
               currentPage = index;
 
@@ -491,6 +495,7 @@ class DataEntryState extends State<DataEntry> {
 }
 
 void saveJson(BuildContext context) async {
+  HapticFeedback.vibrate();
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -505,6 +510,7 @@ void saveJson(BuildContext context) async {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
+                  HapticFeedback.vibrate();
                   List<String> missingFields = dataVerification();
                   if (missingFields.isEmpty) {
                   if (await saveExport() == 0) {
@@ -564,6 +570,7 @@ Map<String,List<String>> missingFieldMap = {
 
 
 void showReturnDialog(BuildContext context) {
+  HapticFeedback.vibrate();
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -578,6 +585,7 @@ void showReturnDialog(BuildContext context) {
               child: Text("No")),
           TextButton(
             onPressed: () {
+              HapticFeedback.vibrate();
               Navigator.pushNamedAndRemoveUntil(
                   context, "/home-scouter", (Route<dynamic> route) => false);
             },
