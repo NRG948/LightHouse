@@ -15,7 +15,8 @@ class AmongViewIndividual extends StatefulWidget {
   State<AmongViewIndividual> createState() => _AmongViewIndividualState();
 }
 
-class _AmongViewIndividualState extends State<AmongViewIndividual> with SingleTickerProviderStateMixin {
+class _AmongViewIndividualState extends State<AmongViewIndividual>
+    with SingleTickerProviderStateMixin {
   static late double scaleFactor;
   late AVISharedState state;
   late ValueNotifier<bool> sortCheckbox;
@@ -46,6 +47,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> with SingleTi
         state.setActiveLayout(state.enabledLayouts[0]);
         state.setActiveSortKey(
             sortKeys[state.enabledLayouts[0]]!.keys.toList()[0]);
+        state.loadPitData();
         state.addListener(() {
           setState(() {});
         });
@@ -213,11 +215,13 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> with SingleTi
                             ]),
                       ),
                     ),
-                    TabBar(
-                      controller: matchPitController,
-                      tabs: [
-                      Tab(text: "MATCH",),
-                      Tab(text: "PIT",)
+                    TabBar(controller: matchPitController, tabs: [
+                      Tab(
+                        text: "MATCH",
+                      ),
+                      Tab(
+                        text: "PIT",
+                      )
                     ]),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -225,41 +229,48 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> with SingleTi
                         width: 400 * scaleFactor,
                         height: 0.3 * screenHeight,
                         child: TabBarView(
-                          controller: matchPitController,
-                          children: [
-                          Container(
-                            height: 0.3 * screenHeight,
-                            width: 350 * scaleFactor,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(Constants.borderRadius),
-                                border: Border.all(width: scaleFactor * 2)),
-                            child: (state.clickedMatch == null)
-                                ? Text("No match selected")
-                                : buildMatchData(context),
-                          ),
-                          Container(
-                              height: 0.3 * screenHeight,
-                              width: 350 * scaleFactor,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Constants.borderRadius),
-                                  border: Border.all(width: scaleFactor * 2)),
-                              child: Text("PIT DATA"))
-                        ]),
+                          physics: NeverScrollableScrollPhysics(),
+                            controller: matchPitController,
+                            children: [
+                              Container(
+                                height: 0.3 * screenHeight,
+                                width: 350 * scaleFactor,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Constants.borderRadius),
+                                    border: Border.all(width: scaleFactor * 2)),
+                                child: (state.clickedMatch == null)
+                                    ? Text("No match selected")
+                                    : buildMatchData(context),
+                              ),
+                              Container(
+                                  height: 0.3 * screenHeight,
+                                  width: 350 * scaleFactor,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          Constants.borderRadius),
+                                      border:
+                                          Border.all(width: scaleFactor * 2)),
+                                  child: state.pitData.isEmpty
+                                      ? Text("No pit data")
+                                      : buildMatchData(context, pit: true))
+                            ]),
                       ),
                     ),
-                    
                   ])),
             ])));
   }
 
-  Widget buildMatchData(BuildContext context) {
+  Widget buildMatchData(BuildContext context, {bool pit = false}) {
     dynamic match = {};
-    for (dynamic i in state.data) {
-      if (i["matchType"] == getParsedMatchInfo(state.clickedMatch!)[0] &&
-          i["matchNumber"] == getParsedMatchInfo(state.clickedMatch!)[1]) {
-        match = i;
+    if (pit) {
+      match = state.pitData;
+    } else {
+      for (dynamic i in state.data) {
+        if (i["matchType"] == getParsedMatchInfo(state.clickedMatch!)[0] &&
+            i["matchNumber"] == getParsedMatchInfo(state.clickedMatch!)[1]) {
+          match = i;
+        }
       }
     }
     if (match == {}) {
@@ -268,13 +279,16 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> with SingleTi
 
     List<Widget> listViewChildren = [
       Text(
-        "Team ${match["teamNumber"]} ${match["matchType"]} ${match["matchNumber"]}",
+        pit
+            ? "Team ${match["teamNumber"]} Pit Data"
+            : "Team ${match["teamNumber"]} ${match["matchType"]} ${match["matchNumber"]}",
         textAlign: TextAlign.center,
         style: comfortaaBold(18, color: Constants.pastelReddishBrown),
       ),
     ];
-    for (String i in individualMatchDisplayKeys[state.activeLayout].keys) {
-      switch (individualMatchDisplayKeys[state.activeLayout][i]) {
+    String layout = pit ? "Pit" : state.activeLayout;
+    for (String i in displayKeys[layout].keys) {
+      switch (displayKeys[layout][i]) {
         case "raw":
           listViewChildren.add(AutoSizeText(
             "${i.toSentenceCase}: ${match[i].toString()}",
@@ -285,7 +299,6 @@ class _AmongViewIndividualState extends State<AmongViewIndividual> with SingleTi
     }
 
     return ListView(children: listViewChildren);
-    ;
     //return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
   }
 }
@@ -461,12 +474,22 @@ class AVISharedState extends ChangeNotifier {
   }
 
   void loadPitData() {
-    List<dynamic> allPitData = jsonDecode(loadDatabaseFile(activeEvent,"Pit"));
-    if (allPitData == [""]) {return;}
-    for (dynamic data in allPitData) {
-      // cook here
+    List<dynamic> allPitData = [];
+    if (loadDatabaseFile(activeEvent, "Pit") == "") {
+      print("EMPTY");
+      return;
     }
-
+    allPitData = jsonDecode(loadDatabaseFile(activeEvent, "Pit"));
+  
+    if (allPitData.isEmpty) {
+      // print("allPitData is empty");
+      return;
+    }
+    for (dynamic i in allPitData) {
+      if (int.tryParse(i["teamNumber"]) == activeTeam) {
+        pitData = i;
+      }
+    }
   }
 }
 
@@ -508,9 +531,9 @@ Map<String, dynamic> sortKeys = {
   }
 };
 
-// This map is used by the individual match viewer to figure out how to display items
+// This map is used by the individual match viewer and pit scouting viewer to figure out how to display items
 // Necessary for more complex data types like event lists
-Map<String, dynamic> individualMatchDisplayKeys = {
+Map<String, dynamic> displayKeys = {
   "Atlas": {
     "scouterName": "raw",
     "replay": "raw",
@@ -582,6 +605,43 @@ Map<String, dynamic> individualMatchDisplayKeys = {
     "redNetAlgae": "raw",
     "blueNetAlgae": "raw",
     "dataQuality": "raw",
+    "timestamp": "raw"
+  },
+  "Pit": {
+    "teamName": "raw",
+    "intervieweeName": "raw",
+    "interviewerName": "raw",
+    "robotHeight": "raw",
+    "robotLength": "raw",
+    "robotWidth": "raw",
+    "robotWeight": "raw",
+    "robotDrivetrain": "raw",
+    "robotMechanisms": "raw",
+    "autoCoralScored": "raw",
+    "autoAlgaeRemoved": "raw",
+    "dropsAlgaeAuto": "raw",
+    "coralScoringAbilityL1": "raw",
+    "coralScoringAbilityL2": "raw",
+    "coralScoringAbilityL3": "raw",
+    "coralScoringAbilityL4": "raw",
+    "canIntakeStation": "raw",
+    "canIntakeGround": "raw",
+    "canRemoveAlgaeL2": "raw",
+    "canRemoveAlgaeL3": "raw",
+    "canScoreProcessor": "raw",
+    "canScorenet": "raw",
+    "canClimbShallow": "raw",
+    "canClimbDeep": "raw",
+    "averageClimbTime": "raw",
+    "driveExperience": "raw",
+    "humanPlayerPreference": "raw",
+    "averageCoralCycles": "raw",
+    "averageAlgaeCycles": "raw",
+    "idealAlliancePartnerQualities": "raw",
+    "otherComments": "raw",
+    "coralScoredL1": "raw",
+    "layout": "raw",
+    "exportName": "raw",
     "timestamp": "raw"
   }
 };
