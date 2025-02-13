@@ -6,7 +6,7 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
-import "package:lighthouse/widgets/reefscape/animated_atuo_replay.dart";
+import "package:lighthouse/widgets/reefscape/animated_auto_replay.dart";
 import "package:lighthouse/widgets/reefscape/scrollable_auto_paths.dart";
 
 class TonyDataViewerPage extends StatefulWidget {
@@ -240,8 +240,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       if (matchData["teamNumber"] == currentTeamNumber) {
         // Get algae scored for processor and barge in teleop.
         List<double> scoreDistribution = [
-          matchData["algaescoreProcessor"].toDouble(),
-          matchData["algaescoreNet"].toDouble()
+          matchData["algaeScoreProcessor"].toDouble(),
+          matchData["algaeScoreNet"].toDouble()
         ];
         chartData[matchData["matchNumber"]] = scoreDistribution;
 

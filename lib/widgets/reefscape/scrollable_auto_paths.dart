@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 // Importing necessary packages and files
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
-import 'package:lighthouse/widgets/reefscape/animated_atuo_replay.dart';
+import 'package:lighthouse/widgets/reefscape/animated_auto_replay.dart';
 
 // Stateful widget to display scrollable auto paths
 class ScrollableAutoPaths extends StatefulWidget {

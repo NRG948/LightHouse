@@ -111,8 +111,8 @@ class _UploadButtonState extends State<UploadButton> {
           decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
           child: TextButton(onPressed: () {openUploadDialog(context,snapshot.data ?? []);}, child: Column(
             children: [
-              Text("UPLOAD",style: comfortaaBold(10)),
-              Text("Upload ${(snapshot.data ?? []).length} items to server",style: comfortaaBold(10))
+              Text("UPLOAD",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
+              Text("Upload ${(snapshot.data ?? []).length} items to server",style: comfortaaBold(18,color: Constants.pastelReddishBrown))
             ],
           )),
         );
@@ -257,8 +257,8 @@ class _DownloadButtonState extends State<DownloadButton> {
           });
         },
         child: Column(children: [
-          Text("DOWNLOAD",style: comfortaaBold(10)),
-          Text("Download Items from server",style: comfortaaBold(10))]
+          Text("DOWNLOAD",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
+          Text("Download Items from server",style: comfortaaBold(18,color:Constants.pastelReddishBrown))]
         ),
       ),
     );
