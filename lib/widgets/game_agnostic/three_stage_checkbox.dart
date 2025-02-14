@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
+// A custom checkbox widget that supports three states: unable, able, and preferred.
 class NRGThreeStageCheckbox extends StatefulWidget {
-  final String title;
-  final String jsonKey;
-  final double height;
-  final double width;
+  final String title; // The title of the checkbox.
+  final String jsonKey; // The key used to store the checkbox state in exportData.
+  final double height; // The height of the checkbox container.
+  final double width; // The width of the checkbox container.
+
   const NRGThreeStageCheckbox(
       {super.key,
       required this.title,
@@ -18,30 +20,33 @@ class NRGThreeStageCheckbox extends StatefulWidget {
   State<NRGThreeStageCheckbox> createState() => _NRGThreeStageCheckboxState();
 }
 
-class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with AutomaticKeepAliveClientMixin{
+// The state class for NRGThreeStageCheckbox.
+class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with AutomaticKeepAliveClientMixin {
   @override
-  bool get wantKeepAlive => true;
-  String get _key => widget.jsonKey;
-  CheckboxStage stage = CheckboxStage.unable;
-  ValueNotifier<CheckboxStage> checkboxNotifier = ValueNotifier<CheckboxStage>(CheckboxStage.unable);
-  String get _title => widget.title;
-  double get _height => widget.height;
-  double get _width => widget.width;
+  bool get wantKeepAlive => true; // Ensures the state is kept alive when the widget is not visible.
 
+  String get _key => widget.jsonKey; // Retrieves the jsonKey from the widget.
+  CheckboxStage stage = CheckboxStage.unable; // Initial stage of the checkbox.
+  ValueNotifier<CheckboxStage> checkboxNotifier = ValueNotifier<CheckboxStage>(CheckboxStage.unable); // Notifier to manage checkbox state.
+  String get _title => widget.title; // Retrieves the title from the widget.
+  double get _height => widget.height; // Retrieves the height from the widget.
+  double get _width => widget.width; // Retrieves the width from the widget.
+
+  // Returns the appropriate icon based on the current checkbox state.
   IconData? getCheckIcon() {
     if (checkboxNotifier.value == CheckboxStage.unable) {
-      return null;
+      return null; // No icon for the 'unable' state.
     } else if (checkboxNotifier.value == CheckboxStage.able) {
-      return const IconData(0xe156, fontFamily: 'MaterialIcons');
+      return const IconData(0xe156, fontFamily: 'MaterialIcons'); // Icon for the 'able' state.
     } else {
-      return const IconData(0xe25b, fontFamily: 'MaterialIcons');
+      return const IconData(0xe25b, fontFamily: 'MaterialIcons'); // Icon for the 'preferred' state.
     }
   }
 
- @override
+  @override
   void initState() {
     super.initState();
-    DataEntry.exportData[_key] = "unable";
+    DataEntry.exportData[_key] = "unable"; // Initialize the exportData with 'unable' state.
   }
 
   @override
@@ -50,9 +55,9 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
     return GestureDetector(
         // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
+          // Cycle through the checkbox states: unable -> able -> preferred -> unable.
           checkboxNotifier.value = CheckboxStage.values[checkboxNotifier.value.index < 2 ? checkboxNotifier.value.index + 1 : 0];
-          DataEntry.exportData[_key] =
-              checkboxNotifier.value.name;
+          DataEntry.exportData[_key] = checkboxNotifier.value.name; // Update the exportData with the current state.
         },
         child: Container(
             height: _height,
@@ -68,7 +73,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                     Transform.scale(
                       scale: 1.4,
                       child: Icon(
-                        IconData(0xef45, fontFamily: 'MaterialIcons')
+                        IconData(0xef45, fontFamily: 'MaterialIcons') // Base icon for the checkbox.
                       ),
                     ), 
                     ValueListenableBuilder(
@@ -78,7 +83,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                           scale: 0.9,
                           child: Icon(
                             getCheckIcon(), 
-                            color: checkboxNotifier.value == CheckboxStage.preferred ? Colors.red : Colors.black,
+                            color: checkboxNotifier.value == CheckboxStage.preferred ? Colors.red : Colors.black, // Change color based on state.
                           ),
                         );
                       }
@@ -86,12 +91,13 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                   ]
                 ),
                 SizedBox(width: 3), 
-                Text(_title, style: comfortaaBold(20,color: Constants.pastelReddishBrown)), 
+                Text(_title, style: comfortaaBold(20, color: Constants.pastelReddishBrown)), // Display the title.
               ],
             )));
   }
 }
 
+// Enum to represent the three stages of the checkbox.
 enum CheckboxStage {
     unable, 
     able, 

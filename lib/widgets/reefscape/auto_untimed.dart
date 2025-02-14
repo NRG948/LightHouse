@@ -28,21 +28,23 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = widget.pit ? [
-        SizedBox(height: 5 * scaleFactor),
-        RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
-        RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] : [Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    List<Widget> children = 
+    // widget.pit ? [
+    //     SizedBox(height: 5 * scaleFactor),
+    //     RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
+    //     RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] : 
+        [Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS", scaleFactor: scaleFactor,),
-          RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,),
-        ],),
-        SizedBox(height: 5 * scaleFactor),
-        Container(
-          height: 15 * scaleFactor,
-          width: 300 * scaleFactor,
+          RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS", scaleFactor: scaleFactor,flipped: false,),
+          Container(
+          height: 50 * scaleFactor,
+          width: 100 * scaleFactor,
           decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-          child: AutoSizeText("DRIVER STATION",textAlign: TextAlign.center,style: comfortaaBold(10 * scaleFactor),),
+          child: Center(child: AutoSizeText("DRIVER STATION",textAlign: TextAlign.center,style: comfortaaBold(10 * scaleFactor),)),
         ),
+          RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,flipped: true,),
+        ],),
+       
         RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
         RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] ;
     return Container(
@@ -158,7 +160,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
       onTap: increment,
       child: Container(
         height: 75 * widget.scaleFactor,
-        width: 302 * widget.scaleFactor,
+        width: 301 * widget.scaleFactor,
         decoration: BoxDecoration(
           color: counter > 0 ? Constants.pastelRed : Constants.pastelGray,
           border: Border.all(
@@ -462,8 +464,9 @@ class RSAUCoralStation extends StatefulWidget {
   final String jsonKey;
   final String title;
   final double scaleFactor;
+  final bool flipped;
   const RSAUCoralStation({
-    super.key, required this.jsonKey, required this.title, required this.scaleFactor
+    super.key, required this.jsonKey, required this.title, required this.scaleFactor, required this.flipped
   });
 
   @override
@@ -471,68 +474,47 @@ class RSAUCoralStation extends StatefulWidget {
 }
 
 class _RSAUCoralStationState extends State<RSAUCoralStation> {
-  String get title => widget.title;
-  String get jsonKey => widget.jsonKey;
-  late int counter;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: increment,
-      child: Row(
-        children: [
-          Container(
-            width: 100 * widget.scaleFactor,
-            height: 40 * widget.scaleFactor,
-             decoration: BoxDecoration(
-              color: Constants.pastelGray,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(Constants.borderRadius),
-                bottomLeft: Radius.circular(Constants.borderRadius)
-              )
-            ),
-            child: Column(
-              children: [
-                Text(title, style: comfortaaBold(12 * widget.scaleFactor),textAlign: TextAlign.center,),
-                Text(counter.toString(),style: comfortaaBold(15.4 * widget.scaleFactor),)
-              ],
-            ),
-          ),
-          Container(
-            width: 50 * widget.scaleFactor,
-            height: 40 * widget.scaleFactor,
-            decoration: BoxDecoration(
-              color: Constants.pastelGray,
-              borderRadius: BorderRadius.only(topRight:Radius.circular(Constants.borderRadius),bottomRight: Radius.circular(Constants.borderRadius)),
-            ),
-            child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down, size: 25 * widget.scaleFactor,),highlightColor: Colors.transparent,splashColor: Colors.transparent,iconSize: 25 * widget.scaleFactor,)
-          )
-        ],
-      ),
-    );
-  }
-
+  
   @override
   void initState() {
     super.initState();
-    counter = 0;
+    DataEntry.exportData[widget.jsonKey] = [];
   }
-  void updateState() {
-    DataEntry.exportData[jsonKey] = counter;
-  }
-  void increment() {setState(() {
-    if (counter<99) {
-      counter++;
-    } else {showDialog(context: context, builder: (builder) {return Dialog(child:Text("Counter $title is over limit!"));});}
-    updateState();
-  });
-  }
-  void decrement() {setState(() {
-    if (counter>0) {
-      counter--;
-    }
-    updateState();
-  }); 
-  }
+
+  @override
+  Widget build(BuildContext context) {
+   double width = 55 * widget.scaleFactor;
+   double height = 80 * widget.scaleFactor;
+    List<Widget> rowChildren = [Container(
+          width: width,
+          height: height,
+          color: Constants.pastelRedMuted,
+          child: TextButton(onPressed: () {
+            DataEntry.exportData[widget.jsonKey].add("outer");
+          }, child: Text("C\nS",style: comfortaaBold(20 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.5)),textAlign: TextAlign.center,)),
+        ),
+        Container(
+          width: width,
+          height: height,
+          color: Constants.pastelReddishBrown,
+          child: TextButton(onPressed: () {
+            DataEntry.exportData[widget.jsonKey].add("inner");
+          }, child: Text("C\nS",style: comfortaaBold(20 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.5)),textAlign: TextAlign.center,)),
+        ),
+        Container(
+          height: height,
+          width: width * 0.7,
+          color: Constants.pastelGray,
+          child: TextButton(onPressed: () {
+            if (DataEntry.exportData[widget.jsonKey].length > 0) {
+            DataEntry.exportData[widget.jsonKey].removeLast();
+            }
+          }, child: Text("U\nN\nD\nO",style: comfortaaBold(10 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.75)),textAlign: TextAlign.center)),
+        )];
+    
+     return Row(children: widget.flipped ? rowChildren.reversed.toList() : rowChildren);
+     
+   }
 }
 class SharedState extends ChangeNotifier {
   String? activeTriangle;

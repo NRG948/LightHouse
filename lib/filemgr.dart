@@ -139,12 +139,11 @@ Future<int> saveExport() async {
 
 void addToUploadQueue(String file) async {
   final queueFile = File("$configFolder/uploadQueue.nrg");
-  if (!(await queueFile.exists())) {
+  if (!(await queueFile.exists()) || queueFile.readAsStringSync() == "") {
     queueFile.writeAsString(jsonEncode([file]));
   } else {
     final List<dynamic> queue = jsonDecode(queueFile.readAsStringSync());
     queue.add(file);
-    print(queue);
     queueFile.writeAsString(jsonEncode(queue));
   }
 }

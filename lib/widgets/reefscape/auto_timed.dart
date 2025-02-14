@@ -47,7 +47,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
               children: [
                 Transform.translate(
                     offset: Offset(5, 5),
-                    child: RSATCoralStation(left: true, index: 7)),
+                    child: RSATCoralStation(left: true, index: 6)),
                 Transform.translate(
                   offset: Offset(0, 5),
                   child: Container(

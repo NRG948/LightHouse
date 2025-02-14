@@ -84,12 +84,12 @@ Map<String, dynamic> atlascout = {
           "title": "Algae",
           "type": "multispinbox",
           "jsonKey": [
-            "algaeremoveL2",
-            "algaeremoveL3",
-            "algaescoreProcessor",
-            "algaescoreNet",
-            "algaemissProcessor",
-            "algaemissNet"
+            "algaeRemoveL2",
+            "algaeRemoveL3",
+            "algaeScoreProcessor",
+            "algaeScoreNet",
+            "algaeMissProcessor",
+            "algaeMissNet"
           ],
           "height": "65",
           "boxNames": [

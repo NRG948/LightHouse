@@ -5,10 +5,10 @@ import "package:lighthouse/pages/data_entry.dart";
 
 /// A manual counter that counts integers greater than 0.
 class NRGSpinbox extends StatefulWidget {
-  final String title;
-  final String jsonKey;
-  final double height;
-  final double width;
+  final String title; // Title of the spinbox
+  final String jsonKey; // Key to store the value in exportData
+  final double height; // Height of the spinbox widget
+  final double width; // Width of the spinbox widget
   const NRGSpinbox(
       {super.key,
       required this.title,
@@ -21,12 +21,12 @@ class NRGSpinbox extends StatefulWidget {
 }
 
 class _NRGSpinboxState extends State<NRGSpinbox> {
-  String get _title => widget.title;
-  String get _key => widget.jsonKey;
-  double get _height => widget.height;
-  double get _width => widget.width;
-  late int _counter;
-  String _value = "";
+  String get _title => widget.title; // Getter for title
+  String get _key => widget.jsonKey; // Getter for jsonKey
+  double get _height => widget.height; // Getter for height
+  double get _width => widget.width; // Getter for width
+  late int _counter; // Counter value
+  String _value = ""; // String representation of the counter value
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +40,25 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
           children: [
             SizedBox(
             width: _width * 0.8,
-            child: AutoSizeText(_title, style: comfortaaBold(30,color: Constants.pastelReddishBrown))),
+            child: AutoSizeText(_title, style: comfortaaBold(30,color: Constants.pastelReddishBrown))), // Display the title
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
                       onPressed: () {
-                        decrement();
+                        decrement(); // Decrement counter on button press
                       },
                       icon: Icon(
                         Icons.keyboard_arrow_down,
                       )),
                   AutoSizeText(
                     "$_counter",
-                    style: comfortaaBold(30,color: Constants.pastelReddishBrown),
+                    style: comfortaaBold(30,color: Constants.pastelReddishBrown), // Display the counter value
                   ),
                   IconButton(
                       onPressed: () {
-                        increment();
+                        increment(); // Increment counter on button press
                       },
                       icon: Icon(
                         Icons.keyboard_arrow_up,
@@ -73,27 +73,27 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
   @override
   void initState() {
     super.initState();
-    _counter = 0;
-    DataEntry.exportData[_key] = 0;
+    _counter = 0; // Initialize counter to 0
+    DataEntry.exportData[_key] = 0; // Initialize exportData with the counter value
   }
 
   void decrement() {
     setState(() {
       if (_counter > 0) {
-        _counter--;
-        updateState();
+        _counter--; // Decrease counter if it's greater than 0
+        updateState(); // Update the state in exportData
       }
     });
   }
 
   void increment() {
     setState(() {
-      _counter++;
-      updateState();
+      _counter++; // Increase counter
+      updateState(); // Update the state in exportData
     });
   }
 
   void updateState() {
-    DataEntry.exportData[_key] = _counter;
+    DataEntry.exportData[_key] = _counter; // Update exportData with the current counter value
   }
 }

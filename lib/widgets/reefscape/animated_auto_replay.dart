@@ -74,7 +74,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     // Initialize robot size and animation controller.
     _robotSideLength = (min(_height, _width) - 20) / 12;
     _controller =
-        AnimationController(duration: Duration(seconds: 15), vsync: this);
+        AnimationController(duration: Duration(seconds: 3), vsync: this);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _resetAutoPath();

@@ -8,8 +8,9 @@ import 'package:lighthouse/pages/amongview.dart';
 import 'package:lighthouse/pages/amongview_individual.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
-/// A horizontal bar chart widget that dislays numbers, automatically sorting by key.
+/// A horizontal bar chart widget that displays numbers, automatically sorting by key.
 class NRGBarChart extends StatefulWidget {
+  // Widget properties
   String title;
   double height;
   double width;
@@ -26,6 +27,7 @@ class NRGBarChart extends StatefulWidget {
   dynamic sharedState;
   bool? chartOnly;
 
+  // Constructor with named parameters and default values
   NRGBarChart(
       {super.key,
       required this.title,
@@ -48,8 +50,8 @@ class NRGBarChart extends StatefulWidget {
         data = data ?? SplayTreeMap(),
         multiData = multiData ?? SplayTreeMap(),
         multiColor = multiColor ?? [],
-        dataLabel = dataLabel ?? "AVERAGE",
-        dataLabels = dataLabels ?? ["AVERAGE"],
+        dataLabel = dataLabel ?? "AVG",
+        dataLabels = dataLabels ?? ["AVG"],
         amongviewTeams = amongviewTeams ?? [],
         amongviewMatches = amongviewMatches ?? [],
         hashMap = hashMap ?? LinkedHashMap(),
@@ -60,6 +62,7 @@ class NRGBarChart extends StatefulWidget {
 }
 
 class _NRGBarChartState extends State<NRGBarChart> {
+  // Getters for widget properties
   String get _title => widget.title;
   double get _height => widget.height;
   double get _width => widget.width;
@@ -73,25 +76,26 @@ class _NRGBarChartState extends State<NRGBarChart> {
 
   /// Converts the [SplayTreeMap] dataset [_data] into a [BarChartGroupData] list to display.
   List<BarChartGroupData> getBarGroups(bool useHashMap) {
+    // If useHashMap is true, use hashMap keys to create BarChartGroupData
     return useHashMap
-        ? widget.hashMap.keys
-            .map<BarChartGroupData>((key) =>
-                BarChartGroupData(x: key, barRods: [
-                  BarChartRodData(
-                      toY: widget.hashMap[key]!,
-                      color: !_removedData.contains(key) ? _color : Colors.grey,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(7),
-                          topRight: Radius.circular(7)),
-                      width: (_width - 20) / widget.hashMap.length * 0.6),
-                ]))
+        ? widget.hashMap.keys.map<BarChartGroupData>((key) => BarChartGroupData(x: key, barRods: [
+            BarChartRodData(
+                toY: widget.hashMap[key]!,
+                color: !_removedData.contains(key) ? _color : Colors.grey,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(7), topRight: Radius.circular(7)),
+                width: (_width - 20) / widget.hashMap.length * 0.6),
+          ]))
             .toList()
+        // Otherwise, use _data keys to create BarChartGroupData
+
         : _data!.keys
             .map((int key) => BarChartGroupData(x: key, barRods: [
                   BarChartRodData(
                       toY: _data![key]!,
                       color: !_removedData.contains(key) ? _color : Colors.grey,
                       borderRadius: BorderRadius.only(
+
                           topLeft: Radius.circular(7),
                           topRight: Radius.circular(7)),
                       width: (_width - 20) / _data!.length * 0.6),
@@ -99,6 +103,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
             .toList();
   }
 
+
+  /// Converts the [SplayTreeMap] dataset [_multiData] into a [BarChartGroupData] list to display.
   List<BarChartGroupData> getMultiBarGroups() => _multiData!.keys
       .map((int key) => BarChartGroupData(
           x: key,
@@ -147,13 +153,14 @@ class _NRGBarChartState extends State<NRGBarChart> {
   /// Gets a column of texts or a single text depending on the type of graph.
   Widget getAverageText() {
     if (_multiData!.isEmpty) {
+
+      // Single text for non-multi data
       return _getSingleText(
           getAverageData(), _color ?? Colors.black, _dataLabel);
     } else {
+      // Column of texts for multi data
       List<Widget> texts = [];
       List<double> averages = getMultiAverageData();
-
-      texts.add(_getSingleText(averages.sum, Colors.black, "TOTAL AVERAGE"));
 
       for (int i = 0; i < averages.length; i++) {
         texts.add(_getSingleText(
@@ -164,18 +171,20 @@ class _NRGBarChartState extends State<NRGBarChart> {
             _dataLabels.isNotEmpty ? _dataLabels[i % _dataLabels.length] : ""));
       }
 
-      return Column(children: texts.reversed.toList());
+      return Row(spacing: 5, mainAxisAlignment: MainAxisAlignment.center, children: texts.reversed.toList());
     }
   }
 
+  /// Helper method to create a single text widget.
   Widget _getSingleText(double average, Color color, String label) =>
       Text("$label: ${roundAtPlace(average, 2)}",
-          style: comfortaaBold(_width / 20,
+          style: comfortaaBold(_width / 17,
               color: color, customFontWeight: FontWeight.w900));
 
   /// Returns the sum of an [Iterable].
   double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
 
+  /// Rounds a number to a specified number of decimal places.
   num roundAtPlace(double number, int place) =>
       num.parse(number.toStringAsFixed(place));
 
@@ -190,14 +199,16 @@ class _NRGBarChartState extends State<NRGBarChart> {
       child: Column(
         children: [
           // Title Text.
-          if (widget.chartOnly != true) Text(_title, style: comfortaaBold(_height / 10, color: Colors.black)),
+          if (widget.chartOnly != true)
+            Text("$_title (${_multiData != null && _multiData!.isNotEmpty ? getMultiAverageData().sum : getAverageData()})",
+                style: comfortaaBold(_height / 10, color: Colors.black)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
             height: _height *
                 (_multiData == null || _multiData!.values.isEmpty
-                    ? 0.75
-                    : 0.75 - 0.05 * _multiData!.values.first.length),
+                    ? 0.8
+                    : 0.7),
             margin: EdgeInsets.only(right: 20),
             child: BarChart(BarChartData(
                 titlesData: FlTitlesData(
@@ -222,36 +233,43 @@ class _NRGBarChartState extends State<NRGBarChart> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: _height / 20)));
+                                  fontSize: 12)));
                     },
                   )),
                   bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                     showTitles: true,
                     getTitlesWidget: (double value, TitleMeta meta) {
-                      return widget.amongviewMatches.isEmpty ? SideTitleWidget(
-                          meta: meta,
-                          space: 4,
-                          child: Text('${value.toInt()}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: !_removedData.contains(value)
-                                      ? Colors.black
-                                      : Colors.grey,
-                                  fontSize: _height / 20))) : SideTitleWidget(meta: meta,
-                                  space: 4,
-                                  child: Text(getParsedMatchInfo(value.toInt(),truncated: true)[0],
+                      return widget.amongviewMatches.isEmpty
+                          ? SideTitleWidget(
+                              meta: meta,
+                              space: 4,
+                              child: Text('${value.toInt()}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
+                                      color: !_removedData.contains(value)
+                                          ? Colors.black
+                                          : Colors.grey,
+                                      fontSize: 12)))
+                          : SideTitleWidget(
+                              meta: meta,
+                              space: 4,
+                              child: Text(
+                                getParsedMatchInfo(value.toInt(),
+                                    truncated: true)[0],
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
                                     color: !_removedData.contains(value)
-                                      ? Colors.black
-                                      : Colors.grey,
-                                  fontSize: _height / 20
-                                  ),),);
+                                        ? Colors.black
+                                        : Colors.grey,
+                                    fontSize: 12),
+                              ),
+                            );
                     },
                   )),
                 ),
-                barTouchData: (widget.amongviewTeams.isNotEmpty || widget.amongviewMatches.isNotEmpty)
+                barTouchData: (widget.amongviewTeams.isNotEmpty ||
+                        widget.amongviewMatches.isNotEmpty)
                     ? BarTouchData(
                         enabled: true,
                         touchTooltipData: BarTouchTooltipData(
@@ -267,15 +285,14 @@ class _NRGBarChartState extends State<NRGBarChart> {
                           }
                           if (widget.sharedState != null) {
                             if (widget.amongviewTeams.isNotEmpty) {
-                            widget.sharedState!.setClickedTeam(
-                                widget.amongviewTeams[
-                                    response.spot!.touchedBarGroupIndex]);
+                              widget.sharedState!.setClickedTeam(
+                                  widget.amongviewTeams[
+                                      response.spot!.touchedBarGroupIndex]);
                             }
                             if (widget.amongviewMatches.isNotEmpty) {
                               widget.sharedState!.setClickedMatch(
-                                 widget.amongviewMatches[
-                                    response.spot!.touchedBarGroupIndex]
-                              );
+                                  widget.amongviewMatches[
+                                      response.spot!.touchedBarGroupIndex]);
                             }
                           }
                         },

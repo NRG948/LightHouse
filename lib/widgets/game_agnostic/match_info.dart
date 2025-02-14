@@ -55,8 +55,9 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
   TextEditingController teamNumberController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    // Build the main container for the widget
     super.build(context);
-    
+
     return Container(
       width: 400 * scaleFactor,
       height: 275 * scaleFactor,
@@ -77,6 +78,7 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
                   ),
               child: Center(
                 child: Column(children: [
+                  // Display event key
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -87,6 +89,7 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
             
                     child: Center(child: AutoSizeText(eventKey.toUpperCase(),style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,)))
                   ],),
+                  // Display team name
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -96,6 +99,7 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
                     height: 35 * scaleFactor,
                     child: Center(child: AutoSizeText(teamName ?? "No Team Selected",style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,)))
                   ],),
+                  // Display team location
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -110,6 +114,7 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
                  
             ),
           ),
+          // Input for team number and replay checkbox
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,6 +152,7 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
               ],
           ),
           SizedBox(height:5*scaleFactor),
+          // Dropdowns for match type and driver station, and input for match number
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -200,6 +206,7 @@ class _MatchInfoState extends State<MatchInfo> with AutomaticKeepAliveClientMixi
     );
   }
 
+  // Fetch team information based on team number
   void getTeamInfo(int teamNumber) async {
     dynamic teamPage;
     try {
