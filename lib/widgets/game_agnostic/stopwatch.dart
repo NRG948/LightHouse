@@ -60,7 +60,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
         stopwatchResult = _stopwatch.elapsed;
-      
+        print(stopwatchResult);
         stopwatchDisplay = widget.dataEntryState.stopwatchInitialValue - stopwatchResult;
         if (stopwatchDisplay < Duration(seconds: 0)) {
           stopwatchDisplay = Duration(seconds: 0);
@@ -78,12 +78,19 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
 
   // Listener to handle page changes and start/stop the stopwatch accordingly
    void _pageListener() {
-    if (true) {
+    if (widget.dataEntryState.isUnderGuidance) {
       if (widget.pageController.page?.round() != widget.pageIndex) {
         _stopwatch.stop(); // Stop the stopwatch when navigating away
         _stopwatch.reset();
       } else {
         _stopwatch.start(); // Restart the stopwatch when navigating back
+        _stopwatch.reset();
+      }
+    } else if (widget.dataEntryState.isUnderGuidance) {
+      if (widget.pageController.page?.round() != widget.pageIndex) {
+        _stopwatch.stop(); // Stop the stopwatch when navigating away
+        _stopwatch.reset();
+      } else {
         _stopwatch.reset();
       }
     }
