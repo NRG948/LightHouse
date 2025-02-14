@@ -329,93 +329,98 @@ class DataEntryState extends State<DataEntry> {
         : {};
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            backgroundColor: Constants.pastelRed,
-            title: FittedBox(
-              child: AutoSizeText(
-                "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
-                style: TextStyle(
-                    fontFamily: "Comfortaa",
-                    fontWeight: FontWeight.w900,
-                    color: Constants.pastelWhite),
-                minFontSize: 4,
+      child: GestureDetector(
+        // Allows keyboard to be closed when anywhere else is clicked on screen
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          // Prevents background image from being resized when keyboard opens
+          resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              backgroundColor: Constants.pastelRed,
+              title: FittedBox(
+                child: AutoSizeText(
+                  "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
+                  style: TextStyle(
+                      fontFamily: "Comfortaa",
+                      fontWeight: FontWeight.w900,
+                      color: Constants.pastelWhite),
+                  minFontSize: 4,
+                ),
               ),
-            ),
-            centerTitle: true,
-            leading: IconButton(
-                onPressed: () {
-                  showReturnDialog(context);
-                },
-                icon: Icon(Icons.home, color: Constants.pastelWhite)),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.javascript, color: Constants.pastelWhite),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext) {
-                        return Dialog(
-                          child: Text(jsonEncode(DataEntry.exportData)),
-                        );
-                      });
-                },
-              ),
-              IconButton(
+              centerTitle: true,
+              leading: IconButton(
                   onPressed: () {
-                    saveJson(context);
+                    showReturnDialog(context);
                   },
-                  icon: Icon(
-                    Icons.save,
-                    color: Constants.pastelWhite,
-                  ))
-            ],
-          ),
-          bottomNavigationBar: buildBottomNavBar(layoutJSON),
-          body: Container(
-            height: screenHeight,
-            width: screenWidth,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
-                    fit: BoxFit.fill)),
-            child: NotificationListener<OverscrollNotification>(
-              onNotification: (notification) {
-                if (
-                  notification.overscroll < -25
-                    ) {
-                  showReturnDialog(context);
-                }
-                if (notification.overscroll > 25
-                        ) {
-                  saveJson(context);
-                }
-                return true;
-              },
-              child: PageView(
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                children: createWidgetPages(layoutJSON["pages"]),
-                onPageChanged: (index) {
-                  setState(() {
-                    currentPage = index;
-                    
-                    // this tells the stopwatches what they should start
-                    // counting down from. 
-                    switch (currentPage) {
-                      case 1: {
-                        stopwatchInitialValue = Duration(seconds: 15);
-                      }
-                      case 2: {
-                        stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
-                      }
-                    }
-                  });
-                },
-              ),
+                  icon: Icon(Icons.home, color: Constants.pastelWhite)),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.javascript, color: Constants.pastelWhite),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext) {
+                          return Dialog(
+                            child: Text(jsonEncode(DataEntry.exportData)),
+                          );
+                        });
+                  },
+                ),
+                IconButton(
+                    onPressed: () {
+                      saveJson(context);
+                    },
+                    icon: Icon(
+                      Icons.save,
+                      color: Constants.pastelWhite,
+                    ))
+              ],
             ),
-          )),
+            bottomNavigationBar: buildBottomNavBar(layoutJSON),
+            body: Container(
+              height: screenHeight,
+              width: screenWidth,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/background-hires.png"),
+                      fit: BoxFit.fill)),
+              child: NotificationListener<OverscrollNotification>(
+                onNotification: (notification) {
+                  if (
+                    notification.overscroll < -25
+                      ) {
+                    showReturnDialog(context);
+                  }
+                  if (notification.overscroll > 25
+                          ) {
+                    saveJson(context);
+                  }
+                  return true;
+                },
+                child: PageView(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  children: createWidgetPages(layoutJSON["pages"]),
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentPage = index;
+                      
+                      // this tells the stopwatches what they should start
+                      // counting down from. 
+                      switch (currentPage) {
+                        case 1: {
+                          stopwatchInitialValue = Duration(seconds: 15);
+                        }
+                        case 2: {
+                          stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
+                        }
+                      }
+                    });
+                  },
+                ),
+              ),
+            )),
+      ),
     );
   }
 

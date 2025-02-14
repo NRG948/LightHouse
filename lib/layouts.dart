@@ -232,7 +232,7 @@ Map<String, dynamic> chronoscout = {
           "type": "rating",
           "jsonKey": "rating"
         },
-        {"title": "Comments", "type": "textbox", "jsonKey": "comments","maxLines":20,"fontSize":15.0,"height":"100"}
+        {"title": "Comments", "type": "textbox", "jsonKey": "comments","maxLines":20,"fontSize":15.0,"height":"90"}
       ]
     }
   ]

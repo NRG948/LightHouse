@@ -24,12 +24,20 @@ class RSTeleopTimed extends StatefulWidget {
 
 class _RSTeleopTimedState extends State<RSTeleopTimed> {
   late double scaleFactor;
+  static late double screenHeight;
   static List<bool> widgetStates = List.filled(8, false);
   @override
   void initState() {
     super.initState();
     scaleFactor = widget.width / 400;
+    
     DataEntry.exportData["teleopEventList"] = [];
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    screenHeight = MediaQuery.of(context).size.height;
   }
 
   @override
@@ -49,7 +57,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                 offset: Offset(5, 5),
                 child: Container(
                     width: 100,
-                    height: 75,
+                    height: 0.1 * screenHeight,
                     decoration: BoxDecoration(
                         color: Constants.pastelGray,
                         borderRadius:
@@ -77,7 +85,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                 offset: Offset(0, 5),
                 child: Container(
                     width: 100,
-                    height: 75,
+                    height: 0.1 * screenHeight,
                     decoration: BoxDecoration(
                         color: Constants.pastelGray,
                         borderRadius:
@@ -104,11 +112,11 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
           ),
           // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
           RSTTHexagon(
-            radius: 150,
+            radius: 160 * scaleFactor,
           ),
           Container(
             width: 100 * scaleFactor,
-            height: 75 * scaleFactor,
+            height: 0.08 * screenHeight,
             decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: TextButton(
                 onPressed: () {
@@ -123,7 +131,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                     angle: pi / 2,
                     child: Text(
                       "Score\nNet",
-                      style: comfortaaBold(18),
+                      style: comfortaaBold(18 * scaleFactor),
                       textAlign: TextAlign.center,
                     ))),
           )
@@ -145,7 +153,7 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
   Widget build(BuildContext context) {
     return Container(
         width: 100,
-        height: 75,
+        height: 0.1 * _RSTeleopTimedState.screenHeight,
         decoration: BoxDecoration(
             color: enabled ? Colors.green : Constants.pastelGray,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -246,7 +254,6 @@ class _RSTTHexagonState extends State<RSTTHexagon> {
           !_RSTeleopTimedState.widgetStates[index])) {
         _RSTeleopTimedState.widgetStates[index] =
             !_RSTeleopTimedState.widgetStates[index];
-        print(DataEntry.stopwatchMap);
         DataEntry.exportData["teleopEventList"].add([
           "${_RSTeleopTimedState.widgetStates[index] ? "enter" : "exit"}${triangleLabels[index]}",
           (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0)).deciseconds
