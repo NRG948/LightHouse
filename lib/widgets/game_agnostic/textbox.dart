@@ -97,7 +97,7 @@ class _NRGTextboxState extends State<NRGTextbox> {
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.all(5),
+            padding: EdgeInsets.all(10),
             child: TextField(
                 keyboardType:
                     _numeric ? TextInputType.number : TextInputType.text,
