@@ -92,7 +92,7 @@ void showStartPos(BuildContext context, double width, double height) {
                               isActive = true;
                               x = localPosition.dx / renderBox.size.width;
                               y = localPosition.dy / renderBox.size.height;
-                              debugPrint("${x!.toStringAsFixed(2)},${y!.toStringAsFixed(2)}");
+                             // debugPrint("${x!.toStringAsFixed(2)},${y!.toStringAsFixed(2)}");
                               DataEntry.exportData["startingPosition"] = "${x!.toStringAsFixed(2)},${y!.toStringAsFixed(2)}";
                             });
                           },

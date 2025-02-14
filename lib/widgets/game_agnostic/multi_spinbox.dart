@@ -57,8 +57,8 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    debugPrint(_width.toString()); // Debug print the width
-    debugPrint(_scaleFactor.toString()); // Debug print the scale factor
+    //debugPrint(_width.toString()); // Debug print the width
+    //debugPrint(_scaleFactor.toString()); // Debug print the scale factor
 
     return Container(
         height: _height,
