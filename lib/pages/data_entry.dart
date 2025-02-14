@@ -35,7 +35,8 @@ import "package:lighthouse/widgets/reefscape/teleop_timed.dart";
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
-  static final Map<int, Duration> stopwatchMap = {};
+  static final Map<int, Duration> stopwatchMap = {
+  };
   static late String activeConfig;
 
   @override

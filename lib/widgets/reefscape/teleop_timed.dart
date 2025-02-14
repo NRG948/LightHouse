@@ -6,7 +6,6 @@ import 'dart:async';
 // TODO: Add score net button
 //TODO: Make start climb only clickable once
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
@@ -61,8 +60,8 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                           // can be added
                           DataEntry.exportData["teleopEventList"].add([
                             "startClimb",
-                            (DataEntry.stopwatchMap[2] ??
-                                    Duration(milliseconds: 0))
+                            (DataEntry.stopwatchMap[2] 
+                            ??Duration(milliseconds: 0))
                                 .deciseconds
                           ]);
                         },
@@ -100,12 +99,33 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                               textAlign: TextAlign.center,
                             )))),
               ),
-                      Transform.translate(offset: Offset(-5, 5), child: RSTTProcessor())
+              Transform.translate(offset: Offset(-5, 5), child: RSTTProcessor())
             ],
           ),
           // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
           RSTTHexagon(
             radius: 150,
+          ),
+          Container(
+            width: 100 * scaleFactor,
+            height: 75 * scaleFactor,
+            decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            child: TextButton(
+                onPressed: () {
+                  print(DataEntry.stopwatchMap);
+                  DataEntry.exportData["teleopEventList"].add([
+                    "scoreNet",
+                    (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
+                        .deciseconds
+                  ]);
+                },
+                child: Transform.rotate(
+                    angle: pi / 2,
+                    child: Text(
+                      "Score\nNet",
+                      style: comfortaaBold(18),
+                      textAlign: TextAlign.center,
+                    ))),
           )
         ],
       ),
@@ -114,7 +134,6 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
 }
 
 class RSTTProcessor extends StatefulWidget {
-
   const RSTTProcessor({super.key});
   @override
   State<RSTTProcessor> createState() => _RSTTProcessorState();
@@ -132,16 +151,16 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: TextButton(
             onPressed: () {
-               if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
-                !_RSTeleopTimedState.widgetStates[7])) {setState(() {
+              if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
+                  !_RSTeleopTimedState.widgetStates[7])) {
+                setState(() {
                   enabled = !enabled;
                   DataEntry.exportData["teleopEventList"].add([
-                "${enabled ? "enter" : "exit"}Processor",
-                (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
-                    .deciseconds
-              ]);
+                    "${enabled ? "enter" : "exit"}Processor",
+                    (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
+                        .deciseconds
+                  ]);
                 });
-                  
               }
             },
             child: Transform.rotate(
@@ -153,7 +172,6 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
                 ))));
   }
 }
-
 
 class TrianglePainter extends CustomPainter {
   final bool left;

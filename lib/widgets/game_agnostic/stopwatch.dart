@@ -46,6 +46,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
   void initState() {
     print("RUNNING!");
     super.initState();
+    DataEntry.stopwatchMap[widget.pageIndex] = Duration(seconds: 0);
     _stopwatch.reset();
     height = _height;
     width = _width;
@@ -63,7 +64,9 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
           stopwatchDisplay = Duration(seconds: 0);
           _stopwatch.stop();
         }
+        if (stopwatchResult > Duration(seconds: 0)) {
         DataEntry.stopwatchMap[widget.pageIndex] = _stopwatch.elapsed;
+        }
       });
     });
 
