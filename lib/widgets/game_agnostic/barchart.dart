@@ -192,7 +192,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
   Widget build(BuildContext context) {
     return Container(
       width: _width,
-      height: _height,
+      height: _height * 1.07,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
