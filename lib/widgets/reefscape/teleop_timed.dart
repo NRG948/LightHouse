@@ -44,7 +44,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
-      height: 500 * scaleFactor,
+      height: 510 * scaleFactor,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -163,6 +163,7 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
                   !_RSTeleopTimedState.widgetStates[7])) {
                 setState(() {
                   enabled = !enabled;
+                  _RSTeleopTimedState.widgetStates[7] = enabled;
                   DataEntry.exportData["teleopEventList"].add([
                     "${enabled ? "enter" : "exit"}Processor",
                     (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
@@ -250,8 +251,8 @@ class _RSTTHexagonState extends State<RSTTHexagon> {
 
   void toggleSection(int index) {
     setState(() {
-      if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
-          !_RSTeleopTimedState.widgetStates[index])) {
+      if (!_RSTeleopTimedState.widgetStates.contains(true) ||
+          _RSTeleopTimedState.widgetStates[index]) {
         _RSTeleopTimedState.widgetStates[index] =
             !_RSTeleopTimedState.widgetStates[index];
         DataEntry.exportData["teleopEventList"].add([
