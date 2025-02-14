@@ -503,7 +503,12 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
     if (uri == null) {
       return "";
     }
-    final response = await http.get(uri);
+    late final dynamic response;
+    try {response = await http.get(uri);}
+    catch (_) {
+      print(_);
+      return "problem";
+    }
     return response.statusCode.toString();
   }
 }

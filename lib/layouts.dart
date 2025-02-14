@@ -294,7 +294,7 @@ Map<String, dynamic> pitscout = {
           "type": "textbox",
           "jsonKey": "robotMechanisms",
           "maxLines":20,
-          "fontSize":21.0
+          "fontSize":15.0
         }
       ]
     },
@@ -384,6 +384,8 @@ Map<String, dynamic> pitscout = {
           "title": "Average Climb Time",
           "type": "textbox",
           "jsonKey": "averageClimbTime",
+          "maxLines": 1,
+          "fontSize": 15.0
         }
       ]
     },
@@ -396,7 +398,7 @@ Map<String, dynamic> pitscout = {
           "type": "textbox",
           "jsonKey": "driveExperience",
           "maxLines":20,
-          "fontSize":16.5
+          "fontSize":14.5
 
         },
         {
@@ -415,7 +417,7 @@ Map<String, dynamic> pitscout = {
               "jsonKey": "averageCoralCycles",
               "width": "34",
               "maxLines":20,
-              "fontSize":17.5
+              "fontSize":12.5
             },
             {
               "type": "spacer",
@@ -427,7 +429,7 @@ Map<String, dynamic> pitscout = {
               "jsonKey": "averageAlgaeCycles",
               "width": "34",
               "maxLines":20,
-              "fontSize":17.5
+              "fontSize":12.5
             }
           ]
         },
@@ -436,7 +438,7 @@ Map<String, dynamic> pitscout = {
           "type": "textbox",
           "jsonKey": "idealAlliancePartnerQualities",
           "maxLines":20,
-          "fontSize":16.5
+          "fontSize":14.5
         },
         {
           "title": "Other Comments",

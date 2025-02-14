@@ -68,6 +68,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                 color: Constants.pastelWhite,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Updates the checkbox when [isChecked] is updated.
                 Stack(
