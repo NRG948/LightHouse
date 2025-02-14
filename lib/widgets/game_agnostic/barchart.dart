@@ -154,9 +154,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
   Widget getAverageText() {
     if (_multiData!.isEmpty) {
 
-      // Single text for non-multi data
-      return _getSingleText(
-          getAverageData(), _color ?? Colors.black, _dataLabel);
+      // Return empty container. Single average moved to title.
+      return Container();
     } else {
       // Column of texts for multi data
       List<Widget> texts = [];
@@ -167,7 +166,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
             averages[i],
             _multiColor != null
                 ? _multiColor![i % _multiColor!.length]
-                : Colors.black,
+                : Constants.pastelReddishBrown,
             _dataLabels.isNotEmpty ? _dataLabels[i % _dataLabels.length] : ""));
       }
 
@@ -192,7 +191,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
   Widget build(BuildContext context) {
     return Container(
       width: _width,
-      height: _height,
+      height: _height * 1.07,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -200,8 +199,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
         children: [
           // Title Text.
           if (widget.chartOnly != true)
-            Text("$_title (${_multiData != null && _multiData!.isNotEmpty ? getMultiAverageData().sum : getAverageData()})",
-                style: comfortaaBold(_height / 10, color: Colors.black)),
+            Text("$_title (${roundAtPlace(_multiData != null && _multiData!.isNotEmpty ? getMultiAverageData().sum : getAverageData(), 2)})",
+                style: comfortaaBold(_height / 10, color: Constants.pastelReddishBrown)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
@@ -232,7 +231,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                           child: Text(value.toStringAsFixed(1),
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Constants.pastelReddishBrown,
                                   fontSize: 12)));
                     },
                   )),
@@ -248,7 +247,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: !_removedData.contains(value)
-                                          ? Colors.black
+                                          ? Constants.pastelReddishBrown
                                           : Colors.grey,
                                       fontSize: 12)))
                           : SideTitleWidget(
@@ -260,7 +259,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: !_removedData.contains(value)
-                                        ? Colors.black
+                                        ? Constants.pastelReddishBrown
                                         : Colors.grey,
                                     fontSize: 12),
                               ),

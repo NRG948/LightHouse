@@ -41,7 +41,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       teams.add(matchData["teamNumber"]);
     }
     for (Map<String, dynamic> matchData in humanPlayerData) {
-      teams.add(matchData["teamNumber"]);
+      teams.add(matchData["redHPTeam"]);
+      teams.add(matchData["blueHPTeam"]);
     }
     // Include pit data?
 
@@ -76,13 +77,13 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         decoration: InputDecoration(
             label: Text('Team Number',
                 style: comfortaaBold(12,
-                    color: Colors.black, customFontWeight: FontWeight.w900)),
-            iconColor: Colors.black),
+                    color: Constants.pastelReddishBrown, customFontWeight: FontWeight.w900)),
+            iconColor: Constants.pastelReddishBrown),
         items: teamsInDatabase
             .map((int team) => DropdownMenuItem(
                 value: team,
                 child: Text("$team",
-                    style: comfortaaBold(12, color: Colors.black))))
+                    style: comfortaaBold(12, color: Constants.pastelReddishBrown))))
             .toList(),
         onChanged: (n) {
           setState(() {
@@ -107,7 +108,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return Text(
         "Functional Matches: ${totalMatches - disabledMatches}/$totalMatches",
         textAlign: TextAlign.left,
-        style: comfortaaBold(10, color: Colors.black));
+        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
   }
 
   Widget getPreferredStrategy() {
@@ -123,7 +124,32 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return Text(
         "Preferred Strategy: ${frequencyMap.isNotEmpty ? frequencyMap.entries.reduce((a, b) => a.value > b.value ? a : b).key : "None"}",
         textAlign: TextAlign.left,
-        style: comfortaaBold(10, color: Colors.black));
+        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
+  }
+
+  Widget getHumanPlayerAccuracy() {
+    int totalAlgae = 0;
+    int algaeScored = 0;
+
+    for (Map<String, dynamic> matchData in humanPlayerData) {
+      if (matchData["redHPTeam"] == currentTeamNumber) {
+        algaeScored += matchData["redScore"] as int;
+        totalAlgae += matchData["redScore"] as int;
+        totalAlgae += matchData["redMiss"] as int;
+      }
+
+      if (matchData["blueHPTeam"] == currentTeamNumber) {
+        algaeScored += matchData["blueScore"] as int;
+        totalAlgae += matchData["blueScore"] as int;
+        totalAlgae += matchData["blueMiss"] as int;
+      }
+    }
+
+    return Text(
+      "Algae Accuracy: $algaeScored/$totalAlgae",
+      textAlign: TextAlign.left,
+      style: comfortaaBold(10, color: Constants.pastelReddishBrown)
+    );
   }
 
   Widget getDisableReasonCommentBox() {
@@ -337,8 +363,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   Widget build(BuildContext context) {
     atlasData = getDataAsMapFromDatabase("Atlas");
     chronosData = getDataAsMapFromDatabase("Chronos");
-    humanPlayerData = getDataAsMapFromDatabase("Unknown");
-    pitData = getDataAsMapFromDatabase("Unknown");
+    humanPlayerData = getDataAsMapFromDatabase("Human Player");
+    pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
     if (teamsInDatabase.isEmpty) {
@@ -359,13 +385,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     final screenHeight = MediaQuery.of(context).size.height;
     verticalScaleFactor = screenHeight / 914;
     horizontalScaleFactor = screenWidth / 411;
-    print("$screenWidth, $screenHeight");
-    // 540, 960
-    // 411, 914
     marginSize = 10 * verticalScaleFactor;
-    print("SCALE FACTOR: $verticalScaleFactor");
-    // 9:16 => 1.0519718771970674
-    // 1:2 => 1
     
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -445,7 +465,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                       spacing: marginSize,
                       children: [
                         getFunctionalMatches(),
-                        getPreferredStrategy()
+                        getPreferredStrategy(),
+                        getHumanPlayerAccuracy()
                       ],
                     ),
                   )

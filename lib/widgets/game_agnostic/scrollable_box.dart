@@ -77,7 +77,7 @@ class _ScrollableBoxState extends State<ScrollableBox> {
           children: [
             // Display the title and the number of comments
             Text("$_title (${_comments.length})",
-                style: comfortaaBold(20, color: Colors.black)),
+                style: comfortaaBold(20, color: Constants.pastelReddishBrown)),
             Expanded(
               child: ListView.separated(
                   itemCount: _comments.length, // Number of comments
