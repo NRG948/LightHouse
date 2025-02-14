@@ -45,82 +45,85 @@ class ScouterHomePage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
     loadConfig();
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Constants.pastelRed,
-      // Drawer menu with navigation options
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(child: Text("Switch Mode")),
-            ListTile(
-                leading: Icon(Icons.home),
-                title: Text("Scouter Home"),
-                onTap: () {
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Constants.pastelRed,
+        // Drawer menu with navigation options
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(child: Text("Switch Mode")),
+              ListTile(
+                  leading: Icon(Icons.home),
+                  title: Text("Scouter Home"),
+                  onTap: () {
+                    HapticFeedback.mediumImpact();
+                    Navigator.pop(context);
+                  }),
+              ListTile(
+                  leading: Icon(Icons.bar_chart),
+                  title: Text("Data Viewer Home"),
+                  onTap: () async {
+                    HapticFeedback.mediumImpact();
+                    Navigator.pushNamed(context, "/home-data-viewer");
+                  })
+            ],
+          ),
+        ),
+        // App bar with icons for settings and displaying config data
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Constants.pastelWhite),
+          backgroundColor: Constants.pastelRed,
+          centerTitle: true,
+          actions: [
+            IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
+            IconButton(
+              icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
+              onPressed: (() {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                          content: Text(jsonEncode(configData).toString()));
+                    });
+              }),
+            ),
+            IconButton(
+                icon: Icon(Icons.settings,color: Constants.pastelWhite,),
+                onPressed: () {
                   HapticFeedback.mediumImpact();
-                  Navigator.pop(context);
-                }),
-            ListTile(
-                leading: Icon(Icons.bar_chart),
-                title: Text("Data Viewer Home"),
-                onTap: () async {
-                  HapticFeedback.mediumImpact();
-                  Navigator.pushNamed(context, "/home-data-viewer");
+                  Navigator.pushNamed(context, "/settings");
                 })
           ],
         ),
+        // Main body of the page with a background image
+        body: Container(
+            width: screenWidth,
+            height: screenHeight,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/background-hires.png"),
+                    fit: BoxFit.cover)),
+            // Column containing title, splash text, and launcher buttons
+            child: Column(
+              children: [
+                SizedBox(
+                  width: 0.75 * screenWidth,
+                  child: AutoSizeText("LightHouse",style: comfortaaBold(60,spacing: -6),maxLines: 1,textAlign: TextAlign.center,),
+                ),
+               SizedBox(
+                height: 0.05 * screenHeight,
+                width: 0.8 * screenWidth,
+                child: AutoSizeText(randomSplashText(),style: comfortaaBold(18,spacing: -1),maxLines: 2,textAlign: TextAlign.center,)),
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: getLaunchers()),
+              ],
+            )),
       ),
-      // App bar with icons for settings and displaying config data
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Constants.pastelWhite),
-        backgroundColor: Constants.pastelRed,
-        centerTitle: true,
-        actions: [
-          IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
-          IconButton(
-            icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
-            onPressed: (() {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                        content: Text(jsonEncode(configData).toString()));
-                  });
-            }),
-          ),
-          IconButton(
-              icon: Icon(Icons.settings,color: Constants.pastelWhite,),
-              onPressed: () {
-                HapticFeedback.mediumImpact();
-                Navigator.pushNamed(context, "/settings");
-              })
-        ],
-      ),
-      // Main body of the page with a background image
-      body: Container(
-          width: screenWidth,
-          height: screenHeight,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/background-hires.png"),
-                  fit: BoxFit.cover)),
-          // Column containing title, splash text, and launcher buttons
-          child: Column(
-            children: [
-              SizedBox(
-                width: 0.75 * screenWidth,
-                child: AutoSizeText("LightHouse",style: comfortaaBold(60,spacing: -6),maxLines: 1,textAlign: TextAlign.center,),
-              ),
-             SizedBox(
-              height: 0.05 * screenHeight,
-              width: 0.8 * screenWidth,
-              child: AutoSizeText(randomSplashText(),style: comfortaaBold(18,spacing: -1),maxLines: 2,textAlign: TextAlign.center,)),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: getLaunchers()),
-            ],
-          )),
     );
   }
 }

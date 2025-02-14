@@ -374,7 +374,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data", style: comfortaaBold(10)));
+          body: Text("No data", style: comfortaaBold(18,color: Constants.pastelReddishBrown)));
     }
 
     if (currentTeamNumber == 0) {

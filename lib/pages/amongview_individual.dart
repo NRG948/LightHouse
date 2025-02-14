@@ -69,7 +69,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data. i'm actually impressed that you got here", style: comfortaaBold(10)));
+          body: Text("No data. i'm actually impressed that you got here", style: comfortaaBold(18,color: Constants.pastelReddishBrown)));
     }
 
     state.activeTeam = ModalRoute.of(context)?.settings.arguments as int;

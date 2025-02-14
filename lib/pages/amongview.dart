@@ -50,7 +50,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
         appBar: AppBar(
           leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back)),
         ),
-        body: Text("No data",style: comfortaaBold(10)));
+        body: Text("No data",style: comfortaaBold(18,color: Constants.pastelReddishBrown)));
     }
 
     final screenWidth = MediaQuery.of(context).size.width;

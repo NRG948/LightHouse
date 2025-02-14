@@ -26,8 +26,8 @@ class SavedData extends StatelessWidget {
         appBar: AppBar(leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new)),),
         body: Column(
           children: [
-            Text("NO DATA",style: comfortaaBold(10)),
-            Text(configData.toString(),style: comfortaaBold(10)),
+            Text("NO DATA",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
+            Text(configData.toString(),style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
             TextButton(onPressed: () {build(context);}, child: Text("Reload Page"))
           ],
         ),);
@@ -378,55 +378,59 @@ class _DataEditState extends State<DataEdit> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      
       backgroundColor: Constants.pastelWhite,
       child: Center(
-        child: Container(
-        height: 525 * SavedData.scaleFactor,
-        width: 350 * SavedData.scaleFactor,
-        decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: SizedBox(
-          width: 300 * SavedData.scaleFactor,
-          child: Column(
-            children: [
-              AutoSizeText("Edit Data",style: comfortaaBold(30 * SavedData.scaleFactor,color: Constants.pastelReddishBrown),),
-              AutoSizeText(statusText,style: comfortaaBold(15,color: Colors.red),maxLines: 1,),
-              DropdownButton(items: 
-              jsonFile.keys.map(
-                (file) {
-                  return DropdownMenuItem(value:file,child: Text(file));}
-              ).toList(),
-              value: activeKey,
-              onChanged: (value) {setState(() {
-                activeKey = value ?? "";
-                controller.text = jsonFile[activeKey].toString();
-                if (typeReferenceFile[activeKey].runtimeType == List<dynamic>) {
-                    controller.text = jsonEncode(jsonFile[activeKey]);
-                  }
-              });
-              }),
-              SizedBox(
-                height: 300 * SavedData.scaleFactor,
-                width: 300 * SavedData.scaleFactor,
-                child: TextField(
-                  smartDashesType: SmartDashesType.disabled,
-                  smartQuotesType: SmartQuotesType.disabled,
-                  controller: controller,
-                  maxLines: 10,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Container(
+          height: 525 * SavedData.scaleFactor,
+          width: 350 * SavedData.scaleFactor,
+          decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+          child: SizedBox(
+            width: 300 * SavedData.scaleFactor,
+            child: Column(
+              children: [
+                AutoSizeText("Edit Data",style: comfortaaBold(30 * SavedData.scaleFactor,color: Constants.pastelReddishBrown),),
+                AutoSizeText(statusText,style: comfortaaBold(15,color: Colors.red),maxLines: 1,),
+                DropdownButton(items: 
+                jsonFile.keys.map(
+                  (file) {
+                    return DropdownMenuItem(value:file,child: Text(file));}
+                ).toList(),
+                value: activeKey,
+                onChanged: (value) {setState(() {
+                  activeKey = value ?? "";
+                  controller.text = jsonFile[activeKey].toString();
+                  if (typeReferenceFile[activeKey].runtimeType == List<dynamic>) {
+                      controller.text = jsonEncode(jsonFile[activeKey]);
+                    }
+                });
+                }),
+                SizedBox(
+                  height: 218 * SavedData.scaleFactor,
+                  width: 300 * SavedData.scaleFactor,
+                  child: TextField(
+                    smartDashesType: SmartDashesType.disabled,
+                    smartQuotesType: SmartQuotesType.disabled,
+                    controller: controller,
+                    maxLines: 10,
+                  ),
                 ),
-              ),
-              SizedBox(
-              height: 100 * SavedData.scaleFactor,
-              child: TextButton(onPressed: () {
-                if (statusText == "") {
-                saveFileFromSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName, jsonFile);
-                 Navigator.pushReplacementNamed(context,"/home-scouter");}
-                
-               
-              }, child: Text("Save",style: comfortaaBold(10))))
-            ],
-          ),
-        )
-      ),),
+                SizedBox(
+                height: 100 * SavedData.scaleFactor,
+                child: TextButton(onPressed: () {
+                  if (statusText == "") {
+                  saveFileFromSavedData(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName, jsonFile);
+                   Navigator.pushReplacementNamed(context,"/home-scouter");}
+                  
+                 
+                }, child: Text("Save",style: comfortaaBold(10))))
+              ],
+            ),
+          )
+                ),
+        ),),
     );
   }
   List<String> tryParseStringList(String inputString) {
