@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 
@@ -81,27 +82,6 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
       }
     });
     _animation = _getAnimationPath();
-
-    /*
-    TweenSequence<Offset>([
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(6, 6), end: Offset(5.35, 6))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 2),
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(5.35, 6), end: Offset(2.2, 0))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 1),
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(2.2, 0), end: Offset(-0.05, 1.3))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 1),
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(-0.05, 1.3), end: Offset(-0.05, 1.3))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 1),
-    ]).animate(_controller);
-    */
   }
 
   @override
@@ -178,25 +158,29 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
                     image: AssetImage("assets/images/auto_field_map.png"),
                     fit: BoxFit.contain),
               ),
-              child: AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return Align(
-                    alignment: Alignment.center,
-                    child: FractionalTranslation(
-                      translation: _animation.value,
-                      child: child,
+              child: Stack(
+                children: [
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      return Align(
+                        alignment: Alignment.center,
+                        child: FractionalTranslation(
+                          translation: _animation.value,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: _robotSideLength,
+                      height: _robotSideLength,
+                      decoration: BoxDecoration(
+                        color: Constants.pastelRed,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  );
-                },
-                child: Container(
-                  width: _robotSideLength,
-                  height: _robotSideLength,
-                  decoration: BoxDecoration(
-                    color: Constants.pastelRed,
-                    shape: BoxShape.circle,
                   ),
-                ),
+                ],
               ),
             ),
           ),
