@@ -59,6 +59,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                             BorderRadius.circular(Constants.borderRadius)),
                     child: TextButton(
                       onPressed: () {
+                        HapticFeedback.mediumImpact();
                         DataEntry.exportData["autoEventList"].add([
                           "intakeCoral",
                           (DataEntry.stopwatchMap[1] ??
@@ -120,6 +121,7 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
       width: 75,
       child: GestureDetector(
         onTap: () {
+          HapticFeedback.mediumImpact();
           setState(() {
             if (!(_RSAutoTimedState.widgetStates.contains(true) &&
                 !_RSAutoTimedState.widgetStates[widget.index])) {
@@ -234,6 +236,7 @@ class _RSATHexagonState extends State<RSATHexagon> {
   }
 
   void toggleSection(int index) {
+    HapticFeedback.mediumImpact();
     setState(() {
       if (!(_RSAutoTimedState.widgetStates.contains(true) &&
           !_RSAutoTimedState.widgetStates[index])) {

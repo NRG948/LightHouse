@@ -52,7 +52,7 @@ class _SettingsPageState extends State<SettingsPage> {
     // Adds a button to reset configuration.
     settingsList.add(TextButton(
         onPressed: () {
-          HapticFeedback.vibrate();
+          HapticFeedback.mediumImpact();
           loadConfig(reset: true); //resets setting to default values
           Navigator.pushReplacementNamed(context, "/settings"); //reloads the setting page
         },
@@ -81,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
           centerTitle: true,
           leading: IconButton(
               onPressed: () {
-                HapticFeedback.vibrate();
+                HapticFeedback.mediumImpact();
                 Navigator.pop(context); // navigates back to home
               },
               icon: Icon(Icons.home)),
@@ -125,7 +125,7 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
   Widget build(BuildContext context) {
     return TextButton(
         onPressed: () async {
-          HapticFeedback.vibrate();
+          HapticFeedback.mediumImpact();
 
           if (!mounted) {
             return;
@@ -139,7 +139,7 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
                     actions: [
                       TextButton(
                           onPressed: () {
-                            HapticFeedback.vibrate();
+                            HapticFeedback.mediumImpact();
                             Navigator.pushNamed(context, "/home-scouter"); //navigates back to home
                           },
                           child: Text("OK"))

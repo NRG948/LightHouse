@@ -197,7 +197,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
   void decrement() {
     setState(() {
       if (_counter > 0) {
-        HapticFeedback.selectionClick();
+        HapticFeedback.mediumImpact();
         _counter--;
         if (widget.otherJsonKey != null) {
           if (DataEntry.exportData[widget.otherJsonKey]! > 0) {
@@ -212,7 +212,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
 
   /// Increments [_counter], and bounds it at 999.
   void increment() {
-    HapticFeedback.selectionClick();
+    HapticFeedback.heavyImpact();
     setState(() {
       if (_counter < 999) {
         _counter++;

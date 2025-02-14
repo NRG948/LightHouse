@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 
 // This widget represents a button that starts a guidance process.
@@ -35,6 +36,7 @@ class _NRGGuidanceButtonState extends State<NRGGuidanceButton> {
     return GestureDetector(
       // When the button is tapped, call the startGuidance function.
       onTap: () {
+        HapticFeedback.mediumImpact();
         _startGuidance(); 
       },
       child: Container(

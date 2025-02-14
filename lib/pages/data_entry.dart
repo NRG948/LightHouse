@@ -429,7 +429,7 @@ class DataEntryState extends State<DataEntry> {
           onTap: (index) {
             setState(() {
               if (currentPage != index) {
-                HapticFeedback.vibrate();
+                HapticFeedback.mediumImpact();
               }
 
               isUnderGuidance = false;
@@ -498,7 +498,7 @@ class DataEntryState extends State<DataEntry> {
 }
 
 void saveJson(BuildContext context) async {
-  HapticFeedback.vibrate();
+  HapticFeedback.mediumImpact();
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -513,7 +513,7 @@ void saveJson(BuildContext context) async {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
-                  HapticFeedback.vibrate();
+                  HapticFeedback.mediumImpact();
                   List<String> missingFields = dataVerification();
                   if (missingFields.isEmpty) {
                   if (await saveExport() == 0) {
@@ -573,7 +573,7 @@ Map<String,List<String>> missingFieldMap = {
 
 
 void showReturnDialog(BuildContext context) {
-  HapticFeedback.vibrate();
+  HapticFeedback.mediumImpact();
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -588,7 +588,7 @@ void showReturnDialog(BuildContext context) {
               child: Text("No")),
           TextButton(
             onPressed: () {
-              HapticFeedback.vibrate();
+              HapticFeedback.mediumImpact();
               Navigator.pushNamedAndRemoveUntil(
                   context, "/home-scouter", (Route<dynamic> route) => false);
             },

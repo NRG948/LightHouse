@@ -2,6 +2,7 @@ import "dart:math" as math;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/pages/data_entry.dart';
@@ -226,13 +227,16 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
   }
 
   void setActive() {setState(() {
+    
     if (!active) {
+      HapticFeedback.heavyImpact();
       if (widget.algae) {
         DataEntry.exportData["autoAlgaeRemoved"].add(widget.location);
       } else {
         DataEntry.exportData["autoCoralScored"].add(widget.location);
       }
     } else {
+      HapticFeedback.lightImpact();
       if (widget.algae) {
         DataEntry.exportData["autoAlgaeRemoved"].remove(widget.location);
       } else {
@@ -373,14 +377,18 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
   Widget build(BuildContext context) {
     Widget returnIfHighlighted = widget.sharedState.activeTriangle == widget.label ? GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {widget.sharedState.setActiveTriangle(widget.label);},
+      onTap: () {
+        HapticFeedback.mediumImpact();
+        widget.sharedState.setActiveTriangle(widget.label);},
       child: Container(
         color: Constants.pastelGray,
          child: Text(widget.label, style: comfortaaBold(14 * widget.scaleFactor,color:Colors.black),)
        ),
     ) : GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () {widget.sharedState.setActiveTriangle(widget.label);},
+      onTap: () {
+        HapticFeedback.mediumImpact();
+        widget.sharedState.setActiveTriangle(widget.label);},
       child: Text(widget.label,style:comfortaaBold(14 * widget.scaleFactor,color:Colors.black)));
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -415,7 +423,9 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
             ClipPath(
               clipper: TriangleClipper(center, vertex1, vertex2),
               child: GestureDetector(
-                onTap: () {widget.sharedState.setActiveTriangle(widget.label);
+                onTap: () {
+                  HapticFeedback.mediumImpact();
+                  widget.sharedState.setActiveTriangle(widget.label);
                 },
                 child: Container(
                   color: Colors.transparent,
@@ -490,6 +500,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
           height: height,
           color: Constants.pastelRedMuted,
           child: TextButton(onPressed: () {
+            HapticFeedback.heavyImpact();
             DataEntry.exportData[widget.jsonKey].add("outer");
           }, child: Text("C\nS",style: comfortaaBold(20 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.5)),textAlign: TextAlign.center,)),
         ),
@@ -498,6 +509,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
           height: height,
           color: Constants.pastelReddishBrown,
           child: TextButton(onPressed: () {
+            HapticFeedback.mediumImpact();
             DataEntry.exportData[widget.jsonKey].add("inner");
           }, child: Text("C\nS",style: comfortaaBold(20 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.5)),textAlign: TextAlign.center,)),
         ),
@@ -507,6 +519,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
           color: Constants.pastelGray,
           child: TextButton(onPressed: () {
             if (DataEntry.exportData[widget.jsonKey].length > 0) {
+            HapticFeedback.lightImpact();
             DataEntry.exportData[widget.jsonKey].removeLast();
             }
           }, child: Text("U\nN\nD\nO",style: comfortaaBold(10 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.75)),textAlign: TextAlign.center)),

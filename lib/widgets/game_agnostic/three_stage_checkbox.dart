@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
@@ -55,6 +56,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
     return GestureDetector(
         // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
+          HapticFeedback.mediumImpact();
           // Cycle through the checkbox states: unable -> able -> preferred -> unable.
           checkboxNotifier.value = CheckboxStage.values[checkboxNotifier.value.index < 2 ? checkboxNotifier.value.index + 1 : 0];
           DataEntry.exportData[_key] = checkboxNotifier.value.name; // Update the exportData with the current state.

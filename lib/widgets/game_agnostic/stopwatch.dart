@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
@@ -115,6 +116,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
               angle: widget.horizontal ? pi/2 : 0,
               child: IconButton(
                 onPressed: () {
+                  HapticFeedback.heavyImpact();
                   _stopwatch.stop();
                   _stopwatch.reset();
                 },
@@ -132,6 +134,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
               angle: widget.horizontal ? pi/2 : 0,
               child: IconButton(
                 onPressed: () {
+                  HapticFeedback.mediumImpact();
                   if (_stopwatch.isRunning) {
                     _stopwatch.stop();
                     return;

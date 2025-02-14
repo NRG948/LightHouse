@@ -58,14 +58,14 @@ class ScouterHomePage extends StatelessWidget {
                 leading: Icon(Icons.home),
                 title: Text("Scouter Home"),
                 onTap: () {
-                  HapticFeedback.vibrate();
+                  HapticFeedback.mediumImpact();
                   Navigator.pop(context);
                 }),
             ListTile(
                 leading: Icon(Icons.bar_chart),
                 title: Text("Data Viewer Home"),
                 onTap: () async {
-                  HapticFeedback.vibrate();
+                  HapticFeedback.mediumImpact();
                   Navigator.pushNamed(context, "/home-data-viewer");
                 })
           ],
@@ -92,7 +92,7 @@ class ScouterHomePage extends StatelessWidget {
           IconButton(
               icon: Icon(Icons.settings,color: Constants.pastelWhite,),
               onPressed: () {
-                HapticFeedback.vibrate();
+                HapticFeedback.mediumImpact();
                 Navigator.pushNamed(context, "/settings");
               })
         ],
@@ -144,7 +144,7 @@ class Launcher extends StatelessWidget {
       // Navigates to the specified route when tapped
       onTap: () {
         Navigator.pushNamed(context, route, arguments: title);
-        HapticFeedback.vibrate();
+        HapticFeedback.mediumImpact();
       },
       child: Padding(
         padding: const EdgeInsets.all(10.0),

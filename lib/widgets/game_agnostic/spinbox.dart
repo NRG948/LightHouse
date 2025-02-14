@@ -1,5 +1,6 @@
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
@@ -47,6 +48,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
                 children: [
                   IconButton(
                       onPressed: () {
+                        HapticFeedback.lightImpact();
                         decrement(); // Decrement counter on button press
                       },
                       icon: Icon(
@@ -58,6 +60,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
                   ),
                   IconButton(
                       onPressed: () {
+                        HapticFeedback.heavyImpact();
                         increment(); // Increment counter on button press
                       },
                       icon: Icon(

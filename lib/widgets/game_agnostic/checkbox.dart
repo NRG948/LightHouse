@@ -1,5 +1,6 @@
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/data_entry.dart";
 
@@ -83,6 +84,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                     return Checkbox(
                         value: isChecked,
                         onChanged: (bool? newValue) {
+                          HapticFeedback.mediumImpact();
                           // Update the checkbox state.
                           checkboxNotifier.value = newValue ?? false;
                         });
