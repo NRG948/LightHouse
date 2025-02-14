@@ -69,7 +69,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data. i'm actually impressed that you got here"));
+          body: Text("No data. i'm actually impressed that you got here", style: comfortaaBold(10)));
     }
 
     state.activeTeam = ModalRoute.of(context)?.settings.arguments as int;
@@ -120,7 +120,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text("Layout:"),
+                        Text("Layout:",style: comfortaaBold(10)),
                         DropdownButton(
                             value: state.activeLayout,
                             items: state.enabledLayouts.map((e) {
@@ -137,7 +137,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("Sort by"),
+                          Text("Sort by",style: comfortaaBold(10)),
                           DropdownButton(
                               value: state.activeSortKey,
                               items: state.getSortKeys().map((e) {
@@ -240,7 +240,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                                         Constants.borderRadius),
                                     border: Border.all(width: scaleFactor * 2)),
                                 child: (state.clickedMatch == null)
-                                    ? Text("No match selected")
+                                    ? Text("No match selected",style: comfortaaBold(10))
                                     : buildMatchData(context),
                               ),
                               Container(
@@ -252,7 +252,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                                       border:
                                           Border.all(width: scaleFactor * 2)),
                                   child: state.pitData.isEmpty
-                                      ? Text("No pit data")
+                                      ? Text("No pit data",style: comfortaaBold(10))
                                       : buildMatchData(context, pit: true))
                             ]),
                       ),
@@ -274,7 +274,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
       }
     }
     if (match == {}) {
-      return Text("how did you get here? email infotech@nrg948.com");
+      return Text("how did you get here? email infotech@nrg948.com",style: comfortaaBold(10));
     }
 
     List<Widget> listViewChildren = [

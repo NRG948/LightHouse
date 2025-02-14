@@ -25,8 +25,8 @@ class SavedData extends StatelessWidget {
         appBar: AppBar(leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new)),),
         body: Column(
           children: [
-            Text("NO DATA"),
-            Text(configData.toString()),
+            Text("NO DATA",style: comfortaaBold(10)),
+            Text(configData.toString(),style: comfortaaBold(10)),
             TextButton(onPressed: () {build(context);}, child: Text("Reload Page"))
           ],
         ),);
@@ -168,12 +168,12 @@ class _SavedFileListState extends State<SavedFileList> {
   }
   @override
   Widget build(BuildContext context) {
-    if (SavedData.sharedState.activeLayout == "No Data") {return Text("No layouts");} // check if there's no layout
+    if (SavedData.sharedState.activeLayout == "No Data") {return Text("No layouts",style: comfortaaBold(10));} // check if there's no layout
     
     List<String> fileListStrings = getFilesInLayout(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout);
     if (fileListStrings.isEmpty) {
       
-      return Text("No matches for layout ${SavedData.sharedState.activeLayout}"); //display message if no files found
+      return Text("No matches for layout ${SavedData.sharedState.activeLayout}",style: comfortaaBold(10)); //display message if no files found
       }
     List<SavedFile> savedFiles = fileListStrings.map((file) {
         return SavedFile(fileName: file,);}).toList();
@@ -273,7 +273,7 @@ class _SavedFileState extends State<SavedFile> {
         ),
       );
     } else {
-      matchInfo = Text("doesn't satisfy");
+      matchInfo = Text("doesn't satisfy",style: comfortaaBold(10));
     }
     return Padding(
       padding: EdgeInsets.only(
@@ -297,11 +297,11 @@ class _SavedFileState extends State<SavedFile> {
               IconButton(onPressed: () {
                 showDialog(context: context, builder: (BuildContext context) {
                   return AlertDialog(title:Text("Delete Data"),
-                  content: Text("Are you sure you want to delete ${widget.fileName}?"),
+                  content: Text("Are you sure you want to delete ${widget.fileName}?",style: comfortaaBold(10)),
                   actions: [
                     TextButton(onPressed: () {
                       Navigator.pop(context);
-                    }, child: Text("No")),
+                    }, child: Text("No",style: comfortaaBold(10))),
                     TextButton(onPressed: () {
                       if (deleteFile(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName) == 0) {
                         Navigator.pushReplacementNamed(context, "/saved_data",arguments: SavedData.sharedState.activeLayout);
@@ -309,7 +309,7 @@ class _SavedFileState extends State<SavedFile> {
                         showDialog(context: context, builder: (BuildContext context) {return AlertDialog(content: Text("Error"));});
                       }
                       //
-                    }, child: Text("Yes"))
+                    }, child: Text("Yes",style: comfortaaBold(10)))
                   ],
                   );
                 });
@@ -417,7 +417,7 @@ class _DataEditState extends State<DataEdit> {
                  Navigator.pushReplacementNamed(context,"/home-scouter");}
                 
                
-              }, child: Text("Save")))
+              }, child: Text("Save",style: comfortaaBold(10))))
             ],
           ),
         )

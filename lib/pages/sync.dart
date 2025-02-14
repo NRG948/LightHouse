@@ -10,7 +10,7 @@ import 'package:lighthouse/pages/data_entry.dart';
 class SyncPage extends StatefulWidget {
   const SyncPage({super.key});
 
-  @override 
+  @override
   State<SyncPage> createState() => SyncPageState();
 }
 
@@ -42,43 +42,50 @@ class SyncPageState extends State<SyncPage> {
     sizeScaleFactor = screenWidth / 400;
     debugPrint("size scale factor: $sizeScaleFactor");
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Constants.pastelWhite),
-        backgroundColor: Constants.pastelRed,
-        title: const Text("Sync", style: TextStyle(
-           fontFamily: "Comfortaa",
-           fontWeight: FontWeight.w900,
-           color: Colors.white
-        ),),
-        centerTitle: true,
-        leading: IconButton(onPressed: () {Navigator.pushNamed(context, "/home-scouter");}, icon: Icon(Icons.home)),
-      ),
-      body: Container(
-        height: screenHeight,
-        width: 400 * sizeScaleFactor,
-        decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
-                    fit: BoxFit.cover)),
-        child: Center(
-          child: Column (
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius)
-                  ),
-              ),
-              ServerConnectStatus(),
-              SizedBox(height: 10,),
-              UploadButton(),
-              SizedBox(height:10),
-              DownloadButton()
-            ],
-          ), 
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Constants.pastelWhite),
+          backgroundColor: Constants.pastelRed,
+          title: const Text(
+            "Sync",
+            style: TextStyle(
+                fontFamily: "Comfortaa",
+                fontWeight: FontWeight.w900,
+                color: Colors.white),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, "/home-scouter");
+              },
+              icon: Icon(Icons.home)),
         ),
-      )
-    );
+        body: Container(
+          height: screenHeight,
+          width: 400 * sizeScaleFactor,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/background-hires.png"),
+                  fit: BoxFit.cover)),
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Constants.pastelWhite,
+                      borderRadius:
+                          BorderRadius.circular(Constants.borderRadius)),
+                ),
+                ServerConnectStatus(),
+                SizedBox(
+                  height: 10,
+                ),
+                UploadButton(),
+                SizedBox(height: 10),
+                DownloadButton()
+              ],
+            ),
+          ),
+        ));
   }
 }
 
@@ -102,29 +109,40 @@ class _UploadButtonState extends State<UploadButton> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: uploadQueue,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {return Placeholder();}
-        return Container(
-          width: 350 * SyncPageState.sizeScaleFactor,
-          height: 100 * SyncPageState.sizeScaleFactor,
-          decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-          child: TextButton(onPressed: () {openUploadDialog(context,snapshot.data ?? []);}, child: Column(
-            children: [
-              Text("UPLOAD",style: comfortaaBold(10)),
-              Text("Upload ${(snapshot.data ?? []).length} items to server",style: comfortaaBold(10))
-            ],
-          )),
-        );
-      }
-    );
+        future: uploadQueue,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Placeholder();
+          }
+          return Container(
+            width: 350 * SyncPageState.sizeScaleFactor,
+            height: 100 * SyncPageState.sizeScaleFactor,
+            decoration: BoxDecoration(
+                color: Constants.pastelWhite,
+                borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            child: TextButton(
+                onPressed: () {
+                  openUploadDialog(context, snapshot.data ?? []);
+                },
+                child: Column(
+                  children: [
+                    Text("UPLOAD", style: comfortaaBold(10)),
+                    Text(
+                        "Upload ${(snapshot.data ?? []).length} items to server",
+                        style: comfortaaBold(10))
+                  ],
+                )),
+          );
+        });
   }
 
   // Open the upload dialog
   void openUploadDialog(BuildContext context, List<dynamic> queue) {
-    showDialog(context: context, builder: (context) {
-      return UploadDialog(queue: queue);
-    });
+    showDialog(
+        context: context,
+        builder: (context) {
+          return UploadDialog(queue: queue);
+        });
   }
 }
 
@@ -139,7 +157,7 @@ class UploadDialog extends StatefulWidget {
 
 class _UploadDialogState extends State<UploadDialog> {
   late String currentFile;
-  Map<String,String> uploadedFiles = {};
+  Map<String, String> uploadedFiles = {};
 
   @override
   void initState() {
@@ -153,7 +171,9 @@ class _UploadDialogState extends State<UploadDialog> {
       child: Container(
         width: 350 * SyncPageState.sizeScaleFactor,
         height: 400 * SyncPageState.sizeScaleFactor,
-        decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        decoration: BoxDecoration(
+            color: Constants.pastelWhite,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: ListView(
           children: buildUploadedFiles(),
         ),
@@ -163,12 +183,14 @@ class _UploadDialogState extends State<UploadDialog> {
 
   // Upload files to the server
   void uploadFiles() async {
-    if (widget.queue.isEmpty) {return;} 
+    if (widget.queue.isEmpty) {
+      return;
+    }
     currentFile = widget.queue[0];
     for (String file in widget.queue) {
       setState(() {
         currentFile = file;
-      }); 
+      });
       String code = await uploadFile(file);
       setState(() {
         uploadedFiles.addEntries([MapEntry(file, code)]);
@@ -188,9 +210,12 @@ class _UploadDialogState extends State<UploadDialog> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 350 * SyncPageState.sizeScaleFactor,
-            color: uploadedFiles[key] == "OK" ? null : Colors.red,
-            child: AutoSizeText("${key.split("/").last} uploaded, status ${uploadedFiles[key]}",maxLines: 1,)),
+              width: 350 * SyncPageState.sizeScaleFactor,
+              color: uploadedFiles[key] == "OK" ? null : Colors.red,
+              child: AutoSizeText(
+                "${key.split("/").last} uploaded, status ${uploadedFiles[key]}",
+                maxLines: 1,
+              )),
         ],
       );
     }).toList();
@@ -204,7 +229,7 @@ class _UploadDialogState extends State<UploadDialog> {
               height: 20 * SyncPageState.sizeScaleFactor,
               width: 20 * SyncPageState.sizeScaleFactor,
               child: CircularProgressIndicator(),
-            ) 
+            )
           ],
         ),
       );
@@ -220,18 +245,23 @@ class _UploadDialogState extends State<UploadDialog> {
       return Future.value("File Missing");
     }
     late String api;
-    if (fileName.contains("Atlas")) {api = "atlas";}
-    else if (fileName.contains("Chronos")) {api = "chronos";}
-    else if (fileName.contains("Pit")) {api = "pit";}
-    else if (fileName.contains("Human Player")) {api = "hp";}
-    else {api = "none";}
-    final response = await http.post((Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
-    headers: {
-      "Content-Type":"application/json"
-    },
-    body: fileContent
-    );
-    return Future.value(responseCodes[response.statusCode] ?? response.statusCode.toString());
+    if (fileName.contains("Atlas")) {
+      api = "atlas";
+    } else if (fileName.contains("Chronos")) {
+      api = "chronos";
+    } else if (fileName.contains("Pit")) {
+      api = "pit";
+    } else if (fileName.contains("Human Player")) {
+      api = "hp";
+    } else {
+      api = "none";
+    }
+    final response = await http.post(
+        (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
+        headers: {"Content-Type": "application/json"},
+        body: fileContent);
+    return Future.value(
+        responseCodes[response.statusCode] ?? response.statusCode.toString());
   }
 }
 
@@ -248,18 +278,22 @@ class _DownloadButtonState extends State<DownloadButton> {
   Widget build(BuildContext context) {
     return Container(
       width: 350 * SyncPageState.sizeScaleFactor,
-      height:100 * SyncPageState.sizeScaleFactor ,
-      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      height: 100 * SyncPageState.sizeScaleFactor,
+      decoration: BoxDecoration(
+          color: Constants.pastelWhite,
+          borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: TextButton(
         onPressed: () {
-          showDialog(context: context, builder: (context) {
-            return DownloadDialog();
-          });
+          showDialog(
+              context: context,
+              builder: (context) {
+                return DownloadDialog();
+              });
         },
         child: Column(children: [
-          Text("DOWNLOAD",style: comfortaaBold(10)),
-          Text("Download Items from server",style: comfortaaBold(10))]
-        ),
+          Text("DOWNLOAD", style: comfortaaBold(10)),
+          Text("Download Items from server", style: comfortaaBold(10))
+        ]),
       ),
     );
   }
@@ -274,7 +308,7 @@ class DownloadDialog extends StatefulWidget {
 }
 
 class _DownloadDialogState extends State<DownloadDialog> {
-  Map<String,String> downloadStatuses = {};
+  Map<String, String> downloadStatuses = {};
   String currentlyDownloading = "";
 
   @override
@@ -289,8 +323,12 @@ class _DownloadDialogState extends State<DownloadDialog> {
       child: Container(
         width: 350 * SyncPageState.sizeScaleFactor,
         height: 500 * SyncPageState.sizeScaleFactor,
-        decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: Column(children: showDownloadStatuses(),),
+        decoration: BoxDecoration(
+            color: Constants.pastelWhite,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: Column(
+          children: showDownloadStatuses(),
+        ),
       ),
     );
   }
@@ -299,27 +337,28 @@ class _DownloadDialogState extends State<DownloadDialog> {
   List<Widget> showDownloadStatuses() {
     List<Widget> statuses = [];
     for (String status in downloadStatuses.keys) {
-      statuses.add(Text("Database $status downloaded w/ code ${downloadStatuses[status]}",style: comfortaaBold(10))); 
+      statuses.add(Text(
+          "Database $status downloaded w/ code ${downloadStatuses[status]}",
+          style: comfortaaBold(10)));
     }
-    statuses.add(
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Text("Downloading $currentlyDownloading",style: comfortaaBold(10)),
-          CircularProgressIndicator()
-        ],
-      )
-    );
+    statuses.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text("Downloading $currentlyDownloading", style: comfortaaBold(10)),
+        CircularProgressIndicator()
+      ],
+    ));
     return statuses;
   }
 
   // Download databases from the server
   void downloadDatabases() async {
-    for (String layout in ["Atlas","Chronos","Pit","Human Player"]) {
+    for (String layout in ["Atlas", "Chronos", "Pit", "Human Player"]) {
       currentlyDownloading = layout;
       int code = await downloadDatabase(layout);
       setState(() {
-         downloadStatuses.addEntries([MapEntry(layout, responseCodes[code]??code.toString())]);
+        downloadStatuses.addEntries(
+            [MapEntry(layout, responseCodes[code] ?? code.toString())]);
       });
     }
     if (mounted) {
@@ -331,17 +370,22 @@ class _DownloadDialogState extends State<DownloadDialog> {
   Future<int> downloadDatabase(String layout) async {
     await Future.delayed(Duration(milliseconds: 100));
     late String api;
-    if (layout == "Atlas") {api = "atlas";}
-    else if (layout == "Chronos") {api = "chronos";}
-    else if (layout == "Pit") {api = "pit";}
-    else if (layout == "Human Player") {api = "hp";}
-    else {api = "none";}
-    final response = await http.get((Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
-    headers: {
-      "Content-Type":"application/json"
-    },
+    if (layout == "Atlas") {
+      api = "atlas";
+    } else if (layout == "Chronos") {
+      api = "chronos";
+    } else if (layout == "Pit") {
+      api = "pit";
+    } else if (layout == "Human Player") {
+      api = "hp";
+    } else {
+      api = "none";
+    }
+    final response = await http.get(
+      (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
+      headers: {"Content-Type": "application/json"},
     );
-    saveDatabaseFile(configData["eventKey"] ?? "", layout,response.body);
+    saveDatabaseFile(configData["eventKey"] ?? "", layout, response.body);
     return Future.value(0);
   }
 }
@@ -370,7 +414,9 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
     return Container(
       width: 350 * SyncPageState.sizeScaleFactor,
       height: 150 * SyncPageState.sizeScaleFactor,
-      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      decoration: BoxDecoration(
+          color: Constants.pastelWhite,
+          borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -392,42 +438,59 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                   ),
                 ),
                 Container(
-                  width: 50 * SyncPageState.sizeScaleFactor,
-                  height: 50 * SyncPageState.sizeScaleFactor,
-                  decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                  child: TextButton(onPressed: () {
-                    setState(() {
-                      configData["serverIP"] = controller.text;
-                      saveConfig();
-                      responseCode = testConnection(controller.text);
-                    });
-                  }, child: Text("GO",style: comfortaaBold(10)))
-                ),
+                    width: 50 * SyncPageState.sizeScaleFactor,
+                    height: 50 * SyncPageState.sizeScaleFactor,
+                    decoration: BoxDecoration(
+                        color: Constants.pastelRed,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius)),
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            configData["serverIP"] = controller.text;
+                            saveConfig();
+                            responseCode = testConnection(controller.text);
+                          });
+                        },
+                        child: Text("GO", style: comfortaaBold(10)))),
               ],
             ),
-            FutureBuilder(future: responseCode, builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Row(children: [
-                  Text("Attempting Connection...",style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
-                  CircularProgressIndicator()
-                ],);
-              } else { 
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("Recieved code ${snapshot.data}",style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
-                    Container(
-                      width: 30 * SyncPageState.sizeScaleFactor,
-                      height: 30 * SyncPageState.sizeScaleFactor,
-                      decoration: BoxDecoration(
-                        color: snapshot.data == "200" ? Colors.lightGreen : Colors.red,
-                        shape: BoxShape.circle
-                      ),
-                    )
-                  ],
-                );
-              }
-            })
+            FutureBuilder(
+                future: responseCode,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Row(
+                      children: [
+                        Text(
+                          "Attempting Connection...",
+                          style: comfortaaBold(18,
+                              color: Constants.pastelReddishBrown),
+                        ),
+                        CircularProgressIndicator()
+                      ],
+                    );
+                  } else {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          "Recieved code ${snapshot.data}",
+                          style: comfortaaBold(18,
+                              color: Constants.pastelReddishBrown),
+                        ),
+                        Container(
+                          width: 30 * SyncPageState.sizeScaleFactor,
+                          height: 30 * SyncPageState.sizeScaleFactor,
+                          decoration: BoxDecoration(
+                              color: snapshot.data == "200"
+                                  ? Colors.lightGreen
+                                  : Colors.red,
+                              shape: BoxShape.circle),
+                        )
+                      ],
+                    );
+                  }
+                })
           ],
         ),
       ),
@@ -436,8 +499,10 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
 
   // Test the connection to the server
   Future<String> testConnection(String url) async {
-    final uri  = Uri.tryParse(url);
-    if (uri == null) {return "";}
+    final uri = Uri.tryParse(url);
+    if (uri == null) {
+      return "";
+    }
     final response = await http.get(uri);
     return response.statusCode.toString();
   }

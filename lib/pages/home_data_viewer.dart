@@ -32,10 +32,10 @@ class DataViewerHome extends StatelessWidget {
           child: Column(children: [
         TextButton(onPressed: () {
           Navigator.pushNamed(context, "/data-viewer-tony"); // Navigates to Tony's Data Viewer Page.
-        }, child: Text("Tony's Data Viewer Page")),
+        }, child: Text("Tony's Data Viewer Page",style: comfortaaBold(10))),
          TextButton(onPressed: () {
           Navigator.pushReplacementNamed(context, "/data-viewer-amongview");
-        }, child: Text("Amongview")),
+        }, child: Text("Amongview",style: comfortaaBold(10))),
       ],),
       ),
 
@@ -81,16 +81,16 @@ class DataViewerHome extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              DrawerHeader(child: Text("Switch Mode")),
+              DrawerHeader(child: Text("Switch Mode",style: comfortaaBold(10))),
               ListTile(
                   leading: Icon(Icons.home),
-                  title: Text("Scouter Home"),
+                  title: Text("Scouter Home",style: comfortaaBold(10)),
                   onTap: () {
                     Navigator.pushNamed(context, "/home-scouter");
                   }),
               ListTile(
                   leading: Icon(Icons.bar_chart),
-                  title: Text("Data Viewer Home"),
+                  title: Text("Data Viewer Home",style: comfortaaBold(10)),
                   onTap: () {
                     Navigator.pop(context); // Closes the drawer, since the user is already on this page.
                   })

@@ -50,7 +50,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
         appBar: AppBar(
           leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back)),
         ),
-        body: Text("No data"));
+        body: Text("No data",style: comfortaaBold(10)));
     }
 
     final screenWidth = MediaQuery.of(context).size.width;
@@ -95,7 +95,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                     height: 0.8 * screenHeight,
                     decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
                     child: Column(children: [
-                      Text("Showing data for ${state.activeEvent}: "),
+                      Text("Showing data for ${state.activeEvent}: ", style: comfortaaBold(10)),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -116,7 +116,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                        Text("Sort by"),
+                        Text("Sort by", style: comfortaaBold(10)),
                         DropdownButton(
                             value: state.activeSortKey,
                             items: state.getSortKeys().map((e) {
@@ -185,7 +185,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                         decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
                         child: TextButton(onPressed: () {
                           Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
-                        }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}")),
+                        }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}",style: comfortaaBold(10))),
                       )
                       
                       ]
