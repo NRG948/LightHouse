@@ -191,7 +191,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
   Widget build(BuildContext context) {
     return Container(
       width: _width,
-      height: _height * 1.07,
+      height: _height,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -206,8 +206,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
             width: _width,
             height: _height *
                 (_multiData == null || _multiData!.values.isEmpty
-                    ? 0.8
-                    : 0.7),
+                    ? 0.7
+                    : 0.6),
             margin: EdgeInsets.only(right: 20),
             child: BarChart(BarChartData(
                 titlesData: FlTitlesData(
