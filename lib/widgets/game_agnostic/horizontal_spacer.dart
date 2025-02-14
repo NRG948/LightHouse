@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// A widget that provides a horizontal space of a specified width.
 class NRGHorizontalSpacer extends StatelessWidget {
   final double width;
   const NRGHorizontalSpacer(
