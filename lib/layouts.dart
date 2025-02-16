@@ -429,7 +429,7 @@ Map<String, dynamic> hpscout = {
       "widgets": [
         {
           "type": "hp-teleop", 
-          "height": "100"
+          "height": "90"
         }, 
         {
           "title": "Data Quality",

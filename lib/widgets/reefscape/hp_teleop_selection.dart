@@ -30,8 +30,8 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
       "blueScore": GlobalKey<CounterState>(),
       "redMiss": GlobalKey<CounterState>(),
       "blueMiss": GlobalKey<CounterState>(),
-      "redAlgaeNet": GlobalKey<CounterState>(),
-      "blueAlgaeNet": GlobalKey<CounterState>(),
+      "redNetAlgae": GlobalKey<CounterState>(),
+      "blueNetAlgae": GlobalKey<CounterState>(),
     });
 
     void undo() {
@@ -54,7 +54,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
               height: _height / 6 - 20,
               margin: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                  color: Constants.pastelRed,
+                  color: Constants.pastelGreen,
                   borderRadius: BorderRadius.all(
                       Radius.circular(Constants.borderRadius))),
               child: Stack(
@@ -83,7 +83,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
                     jsonKey: "redScore",
                     height: _height / 4,
                     width: _width / 2,
-                    color: Constants.pastelGreen,
+                    color: Constants.pastelRed,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
                       history.addLast("redScore"),
@@ -96,7 +96,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
                     jsonKey: "redMiss",
                     height: _height / 4,
                     width: _width / 2,
-                    color: Constants.pastelGreen,
+                    color: Constants.pastelRedMuted,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
                       history.addLast("redMiss"),
@@ -104,15 +104,15 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
                     },
                   ),
                   Counter(
-                    key: counters["redNet"],
-                    title: "Remove",
-                    jsonKey: "algaeRemove",
+                    key: counters["redNetAlgae"],
+                    title: "Red Algae in Net",
+                    jsonKey: "redNetAlgae",
                     height: _height / 4,
                     width: _width / 2,
-                    color: Constants.pastelGreen,
+                    color: Constants.pastelReddishBrown,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
-                      history.addLast("algaeRemove"),
+                      history.addLast("redNetAlgae"),
                       HapticFeedback.heavyImpact()
                     },
                   ),
@@ -121,41 +121,41 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
               Column(
                 children: [
                   Counter(
-                    key: counters["coralScoredL4"],
-                    title: "L4",
-                    jsonKey: "coralScoredL4",
-                    height: _height / 5,
+                    key: counters["blueScore"],
+                    title: "Blue Score",
+                    jsonKey: "blueScore",
+                    height: _height / 4,
                     width: _width / 2,
-                    color: Constants.pastelYellow,
+                    color: Constants.pastelBlue,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
-                      history.addLast("coralScoredL4"),
+                      history.addLast("blueScore"),
                       HapticFeedback.heavyImpact()
                     },
                   ),
                   Counter(
-                    key: counters["coralScoredL3"],
-                    title: "L3",
-                    jsonKey: "coralScoredL3",
-                    height: _height / 5,
+                    key: counters["blueMiss"],
+                    title: "Blue Miss",
+                    jsonKey: "blueMiss",
+                    height: _height / 4,
                     width: _width / 2,
-                    color: Constants.pastelYellow,
+                    color: Constants.pastelBlueAgain,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
-                      history.addLast("coralScoredL3"),
+                      history.addLast("blueMiss"),
                       HapticFeedback.heavyImpact()
                     },
                   ),
                   Counter(
-                    key: counters["coralScoredL2"],
-                    title: "L2",
-                    jsonKey: "coralScoredL2",
-                    height: _height / 5,
+                    key: counters["blueNetAlgae"],
+                    title: "Blue Algae in Net",
+                    jsonKey: "blueNetAlgae",
+                    height: _height / 4,
                     width: _width / 2,
-                    color: Constants.pastelYellow,
+                    color: Constants.pastelBlueMuted,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
-                      history.addLast("coralScoredL2"),
+                      history.addLast("blueNetAlgae"),
                       HapticFeedback.heavyImpact()
                     },
                   ),
