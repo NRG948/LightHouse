@@ -26,7 +26,7 @@ class Counter extends StatefulWidget {
   State<Counter> createState() => CounterState();
 }
 
-class CounterState extends State<Counter> {
+class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
   String get _title => widget.title;
   String get _key => widget.jsonKey;
   double get _height => widget.height;
@@ -38,6 +38,7 @@ class CounterState extends State<Counter> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
         height: _height,
         width: _width,
@@ -100,4 +101,7 @@ class CounterState extends State<Counter> {
   void updateState() {
     DataEntry.exportData[_key] = _counter;
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

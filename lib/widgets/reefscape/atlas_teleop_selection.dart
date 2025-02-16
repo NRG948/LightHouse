@@ -16,7 +16,7 @@ class AtlasTeleopSelection extends StatefulWidget {
   State<AtlasTeleopSelection> createState() => _AtlasTeleopSelectionState();
 }
 
-class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> {
+class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with AutomaticKeepAliveClientMixin {
   double get _height => widget.height;
   double get _width => widget.width;
 
@@ -24,7 +24,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> {
   Map<String, GlobalKey<CounterState>> counters = {};
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     counters.addAll({
       "coralScoredL1": GlobalKey<CounterState>(),
       "coralScoredL2": GlobalKey<CounterState>(),
@@ -36,6 +37,11 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> {
       "coralPickups": GlobalKey<CounterState>(),
       "algaePickups": GlobalKey<CounterState>()
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
 
     void undo() {
       if (history.isNotEmpty) {
@@ -176,4 +182,7 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> {
           )
         ]));
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

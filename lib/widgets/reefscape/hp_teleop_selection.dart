@@ -16,7 +16,7 @@ class HPTeleopSelection extends StatefulWidget {
   State<HPTeleopSelection> createState() => _HPTeleopSelectionState();
 }
 
-class _HPTeleopSelectionState extends State<HPTeleopSelection> {
+class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKeepAliveClientMixin {
   double get _height => widget.height;
   double get _width => widget.width;
 
@@ -24,7 +24,8 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
   Map<String, GlobalKey<CounterState>> counters = {};
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     counters.addAll({
       "redScore": GlobalKey<CounterState>(),
       "blueScore": GlobalKey<CounterState>(),
@@ -33,6 +34,11 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
       "redNetAlgae": GlobalKey<CounterState>(),
       "blueNetAlgae": GlobalKey<CounterState>(),
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
 
     void undo() {
       if (history.isNotEmpty) {
@@ -165,4 +171,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
           ],
         ));
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }
