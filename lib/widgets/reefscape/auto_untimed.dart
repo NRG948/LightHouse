@@ -29,29 +29,54 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = 
-    // widget.pit ? [
-    //     SizedBox(height: 5 * scaleFactor),
-    //     RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
-    //     RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] : 
-        [Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    List<Widget> children =
+        // widget.pit ? [
+        //     SizedBox(height: 5 * scaleFactor),
+        //     RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
+        //     RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] :
+        [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          RSAUCoralStation(title: "Processor", jsonKey: "autoProcessorCS", scaleFactor: scaleFactor,flipped: false,),
+          RSAUCoralStation(
+            title: "Processor",
+            jsonKey: "autoProcessorCS",
+            scaleFactor: scaleFactor,
+            flipped: false,
+          ),
           Container(
-          height: 50 * scaleFactor,
-          width: 100 * scaleFactor,
-          decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-          child: Center(child: AutoSizeText("DRIVER STATION",textAlign: TextAlign.center,style: comfortaaBold(10 * scaleFactor),)),
-        ),
-          RSAUCoralStation(title: "Barge", jsonKey: "autoBargeCS", scaleFactor: scaleFactor,flipped: true,),
-        ],),
-       
-        RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
-        RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] ;
+            height: 50 * scaleFactor,
+            width: 100 * scaleFactor,
+            decoration: BoxDecoration(
+                color: Constants.pastelRed,
+                borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            child: Center(
+                child: AutoSizeText(
+              "DRIVER STATION",
+              textAlign: TextAlign.center,
+              style: comfortaaBold(10 * scaleFactor),
+            )),
+          ),
+          RSAUCoralStation(
+            title: "Barge",
+            jsonKey: "autoBargeCS",
+            scaleFactor: scaleFactor,
+            flipped: true,
+          ),
+        ],
+      ),
+      RSAUHexagon(
+        sharedState: sharedState,
+        scaleFactor: scaleFactor,
+      ),
+      RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)
+    ];
     return Container(
-      height:666 * scaleFactor,
-      width:widget.width,
-      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      height: 666 * scaleFactor,
+      width: widget.width,
+      decoration: BoxDecoration(
+          color: Constants.pastelWhite,
+          borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(children: children),
     );
   }
@@ -60,74 +85,118 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 class RSAUReef extends StatefulWidget {
   final SharedState sharedState;
   final double scaleFactor;
-  const RSAUReef({super.key, required this.sharedState, required this.scaleFactor});
+  const RSAUReef(
+      {super.key, required this.sharedState, required this.scaleFactor});
 
   @override
   State<RSAUReef> createState() => _RSAUReefState();
 }
 
-class _RSAUReefState extends State<RSAUReef> with AutomaticKeepAliveClientMixin {
+class _RSAUReefState extends State<RSAUReef>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
-     DataEntry.exportData["autoCoralScored"] = [];
+    DataEntry.exportData["autoCoralScored"] = [];
     DataEntry.exportData["autoAlgaeRemoved"] = [];
     super.initState();
-    widget.sharedState.addListener(() {setState(() {
-    });});
+    widget.sharedState.addListener(() {
+      setState(() {});
+    });
   }
+
   @override
   void dispose() {
     super.dispose();
-    widget.sharedState.addListener(() {setState(() {
-
-    });});
+    widget.sharedState.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.sharedState.activeTriangle == null) {
-      return Text("No Section Selected", style: comfortaaBold(18, color: Colors.black),);
+      return Text(
+        "No Section Selected",
+        style: comfortaaBold(18, color: Colors.black),
+      );
     }
     String at = widget.sharedState.activeTriangle!;
     return Container(
-      height: 308 * widget.scaleFactor,
-      width: 318 * widget.scaleFactor,
-      padding: EdgeInsets.all(8 * widget.scaleFactor),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
-        border: Border.all(color: Colors.black),
-        borderRadius: BorderRadius.circular(Constants.borderRadius),),
-      child: Column(
-        spacing: 2 * widget.scaleFactor,
-        children: [
-        Text("Section ${widget.sharedState.activeTriangle}",
-        textAlign: TextAlign.center,
-        style: comfortaaBold(18 * widget.scaleFactor, color: const Color.fromARGB(255, 0, 0, 0))),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        height: 308 * widget.scaleFactor,
+        width: 318 * widget.scaleFactor,
+        padding: EdgeInsets.all(8 * widget.scaleFactor),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 255, 255, 255),
+          border: Border.all(color: Colors.black),
+          borderRadius: BorderRadius.circular(Constants.borderRadius),
+        ),
+        child: Column(
+          spacing: 2 * widget.scaleFactor,
           children: [
-          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[0]}4",scaleFactor: widget.scaleFactor ),
-          RSAUReefButton(icon: CoralAlgaeIcons.coral4,location: "${at[1]}4",scaleFactor: widget.scaleFactor),
-        ],),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[0]}3",scaleFactor: widget.scaleFactor),
-          RSAUReefButton(icon: CoralAlgaeIcons.algae3FRCLogo, location: "${at}3", algae: true,scaleFactor: widget.scaleFactor),
-          RSAUReefButton(icon: CoralAlgaeIcons.coral3,location: "${at[1]}3",scaleFactor: widget.scaleFactor),
-        ],),
-        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[0]}2",scaleFactor: widget.scaleFactor),
-          RSAUReefButton(icon: CoralAlgaeIcons.algae2FRCLogo, location: "${at}2", algae: true,scaleFactor: widget.scaleFactor),
-          RSAUReefButton(icon: CoralAlgaeIcons.coral2,location: "${at[1]}2",scaleFactor: widget.scaleFactor),
-        ],),
-        RSAUTrough(scaleFactor: widget.scaleFactor,)    
-      ],)
-    );
+            Text("Section ${widget.sharedState.activeTriangle}",
+                textAlign: TextAlign.center,
+                style: comfortaaBold(18 * widget.scaleFactor,
+                    color: const Color.fromARGB(255, 0, 0, 0))),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.coral4,
+                    location: "${at[0]}4",
+                    scaleFactor: widget.scaleFactor),
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.coral4,
+                    location: "${at[1]}4",
+                    scaleFactor: widget.scaleFactor),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.coral3,
+                    location: "${at[0]}3",
+                    scaleFactor: widget.scaleFactor),
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.algae3FRCLogo,
+                    location: "${at}3",
+                    algae: true,
+                    scaleFactor: widget.scaleFactor),
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.coral3,
+                    location: "${at[1]}3",
+                    scaleFactor: widget.scaleFactor),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.coral2,
+                    location: "${at[0]}2",
+                    scaleFactor: widget.scaleFactor),
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.algae2FRCLogo,
+                    location: "${at}2",
+                    algae: true,
+                    scaleFactor: widget.scaleFactor),
+                RSAUReefButton(
+                    icon: CoralAlgaeIcons.coral2,
+                    location: "${at[1]}2",
+                    scaleFactor: widget.scaleFactor),
+              ],
+            ),
+            RSAUTrough(
+              scaleFactor: widget.scaleFactor,
+            )
+          ],
+        ));
   }
 }
+
 class RSAUTrough extends StatefulWidget {
   final double scaleFactor;
   const RSAUTrough({super.key, required this.scaleFactor});
@@ -145,14 +214,22 @@ class _RSAUTroughState extends State<RSAUTrough> {
     counter = 0;
   }
 
-  void increment() {setState( () {
-    if (counter < 99) {counter++;}
-    DataEntry.exportData["autoCoralScoredL1"] = counter.toString();});
+  void increment() {
+    setState(() {
+      if (counter < 99) {
+        counter++;
+      }
+      DataEntry.exportData["autoCoralScoredL1"] = counter.toString();
+    });
   }
 
-  void decrement() {setState(() {
-    if (counter>0) {counter--;}
-    DataEntry.exportData["autoCoralScoredL1"] = counter.toString();});
+  void decrement() {
+    setState(() {
+      if (counter > 0) {
+        counter--;
+      }
+      DataEntry.exportData["autoCoralScoredL1"] = counter.toString();
+    });
   }
 
   @override
@@ -163,42 +240,63 @@ class _RSAUTroughState extends State<RSAUTrough> {
         height: 75 * widget.scaleFactor,
         width: 301 * widget.scaleFactor,
         decoration: BoxDecoration(
-          color: counter > 0 ? Constants.pastelRed : Constants.pastelGray,
-          border: Border.all(
-            color: const Color.fromARGB(255, 255, 255, 255),
-            width: widget.scaleFactor
-          )
-        ),
+            color: counter > 0 ? Constants.pastelRed : Constants.pastelGray,
+            border: Border.all(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                width: widget.scaleFactor)),
         child: Center(
           child: GestureDetector(
             onTap: increment,
             child: Column(
               children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(CoralAlgaeIcons.coral, size: 24 * widget.scaleFactor,color: Colors.black,),
-                  Text("Coral Scored L1 (Trough)", textAlign: TextAlign.center,style: comfortaaBold(15 * widget.scaleFactor, color: const Color.fromARGB(255, 0, 0, 0)),),
-                ],
-              ),
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                child: SizedBox(
-                  height: 49 * widget.scaleFactor,
-                  child: Row(
-                    spacing: 0,
-                    children: [
-                    SizedBox(
-                      width: 250 * widget.scaleFactor,
-                      //the number count of the coral being scored on that level
-                      child: Text(counter.toString(),style: comfortaaBold(23 * widget.scaleFactor, color: const Color.fromARGB(255, 0, 0, 0)),textAlign: TextAlign.center,)),
-                    SizedBox(
-                      width: 24,
-                      child: IconButton(onPressed: decrement, icon: Icon(Icons.keyboard_arrow_down, size: 25 * widget.scaleFactor),highlightColor: const Color.fromARGB(255, 0, 0, 0),splashColor: const Color.fromARGB(255, 0, 0, 0),iconSize: 25 * widget.scaleFactor))
-                  ],),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      CoralAlgaeIcons.coral,
+                      size: 24 * widget.scaleFactor,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      "Coral Scored L1 (Trough)",
+                      textAlign: TextAlign.center,
+                      style: comfortaaBold(15 * widget.scaleFactor,
+                          color: const Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                  ],
                 ),
-              )
-            ],),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  child: SizedBox(
+                    height: 49 * widget.scaleFactor,
+                    child: Row(
+                      spacing: 0,
+                      children: [
+                        SizedBox(
+                            width: 250 * widget.scaleFactor,
+                            //the number count of the coral being scored on that level
+                            child: Text(
+                              counter.toString(),
+                              style: comfortaaBold(23 * widget.scaleFactor,
+                                  color: const Color.fromARGB(255, 0, 0, 0)),
+                              textAlign: TextAlign.center,
+                            )),
+                        SizedBox(
+                            width: 24,
+                            child: IconButton(
+                                onPressed: decrement,
+                                icon: Icon(Icons.keyboard_arrow_down,
+                                    size: 25 * widget.scaleFactor),
+                                highlightColor:
+                                    const Color.fromARGB(255, 0, 0, 0),
+                                splashColor: const Color.fromARGB(255, 0, 0, 0),
+                                iconSize: 25 * widget.scaleFactor))
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -211,7 +309,12 @@ class RSAUReefButton extends StatefulWidget {
   final bool algae;
   final String location;
   final double scaleFactor;
-  const RSAUReefButton({super.key, required this.icon, required this.location, required this.scaleFactor, this.algae = false});
+  const RSAUReefButton(
+      {super.key,
+      required this.icon,
+      required this.location,
+      required this.scaleFactor,
+      this.algae = false});
 
   @override
   State<RSAUReefButton> createState() => _RSAUReefButtonState();
@@ -226,86 +329,92 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
     active = false;
   }
 
-  void setActive() {setState(() {
-    
-    if (!active) {
-      HapticFeedback.heavyImpact();
-      if (widget.algae) {
-        DataEntry.exportData["autoAlgaeRemoved"].add(widget.location);
+  void setActive() {
+    setState(() {
+      if (!active) {
+        HapticFeedback.heavyImpact();
+        if (widget.algae) {
+          DataEntry.exportData["autoAlgaeRemoved"].add(widget.location);
+        } else {
+          DataEntry.exportData["autoCoralScored"].add(widget.location);
+        }
       } else {
-        DataEntry.exportData["autoCoralScored"].add(widget.location);
+        HapticFeedback.lightImpact();
+        if (widget.algae) {
+          DataEntry.exportData["autoAlgaeRemoved"].remove(widget.location);
+        } else {
+          DataEntry.exportData["autoCoralScored"].remove(widget.location);
+        }
       }
-    } else {
-      HapticFeedback.lightImpact();
-      if (widget.algae) {
-        DataEntry.exportData["autoAlgaeRemoved"].remove(widget.location);
-      } else {
-        DataEntry.exportData["autoCoralScored"].remove(widget.location);
-      }
-    }
-    active = !active;
+      active = !active;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    active = DataEntry.exportData["autoCoralScored"].contains(widget.location) || DataEntry.exportData["autoAlgaeRemoved"].contains(widget.location);
+    active =
+        DataEntry.exportData["autoCoralScored"].contains(widget.location) ||
+            DataEntry.exportData["autoAlgaeRemoved"].contains(widget.location);
     return GestureDetector(
       onTap: setActive,
       child: Container(
-        height: 60 * widget.scaleFactor,
-        width:  (widget.algae ? 75 : 100) * widget.scaleFactor,
-        decoration: BoxDecoration(
-          color: active ? Constants.pastelRed : Constants.pastelGray,
-          border: Border.all(
-            color: Colors.black,
-            width: widget.scaleFactor
+          height: 60 * widget.scaleFactor,
+          width: (widget.algae ? 75 : 100) * widget.scaleFactor,
+          decoration: BoxDecoration(
+              color: active ? Constants.pastelRed : Constants.pastelGray,
+              border:
+                  Border.all(color: Colors.black, width: widget.scaleFactor)),
+          //coral icons for the corals that you can choose to click within the map within auto section within atlas section
+          child: Center(
+            child: IconButton(
+              onPressed: setActive,
+              icon: Icon(widget.icon, size: 45 * widget.scaleFactor),
+              iconSize: 45 * widget.scaleFactor,
+              color: Colors.black,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
           )),
-          //coral icons for the corals that you can choose to click within the map within auto section within atlas section 
-        child: Center(
-          child: IconButton(onPressed: setActive, icon: Icon(widget.icon, size: 45 * widget.scaleFactor),
-          iconSize: 45 * widget.scaleFactor,
-          color: Colors.black,
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,),
-        )
-      ),
     );
   }
 }
+
 class RSAUHexagon extends StatelessWidget {
   final SharedState sharedState;
   final double scaleFactor;
-  const RSAUHexagon({super.key, required this.sharedState, required this.scaleFactor});
+  const RSAUHexagon(
+      {super.key, required this.sharedState, required this.scaleFactor});
 
   @override
   Widget build(BuildContext context) {
     // TODO: Change these labels to more accurately match reef locations (top ones are flipped)
-    final triangleLabels = ["IJ","GH","EF","CD","AB","KL",];
+    final triangleLabels = [
+      "IJ",
+      "GH",
+      "EF",
+      "CD",
+      "AB",
+      "KL",
+    ];
     return Container(
-      color: Constants.pastelWhite,
-      height: 275 * scaleFactor,
-      width: 275 * scaleFactor,
-      alignment: Alignment.center,
-      child: AspectRatio(aspectRatio: 1,
-      child: Stack(
-        children: [
-          CustomPaint(size: Size.infinite,
-          painter: HexagonPainter()),
-          for (int i = 0; i < 6; i++)
-            TriangleTapRegion(
-              index: i,
-              label: triangleLabels[i],
-              sharedState: sharedState,
-              scaleFactor: scaleFactor
-            ),
-        ],
-      ))
-
-      );
+        color: Constants.pastelWhite,
+        height: 275 * scaleFactor,
+        width: 275 * scaleFactor,
+        alignment: Alignment.center,
+        child: AspectRatio(
+            aspectRatio: 1,
+            child: Stack(
+              children: [
+                CustomPaint(size: Size.infinite, painter: HexagonPainter()),
+                for (int i = 0; i < 6; i++)
+                  TriangleTapRegion(
+                      index: i,
+                      label: triangleLabels[i],
+                      sharedState: sharedState,
+                      scaleFactor: scaleFactor),
+              ],
+            )));
   }
-
-  
 }
 
 class HexagonPainter extends CustomPainter {
@@ -347,13 +456,17 @@ class HexagonPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-
 class TriangleTapRegion extends StatefulWidget {
   final int index;
   final String label;
   final SharedState sharedState;
   final double scaleFactor;
-  const TriangleTapRegion({super.key, required this.index, required this.label, required this.sharedState, required this.scaleFactor});
+  const TriangleTapRegion(
+      {super.key,
+      required this.index,
+      required this.label,
+      required this.sharedState,
+      required this.scaleFactor});
 
   @override
   State<TriangleTapRegion> createState() => _TriangleTapRegionState();
@@ -363,33 +476,46 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
   @override
   void initState() {
     super.initState();
-    widget.sharedState.addListener(() {setState(() {
-    });});
+    widget.sharedState.addListener(() {
+      setState(() {});
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    widget.sharedState.addListener(() {setState(() {
-    });});
+    widget.sharedState.addListener(() {
+      setState(() {});
+    });
   }
+
   @override
   Widget build(BuildContext context) {
-    Widget returnIfHighlighted = widget.sharedState.activeTriangle == widget.label ? GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        HapticFeedback.mediumImpact();
-        widget.sharedState.setActiveTriangle(widget.label);},
-      child: Container(
-        color: Constants.pastelGray,
-         child: Text(widget.label, style: comfortaaBold(14 * widget.scaleFactor,color:Colors.black),)
-       ),
-    ) : GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        HapticFeedback.mediumImpact();
-        widget.sharedState.setActiveTriangle(widget.label);},
-      child: Text(widget.label,style:comfortaaBold(14 * widget.scaleFactor,color:Colors.black)));
+    Widget returnIfHighlighted =
+        widget.sharedState.activeTriangle == widget.label
+            ? GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  HapticFeedback.mediumImpact();
+                  widget.sharedState.setActiveTriangle(widget.label);
+                },
+                child: Container(
+                    color: Constants.pastelGray,
+                    child: Text(
+                      widget.label,
+                      style: comfortaaBold(14 * widget.scaleFactor,
+                          color: Colors.black),
+                    )),
+              )
+            : GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  HapticFeedback.mediumImpact();
+                  widget.sharedState.setActiveTriangle(widget.label);
+                },
+                child: Text(widget.label,
+                    style: comfortaaBold(14 * widget.scaleFactor,
+                        color: Colors.black)));
     return LayoutBuilder(
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
@@ -434,16 +560,16 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
             ),
             // Triangle label
             Positioned(
-              left: labelPosition.dx - 10, // Adjust for text centering
-              top: labelPosition.dy - 10,  // Adjust for text centering
-              child: returnIfHighlighted
-            ),
+                left: labelPosition.dx - 10, // Adjust for text centering
+                top: labelPosition.dy - 10, // Adjust for text centering
+                child: returnIfHighlighted),
           ],
         );
       },
     );
   }
 }
+
 class TriangleClipper extends CustomClipper<Path> {
   final Offset center;
   final Offset vertex1;
@@ -469,22 +595,23 @@ class TriangleClipper extends CustomClipper<Path> {
   }
 }
 
-
 class RSAUCoralStation extends StatefulWidget {
   final String jsonKey;
   final String title;
   final double scaleFactor;
   final bool flipped;
-  const RSAUCoralStation({
-    super.key, required this.jsonKey, required this.title, required this.scaleFactor, required this.flipped
-  });
+  const RSAUCoralStation(
+      {super.key,
+      required this.jsonKey,
+      required this.title,
+      required this.scaleFactor,
+      required this.flipped});
 
   @override
   State<RSAUCoralStation> createState() => _RSAUCoralStationState();
 }
 
 class _RSAUCoralStationState extends State<RSAUCoralStation> {
-  
   @override
   void initState() {
     super.initState();
@@ -493,42 +620,64 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
 
   @override
   Widget build(BuildContext context) {
-   double width = 55 * widget.scaleFactor;
-   double height = 80 * widget.scaleFactor;
-    List<Widget> rowChildren = [Container(
-          width: width,
-          height: height,
-          color: Constants.pastelRedMuted,
-          child: TextButton(onPressed: () {
-            HapticFeedback.heavyImpact();
-            DataEntry.exportData[widget.jsonKey].add("outer");
-          }, child: Text("C\nS",style: comfortaaBold(20 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.5)),textAlign: TextAlign.center,)),
-        ),
-        Container(
-          width: width,
-          height: height,
-          color: Constants.pastelReddishBrown,
-          child: TextButton(onPressed: () {
-            HapticFeedback.mediumImpact();
-            DataEntry.exportData[widget.jsonKey].add("inner");
-          }, child: Text("C\nS",style: comfortaaBold(20 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.5)),textAlign: TextAlign.center,)),
-        ),
-        Container(
-          height: height,
-          width: width * 0.7,
-          color: Constants.pastelGray,
-          child: TextButton(onPressed: () {
-            if (DataEntry.exportData[widget.jsonKey].length > 0) {
-            HapticFeedback.lightImpact();
-            DataEntry.exportData[widget.jsonKey].removeLast();
-            }
-          }, child: Text("U\nN\nD\nO",style: comfortaaBold(10 * widget.scaleFactor,color: Constants.pastelWhite.withValues(alpha: 0.75)),textAlign: TextAlign.center)),
-        )];
-    
-     return Row(children: widget.flipped ? rowChildren.reversed.toList() : rowChildren);
-     
-   }
+    double width = 55 * widget.scaleFactor;
+    double height = 80 * widget.scaleFactor;
+    List<Widget> rowChildren = [
+      Container(
+        width: width,
+        height: height,
+        color: Constants.pastelRedMuted,
+        child: TextButton(
+            onPressed: () {
+              HapticFeedback.heavyImpact();
+              DataEntry.exportData[widget.jsonKey].add("outer");
+            },
+            child: Text(
+              "C\nS",
+              style: comfortaaBold(20 * widget.scaleFactor,
+                  color: Constants.pastelWhite.withValues(alpha: 0.5)),
+              textAlign: TextAlign.center,
+            )),
+      ),
+      Container(
+        width: width,
+        height: height,
+        color: Constants.pastelReddishBrown,
+        child: TextButton(
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              DataEntry.exportData[widget.jsonKey].add("inner");
+            },
+            child: Text(
+              "C\nS",
+              style: comfortaaBold(20 * widget.scaleFactor,
+                  color: Constants.pastelWhite.withValues(alpha: 0.5)),
+              textAlign: TextAlign.center,
+            )),
+      ),
+      Container(
+        height: height,
+        width: width * 0.7,
+        color: Constants.pastelGray,
+        child: TextButton(
+            onPressed: () {
+              if (DataEntry.exportData[widget.jsonKey].length > 0) {
+                HapticFeedback.lightImpact();
+                DataEntry.exportData[widget.jsonKey].removeLast();
+              }
+            },
+            child: Text("U\nN\nD\nO",
+                style: comfortaaBold(10 * widget.scaleFactor,
+                    color: Constants.pastelWhite.withValues(alpha: 0.75)),
+                textAlign: TextAlign.center)),
+      )
+    ];
+
+    return Row(
+        children: widget.flipped ? rowChildren.reversed.toList() : rowChildren);
+  }
 }
+
 class SharedState extends ChangeNotifier {
   String? activeTriangle;
   void setActiveTriangle(String triangle) {
