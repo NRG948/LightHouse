@@ -26,6 +26,7 @@ import "package:lighthouse/widgets/game_agnostic/start_pos.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
+import "package:lighthouse/widgets/reefscape/atlas_teleop_selection.dart";
 
 import "package:lighthouse/widgets/reefscape/auto_timed.dart";
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
@@ -276,6 +277,8 @@ class DataEntryState extends State<DataEntry> {
               title: title,
               comments: comments,
               sort: sortType);
+        case "atlas-teleop":
+          return AtlasTeleopSelection(width: width, height: height);
       }
       return Text("type $type isn't a valid type");
     }).toList();
