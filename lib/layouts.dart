@@ -54,49 +54,8 @@ Map<String, dynamic> atlascout = {
       "icon": CoralAlgaeIcons.teleop,
       "widgets": [
         {
-          "title": "Coral Pickups",
-          "type": "multispinbox",
-          "jsonKey": [
-            "coralPickupsStation",
-            "coralPickupsGround",
-          ],
-          "height": "30",
-          "boxNames": [
-            ["Station", "Ground"]
-          ]
-        },
-        {
-          "title": "Coral Scored",
-          "type": "multispinbox",
-          "jsonKey": [
-            "coralScoredL1",
-            "coralScoredL2",
-            "coralScoredL3",
-            "coralScoredL4",
-          ],
-          "height": "43",
-          "boxNames": [
-            ["L1", "L2"],
-            ["L3", "L4"]
-          ]
-        },
-        {
-          "title": "Algae",
-          "type": "multispinbox",
-          "jsonKey": [
-            "algaeRemoveL2",
-            "algaeRemoveL3",
-            "algaeScoreProcessor",
-            "algaeScoreNet",
-            "algaeMissProcessor",
-            "algaeMissNet"
-          ],
-          "height": "65",
-          "boxNames": [
-            ["Remove L2", "Remove L3"],
-            ["Score Processor", "Score Net"],
-            ["Miss Processor", "Miss Net"]
-          ]
+          "type": "atlas-teleop",
+          "height": "160",
         }
       ]
     },
@@ -468,36 +427,10 @@ Map<String, dynamic> hpscout = {
       "title": "Scoring",
       "icon": CustomIcons.gamepad,
       "widgets": [
-       // TODO: Add HP multi spinbox
         {
-          "type": "multispinbox",
-          "title": "Scoring",
-          "jsonKey": ["redScore", "blueScore"],
-          "otherJsonKey": ["redNetAlgae","blueNetAlgae"],
-          "height": "25",
-          "boxNames": [
-            ["Red Score", "Blue Score"]
-            ]
-        },
-        {
-          "type": "multispinbox",
-          "title": "Missing",
-          "jsonKey": ["redMiss", "blueMiss"],
-          "height": "25",
-          "boxNames": [
-            ["Red Miss", "Blue Miss"]
-            ]
-        },
-        // TODO: Make this automatically update based on red/blue score
-        {
-          "title": "Algae in Net",
-          "type": "multispinbox",
-          "jsonKey": ["redNetAlgae", "blueNetAlgae"],
-          "height": "25",
-          "boxNames": [
-            ["Red Algae", "Blue Algae"]
-          ],
-        },
+          "type": "hp-teleop", 
+          "height": "90"
+        }, 
         {
           "title": "Data Quality",
           "type": "rating",
