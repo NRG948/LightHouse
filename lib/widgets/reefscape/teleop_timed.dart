@@ -30,7 +30,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
   void initState() {
     super.initState();
     scaleFactor = widget.width / 400;
-    
+
     DataEntry.exportData["teleopEventList"] = [];
   }
 
@@ -64,12 +64,13 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                             BorderRadius.circular(Constants.borderRadius)),
                     child: TextButton(
                         onPressed: () {
+                          HapticFeedback.heavyImpact();
                           // TODO: Add duplicate data prevention so that only one startClimb
                           // can be added
                           DataEntry.exportData["teleopEventList"].add([
                             "startClimb",
-                            (DataEntry.stopwatchMap[2] 
-                            ??Duration(milliseconds: 0))
+                            (DataEntry.stopwatchMap[2] ??
+                                    Duration(milliseconds: 0))
                                 .deciseconds
                           ]);
                         },
@@ -92,6 +93,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                             BorderRadius.circular(Constants.borderRadius)),
                     child: TextButton(
                         onPressed: () {
+                          HapticFeedback.heavyImpact();
                           DataEntry.exportData["teleopEventList"].add([
                             "intakeCoral",
                             (DataEntry.stopwatchMap[2] ??
@@ -117,9 +119,12 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
           Container(
             width: 100 * scaleFactor,
             height: 0.08 * screenHeight,
-            decoration: BoxDecoration(color: Constants.pastelGray,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            decoration: BoxDecoration(
+                color: Constants.pastelGray,
+                borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: TextButton(
                 onPressed: () {
+                  HapticFeedback.heavyImpact();
                   print(DataEntry.stopwatchMap);
                   DataEntry.exportData["teleopEventList"].add([
                     "scoreNet",
@@ -159,6 +164,7 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: TextButton(
             onPressed: () {
+              HapticFeedback.heavyImpact();
               if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
                   !_RSTeleopTimedState.widgetStates[7])) {
                 setState(() {
@@ -253,6 +259,7 @@ class _RSTTHexagonState extends State<RSTTHexagon> {
     setState(() {
       if (!_RSTeleopTimedState.widgetStates.contains(true) ||
           _RSTeleopTimedState.widgetStates[index]) {
+        HapticFeedback.heavyImpact();
         _RSTeleopTimedState.widgetStates[index] =
             !_RSTeleopTimedState.widgetStates[index];
         DataEntry.exportData["teleopEventList"].add([
