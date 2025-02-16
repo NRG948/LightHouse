@@ -263,7 +263,7 @@ Map<String, dynamic> pitscout = {
       "widgets": [
         {
           "height": "40",
-          "width": "60",
+          "width": "70",
           "type": "rsAutoUntimedPit",
           "jsonKey": [
             "autoProcessorCS",
@@ -276,6 +276,7 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Drops Algae on Ground",
           "type": "checkbox",
+          "height": "17", 
           "jsonKey": "dropsAlgaeAuto"
         }
       ]
