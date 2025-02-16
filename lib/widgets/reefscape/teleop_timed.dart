@@ -44,7 +44,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
-      height: 510 * scaleFactor,
+      height: 650 * scaleFactor,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -56,8 +56,8 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
               Transform.translate(
                 offset: Offset(5, 5),
                 child: Container(
-                    width: 100,
-                    height: 0.1 * screenHeight,
+                    width: 160,
+                    height: 0.125 * screenHeight,
                     decoration: BoxDecoration(
                         color: Constants.pastelGray,
                         borderRadius:
@@ -83,10 +83,10 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                             )))),
               ),
               Transform.translate(
-                offset: Offset(0, 5),
+                offset: Offset(-5, 5),
                 child: Container(
-                    width: 100,
-                    height: 0.1 * screenHeight,
+                    width: 160,
+                    height: 0.125 * screenHeight,
                     decoration: BoxDecoration(
                         color: Constants.pastelGray,
                         borderRadius:
@@ -109,36 +109,44 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
                               textAlign: TextAlign.center,
                             )))),
               ),
-              Transform.translate(offset: Offset(-5, 5), child: RSTTProcessor())
             ],
           ),
           // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
           RSTTHexagon(
-            radius: 160 * scaleFactor,
+            radius: 195 * scaleFactor,
           ),
-          Container(
-            width: 100 * scaleFactor,
-            height: 0.08 * screenHeight,
-            decoration: BoxDecoration(
-                color: Constants.pastelGray,
-                borderRadius: BorderRadius.circular(Constants.borderRadius)),
-            child: TextButton(
-                onPressed: () {
-                  HapticFeedback.heavyImpact();
-                  print(DataEntry.stopwatchMap);
-                  DataEntry.exportData["teleopEventList"].add([
-                    "scoreNet",
-                    (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
-                        .deciseconds
-                  ]);
-                },
-                child: Transform.rotate(
-                    angle: pi / 2,
-                    child: Text(
-                      "Score\nNet",
-                      style: comfortaaBold(18 * scaleFactor),
-                      textAlign: TextAlign.center,
-                    ))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Transform.translate(
+                offset: Offset(5, 0),
+                child: Container(
+                  width: 160,
+                  height: 0.125 * screenHeight,
+                  decoration: BoxDecoration(
+                      color: Constants.pastelGray,
+                      borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                  child: TextButton(
+                      onPressed: () {
+                        HapticFeedback.heavyImpact();
+                        print(DataEntry.stopwatchMap);
+                        DataEntry.exportData["teleopEventList"].add([
+                          "scoreNet",
+                          (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
+                              .deciseconds
+                        ]);
+                      },
+                      child: Transform.rotate(
+                          angle: pi / 2,
+                          child: Text(
+                            "Score\nNet",
+                            style: comfortaaBold(18 * scaleFactor),
+                            textAlign: TextAlign.center,
+                          ))),
+                ),
+              ),
+              Transform.translate(offset: Offset(-5, 0), child: RSTTProcessor()), 
+            ],
           )
         ],
       ),
@@ -157,8 +165,8 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 100,
-        height: 0.1 * _RSTeleopTimedState.screenHeight,
+        width: 160,
+        height: 0.125 * _RSTeleopTimedState.screenHeight,
         decoration: BoxDecoration(
             color: enabled ? Colors.green : Constants.pastelGray,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
