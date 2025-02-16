@@ -26,15 +26,12 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
   @override
   Widget build(BuildContext context) {
     counters.addAll({
-      "coralScoredL1": GlobalKey<CounterState>(),
-      "coralScoredL2": GlobalKey<CounterState>(),
-      "coralScoredL3": GlobalKey<CounterState>(),
-      "coralScoredL4": GlobalKey<CounterState>(),
-      "algaeRemove": GlobalKey<CounterState>(),
-      "algaeScoreProcessor": GlobalKey<CounterState>(),
-      "algaeScoreNet": GlobalKey<CounterState>(),
-      "coralPickups": GlobalKey<CounterState>(),
-      "algaePickups": GlobalKey<CounterState>()
+      "redScore": GlobalKey<CounterState>(),
+      "blueScore": GlobalKey<CounterState>(),
+      "redMiss": GlobalKey<CounterState>(),
+      "blueMiss": GlobalKey<CounterState>(),
+      "redAlgaeNet": GlobalKey<CounterState>(),
+      "blueAlgaeNet": GlobalKey<CounterState>(),
     });
 
     void undo() {
@@ -50,130 +47,122 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> {
             color: Constants.pastelWhite,
             borderRadius:
                 BorderRadius.all(Radius.circular(Constants.borderRadius))),
-        child: Row(children: [
-          Column(
-            children: [
-              Container(
-                width: _width / 2 - 20,
-                height: _height / 5 - 20,
-                margin: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Constants.pastelRed,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(Constants.borderRadius))),
-                child: Stack(
-                  children: [
-                    Center(
-                      child: AutoSizeText(
-                        "Undo",
-                        style: comfortaaBold(40),
-                      ),
+        child: Column(
+          children: [
+            Container(
+              width: _width - 20,
+              height: _height / 6 - 20,
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  color: Constants.pastelRed,
+                  borderRadius: BorderRadius.all(
+                      Radius.circular(Constants.borderRadius))),
+              child: Stack(
+                children: [
+                  Center(
+                    child: AutoSizeText(
+                      "Undo",
+                      style: comfortaaBold(40),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        undo();
-                        HapticFeedback.heavyImpact();
-                      },
-                    )
-                  ],
-                ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      undo();
+                      HapticFeedback.heavyImpact();
+                    },
+                  )
+                ],
               ),
-              Counter(
-                key: counters["algaeScoreNet"],
-                title: "Net",
-                jsonKey: "algaeScoreNet",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelGreen,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaeScoreNet"), HapticFeedback.heavyImpact()},
+            ),
+            Row(children: [
+              Column(
+                children: [
+                  Counter(
+                    key: counters["redScore"],
+                    title: "Red Score",
+                    jsonKey: "redScore",
+                    height: _height / 4,
+                    width: _width / 2,
+                    color: Constants.pastelGreen,
+                    boxColor: Constants.pastelWhite,
+                    onIncrement: () => {
+                      history.addLast("redScore"),
+                      HapticFeedback.heavyImpact()
+                    },
+                  ),
+                  Counter(
+                    key: counters["redMiss"],
+                    title: "Red Miss",
+                    jsonKey: "redMiss",
+                    height: _height / 4,
+                    width: _width / 2,
+                    color: Constants.pastelGreen,
+                    boxColor: Constants.pastelWhite,
+                    onIncrement: () => {
+                      history.addLast("redMiss"),
+                      HapticFeedback.heavyImpact()
+                    },
+                  ),
+                  Counter(
+                    key: counters["redNet"],
+                    title: "Remove",
+                    jsonKey: "algaeRemove",
+                    height: _height / 4,
+                    width: _width / 2,
+                    color: Constants.pastelGreen,
+                    boxColor: Constants.pastelWhite,
+                    onIncrement: () => {
+                      history.addLast("algaeRemove"),
+                      HapticFeedback.heavyImpact()
+                    },
+                  ),
+                ],
               ),
-              Counter(
-                key: counters["algaeScoreProcessor"],
-                title: "Processor",
-                jsonKey: "algaeScoreProcessor",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelGreen,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaeScoreProcessor"), HapticFeedback.heavyImpact()},
-              ),
-              Counter(
-                key: counters["algaeRemove"],
-                title: "Remove",
-                jsonKey: "algaeRemove",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelGreen,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaeRemove"), HapticFeedback.heavyImpact()},
-              ),
-              Counter(
-                key: counters["algaePickups"],
-                title: "Algae Intake",
-                jsonKey: "algaePickups",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelBlue,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaePickups"), HapticFeedback.heavyImpact()},
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              Counter(
-                key: counters["coralScoredL4"],
-                title: "L4",
-                jsonKey: "coralScoredL4",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelYellow,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL4"), HapticFeedback.heavyImpact()},
-              ),
-              Counter(
-                key: counters["coralScoredL3"],
-                title: "L3",
-                jsonKey: "coralScoredL3",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelYellow,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL3"), HapticFeedback.heavyImpact()},
-              ),
-              Counter(
-                key: counters["coralScoredL2"],
-                title: "L2",
-                jsonKey: "coralScoredL2",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelYellow,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL2"), HapticFeedback.heavyImpact()},
-              ),
-              Counter(
-                key: counters["coralScoredL1"],
-                title: "L1",
-                jsonKey: "coralScoredL1",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelYellow,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL1"), HapticFeedback.heavyImpact()},
-              ),
-              Counter(
-                key: counters["coralPickups"],
-                title: "Coral Intake",
-                jsonKey: "coralPickups",
-                height: _height / 5,
-                width: _width / 2,
-                color: Constants.pastelBlue,
-                boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralPickups"), HapticFeedback.heavyImpact()},
-              ),
-            ],
-          )
-        ]));
+              Column(
+                children: [
+                  Counter(
+                    key: counters["coralScoredL4"],
+                    title: "L4",
+                    jsonKey: "coralScoredL4",
+                    height: _height / 5,
+                    width: _width / 2,
+                    color: Constants.pastelYellow,
+                    boxColor: Constants.pastelWhite,
+                    onIncrement: () => {
+                      history.addLast("coralScoredL4"),
+                      HapticFeedback.heavyImpact()
+                    },
+                  ),
+                  Counter(
+                    key: counters["coralScoredL3"],
+                    title: "L3",
+                    jsonKey: "coralScoredL3",
+                    height: _height / 5,
+                    width: _width / 2,
+                    color: Constants.pastelYellow,
+                    boxColor: Constants.pastelWhite,
+                    onIncrement: () => {
+                      history.addLast("coralScoredL3"),
+                      HapticFeedback.heavyImpact()
+                    },
+                  ),
+                  Counter(
+                    key: counters["coralScoredL2"],
+                    title: "L2",
+                    jsonKey: "coralScoredL2",
+                    height: _height / 5,
+                    width: _width / 2,
+                    color: Constants.pastelYellow,
+                    boxColor: Constants.pastelWhite,
+                    onIncrement: () => {
+                      history.addLast("coralScoredL2"),
+                      HapticFeedback.heavyImpact()
+                    },
+                  ),
+                ],
+              )
+            ]),
+          ],
+        ));
   }
 }
