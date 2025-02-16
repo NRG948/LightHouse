@@ -40,7 +40,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
         children: [
           RSAUCoralStation(
             title: "Processor",
-            jsonKey: "autoProcessorCS",
+            jsonKey: "autoCS",
             scaleFactor: scaleFactor,
             flipped: false,
           ),
@@ -59,7 +59,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
           ),
           RSAUCoralStation(
             title: "Barge",
-            jsonKey: "autoBargeCS",
+            jsonKey: "autoCS",
             scaleFactor: scaleFactor,
             flipped: true,
           ),
@@ -624,40 +624,24 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
     double height = 80 * widget.scaleFactor;
     List<Widget> rowChildren = [
       Container(
-        width: width,
+        width: width * 1.5,
         height: height,
         color: Constants.pastelRedMuted,
         child: TextButton(
             onPressed: () {
               HapticFeedback.heavyImpact();
-              DataEntry.exportData[widget.jsonKey].add("outer");
+              DataEntry.exportData[widget.jsonKey].add(widget.title.toLowerCase());
             },
             child: Text(
-              "C\nS",
-              style: comfortaaBold(20 * widget.scaleFactor,
-                  color: Constants.pastelWhite.withValues(alpha: 0.5)),
-              textAlign: TextAlign.center,
-            )),
-      ),
-      Container(
-        width: width,
-        height: height,
-        color: Constants.pastelReddishBrown,
-        child: TextButton(
-            onPressed: () {
-              HapticFeedback.mediumImpact();
-              DataEntry.exportData[widget.jsonKey].add("inner");
-            },
-            child: Text(
-              "C\nS",
-              style: comfortaaBold(20 * widget.scaleFactor,
+              "CS",
+              style: comfortaaBold(35 * widget.scaleFactor,
                   color: Constants.pastelWhite.withValues(alpha: 0.5)),
               textAlign: TextAlign.center,
             )),
       ),
       Container(
         height: height,
-        width: width * 0.7,
+        width: width * 0.8,
         color: Constants.pastelGray,
         child: TextButton(
             onPressed: () {
