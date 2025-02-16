@@ -55,7 +55,7 @@ Map<String, dynamic> atlascout = {
       "widgets": [
         {
           "type": "atlas-teleop",
-          "height": "160",
+          "height": "150",
         }
       ]
     },
