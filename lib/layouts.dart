@@ -341,7 +341,7 @@ Map<String, dynamic> pitscout = {
           ]
         },
         {
-          "title": "Average Climb Time",
+          "title": "Preferred Climb Start Time",
           "type": "textbox",
           "jsonKey": "averageClimbTime",
           "maxLines": 1,
@@ -372,7 +372,7 @@ Map<String, dynamic> pitscout = {
           "type": "row",
           "children": [
             {
-              "title": "Average Coral \n Cycles Time",
+              "title": "Coral Cycles \n Per Match",
               "type": "numberbox",
               "jsonKey": "averageCoralCycles",
               "width": "34",
@@ -384,7 +384,7 @@ Map<String, dynamic> pitscout = {
               "width": "2",
             },
             {
-              "title": "Average Algae \n Cycles Time",
+              "title": "Algae Cycles \n Per Match",
               "type": "numberbox",
               "jsonKey": "averageAlgaeCycles",
               "width": "34",
