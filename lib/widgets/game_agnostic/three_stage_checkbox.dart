@@ -76,7 +76,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                     Transform.scale(
                       scale: 1.4,
                       child: Icon(
-                        IconData(0xef45, fontFamily: 'MaterialIcons') // Base icon for the checkbox.
+                        const IconData(0xef45, fontFamily: 'MaterialIcons') // Base icon for the checkbox.
                       ),
                     ), 
                     ValueListenableBuilder(
