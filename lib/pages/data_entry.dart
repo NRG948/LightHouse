@@ -30,6 +30,7 @@ import "package:lighthouse/widgets/reefscape/atlas_teleop_selection.dart";
 
 import "package:lighthouse/widgets/reefscape/auto_timed.dart";
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
+import "package:lighthouse/widgets/reefscape/hp_teleop_selection.dart";
 import "package:lighthouse/widgets/reefscape/teleop_timed.dart";
 
 // Main widget for the Data Entry page
@@ -279,6 +280,8 @@ class DataEntryState extends State<DataEntry> {
               sort: sortType);
         case "atlas-teleop":
           return AtlasTeleopSelection(width: width, height: height);
+        case "hp-teleop": 
+          return HPTeleopSelection(height: height, width: width);
       }
       return Text("type $type isn't a valid type");
     }).toList();

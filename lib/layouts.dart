@@ -427,36 +427,10 @@ Map<String, dynamic> hpscout = {
       "title": "Scoring",
       "icon": CustomIcons.gamepad,
       "widgets": [
-       // TODO: Add HP multi spinbox
         {
-          "type": "multispinbox",
-          "title": "Scoring",
-          "jsonKey": ["redScore", "blueScore"],
-          "otherJsonKey": ["redNetAlgae","blueNetAlgae"],
-          "height": "25",
-          "boxNames": [
-            ["Red Score", "Blue Score"]
-            ]
-        },
-        {
-          "type": "multispinbox",
-          "title": "Missing",
-          "jsonKey": ["redMiss", "blueMiss"],
-          "height": "25",
-          "boxNames": [
-            ["Red Miss", "Blue Miss"]
-            ]
-        },
-        // TODO: Make this automatically update based on red/blue score
-        {
-          "title": "Algae in Net",
-          "type": "multispinbox",
-          "jsonKey": ["redNetAlgae", "blueNetAlgae"],
-          "height": "25",
-          "boxNames": [
-            ["Red Algae", "Blue Algae"]
-          ],
-        },
+          "type": "hp-teleop", 
+          "height": "100"
+        }, 
         {
           "title": "Data Quality",
           "type": "rating",

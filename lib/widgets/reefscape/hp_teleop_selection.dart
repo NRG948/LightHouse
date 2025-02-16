@@ -6,17 +6,17 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/widgets/game_agnostic/counter.dart';
 
-class AtlasTeleopSelection extends StatefulWidget {
+class HPTeleopSelection extends StatefulWidget {
   final double height;
   final double width;
-  const AtlasTeleopSelection(
+  const HPTeleopSelection(
       {super.key, required this.height, required this.width});
 
   @override
-  State<AtlasTeleopSelection> createState() => _AtlasTeleopSelectionState();
+  State<HPTeleopSelection> createState() => _HPTeleopSelectionState();
 }
 
-class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> {
+class _HPTeleopSelectionState extends State<HPTeleopSelection> {
   double get _height => widget.height;
   double get _width => widget.width;
 
