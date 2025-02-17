@@ -18,11 +18,13 @@ class Constants {
   static const Color pastelRedMuted = Color.fromARGB(255, 162, 90, 83);
   
   static final double borderRadius = 8;
-
-  /// There is alwasy a delay between the end of, for example, 
+  /// There is always a delay between the end of, for example, 
   /// auto and the start of teleop. Thus, this is simply for
   /// adding a bit of delay before the next section. :)
   static final double startDelay = 3;
+  
+  static const String versionName = "Feb 16 Update";
+
 }
 
 TextStyle comfortaaBold(double fontSize,

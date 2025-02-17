@@ -29,7 +29,7 @@ Future<void> initConfig() async {
   }
 }
 
-Future<void> loadConfig({bool reset = false}) async {
+Future<Map<String,String>> loadConfig({bool reset = false}) async {
   configData.clear();
   late Map<String, dynamic> configJson;
   final configFile = File("$configFolder/config.nrg");
@@ -41,6 +41,7 @@ Future<void> loadConfig({bool reset = false}) async {
   }
   configData.addEntries(configJson.entries
       .map((entry) => MapEntry(entry.key, entry.value.toString())));
+  return configData;
 }
 
 List<String> getSavedEvents() {

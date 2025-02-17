@@ -9,9 +9,21 @@ import 'package:lighthouse/layouts.dart';
 import 'package:lighthouse/splash_texts.dart';
 
 //stateless widget representing the home screen of the app
-class ScouterHomePage extends StatelessWidget {
+class ScouterHomePage extends StatefulWidget {
   const ScouterHomePage({super.key});
+
+  @override
+  State<ScouterHomePage> createState() => _ScouterHomePageState();
+}
+
+class _ScouterHomePageState extends State<ScouterHomePage> {
+  late Future<Map<String,String>> asyncConfigData;
   static late double scaleFactor;
+  @override
+  void initState() {
+    super.initState();
+    asyncConfigData = loadConfig();
+  }
   // This method generates a list of Launcher widgets based on layouts.
   List<Launcher> getLaunchers() {
     final enabledLayouts = layoutMap.keys;
@@ -37,14 +49,12 @@ class ScouterHomePage extends StatelessWidget {
     return enabledLaunchers;
   }
 
-  
   @override
   Widget build(BuildContext context) {
     // Get screen dimensions and set scale factor
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
-    loadConfig();
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -79,18 +89,20 @@ class ScouterHomePage extends StatelessWidget {
           backgroundColor: Constants.pastelRed,
           centerTitle: true,
           actions: [
-            IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
-            IconButton(
-              icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
-              onPressed: (() {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                          content: Text(jsonEncode(configData).toString()));
-                    });
-              }),
-            ),
+            // Buttons used for testing functionality
+            // Leave them here but shouldn't be enabled in prod
+            // IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
+            // IconButton(
+            //   icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
+            //   onPressed: (() {
+            //     showDialog(
+            //         context: context,
+            //         builder: (BuildContext context) {
+            //           return AlertDialog(
+            //               content: Text(jsonEncode(configData).toString()));
+            //         });
+            //   }),
+            // ),
             IconButton(
                 icon: Icon(Icons.settings,color: Constants.pastelWhite,),
                 onPressed: () {
@@ -121,6 +133,18 @@ class ScouterHomePage extends StatelessWidget {
                 Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: getLaunchers()),
+                SizedBox(
+                  height: 0.05 * screenHeight,
+                  width: 0.8 * screenWidth,
+                  child: FutureBuilder(
+                    future: asyncConfigData,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                      return  AutoSizeText("${Constants.versionName} | ${snapshot.data!["scouterName"]} | ${snapshot.data!["eventKey"]}",style: comfortaaBold(18),textAlign: TextAlign.center,);}
+                      else {
+                        return AutoSizeText("Loading...",style: comfortaaBold(18),textAlign: TextAlign.center,);
+                      }}),
+                )
               ],
             )),
       ),
@@ -153,8 +177,8 @@ class Launcher extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         //space between each choice
         child: Container(
-          height: 75 * ScouterHomePage.scaleFactor,
-          width: 400 * ScouterHomePage.scaleFactor,
+          height: 75 * _ScouterHomePageState.scaleFactor,
+          width: 400 * _ScouterHomePageState.scaleFactor,
 
           //the size of the box that holds each choice
           decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
