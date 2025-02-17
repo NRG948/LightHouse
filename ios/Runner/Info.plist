@@ -81,7 +81,7 @@
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>FLTEnableImpeller</key>
-	<string>NO</string>
+	<false/>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_http._tcp</string>
