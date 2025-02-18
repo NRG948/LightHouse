@@ -184,7 +184,7 @@ Map<String, dynamic> chronoscout = {
           "title": "General Strategy",
           "type": "dropdown",
           "jsonKey": "generalStrategy",
-          "options": "Cycling,Defense,Feed/Pass,Other"
+          "options": "Coral Cycle,Algae Cycle,Hybrid Cycle,Defense,Feed/Pass,Other"
         },
         {
           "title": "Data Quality",
