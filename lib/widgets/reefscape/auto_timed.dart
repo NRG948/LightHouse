@@ -34,7 +34,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
   @override
   void dispose() {
     super.dispose();
-    widgetStates = List.filled(8, false);
+    widgetStates = List.filled(10, false);
   }
 
   @override
