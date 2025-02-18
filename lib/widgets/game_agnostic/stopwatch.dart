@@ -121,28 +121,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
           // Custom widget to display the stopwatch time
           HoriVert(height: height, width: width, stopwatchDisplay: stopwatchDisplay, widget: widget, horizontal: widget.horizontal),
           Container(
-            margin: EdgeInsets.only(
-                left: width *
-                    6 /
-                    400), // For development, we can change the width without having to change this too.
-            child: Transform.rotate(
-              angle: widget.horizontal ? pi/2 : 0,
-              child: IconButton(
-                onPressed: () {
-                  HapticFeedback.heavyImpact();
-                  _stopwatch.stop();
-                  _stopwatch.reset();
-                },
-                icon: Icon(
-                  const IconData(0xe514, fontFamily: 'MaterialIcons'),
-                  size: 45,
-                  color: Constants.pastelGray,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 0),
+            margin: EdgeInsets.only(left: 10),
             child: Transform.rotate(
               angle: widget.horizontal ? pi/2 : 0,
               child: IconButton(
@@ -189,7 +168,7 @@ class HoriVert extends StatelessWidget {
     return horizontal ? Container(
       margin: EdgeInsets.only(left: height * 0.1),
       height: height * 0.8,
-      width: width * 0.6,
+      width: width * 0.75,
       decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: HoriVertText(stopwatchDisplay: stopwatchDisplay, height: height, width: width, horizontal: horizontal,),
     ) :Container(
