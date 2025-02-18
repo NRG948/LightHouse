@@ -23,9 +23,9 @@ class RSTeleopTimed extends StatefulWidget {
 }
 
 class _RSTeleopTimedState extends State<RSTeleopTimed> {
-  late double scaleFactor;
+  static late double scaleFactor;
   static late double screenHeight;
-  static List<bool> widgetStates = List.filled(8, false);
+  static List<bool> widgetStates = List.filled(10, false);
   @override
   void initState() {
     super.initState();
@@ -44,7 +44,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
-      height: 650 * scaleFactor,
+      height: 600 * scaleFactor,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -55,101 +55,156 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
             children: [
               Transform.translate(
                 offset: Offset(5, 5),
-                child: Container(
-                    width: 160,
-                    height: 0.125 * screenHeight,
-                    decoration: BoxDecoration(
-                        color: Constants.pastelGray,
-                        borderRadius:
-                            BorderRadius.circular(Constants.borderRadius)),
-                    child: TextButton(
-                        onPressed: () {
-                          HapticFeedback.heavyImpact();
-                          // TODO: Add duplicate data prevention so that only one startClimb
-                          // can be added
-                          DataEntry.exportData["teleopEventList"].add([
-                            "startClimb",
-                            (DataEntry.stopwatchMap[2] ??
-                                    Duration(milliseconds: 0))
-                                .deciseconds
-                          ]);
-                        },
-                        child: Transform.rotate(
-                            angle: pi / 2,
-                            child: Text(
-                              "Start\nClimb",
-                              style: comfortaaBold(18),
-                              textAlign: TextAlign.center,
-                            )))),
+                child: RSTTClimb(),
               ),
-              Transform.translate(
-                offset: Offset(-5, 5),
-                child: Container(
-                    width: 160,
-                    height: 0.125 * screenHeight,
-                    decoration: BoxDecoration(
-                        color: Constants.pastelGray,
-                        borderRadius:
-                            BorderRadius.circular(Constants.borderRadius)),
-                    child: TextButton(
-                        onPressed: () {
-                          HapticFeedback.heavyImpact();
-                          DataEntry.exportData["teleopEventList"].add([
-                            "intakeCoral",
-                            (DataEntry.stopwatchMap[2] ??
-                                    Duration(milliseconds: 0))
-                                .deciseconds
-                          ]);
-                        },
-                        child: Transform.rotate(
-                            angle: pi / 2,
-                            child: Text(
-                              "Intake\nCoral",
-                              style: comfortaaBold(18),
-                              textAlign: TextAlign.center,
-                            )))),
-              ),
+              Transform.translate(offset: Offset(-5, 5), child: RSTTCoral()),
             ],
           ),
           // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
           RSTTHexagon(
-            radius: 195 * scaleFactor,
+            radius: 170 * scaleFactor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Transform.translate(
                 offset: Offset(5, 0),
-                child: Container(
-                  width: 160,
-                  height: 0.125 * screenHeight,
-                  decoration: BoxDecoration(
-                      color: Constants.pastelGray,
-                      borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                  child: TextButton(
-                      onPressed: () {
-                        HapticFeedback.heavyImpact();
-                        print(DataEntry.stopwatchMap);
-                        DataEntry.exportData["teleopEventList"].add([
-                          "scoreNet",
-                          (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
-                              .deciseconds
-                        ]);
-                      },
-                      child: Transform.rotate(
-                          angle: pi / 2,
-                          child: Text(
-                            "Score\nNet",
-                            style: comfortaaBold(18 * scaleFactor),
-                            textAlign: TextAlign.center,
-                          ))),
-                ),
+                child: RSTTNet(),
               ),
-              Transform.translate(offset: Offset(-5, 0), child: RSTTProcessor()), 
+              Transform.translate(
+                  offset: Offset(-5, 0), child: RSTTProcessor()),
             ],
           )
         ],
       ),
+    );
+  }
+}
+
+class RSTTNet extends StatefulWidget {
+  const RSTTNet({super.key});
+  @override
+  State<RSTTNet> createState() => _RSTTNet();
+}
+
+class _RSTTNet extends State<RSTTNet> {
+  bool enabled = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 160,
+      height: 0.125 * _RSTeleopTimedState.screenHeight,
+      decoration: BoxDecoration(
+          color: enabled ? Colors.green : Constants.pastelGray,
+          borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      child: TextButton(
+          onPressed: () {
+            HapticFeedback.heavyImpact();
+            if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
+                !_RSTeleopTimedState.widgetStates[7])) {
+              setState(() {
+                enabled = !enabled;
+                _RSTeleopTimedState.widgetStates[7] = enabled;
+                DataEntry.exportData["teleopEventList"].add([
+                  "${enabled ? "enter" : "exit"}NetShoot",
+                  (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
+                      .deciseconds
+                ]);
+              });
+            }
+          },
+          child: Transform.rotate(
+              angle: pi / 2,
+              child: Text(
+                "Score\nNet",
+                style: comfortaaBold(18 * _RSTeleopTimedState.scaleFactor),
+                textAlign: TextAlign.center,
+              ))),
+    );
+  }
+}
+
+class RSTTClimb extends StatefulWidget {
+  const RSTTClimb({super.key});
+  @override
+  State<RSTTClimb> createState() => _RSTTClimbState();
+}
+
+class _RSTTClimbState extends State<RSTTClimb> {
+  bool enabled = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 160,
+        height: 0.125 * _RSTeleopTimedState.screenHeight,
+        decoration: BoxDecoration(
+            color: enabled ? Colors.green : Constants.pastelGray,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: TextButton(
+            onPressed: () {
+              HapticFeedback.heavyImpact();
+              if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
+                  !_RSTeleopTimedState.widgetStates[8])) {
+                setState(() {
+                  enabled = !enabled;
+                  _RSTeleopTimedState.widgetStates[8] = enabled;
+                  DataEntry.exportData["teleopEventList"].add([
+                    "${enabled ? "enter" : "exit"}ClimbArea",
+                    (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
+                        .deciseconds
+                  ]);
+                });
+              }
+            },
+            child: Transform.rotate(
+                angle: pi / 2,
+                child: Text(
+                  "Climb",
+                  style: comfortaaBold(18),
+                  textAlign: TextAlign.center,
+                ))));
+  }
+}
+
+class RSTTCoral extends StatefulWidget {
+  const RSTTCoral({super.key});
+  @override
+  State<RSTTCoral> createState() => _RSTTCoralState();
+}
+
+class _RSTTCoralState extends State<RSTTCoral> {
+  bool enabled = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 160,
+      height: 0.125 * _RSTeleopTimedState.screenHeight,
+      decoration: BoxDecoration(
+          color: enabled ? Colors.green : Constants.pastelGray,
+          borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      child: TextButton(
+          onPressed: () {
+            HapticFeedback.heavyImpact();
+            if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
+                !_RSTeleopTimedState.widgetStates[9])) {
+              setState(() {
+                enabled = !enabled;
+                _RSTeleopTimedState.widgetStates[9] = enabled;
+                DataEntry.exportData["teleopEventList"].add([
+                  "${enabled ? "enter" : "exit"}CoralStation",
+                  (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
+                      .deciseconds
+                ]);
+              });
+            }
+          },
+          child: Transform.rotate(
+              angle: pi / 2,
+              child: Text(
+                "Intake\nCoral",
+                style: comfortaaBold(18 * _RSTeleopTimedState.scaleFactor),
+                textAlign: TextAlign.center,
+              ))),
     );
   }
 }
@@ -174,10 +229,10 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
             onPressed: () {
               HapticFeedback.heavyImpact();
               if (!(_RSTeleopTimedState.widgetStates.contains(true) &&
-                  !_RSTeleopTimedState.widgetStates[7])) {
+                  !_RSTeleopTimedState.widgetStates[6])) {
                 setState(() {
                   enabled = !enabled;
-                  _RSTeleopTimedState.widgetStates[7] = enabled;
+                  _RSTeleopTimedState.widgetStates[6] = enabled;
                   DataEntry.exportData["teleopEventList"].add([
                     "${enabled ? "enter" : "exit"}Processor",
                     (DataEntry.stopwatchMap[2] ?? Duration(milliseconds: 0))
@@ -265,6 +320,7 @@ class _RSTTHexagonState extends State<RSTTHexagon> {
 
   void toggleSection(int index) {
     setState(() {
+      print(_RSTeleopTimedState.widgetStates);
       if (!_RSTeleopTimedState.widgetStates.contains(true) ||
           _RSTeleopTimedState.widgetStates[index]) {
         HapticFeedback.heavyImpact();
