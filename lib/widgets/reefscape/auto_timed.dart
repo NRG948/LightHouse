@@ -32,6 +32,12 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    widgetStates = List.filled(8, false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,

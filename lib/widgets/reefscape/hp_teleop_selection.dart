@@ -47,7 +47,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
     }
 
     return Container(
-        height: _height,
+        height: _height - 20,
         width: _width,
         decoration: BoxDecoration(
             color: Constants.pastelWhite,
