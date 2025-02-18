@@ -35,6 +35,12 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    widgetStates = List.filled(8, false);
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     screenHeight = MediaQuery.of(context).size.height;

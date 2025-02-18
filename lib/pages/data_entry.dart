@@ -536,8 +536,8 @@ void saveJson(BuildContext context) async {
                             actions: [
                               TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, "/home-scouter");
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, "/home-scouter", (Route<dynamic> route) => false);
                                   },
                                   child: Text("OK"))
                             ],

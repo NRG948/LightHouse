@@ -38,7 +38,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
   // We need this so that we can call setState and have the stopwatch text change.
   late Duration stopwatchResult;
   late Duration stopwatchDisplay;
-  late Timer? _timer;
+  late Timer _timer;
 
   @override
   bool get wantKeepAlive => true;
@@ -98,8 +98,14 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _timer.cancel();
     super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    _timer.cancel();
+    super.deactivate();
   }
 
   @override
