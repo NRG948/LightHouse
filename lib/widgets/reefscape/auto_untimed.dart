@@ -72,7 +72,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
       RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)
     ];
     return Container(
-      height: 666 * scaleFactor,
+      height: 700 * scaleFactor,
       width: widget.width,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
@@ -125,14 +125,9 @@ class _RSAUReefState extends State<RSAUReef>
     }
     String at = widget.sharedState.activeTriangle!;
     return Container(
-        height: 308 * widget.scaleFactor,
+        height: 320 * widget.scaleFactor,
         width: 318 * widget.scaleFactor,
         padding: EdgeInsets.all(8 * widget.scaleFactor),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 255, 255, 255),
-          border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.circular(Constants.borderRadius),
-        ),
         child: Column(
           spacing: 2 * widget.scaleFactor,
           children: [
@@ -237,13 +232,11 @@ class _RSAUTroughState extends State<RSAUTrough> {
     return GestureDetector(
       onTap: increment,
       child: Container(
-        height: 75 * widget.scaleFactor,
+        height: 85 * widget.scaleFactor,
         width: 301 * widget.scaleFactor,
+        padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: counter > 0 ? Constants.pastelRed : Constants.pastelGray,
-            border: Border.all(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                width: widget.scaleFactor)),
+            color: counter > 0 ? Constants.pastelRed : Constants.pastelGray),
         child: Center(
           child: GestureDetector(
             onTap: increment,
@@ -251,17 +244,18 @@ class _RSAUTroughState extends State<RSAUTrough> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 2,
                   children: [
                     Icon(
                       CoralAlgaeIcons.coral,
                       size: 24 * widget.scaleFactor,
-                      color: Colors.black,
+                      color: Constants.pastelWhite,
                     ),
                     Text(
                       "Coral Scored L1 (Trough)",
                       textAlign: TextAlign.center,
                       style: comfortaaBold(15 * widget.scaleFactor,
-                          color: const Color.fromARGB(255, 0, 0, 0)),
+                          color: Constants.pastelWhite),
                     ),
                   ],
                 ),
@@ -278,7 +272,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                             child: Text(
                               counter.toString(),
                               style: comfortaaBold(23 * widget.scaleFactor,
-                                  color: const Color.fromARGB(255, 0, 0, 0)),
+                                  color: Constants.pastelWhite),
                               textAlign: TextAlign.center,
                             )),
                         SizedBox(
@@ -287,9 +281,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                                 onPressed: decrement,
                                 icon: Icon(Icons.keyboard_arrow_down,
                                     size: 25 * widget.scaleFactor),
-                                highlightColor:
-                                    const Color.fromARGB(255, 0, 0, 0),
-                                splashColor: const Color.fromARGB(255, 0, 0, 0),
+                                color: Constants.pastelWhite,
                                 iconSize: 25 * widget.scaleFactor))
                       ],
                     ),
@@ -361,16 +353,14 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
           height: 60 * widget.scaleFactor,
           width: (widget.algae ? 75 : 100) * widget.scaleFactor,
           decoration: BoxDecoration(
-              color: active ? Constants.pastelRed : Constants.pastelGray,
-              border:
-                  Border.all(color: Colors.black, width: widget.scaleFactor)),
+              color: active ? Constants.pastelRed : Constants.pastelGray),
           //coral icons for the corals that you can choose to click within the map within auto section within atlas section
           child: Center(
             child: IconButton(
               onPressed: setActive,
               icon: Icon(widget.icon, size: 45 * widget.scaleFactor),
               iconSize: 45 * widget.scaleFactor,
-              color: Colors.black,
+              color: Constants.pastelWhite,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
             ),
@@ -424,7 +414,7 @@ class HexagonPainter extends CustomPainter {
       ..color = Constants.pastelWhite
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5;
-    
+
     final Paint fillPaint = Paint()
       ..color = Constants.pastelGray
       ..style = PaintingStyle.fill;
@@ -635,7 +625,8 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
         child: TextButton(
             onPressed: () {
               HapticFeedback.heavyImpact();
-              DataEntry.exportData[widget.jsonKey].add(widget.title.toLowerCase());
+              DataEntry.exportData[widget.jsonKey]
+                  .add(widget.title.toLowerCase());
             },
             child: Text(
               "CS",
