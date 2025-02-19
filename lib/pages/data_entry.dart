@@ -476,7 +476,7 @@ class DataEntryState extends State<DataEntry> {
   }
 
   void checkGuidanceState(Timer guidanceTimer) {
-    if (guidanceStopwatch.elapsed.inSeconds >= 135 + Constants.startDelay) {
+    if (guidanceStopwatch.elapsed.inSeconds >= 150 + Constants.startDelay) {
       guidanceStopwatch.stop();
       if (guidanceState != GuidanceState.endgame) {
         guidanceState = GuidanceState.endgame;
