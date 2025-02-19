@@ -421,9 +421,9 @@ class HexagonPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
-      ..color = Colors.black
+      ..color = Constants.pastelWhite
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = 5;
 
     final double R = size.width / 2; // Radius of the hexagon
     final Offset center = Offset(size.width / 2, size.height / 2);

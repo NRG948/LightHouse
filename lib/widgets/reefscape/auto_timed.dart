@@ -328,15 +328,15 @@ class HexagonPainter extends CustomPainter {
     double centerY = radius;
 
     Paint borderPaint = Paint()
-      ..color = Colors.black
+      ..color = Constants.pastelWhite
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = 5;
 
     List<List<Offset>> triangles = getTrianglePoints(centerX, centerY, radius);
 
     for (int i = 0; i < 6; i++) {
       Paint fillPaint = Paint()
-        ..color = sectionStates[i] ? Colors.green : Constants.pastelWhite
+        ..color = sectionStates[i] ? Colors.green : Constants.pastelGray
         ..style = PaintingStyle.fill;
 
       Path path = Path()
