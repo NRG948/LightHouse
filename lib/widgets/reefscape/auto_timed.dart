@@ -78,12 +78,12 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                         child: Column(
                           children: [
                             Text(
-                              "Coral",
+                              "Ground",
                               style: comfortaaBold(18),
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              "Intake",
+                              "Coral",
                               style: comfortaaBold(18),
                               textAlign: TextAlign.center,
                             ),
