@@ -424,6 +424,10 @@ class HexagonPainter extends CustomPainter {
       ..color = Constants.pastelWhite
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5;
+    
+    final Paint fillPaint = Paint()
+      ..color = Constants.pastelGray
+      ..style = PaintingStyle.fill;
 
     final double R = size.width / 2; // Radius of the hexagon
     final Offset center = Offset(size.width / 2, size.height / 2);
@@ -445,6 +449,7 @@ class HexagonPainter extends CustomPainter {
     }
     hexagonPath.close();
     canvas.drawPath(hexagonPath, paint);
+    canvas.drawPath(hexagonPath, fillPaint);
 
     // Draw lines from the center to each vertex
     for (final vertex in vertices) {
@@ -500,11 +505,11 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
                   widget.sharedState.setActiveTriangle(widget.label);
                 },
                 child: Container(
-                    color: Constants.pastelGray,
+                    color: Constants.pastelGreen,
                     child: Text(
                       widget.label,
-                      style: comfortaaBold(14 * widget.scaleFactor,
-                          color: Colors.black),
+                      style: comfortaaBold(20 * widget.scaleFactor,
+                          color: Constants.pastelWhite),
                     )),
               )
             : GestureDetector(
@@ -514,8 +519,8 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
                   widget.sharedState.setActiveTriangle(widget.label);
                 },
                 child: Text(widget.label,
-                    style: comfortaaBold(14 * widget.scaleFactor,
-                        color: Colors.black)));
+                    style: comfortaaBold(20 * widget.scaleFactor,
+                        color: Constants.pastelWhite)));
     return LayoutBuilder(
       builder: (context, constraints) {
         final double width = constraints.maxWidth;
