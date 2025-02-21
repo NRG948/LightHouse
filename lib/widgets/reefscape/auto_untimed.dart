@@ -17,6 +17,8 @@ class RSAutoUntimed extends StatefulWidget {
 }
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
+  bool get pit => widget.pit;
+  int current_auto = 1;
   late SharedState sharedState;
   late double scaleFactor;
   @override
@@ -35,35 +37,93 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
         //     RSAUHexagon(sharedState: sharedState,scaleFactor: scaleFactor,),
         //     RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)] :
         [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          RSAUCoralStation(
-            title: "Processor",
-            jsonKey: "autoCS",
-            scaleFactor: scaleFactor,
-            flipped: false,
-          ),
-          Container(
-            height: 50 * scaleFactor,
-            width: 100 * scaleFactor,
-            decoration: BoxDecoration(
-                color: Constants.pastelRed,
-                borderRadius: BorderRadius.circular(Constants.borderRadius)),
-            child: Center(
-                child: AutoSizeText(
-              "DRIVER STATION",
-              textAlign: TextAlign.center,
-              style: comfortaaBold(10 * scaleFactor),
-            )),
-          ),
-          RSAUCoralStation(
-            title: "Barge",
-            jsonKey: "autoCS",
-            scaleFactor: scaleFactor,
-            flipped: true,
-          ),
-        ],
+      SizedBox(
+        height: 95,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: RSAUCoralStation(
+                title: "Processor",
+                jsonKey: "autoCS",
+                scaleFactor: scaleFactor,
+                flipped: false,
+              ),
+            ),
+            Column(
+              children: [
+                pit
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 23,
+                          child: DropdownButton(
+                              value: current_auto,
+                              items: [
+                                DropdownMenuItem(
+                                  value: 1,
+                                  child: Text(
+                                    "1",
+                                    style:
+                                        comfortaaBold(20, color: Colors.black),
+                                  ),
+                                ), 
+                                DropdownMenuItem(
+                                  value: 2,
+                                  child: Text(
+                                    "2",
+                                    style:
+                                        comfortaaBold(20, color: Colors.black),
+                                  ),
+                                ), 
+                                DropdownMenuItem(
+                                  value: 3,
+                                  child: Text(
+                                    "3",
+                                    style:
+                                        comfortaaBold(20, color: Colors.black),
+                                  ),
+                                ), 
+                              ],
+                              onChanged: (selection) {
+                                setState(() {
+                                  current_auto = selection!;
+                                });
+                              }),
+                        ),
+                      )
+                    : Container(),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: pit ? 40 : 50 * scaleFactor,
+                    width: 100 * scaleFactor,
+                    decoration: BoxDecoration(
+                        color: Constants.pastelRed,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius)),
+                    child: Center(
+                        child: AutoSizeText(
+                      "DRIVER STATION",
+                      textAlign: TextAlign.center,
+                      style: comfortaaBold(10 * scaleFactor),
+                    )),
+                  ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: RSAUCoralStation(
+                title: "Barge",
+                jsonKey: "autoCS",
+                scaleFactor: scaleFactor,
+                flipped: true,
+              ),
+            ),
+          ],
+        ),
       ),
       RSAUHexagon(
         sharedState: sharedState,
@@ -388,7 +448,7 @@ class RSAUHexagon extends StatelessWidget {
     ];
     return Container(
         color: Constants.pastelWhite,
-        height: 275 * scaleFactor,
+        height: 250 * scaleFactor,
         width: 275 * scaleFactor,
         alignment: Alignment.center,
         child: AspectRatio(
