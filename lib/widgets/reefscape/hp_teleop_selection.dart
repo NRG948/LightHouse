@@ -93,7 +93,8 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
                       history.addLast("redScore"),
-                      HapticFeedback.heavyImpact()
+                      HapticFeedback.heavyImpact(),
+                      counters["redNetAlgae"]!.currentState!.increment()
                     },
                   ),
                   Counter(
@@ -136,7 +137,8 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
                       history.addLast("blueScore"),
-                      HapticFeedback.heavyImpact()
+                      HapticFeedback.heavyImpact(),
+                      counters["blueNetAlgae"]!.currentState!.increment()
                     },
                   ),
                   Counter(
