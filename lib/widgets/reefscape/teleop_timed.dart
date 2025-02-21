@@ -55,6 +55,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
+        spacing: 25 * scaleFactor,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,7 +69,7 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
           ),
           // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
           RSTTHexagon(
-            radius: 170 * scaleFactor,
+            radius: 165 * scaleFactor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,8 +99,8 @@ class _RSTTNet extends State<RSTTNet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 160,
-      height: 0.125 * _RSTeleopTimedState.screenHeight,
+      width: 165 * _RSTeleopTimedState.scaleFactor,
+      height: 130 * _RSTeleopTimedState.scaleFactor,
       decoration: BoxDecoration(
           color: enabled ? Colors.green : Constants.pastelGray,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -141,8 +142,8 @@ class _RSTTClimbState extends State<RSTTClimb> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 160,
-        height: 0.125 * _RSTeleopTimedState.screenHeight,
+        width: 165 * _RSTeleopTimedState.scaleFactor,
+        height: 130 * _RSTeleopTimedState.scaleFactor,
         decoration: BoxDecoration(
             color: enabled ? Colors.green : Constants.pastelGray,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -183,8 +184,8 @@ class _RSTTCoralState extends State<RSTTCoral> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 160,
-      height: 0.125 * _RSTeleopTimedState.screenHeight,
+      width: 165 * _RSTeleopTimedState.scaleFactor,
+      height: 130 * _RSTeleopTimedState.scaleFactor,
       decoration: BoxDecoration(
           color: enabled ? Colors.green : Constants.pastelGray,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -226,8 +227,8 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 160,
-        height: 0.125 * _RSTeleopTimedState.screenHeight,
+        width: 165 * _RSTeleopTimedState.scaleFactor,
+        height: 130 * _RSTeleopTimedState.scaleFactor,
         decoration: BoxDecoration(
             color: enabled ? Colors.green : Constants.pastelGray,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -291,9 +292,9 @@ class _RSTTHexagonState extends State<RSTTHexagon> {
       },
       child: SizedBox(
         width: widget.radius * 2,
-        height: widget.radius * 2,
+        height: widget.radius * sqrt(3),
         child: CustomPaint(
-          size: Size(widget.radius * 2, widget.radius * 2),
+          size: Size(widget.radius * 2, widget.radius * sqrt(3)),
           painter: HexagonPainter(_RSTeleopTimedState.widgetStates[0]),
           child: Center(
             child: Transform.rotate(
@@ -312,7 +313,7 @@ class _RSTTHexagonState extends State<RSTTHexagon> {
   bool getTappedSection(Offset tap) {
     double size = widget.radius;
     double centerX = size;
-    double centerY = size;
+    double centerY = size * sqrt(3) / 2;
 
     return (Offset(centerX, centerY) - tap).distance < size;
   }
@@ -326,7 +327,7 @@ class HexagonPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double radius = size.width / 2;
     double centerX = radius;
-    double centerY = radius;
+    double centerY = radius * sqrt(3) / 2;
 
     List<Offset> hexagon = getHexagonPoints(centerX, centerY, radius);
 
