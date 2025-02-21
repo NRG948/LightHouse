@@ -56,7 +56,7 @@ class _NRGRatingState extends State<NRGRating> with AutomaticKeepAliveClientMixi
           StarRating(onRatingChanged: (value) {
             // Update the rating value in exportData
             DataEntry.exportData["dataQuality"] = value;
-          },starSize: 0.15 * widget.width,)
+          },starSize: 0.6 * widget.height,)
         ],
       ),
     );
@@ -107,6 +107,7 @@ class _StarRatingState extends State<StarRating> {
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      spacing: widget.starSize / 4,
       children: List.generate(5, (index) {
         double starValue = index + 1; // Full star value
         double halfStarValue = index + 0.5; // Half-star value
