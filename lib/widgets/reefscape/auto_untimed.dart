@@ -236,7 +236,8 @@ class _RSAUTroughState extends State<RSAUTrough> {
         width: 301 * widget.scaleFactor,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: counter > 0 ? Constants.pastelRed : Constants.pastelGray),
+            color:
+                counter > 0 ? Constants.pastelRedMuted : Constants.pastelGray),
         child: Center(
           child: GestureDetector(
             onTap: increment,
@@ -353,7 +354,9 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
           height: 60 * widget.scaleFactor,
           width: (widget.algae ? 75 : 100) * widget.scaleFactor,
           decoration: BoxDecoration(
-              color: active ? Constants.pastelRed : Constants.pastelGray),
+              color: active
+                  ? (widget.algae ? Constants.pastelGreen : Constants.pastelRed)
+                  : Constants.pastelGray),
           //coral icons for the corals that you can choose to click within the map within auto section within atlas section
           child: Center(
             child: IconButton(
@@ -395,7 +398,8 @@ class RSAUHexagon extends StatelessWidget {
             aspectRatio: 1,
             child: Stack(
               children: [
-                CustomPaint(size: Size.infinite, painter: HexagonPainter()),
+                CustomPaint(
+                    size: Size.infinite, painter: HexagonPainter(sharedState)),
                 for (int i = 0; i < 6; i++)
                   TriangleTapRegion(
                       index: i,
@@ -408,42 +412,58 @@ class RSAUHexagon extends StatelessWidget {
 }
 
 class HexagonPainter extends CustomPainter {
+  final SharedState sharedState;
+  List<String> labels = ["IJ", "GH", "EF", "CD", "AB", "KL"];
+  HexagonPainter(this.sharedState);
+
   @override
   void paint(Canvas canvas, Size size) {
+    print(sharedState.activeTriangle);
     final Paint paint = Paint()
       ..color = Constants.pastelWhite
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5;
 
+    final Paint highlightFillPaint = Paint()
+      ..color = Constants.pastelBlue
+      ..style = PaintingStyle.fill;
+
     final Paint fillPaint = Paint()
       ..color = Constants.pastelGray
       ..style = PaintingStyle.fill;
 
-    final double R = size.width / 2; // Radius of the hexagon
+    final double R = size.width / 2;
     final Offset center = Offset(size.width / 2, size.height / 2);
 
-    // Calculate the vertices of the hexagon
-    final List<Offset> vertices = [];
+    final List<Offset> hexagonVertices = [];
     for (int k = 0; k < 6; k++) {
       double angle = k * (math.pi / 3);
-      vertices.add(Offset(
+      hexagonVertices.add(Offset(
         center.dx + R * math.cos(angle),
         center.dy + R * math.sin(angle),
       ));
     }
 
-    // Draw the hexagon
-    final Path hexagonPath = Path()..moveTo(vertices[0].dx, vertices[0].dy);
-    for (int i = 1; i < vertices.length; i++) {
-      hexagonPath.lineTo(vertices[i].dx, vertices[i].dy);
+    final List<List<Offset>> triangleVertices = [];
+    for (int k = 0; k < 6; k++) {
+      triangleVertices
+          .add([hexagonVertices[k], hexagonVertices[(k + 1) % 6], center]);
     }
-    hexagonPath.close();
-    canvas.drawPath(hexagonPath, paint);
-    canvas.drawPath(hexagonPath, fillPaint);
 
-    // Draw lines from the center to each vertex
-    for (final vertex in vertices) {
-      canvas.drawLine(center, vertex, paint);
+    for (int i = 0; i < 6; i++) {
+      final Path hexagonPath = Path()
+        ..moveTo(triangleVertices[i][0].dx, triangleVertices[i][0].dy)
+        ..lineTo(triangleVertices[i][1].dx, triangleVertices[i][1].dy)
+        ..lineTo(triangleVertices[i][2].dx, triangleVertices[i][2].dy)
+        ..close();
+
+      canvas.drawPath(
+          hexagonPath,
+          sharedState.activeTriangle != null &&
+                  i == labels.indexOf(sharedState.activeTriangle!)
+              ? highlightFillPaint
+              : fillPaint);
+      canvas.drawPath(hexagonPath, paint);
     }
   }
 
@@ -494,13 +514,11 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
                   HapticFeedback.mediumImpact();
                   widget.sharedState.setActiveTriangle(widget.label);
                 },
-                child: Container(
-                    color: Constants.pastelGreen,
-                    child: Text(
-                      widget.label,
-                      style: comfortaaBold(20 * widget.scaleFactor,
-                          color: Constants.pastelWhite),
-                    )),
+                child: Text(
+                  widget.label,
+                  style: comfortaaBold(20 * widget.scaleFactor,
+                      color: Constants.pastelWhite),
+                ),
               )
             : GestureDetector(
                 behavior: HitTestBehavior.translucent,
