@@ -18,7 +18,6 @@ class RSAutoUntimed extends StatefulWidget {
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
   bool get pit => widget.pit;
-  int currentAuto = 1;
   late SharedState sharedState;
   late double scaleFactor;
   @override
@@ -59,7 +58,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                         child: SizedBox(
                           height: 23,
                           child: DropdownButton(
-                              value: currentAuto,
+                              value: sharedState.currentAuto,
                               items: [
                                 DropdownMenuItem(
                                   value: 1,
@@ -88,7 +87,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                               ],
                               onChanged: (selection) {
                                 setState(() {
-                                  currentAuto = selection! as int;
+                                  sharedState.currentAuto = selection! as int; //flutter is being weird about this one, so I'm gonna keep this cast for now...
                                 });
                               }),
                         ),
@@ -408,9 +407,9 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
 
   @override
   Widget build(BuildContext context) {
-    active =
-        sharedState.targetData["autoCoralScored"].contains(widget.location) ||
-            sharedState.targetData["autoAlgaeRemoved"].contains(widget.location);
+    active = sharedState.targetData["autoCoralScored"]
+            .contains(widget.location) ||
+        sharedState.targetData["autoAlgaeRemoved"].contains(widget.location);
     return GestureDetector(
       onTap: setActive,
       child: Container(
@@ -671,7 +670,7 @@ class RSAUCoralStation extends StatefulWidget {
 }
 
 class _RSAUCoralStationState extends State<RSAUCoralStation> {
-  final sharedState = SharedState(); 
+  final sharedState = SharedState();
   @override
   void initState() {
     super.initState();
