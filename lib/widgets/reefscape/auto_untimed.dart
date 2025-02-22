@@ -140,6 +140,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
       pit ? NRGCheckbox(
           title: "Drops Algae on Ground",
           jsonKey: "dropsAlgaeAuto",
+          jsonKeyPath: sharedState.targetData,
           height: 40,
           width: 400) : SizedBox()
     ];
@@ -787,7 +788,8 @@ class RSAUSharedState extends ChangeNotifier {
         'autoCS': [],
         'autoCoralScored': [],
         'autoAlgaeRemoved': [],
-        'autoCoralScoredL1': '0'
+        'autoCoralScoredL1': '0', 
+        'dropsAlgaeAuto': false
       };
 
   void setCurrentAuto(int auto) {

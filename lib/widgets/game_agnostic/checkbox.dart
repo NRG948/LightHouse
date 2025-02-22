@@ -9,6 +9,8 @@ class NRGCheckbox extends StatefulWidget {
   final String title; // The title of the checkbox.
   final String
       jsonKey; // The key used to store the checkbox state in exportData.
+  final Map<String, dynamic>?
+      jsonKeyPath; // alternate path to provide more control
   final double height; // The height of the checkbox widget.
   final double width; // The width of the checkbox widget.
   final bool
@@ -17,6 +19,7 @@ class NRGCheckbox extends StatefulWidget {
       {super.key,
       required this.title,
       required this.jsonKey,
+      this.jsonKeyPath,
       required this.height,
       required this.width,
       this.vertical = false});
@@ -27,6 +30,7 @@ class NRGCheckbox extends StatefulWidget {
 
 class _NRGCheckboxState extends State<NRGCheckbox> {
   String get _key => widget.jsonKey; // Getter for the jsonKey.
+  Map<String, dynamic>? get _keyPath => widget.jsonKeyPath;
   bool isChecked = false; // Initial state of the checkbox.
 
   // Notifier to update the checkbox state.
@@ -39,7 +43,11 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
   void initState() {
     super.initState();
     // Initialize the exportData with the checkbox state.
-    DataEntry.exportData[widget.jsonKey] = false;
+    if (_keyPath == null) {
+      DataEntry.exportData[widget.jsonKey] = false;
+    } else {
+      _keyPath![widget.jsonKey] = false;
+    }
   }
 
   @override
@@ -84,7 +92,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                   valueListenable: checkboxNotifier,
                   builder: (context, isChecked, child) {
                     return Checkbox(
-                        value: isChecked,
+                        value: _keyPath == null ? DataEntry.exportData[_key] : _keyPath![widget.jsonKey],
                         onChanged: (bool? newValue) {
                           HapticFeedback.mediumImpact();
                           // Update the checkbox state.
@@ -107,8 +115,13 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
         onTap: () {
           // Toggle the checkbox state.
           checkboxNotifier.value = !checkboxNotifier.value;
+          print(checkboxNotifier.value);
           // Update the exportData with the new state.
-          DataEntry.exportData[_key] = checkboxNotifier.value;
+          if (_keyPath == null) {
+            DataEntry.exportData[_key] = checkboxNotifier.value;
+          } else {
+            _keyPath![widget.jsonKey] = checkboxNotifier.value;
+          }
         },
         child: Container(
             height: _height,
