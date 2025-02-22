@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 
 class RSAutoUntimed extends StatefulWidget {
   final double width;
@@ -18,15 +19,20 @@ class RSAutoUntimed extends StatefulWidget {
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
   bool get pit => widget.pit;
-  int current_auto = 1;
-  late SharedState sharedState;
+  late RSAUSharedState sharedState;
   late double scaleFactor;
   @override
   void initState() {
     super.initState();
-    sharedState = SharedState();
-
+    sharedState = RSAUSharedState();
+    sharedState.initialize(widget.pit);
     scaleFactor = widget.width / 400;
+
+    if (widget.pit) {
+      assert(DataEntry.exportData['auto'] != null);
+      assert(DataEntry.exportData['auto']['auto1'] != null);
+      assert(DataEntry.exportData['auto']['auto1']['autoCS'] != null);
+    }
   }
 
   @override
@@ -59,7 +65,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                         child: SizedBox(
                           height: 23,
                           child: DropdownButton(
-                              value: current_auto,
+                              value: sharedState.currentAuto,
                               items: [
                                 DropdownMenuItem(
                                   value: 1,
@@ -68,7 +74,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                                     style:
                                         comfortaaBold(20, color: Colors.black),
                                   ),
-                                ), 
+                                ),
                                 DropdownMenuItem(
                                   value: 2,
                                   child: Text(
@@ -76,7 +82,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                                     style:
                                         comfortaaBold(20, color: Colors.black),
                                   ),
-                                ), 
+                                ),
                                 DropdownMenuItem(
                                   value: 3,
                                   child: Text(
@@ -84,11 +90,12 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                                     style:
                                         comfortaaBold(20, color: Colors.black),
                                   ),
-                                ), 
+                                ),
                               ],
                               onChanged: (selection) {
                                 setState(() {
-                                  current_auto = selection!;
+                                  sharedState.setCurrentAuto(selection!
+                                      as int); //flutter is being weird about this one, so I'm gonna keep this cast for now...
                                 });
                               }),
                         ),
@@ -129,10 +136,16 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
         sharedState: sharedState,
         scaleFactor: scaleFactor,
       ),
-      RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)
+      RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor),
+      pit ? NRGCheckbox(
+          title: "Drops Algae on Ground",
+          jsonKey: "dropsAlgaeAuto",
+          jsonKeyPath: sharedState.targetData,
+          height: 40,
+          width: 400) : SizedBox()
     ];
     return Container(
-      height: 700 * scaleFactor,
+      height: pit ? 670 : 700 * scaleFactor,
       width: widget.width,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
@@ -143,7 +156,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 }
 
 class RSAUReef extends StatefulWidget {
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   final double scaleFactor;
   const RSAUReef(
       {super.key, required this.sharedState, required this.scaleFactor});
@@ -154,13 +167,15 @@ class RSAUReef extends StatefulWidget {
 
 class _RSAUReefState extends State<RSAUReef>
     with AutomaticKeepAliveClientMixin {
+  final sharedState = RSAUSharedState();
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
-    DataEntry.exportData["autoCoralScored"] = [];
-    DataEntry.exportData["autoAlgaeRemoved"] = [];
+    sharedState.targetData["autoCoralScored"] = [];
+    sharedState.targetData["autoAlgaeRemoved"] = [];
     super.initState();
     widget.sharedState.addListener(() {
       setState(() {});
@@ -261,29 +276,32 @@ class RSAUTrough extends StatefulWidget {
 }
 
 class _RSAUTroughState extends State<RSAUTrough> {
-  late int counter;
+  final sharedState = RSAUSharedState();
 
   @override
   void initState() {
     super.initState();
-    counter = 0;
+    sharedState.targetData["autoCoralScoredL1"] = "0";
   }
 
   void increment() {
     setState(() {
-      if (counter < 99) {
-        counter++;
+      if (int.parse(sharedState.targetData["autoCoralScoredL1"]) < 99) {
+        sharedState.targetData["autoCoralScoredL1"] =
+            (int.parse(sharedState.targetData["autoCoralScoredL1"]) + 1)
+                .toString();
       }
-      DataEntry.exportData["autoCoralScoredL1"] = counter.toString();
     });
   }
 
   void decrement() {
     setState(() {
-      if (counter > 0) {
-        counter--;
+      if (int.parse(sharedState.targetData["autoCoralScoredL1"]) > 0) {
+        sharedState.targetData["autoCoralScoredL1"] =
+            (int.parse(sharedState.targetData["autoCoralScoredL1"]) - 1)
+                .toString();
+        ;
       }
-      DataEntry.exportData["autoCoralScoredL1"] = counter.toString();
     });
   }
 
@@ -296,8 +314,9 @@ class _RSAUTroughState extends State<RSAUTrough> {
         width: 301 * widget.scaleFactor,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color:
-                counter > 0 ? Constants.pastelRedMuted : Constants.pastelGray),
+            color: int.parse(sharedState.targetData["autoCoralScoredL1"]) > 0
+                ? Constants.pastelRed
+                : Constants.pastelGray),
         child: Center(
           child: GestureDetector(
             onTap: increment,
@@ -331,7 +350,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                             width: 250 * widget.scaleFactor,
                             //the number count of the coral being scored on that level
                             child: Text(
-                              counter.toString(),
+                              sharedState.targetData["autoCoralScoredL1"],
                               style: comfortaaBold(23 * widget.scaleFactor,
                                   color: Constants.pastelWhite),
                               textAlign: TextAlign.center,
@@ -374,6 +393,7 @@ class RSAUReefButton extends StatefulWidget {
 }
 
 class _RSAUReefButtonState extends State<RSAUReefButton> {
+  final sharedState = RSAUSharedState();
   late bool active;
 
   @override
@@ -387,16 +407,16 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
       if (!active) {
         HapticFeedback.heavyImpact();
         if (widget.algae) {
-          DataEntry.exportData["autoAlgaeRemoved"].add(widget.location);
+          sharedState.targetData["autoAlgaeRemoved"].add(widget.location);
         } else {
-          DataEntry.exportData["autoCoralScored"].add(widget.location);
+          sharedState.targetData["autoCoralScored"].add(widget.location);
         }
       } else {
         HapticFeedback.lightImpact();
         if (widget.algae) {
-          DataEntry.exportData["autoAlgaeRemoved"].remove(widget.location);
+          sharedState.targetData["autoAlgaeRemoved"].remove(widget.location);
         } else {
-          DataEntry.exportData["autoCoralScored"].remove(widget.location);
+          sharedState.targetData["autoCoralScored"].remove(widget.location);
         }
       }
       active = !active;
@@ -405,9 +425,9 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
 
   @override
   Widget build(BuildContext context) {
-    active =
-        DataEntry.exportData["autoCoralScored"].contains(widget.location) ||
-            DataEntry.exportData["autoAlgaeRemoved"].contains(widget.location);
+    active = sharedState.targetData["autoCoralScored"]
+            .contains(widget.location) ||
+        sharedState.targetData["autoAlgaeRemoved"].contains(widget.location);
     return GestureDetector(
       onTap: setActive,
       child: Container(
@@ -433,7 +453,7 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
 }
 
 class RSAUHexagon extends StatelessWidget {
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   final double scaleFactor;
   const RSAUHexagon(
       {super.key, required this.sharedState, required this.scaleFactor});
@@ -472,7 +492,7 @@ class RSAUHexagon extends StatelessWidget {
 }
 
 class HexagonPainter extends CustomPainter {
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   List<String> labels = ["IJ", "GH", "EF", "CD", "AB", "KL"];
   HexagonPainter(this.sharedState);
 
@@ -534,7 +554,7 @@ class HexagonPainter extends CustomPainter {
 class TriangleTapRegion extends StatefulWidget {
   final int index;
   final String label;
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   final double scaleFactor;
   const TriangleTapRegion(
       {super.key,
@@ -685,10 +705,11 @@ class RSAUCoralStation extends StatefulWidget {
 }
 
 class _RSAUCoralStationState extends State<RSAUCoralStation> {
+  final sharedState = RSAUSharedState();
   @override
   void initState() {
     super.initState();
-    DataEntry.exportData[widget.jsonKey] = [];
+    sharedState.targetData[widget.jsonKey] = [];
   }
 
   @override
@@ -703,7 +724,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
         child: TextButton(
             onPressed: () {
               HapticFeedback.heavyImpact();
-              DataEntry.exportData[widget.jsonKey]
+              sharedState.targetData[widget.jsonKey]
                   .add(widget.title.toLowerCase());
             },
             child: Text(
@@ -719,9 +740,9 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
         color: Constants.pastelGray,
         child: TextButton(
             onPressed: () {
-              if (DataEntry.exportData[widget.jsonKey].length > 0) {
+              if (sharedState.targetData[widget.jsonKey].length > 0) {
                 HapticFeedback.lightImpact();
-                DataEntry.exportData[widget.jsonKey].removeLast();
+                sharedState.targetData[widget.jsonKey].removeLast();
               }
             },
             child: Text("U\nN\nD\nO",
@@ -736,10 +757,64 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
   }
 }
 
-class SharedState extends ChangeNotifier {
+class RSAUSharedState extends ChangeNotifier {
+  static final RSAUSharedState _instance = RSAUSharedState._internal();
+  factory RSAUSharedState() => _instance;
+  RSAUSharedState._internal();
+
+  final List<VoidCallback> _listeners = [];
+  int currentAuto = 1;
   String? activeTriangle;
+  late bool pitMode = false;
+
+  @override
+  void addListener(VoidCallback listener) {
+    super.addListener(listener);
+    _listeners.add(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    super.removeListener(listener);
+    _listeners.remove(listener);
+  }
+
+  Map<String, dynamic> get targetData {
+    if (!pitMode) return DataEntry.exportData;
+
+    return (DataEntry.exportData['auto']
+        as Map<String, dynamic>)['auto$currentAuto'] as Map<String, dynamic>;
+  }
+
+  void initialize(bool pit) {
+    for (final listener in List.of(_listeners)) {
+      removeListener(listener);
+    }
+    activeTriangle = null;
+    pitMode = pit;
+    if (pitMode) {
+      DataEntry.exportData['auto'] = {
+        'auto1': _createAutoEntry(),
+        'auto2': _createAutoEntry(),
+        'auto3': _createAutoEntry()
+      };
+    }
+  }
+
+  Map<String, dynamic> _createAutoEntry() => {
+        'autoCS': [],
+        'autoCoralScored': [],
+        'autoAlgaeRemoved': [],
+        'autoCoralScoredL1': '0', 
+        'dropsAlgaeAuto': false
+      };
+
+  void setCurrentAuto(int auto) {
+    currentAuto = auto;
+    notifyListeners();
+  }
+
   void setActiveTriangle(String triangle) {
-    print(triangle);
     activeTriangle = triangle;
     notifyListeners();
   }
