@@ -77,13 +77,15 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         decoration: InputDecoration(
             label: Text('Team Number',
                 style: comfortaaBold(12,
-                    color: Constants.pastelReddishBrown, customFontWeight: FontWeight.w900)),
+                    color: Constants.pastelReddishBrown,
+                    customFontWeight: FontWeight.w900)),
             iconColor: Constants.pastelReddishBrown),
         items: teamsInDatabase
             .map((int team) => DropdownMenuItem(
                 value: team,
                 child: Text("$team",
-                    style: comfortaaBold(12, color: Constants.pastelReddishBrown))))
+                    style: comfortaaBold(12,
+                        color: Constants.pastelReddishBrown))))
             .toList(),
         onChanged: (n) {
           setState(() {
@@ -145,11 +147,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       }
     }
 
-    return Text(
-      "Algae Accuracy: $algaeScored/$totalAlgae",
-      textAlign: TextAlign.left,
-      style: comfortaaBold(10, color: Constants.pastelReddishBrown)
-    );
+    return Text("Algae Accuracy: $algaeScored/$totalAlgae",
+        textAlign: TextAlign.left,
+        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
   }
 
   Widget getDisableReasonCommentBox() {
@@ -301,12 +301,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       Constants.pastelRed,
       Constants.pastelYellow
     ];
-    List<String> labels = [
-      "L1",
-      "L2",
-      "L3",
-      "L4"
-    ];
+    List<String> labels = ["L1", "L2", "L3", "L4"];
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
@@ -338,25 +333,39 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAutoPreviews() {
-    List<AnimatedAutoReplay> autos = [];
+    Map<int, AnimatedAutoReplay> autos = {};
 
     for (Map<String, dynamic> matchData in chronosData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
-        autos.add(AnimatedAutoReplay(
-          height: 160 * verticalScaleFactor,
-          width: 160 * horizontalScaleFactor,
-          startingPosition: List<double>.from(matchData["startingPosition"]
-              .split(",")
-              .map((x) => double.parse(x))
-              .toList()),
-          waypoints: List<List<dynamic>>.from(matchData["autoEventList"]),
-          flipStarting: matchData["driverStation"][0] == "R",
-        ));
+        autos[matchData["matchNumber"]] = AnimatedAutoReplay(
+            height: 160 * verticalScaleFactor,
+            width: 160 * horizontalScaleFactor,
+            path: AutoPath(
+              startingPosition: List<double>.from(matchData["startingPosition"]
+                  .split(",")
+                  .map((x) => double.parse(x))
+                  .toList()),
+              waypoints: List<List<dynamic>>.from(matchData["autoEventList"]),
+              flipStarting: matchData["driverStation"][0] == "R",
+            ));
+      }
+    }
+
+    for (Map<String, dynamic> matchData in atlasData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        if (!autos.containsKey(matchData["matchNumber"])) {
+          autos[matchData["matchNumber"]] = AnimatedAutoReplay(
+              height: 160 * verticalScaleFactor,
+              width: 160 * horizontalScaleFactor);
+        }
       }
     }
 
     return ScrollableAutoPaths(
-        height: 220 * verticalScaleFactor, width: 190 * horizontalScaleFactor, title: "Autos", autos: autos);
+        height: 220 * verticalScaleFactor,
+        width: 190 * horizontalScaleFactor,
+        title: "Autos",
+        autos: autos.values.toList());
   }
 
   @override
@@ -374,7 +383,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data", style: comfortaaBold(18,color: Constants.pastelReddishBrown)));
+          body: Text("No data",
+              style: comfortaaBold(18, color: Constants.pastelReddishBrown)));
     }
 
     if (currentTeamNumber == 0) {
@@ -386,7 +396,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     verticalScaleFactor = screenHeight / 914;
     horizontalScaleFactor = screenWidth / 411;
     marginSize = 10 * verticalScaleFactor;
-    
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
