@@ -274,6 +274,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
   @override
   void initState() {
     super.initState();
+    sharedState.targetData["autoCoralScoredL1"] = "0";
   }
 
   void increment() {
