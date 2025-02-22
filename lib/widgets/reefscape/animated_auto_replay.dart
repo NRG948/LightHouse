@@ -1,8 +1,10 @@
 import 'dart:math';
 
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 
+// This widget animates an object along a predefined path with auto-replay functionality.
 class AnimatedAutoReplay extends StatefulWidget {
   final double height;
   final double width;
@@ -23,6 +25,7 @@ class AnimatedAutoReplay extends StatefulWidget {
 
 class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     with SingleTickerProviderStateMixin {
+  // Define key locations and event mappings.
   Map<String, Offset> keyLocations = {
     "AB": Offset(-0.8, 0),
     "CD": Offset(-0.05, 1.3),
@@ -69,36 +72,16 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   void initState() {
     super.initState();
 
+    // Initialize robot size and animation controller.
     _robotSideLength = (min(_height, _width) - 20) / 12;
     _controller =
-        AnimationController(duration: Duration(seconds: 15), vsync: this);
+        AnimationController(duration: Duration(seconds: 3), vsync: this);
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _resetAutoPath();
       }
     });
     _animation = _getAnimationPath();
-
-    /*
-    TweenSequence<Offset>([
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(6, 6), end: Offset(5.35, 6))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 2),
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(5.35, 6), end: Offset(2.2, 0))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 1),
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(2.2, 0), end: Offset(-0.05, 1.3))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 1),
-      TweenSequenceItem(
-          tween: Tween(begin: Offset(-0.05, 1.3), end: Offset(-0.05, 1.3))
-              .chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: 1),
-    ]).animate(_controller);
-    */
   }
 
   @override
@@ -107,6 +90,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     super.dispose();
   }
 
+  // Handle single click to start/stop animation.
   void _autoPathSingleClick() {
     if (_controller.isAnimating) {
       _controller.stop();
@@ -115,10 +99,12 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     }
   }
 
+  // Reset the animation path.
   void _resetAutoPath() {
     _controller.reset();
   }
 
+  // Calculate offset from starting location.
   Offset _calculateOffsetFromStartingLocation(List<double> pos, bool flip) {
     assert(pos.length == 2);
     double x = pos[0];
@@ -131,6 +117,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     return Offset(6 - (0.6 - x) * 13 / 6, 2 * (y - 0.5) * 6);
   }
 
+  // Generate animation path based on waypoints.
   Animation<Offset> _getAnimationPath() {
     List<TweenSequenceItem<Offset>> items = [];
     items.add(TweenSequenceItem(
@@ -171,25 +158,29 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
                     image: AssetImage("assets/images/auto_field_map.png"),
                     fit: BoxFit.contain),
               ),
-              child: AnimatedBuilder(
-                animation: _animation,
-                builder: (context, child) {
-                  return Align(
-                    alignment: Alignment.center,
-                    child: FractionalTranslation(
-                      translation: _animation.value,
-                      child: child,
+              child: Stack(
+                children: [
+                  AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      return Align(
+                        alignment: Alignment.center,
+                        child: FractionalTranslation(
+                          translation: _animation.value,
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: _robotSideLength,
+                      height: _robotSideLength,
+                      decoration: BoxDecoration(
+                        color: Constants.pastelRed,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  );
-                },
-                child: Container(
-                  width: _robotSideLength,
-                  height: _robotSideLength,
-                  decoration: BoxDecoration(
-                    color: Constants.pastelRed,
-                    shape: BoxShape.circle,
                   ),
-                ),
+                ],
               ),
             ),
           ),

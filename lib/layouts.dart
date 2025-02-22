@@ -54,49 +54,8 @@ Map<String, dynamic> atlascout = {
       "icon": CoralAlgaeIcons.teleop,
       "widgets": [
         {
-          "title": "Coral Pickups",
-          "type": "multispinbox",
-          "jsonKey": [
-            "coralPickupsStation",
-            "coralPickupsGround",
-          ],
-          "height": "30",
-          "boxNames": [
-            ["Station", "Ground"]
-          ]
-        },
-        {
-          "title": "Coral Scored",
-          "type": "multispinbox",
-          "jsonKey": [
-            "coralScoredL1",
-            "coralScoredL2",
-            "coralScoredL3",
-            "coralScoredL4",
-          ],
-          "height": "43",
-          "boxNames": [
-            ["L1", "L2"],
-            ["L3", "L4"]
-          ]
-        },
-        {
-          "title": "Algae",
-          "type": "multispinbox",
-          "jsonKey": [
-            "algaeremoveL2",
-            "algaeremoveL3",
-            "algaescoreProcessor",
-            "algaescoreNet",
-            "algaemissProcessor",
-            "algaemissNet"
-          ],
-          "height": "65",
-          "boxNames": [
-            ["Remove L2", "Remove L3"],
-            ["Score Processor", "Score Net"],
-            ["Miss Processor", "Miss Net"]
-          ]
+          "type": "atlas-teleop",
+          "height": "150",
         }
       ]
     },
@@ -225,14 +184,14 @@ Map<String, dynamic> chronoscout = {
           "title": "General Strategy",
           "type": "dropdown",
           "jsonKey": "generalStrategy",
-          "options": "Cycling,Defense,Feed/Pass,Other"
+          "options": "Coral Cycle,Algae Cycle,Hybrid Cycle,Defense,Feed/Pass,Other"
         },
         {
           "title": "Data Quality",
           "type": "rating",
           "jsonKey": "rating"
         },
-        {"title": "Comments", "type": "textbox", "jsonKey": "comments","maxLines":20,"fontSize":15.0,"height":"100"}
+        {"title": "Comments", "type": "textbox", "jsonKey": "comments","maxLines":20,"fontSize":15.0,"height":"90"}
       ]
     }
   ]
@@ -294,7 +253,7 @@ Map<String, dynamic> pitscout = {
           "type": "textbox",
           "jsonKey": "robotMechanisms",
           "maxLines":20,
-          "fontSize":21.0
+          "fontSize":15.0
         }
       ]
     },
@@ -304,7 +263,7 @@ Map<String, dynamic> pitscout = {
       "widgets": [
         {
           "height": "40",
-          "width": "60",
+          "width": "70",
           "type": "rsAutoUntimedPit",
           "jsonKey": [
             "autoProcessorCS",
@@ -317,6 +276,7 @@ Map<String, dynamic> pitscout = {
         {
           "title": "Drops Algae on Ground",
           "type": "checkbox",
+          "height": "17", 
           "jsonKey": "dropsAlgaeAuto"
         }
       ]
@@ -381,9 +341,11 @@ Map<String, dynamic> pitscout = {
           ]
         },
         {
-          "title": "Average Climb Time",
+          "title": "Preferred Climb Start Time",
           "type": "textbox",
           "jsonKey": "averageClimbTime",
+          "maxLines": 1,
+          "fontSize": 15.0
         }
       ]
     },
@@ -396,7 +358,7 @@ Map<String, dynamic> pitscout = {
           "type": "textbox",
           "jsonKey": "driveExperience",
           "maxLines":20,
-          "fontSize":16.5
+          "fontSize":14.5
 
         },
         {
@@ -410,24 +372,24 @@ Map<String, dynamic> pitscout = {
           "type": "row",
           "children": [
             {
-              "title": "Average Coral \n Cycles Time",
+              "title": "Coral Cycles \n Per Match",
               "type": "numberbox",
               "jsonKey": "averageCoralCycles",
               "width": "34",
               "maxLines":20,
-              "fontSize":17.5
+              "fontSize":12.5
             },
             {
               "type": "spacer",
               "width": "2",
             },
             {
-              "title": "Average Algae \n Cycles Time",
+              "title": "Algae Cycles \n Per Match",
               "type": "numberbox",
               "jsonKey": "averageAlgaeCycles",
               "width": "34",
               "maxLines":20,
-              "fontSize":17.5
+              "fontSize":12.5
             }
           ]
         },
@@ -436,7 +398,7 @@ Map<String, dynamic> pitscout = {
           "type": "textbox",
           "jsonKey": "idealAlliancePartnerQualities",
           "maxLines":20,
-          "fontSize":16.5
+          "fontSize":14.5
         },
         {
           "title": "Other Comments",
@@ -466,36 +428,10 @@ Map<String, dynamic> hpscout = {
       "title": "Scoring",
       "icon": CustomIcons.gamepad,
       "widgets": [
-       // TODO: Add HP multi spinbox
         {
-          "type": "multispinbox",
-          "title": "Scoring",
-          "jsonKey": ["redScore", "blueScore"],
-          "otherJsonKey": ["redNetAlgae","blueNetAlgae"],
-          "height": "25",
-          "boxNames": [
-            ["Red Score", "Blue Score"]
-            ]
-        },
-        {
-          "type": "multispinbox",
-          "title": "Missing",
-          "jsonKey": ["redMiss", "blueMiss"],
-          "height": "25",
-          "boxNames": [
-            ["Red Miss", "Blue Miss"]
-            ]
-        },
-        // TODO: Make this automatically update based on red/blue score
-        {
-          "title": "Algae in Net",
-          "type": "multispinbox",
-          "jsonKey": ["redNetAlgae", "blueNetAlgae"],
-          "height": "25",
-          "boxNames": [
-            ["Red Algae", "Blue Algae"]
-          ],
-        },
+          "type": "hp-teleop", 
+          "height": "105"
+        }, 
         {
           "title": "Data Quality",
           "type": "rating",

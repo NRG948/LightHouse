@@ -4,7 +4,7 @@ import "dart:convert";
 
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
-import "package:flutter/rendering.dart";
+import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/layouts.dart";
@@ -26,16 +26,21 @@ import "package:lighthouse/widgets/game_agnostic/start_pos.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
+import "package:lighthouse/widgets/reefscape/atlas_teleop_selection.dart";
 
 import "package:lighthouse/widgets/reefscape/auto_timed.dart";
 import "package:lighthouse/widgets/reefscape/auto_untimed.dart";
+import "package:lighthouse/widgets/reefscape/hp_teleop_selection.dart";
 import "package:lighthouse/widgets/reefscape/teleop_timed.dart";
 
+// Main widget for the Data Entry page
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
-  static final Map<int, Duration> stopwatchMap = {};
+  static final Map<int, Duration> stopwatchMap = {
+  };
   static late String activeConfig;
+
   @override
   State<DataEntry> createState() => DataEntryState();
 }
@@ -85,9 +90,11 @@ class DataEntryState extends State<DataEntry> {
   @override
   void dispose() {
     controller.dispose();
+    guidanceStopwatch.stop();
     super.dispose();
   }
 
+  // Create a list of widgets based on the provided widget data
   List<Widget> createWidgetList(List<dynamic> widgets, [double? desireHeight]) {
     final widgetList = widgets.map((widgetData) {
       final type = widgetData["type"]!;
@@ -98,7 +105,6 @@ class DataEntryState extends State<DataEntry> {
           width: 70 * resizeScaleFactorWidth,
           height: height,
           child: Row(
-              spacing: 0,
               children: createWidgetList(widgetData["children"]!, height)),
         );
       }
@@ -272,6 +278,10 @@ class DataEntryState extends State<DataEntry> {
               title: title,
               comments: comments,
               sort: sortType);
+        case "atlas-teleop":
+          return AtlasTeleopSelection(width: width, height: height);
+        case "hp-teleop": 
+          return HPTeleopSelection(height: height, width: width);
       }
       return Text("type $type isn't a valid type");
     }).toList();
@@ -325,93 +335,98 @@ class DataEntryState extends State<DataEntry> {
         : {};
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            backgroundColor: Constants.pastelRed,
-            title: FittedBox(
-              child: AutoSizeText(
-                "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
-                style: TextStyle(
-                    fontFamily: "Comfortaa",
-                    fontWeight: FontWeight.w900,
-                    color: Constants.pastelWhite),
-                minFontSize: 4,
+      child: GestureDetector(
+        // Allows keyboard to be closed when anywhere else is clicked on screen
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          // Prevents background image from being resized when keyboard opens
+          resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              backgroundColor: Constants.pastelRed,
+              title: FittedBox(
+                child: AutoSizeText(
+                  "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
+                  style: TextStyle(
+                      fontFamily: "Comfortaa",
+                      fontWeight: FontWeight.w900,
+                      color: Constants.pastelWhite),
+                  minFontSize: 4,
+                ),
               ),
-            ),
-            centerTitle: true,
-            leading: IconButton(
-                onPressed: () {
-                  showReturnDialog(context);
-                },
-                icon: Icon(Icons.home, color: Constants.pastelWhite)),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.javascript, color: Constants.pastelWhite),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext) {
-                        return Dialog(
-                          child: Text(jsonEncode(DataEntry.exportData)),
-                        );
-                      });
-                },
-              ),
-              IconButton(
+              centerTitle: true,
+              leading: IconButton(
                   onPressed: () {
-                    saveJson(context);
+                    showReturnDialog(context);
                   },
-                  icon: Icon(
-                    Icons.save,
-                    color: Constants.pastelWhite,
-                  ))
-            ],
-          ),
-          bottomNavigationBar: buildBottomNavBar(layoutJSON),
-          body: Container(
-            height: screenHeight,
-            width: screenWidth,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
-                    fit: BoxFit.fill)),
-            child: NotificationListener<OverscrollNotification>(
-              onNotification: (notification) {
-                if (
-                  notification.overscroll < -25
-                    ) {
-                  showReturnDialog(context);
-                }
-                if (notification.overscroll > 25
-                        ) {
-                  saveJson(context);
-                }
-                return true;
-              },
-              child: PageView(
-                controller: controller,
-                scrollDirection: Axis.horizontal,
-                children: createWidgetPages(layoutJSON["pages"]),
-                onPageChanged: (index) {
-                  setState(() {
-                    currentPage = index;
-                    
-                    // this tells the stopwatches what they should start
-                    // counting down from. 
-                    switch (currentPage) {
-                      case 1: {
-                        stopwatchInitialValue = Duration(seconds: 15);
-                      }
-                      case 2: {
-                        stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
-                      }
-                    }
-                  });
-                },
-              ),
+                  icon: Icon(Icons.home, color: Constants.pastelWhite)),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.javascript, color: Constants.pastelWhite),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext) {
+                          return Dialog(
+                            child: Text(jsonEncode(DataEntry.exportData)),
+                          );
+                        });
+                  },
+                ),
+                IconButton(
+                    onPressed: () {
+                      saveJson(context);
+                    },
+                    icon: Icon(
+                      Icons.save,
+                      color: Constants.pastelWhite,
+                    ))
+              ],
             ),
-          )),
+            bottomNavigationBar: buildBottomNavBar(layoutJSON),
+            body: Container(
+              height: screenHeight,
+              width: screenWidth,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/background-hires.png"),
+                      fit: BoxFit.fill)),
+              child: NotificationListener<OverscrollNotification>(
+                onNotification: (notification) {
+                  if (
+                    notification.overscroll < -25
+                      ) {
+                    showReturnDialog(context);
+                  }
+                  if (notification.overscroll > 25
+                          ) {
+                    saveJson(context);
+                  }
+                  return true;
+                },
+                child: PageView(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  children: createWidgetPages(layoutJSON["pages"]),
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentPage = index;
+                      
+                      // this tells the stopwatches what they should start
+                      // counting down from. 
+                      switch (currentPage) {
+                        case 1: {
+                          stopwatchInitialValue = Duration(seconds: 15);
+                        }
+                        case 2: {
+                          stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
+                        }
+                      }
+                    });
+                  },
+                ),
+              ),
+            )),
+      ),
     );
   }
 
@@ -424,6 +439,10 @@ class DataEntryState extends State<DataEntry> {
       child: BottomNavigationBar(
           onTap: (index) {
             setState(() {
+              if (currentPage != index) {
+                HapticFeedback.mediumImpact();
+              }
+
               isUnderGuidance = false;
               currentPage = index;
 
@@ -457,7 +476,8 @@ class DataEntryState extends State<DataEntry> {
   }
 
   void checkGuidanceState(Timer guidanceTimer) {
-    if (guidanceStopwatch.elapsed.inSeconds >= 135 + Constants.startDelay) {
+    if (guidanceStopwatch.elapsed.inSeconds >= 150 + Constants.startDelay) {
+      guidanceStopwatch.stop();
       if (guidanceState != GuidanceState.endgame) {
         guidanceState = GuidanceState.endgame;
         guidanceTimer.cancel();
@@ -489,6 +509,7 @@ class DataEntryState extends State<DataEntry> {
 }
 
 void saveJson(BuildContext context) async {
+  HapticFeedback.mediumImpact();
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -503,6 +524,7 @@ void saveJson(BuildContext context) async {
                 child: Text("No")),
             TextButton(
                 onPressed: () async {
+                  HapticFeedback.mediumImpact();
                   List<String> missingFields = dataVerification();
                   if (missingFields.isEmpty) {
                   if (await saveExport() == 0) {
@@ -514,8 +536,8 @@ void saveJson(BuildContext context) async {
                             actions: [
                               TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, "/home-scouter");
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, "/home-scouter", (Route<dynamic> route) => false);
                                   },
                                   child: Text("OK"))
                             ],
@@ -562,6 +584,7 @@ Map<String,List<String>> missingFieldMap = {
 
 
 void showReturnDialog(BuildContext context) {
+  HapticFeedback.mediumImpact();
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -576,6 +599,7 @@ void showReturnDialog(BuildContext context) {
               child: Text("No")),
           TextButton(
             onPressed: () {
+              HapticFeedback.mediumImpact();
               Navigator.pushNamedAndRemoveUntil(
                   context, "/home-scouter", (Route<dynamic> route) => false);
             },

@@ -32,6 +32,12 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    widgetStates = List.filled(10, false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
@@ -47,7 +53,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
               children: [
                 Transform.translate(
                     offset: Offset(5, 5),
-                    child: RSATCoralStation(left: true, index: 7)),
+                    child: RSATCoralStation(left: true, index: 6)),
                 Transform.translate(
                   offset: Offset(0, 5),
                   child: Container(
@@ -59,6 +65,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                             BorderRadius.circular(Constants.borderRadius)),
                     child: TextButton(
                       onPressed: () {
+                        HapticFeedback.mediumImpact();
                         DataEntry.exportData["autoEventList"].add([
                           "intakeCoral",
                           (DataEntry.stopwatchMap[1] ??
@@ -71,12 +78,12 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                         child: Column(
                           children: [
                             Text(
-                              "Coral",
+                              "Ground",
                               style: comfortaaBold(18),
                               textAlign: TextAlign.center,
                             ),
                             Text(
-                              "Intake",
+                              "Coral",
                               style: comfortaaBold(18),
                               textAlign: TextAlign.center,
                             ),
@@ -120,6 +127,7 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
       width: 75,
       child: GestureDetector(
         onTap: () {
+          HapticFeedback.mediumImpact();
           setState(() {
             if (!(_RSAutoTimedState.widgetStates.contains(true) &&
                 !_RSAutoTimedState.widgetStates[widget.index])) {
@@ -234,6 +242,7 @@ class _RSATHexagonState extends State<RSATHexagon> {
   }
 
   void toggleSection(int index) {
+    HapticFeedback.mediumImpact();
     setState(() {
       if (!(_RSAutoTimedState.widgetStates.contains(true) &&
           !_RSAutoTimedState.widgetStates[index])) {
@@ -319,15 +328,15 @@ class HexagonPainter extends CustomPainter {
     double centerY = radius;
 
     Paint borderPaint = Paint()
-      ..color = Colors.black
+      ..color = Constants.pastelWhite
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = 5;
 
     List<List<Offset>> triangles = getTrianglePoints(centerX, centerY, radius);
 
     for (int i = 0; i < 6; i++) {
       Paint fillPaint = Paint()
-        ..color = sectionStates[i] ? Colors.green : Constants.pastelWhite
+        ..color = sectionStates[i] ? Colors.green : Constants.pastelGray
         ..style = PaintingStyle.fill;
 
       Path path = Path()

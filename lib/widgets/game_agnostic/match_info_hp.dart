@@ -31,18 +31,21 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
     super.initState();
     scaleFactor = widget.width / 400;
     eventKey = configData["eventKey"]!;
+    // Add listener to red team number controller
     redTeamNumberController.addListener(() {
       setState(() {
         DataEntry.exportData["redHPTeam"] = int.tryParse(redTeamNumberController.text) ?? 0;
         getTeamInfo(DataEntry.exportData["redHPTeam"], false);
       });
     });
+    // Add listener to blue team number controller
     blueTeamNumberController.addListener(() {
       setState(() {
         DataEntry.exportData["blueHPTeam"] = int.tryParse(blueTeamNumberController.text) ?? 0;
          getTeamInfo(DataEntry.exportData["blueHPTeam"], true);
       });
     });
+    // Initialize export data
     DataEntry.exportData["matchNumber"] = 0;
     DataEntry.exportData["redHPTeam"] = 0;
     DataEntry.exportData["blueHPTeam"] = 0;
@@ -73,6 +76,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
       ),
       child: Column(
         children: [
+          // Commented out code for match event display
           // Padding(
           //   padding: const EdgeInsets.all(10.0),
           //   child: Container(
@@ -97,6 +101,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
                   ),
               child: Center(
                 child: Column(children: [
+                  // Display event key
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -107,6 +112,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
             
                     child: Center(child: AutoSizeText(eventKey.toUpperCase(),style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,)))
                   ],),
+                  // Display red team name
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -116,6 +122,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
                     height: 35 * scaleFactor,
                     child: Center(child: AutoSizeText(redTeamName ?? "No Team Selected",style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,)))
                   ],),
+                  // Display red team location
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -125,6 +132,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
                     height: 35 * scaleFactor,
                     child: Center(child: AutoSizeText(redTeamLocation ?? "",style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,textAlign: TextAlign.start,)))
                   ],),
+                  // Display blue team name
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -134,6 +142,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
                     height: 35 * scaleFactor,
                     child: Center(child: AutoSizeText(blueTeamName ?? "No Team Selected",style: comfortaaBold(18),maxLines: 2,overflow: TextOverflow.ellipsis,)))
                   ],),
+                  // Display blue team location
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -148,6 +157,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
                  
             ),
           ),
+          // Input fields for team numbers
           Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,6 +204,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
               ],
           ),
           SizedBox(height:5*scaleFactor),
+          // Dropdown and checkbox for match type and replay
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -223,6 +234,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
                   activeColor: Constants.pastelYellow,),
                 )
             ],),
+              // Commented out code for driver station dropdown
               // Container(
               //   width: 100 * scaleFactor,
               //   height: 65 * scaleFactor,
@@ -234,6 +246,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
               //     },dropdownColor: Constants.pastelYellow,),
               //   ),
               // ),
+              // Input field for match number
               SizedBox(
                   height: 65 * scaleFactor,
                   width: 75 * scaleFactor,
@@ -263,6 +276,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer> with Automa
       ),
     );
   }
+  // Fetch team information based on team number
   void getTeamInfo(int teamNumber,bool blue) async {
     bool foundTeam = false;
     try {

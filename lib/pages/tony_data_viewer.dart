@@ -6,7 +6,7 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
-import "package:lighthouse/widgets/reefscape/animated_atuo_replay.dart";
+import "package:lighthouse/widgets/reefscape/animated_auto_replay.dart";
 import "package:lighthouse/widgets/reefscape/scrollable_auto_paths.dart";
 
 class TonyDataViewerPage extends StatefulWidget {
@@ -17,7 +17,9 @@ class TonyDataViewerPage extends StatefulWidget {
 }
 
 class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
-  late double scaleFactor;
+  late double verticalScaleFactor;
+  late double horizontalScaleFactor;
+  late double marginSize;
   late List<Map<String, dynamic>> atlasData;
   late List<Map<String, dynamic>> chronosData;
   late List<Map<String, dynamic>> humanPlayerData;
@@ -39,7 +41,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       teams.add(matchData["teamNumber"]);
     }
     for (Map<String, dynamic> matchData in humanPlayerData) {
-      teams.add(matchData["teamNumber"]);
+      teams.add(matchData["redHPTeam"]);
+      teams.add(matchData["blueHPTeam"]);
     }
     // Include pit data?
 
@@ -70,17 +73,17 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return DropdownButtonFormField(
         value: currentTeamNumber,
         dropdownColor: Constants.pastelWhite,
-        padding: EdgeInsets.all(10),
+        padding: EdgeInsets.all(marginSize),
         decoration: InputDecoration(
             label: Text('Team Number',
                 style: comfortaaBold(12,
-                    color: Colors.black, customFontWeight: FontWeight.w900)),
-            iconColor: Colors.black),
+                    color: Constants.pastelReddishBrown, customFontWeight: FontWeight.w900)),
+            iconColor: Constants.pastelReddishBrown),
         items: teamsInDatabase
             .map((int team) => DropdownMenuItem(
                 value: team,
                 child: Text("$team",
-                    style: comfortaaBold(12, color: Colors.black))))
+                    style: comfortaaBold(12, color: Constants.pastelReddishBrown))))
             .toList(),
         onChanged: (n) {
           setState(() {
@@ -105,7 +108,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return Text(
         "Functional Matches: ${totalMatches - disabledMatches}/$totalMatches",
         textAlign: TextAlign.left,
-        style: comfortaaBold(10, color: Colors.black));
+        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
   }
 
   Widget getPreferredStrategy() {
@@ -121,7 +124,32 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return Text(
         "Preferred Strategy: ${frequencyMap.isNotEmpty ? frequencyMap.entries.reduce((a, b) => a.value > b.value ? a : b).key : "None"}",
         textAlign: TextAlign.left,
-        style: comfortaaBold(10, color: Colors.black));
+        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
+  }
+
+  Widget getHumanPlayerAccuracy() {
+    int totalAlgae = 0;
+    int algaeScored = 0;
+
+    for (Map<String, dynamic> matchData in humanPlayerData) {
+      if (matchData["redHPTeam"] == currentTeamNumber) {
+        algaeScored += matchData["redScore"] as int;
+        totalAlgae += matchData["redScore"] as int;
+        totalAlgae += matchData["redMiss"] as int;
+      }
+
+      if (matchData["blueHPTeam"] == currentTeamNumber) {
+        algaeScored += matchData["blueScore"] as int;
+        totalAlgae += matchData["blueScore"] as int;
+        totalAlgae += matchData["blueMiss"] as int;
+      }
+    }
+
+    return Text(
+      "Algae Accuracy: $algaeScored/$totalAlgae",
+      textAlign: TextAlign.left,
+      style: comfortaaBold(10, color: Constants.pastelReddishBrown)
+    );
   }
 
   Widget getDisableReasonCommentBox() {
@@ -140,8 +168,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     }
 
     return ScrollableBox(
-        width: 240,
-        height: 110,
+        width: 240 * horizontalScaleFactor,
+        height: 110 * verticalScaleFactor,
         title: "Disable Reason",
         comments: comments,
         sort: Sort.LENGTH_MAX);
@@ -187,14 +215,18 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     }
 
     return ScrollableBox(
-        width: 400,
-        height: 170,
+        width: 400 * horizontalScaleFactor,
+        height: 170 * verticalScaleFactor,
         title: "Comments",
         comments: comments,
         sort: Sort.LENGTH_MAX);
   }
 
   Widget getClimbStartTimeBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, double> chartData = SplayTreeMap();
     List<int> removedData = [];
     Color color = Constants.pastelRed;
@@ -212,8 +244,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Climb Time",
-        height: 150,
-        width: 190,
+        height: 150 * verticalScaleFactor,
+        width: 190 * horizontalScaleFactor,
         removedData: removedData,
         data: chartData,
         color: color,
@@ -221,17 +253,21 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAlgaeBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
     List<Color> colors = [Constants.pastelBlue, Constants.pastelBlueAgain];
-    List<String> labels = ["AVERAGE NET", "AVERAGE PROCESSOR"];
+    List<String> labels = ["NET", "PROC"];
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         // Get algae scored for processor and barge in teleop.
         List<double> scoreDistribution = [
-          matchData["algaescoreProcessor"].toDouble(),
-          matchData["algaescoreNet"].toDouble()
+          matchData["algaeScoreProcessor"].toDouble(),
+          matchData["algaeScoreNet"].toDouble()
         ];
         chartData[matchData["matchNumber"]] = scoreDistribution;
 
@@ -244,8 +280,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Algae",
-        height: 220,
-        width: 190,
+        height: 220 * verticalScaleFactor,
+        width: 190 * horizontalScaleFactor,
         removedData: removedData,
         multiData: chartData,
         multiColor: colors,
@@ -253,6 +289,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getCoralBarChart() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
     List<Color> colors = [
@@ -262,10 +302,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       Constants.pastelYellow
     ];
     List<String> labels = [
-      "AVERAGE L1",
-      "AVERAGE L2",
-      "AVERAGE L3",
-      "AVERAGE L4"
+      "L1",
+      "L2",
+      "L3",
+      "L4"
     ];
 
     for (Map<String, dynamic> matchData in atlasData) {
@@ -289,8 +329,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Coral",
-        height: 240,
-        width: 190,
+        height: 240 * verticalScaleFactor,
+        width: 190 * horizontalScaleFactor,
         removedData: removedData,
         multiData: chartData,
         multiColor: colors,
@@ -303,8 +343,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in chronosData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         autos.add(AnimatedAutoReplay(
-          height: 160,
-          width: 160,
+          height: 160 * verticalScaleFactor,
+          width: 160 * horizontalScaleFactor,
           startingPosition: List<double>.from(matchData["startingPosition"]
               .split(",")
               .map((x) => double.parse(x))
@@ -316,15 +356,15 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     }
 
     return ScrollableAutoPaths(
-        height: 220, width: 190, title: "Autos", autos: autos);
+        height: 220 * verticalScaleFactor, width: 190 * horizontalScaleFactor, title: "Autos", autos: autos);
   }
 
   @override
   Widget build(BuildContext context) {
     atlasData = getDataAsMapFromDatabase("Atlas");
     chronosData = getDataAsMapFromDatabase("Chronos");
-    humanPlayerData = getDataAsMapFromDatabase("Unknown");
-    pitData = getDataAsMapFromDatabase("Unknown");
+    humanPlayerData = getDataAsMapFromDatabase("Human Player");
+    pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
     if (teamsInDatabase.isEmpty) {
@@ -334,7 +374,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data"));
+          body: Text("No data", style: comfortaaBold(18,color: Constants.pastelReddishBrown)));
     }
 
     if (currentTeamNumber == 0) {
@@ -343,7 +383,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    scaleFactor = screenHeight / 914;
+    verticalScaleFactor = screenHeight / 914;
+    horizontalScaleFactor = screenWidth / 411;
+    marginSize = 10 * verticalScaleFactor;
+    
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
@@ -366,24 +409,25 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       body: Container(
           width: screenWidth,
           height: screenHeight,
-          margin: EdgeInsets.all(10),
+          margin: EdgeInsets.all(marginSize),
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/images/background-hires.png"),
                   fit: BoxFit.cover)),
           child: Column(
-            spacing: 10,
+            spacing: marginSize,
             children: [
               Row(
-                spacing: 10,
+                spacing: marginSize,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   getCoralBarChart(),
                   Column(
-                    spacing: 10,
+                    spacing: marginSize,
                     children: [
                       Container(
-                          width: 190,
-                          height: 80,
+                          width: 190 * horizontalScaleFactor,
+                          height: 80 * verticalScaleFactor,
                           decoration: BoxDecoration(
                               color: Constants.pastelWhite,
                               borderRadius: BorderRadius.all(
@@ -395,7 +439,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 ],
               ),
               Row(
-                spacing: 10,
+                spacing: marginSize,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   getAlgaeBarChart(),
                   getAutoPreviews(),
@@ -403,23 +448,25 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               ),
               getCommentBox(),
               Row(
-                spacing: 10,
+                spacing: marginSize,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   getDisableReasonCommentBox(),
                   Container(
-                    padding: EdgeInsets.all(10),
-                    width: 140,
-                    height: 110,
+                    padding: EdgeInsets.all(marginSize),
+                    width: 140 * horizontalScaleFactor,
+                    height: 110 * verticalScaleFactor,
                     decoration: BoxDecoration(
                         color: Constants.pastelWhite,
                         borderRadius: BorderRadius.all(
                             Radius.circular(Constants.borderRadius))),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 10,
+                      spacing: marginSize,
                       children: [
                         getFunctionalMatches(),
-                        getPreferredStrategy()
+                        getPreferredStrategy(),
+                        getHumanPlayerAccuracy()
                       ],
                     ),
                   )
