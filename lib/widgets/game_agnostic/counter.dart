@@ -11,7 +11,8 @@ class Counter extends StatefulWidget {
   final double width;
   final Color color;
   final Color boxColor;
-  final VoidCallback onIncrement;
+  final VoidCallback? onIncrement;
+  final VoidCallback? onDecrement;
   const Counter(
       {super.key,
       required this.title,
@@ -20,7 +21,8 @@ class Counter extends StatefulWidget {
       required this.width,
       required this.color,
       required this.boxColor,
-      required this.onIncrement});
+      this.onIncrement,
+      this.onDecrement});
 
   @override
   State<Counter> createState() => CounterState();
@@ -33,7 +35,8 @@ class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
   double get _width => widget.width;
   Color get _color => widget.color;
   Color get _boxColor => widget.boxColor;
-  VoidCallback get _onIncrement => widget.onIncrement;
+  VoidCallback? get _onIncrement => widget.onIncrement;
+  VoidCallback? get _onDecrement => widget.onDecrement;
   late int _counter;
 
   @override
@@ -82,6 +85,7 @@ class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
   }
 
   void decrement() {
+    if (_onDecrement != null) _onDecrement!();
     setState(() {
       if (_counter > 0) {
         _counter--;
@@ -91,7 +95,7 @@ class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
   }
 
   void increment() {
-    _onIncrement();
+    if (_onIncrement != null) _onIncrement!();
     setState(() {
       _counter++;
       updateState();
