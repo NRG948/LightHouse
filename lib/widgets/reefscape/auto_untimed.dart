@@ -18,14 +18,20 @@ class RSAutoUntimed extends StatefulWidget {
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
   bool get pit => widget.pit;
-  late SharedState sharedState;
+  late RSAUSharedState sharedState;
   late double scaleFactor;
   @override
   void initState() {
     super.initState();
-    sharedState = SharedState();
+    sharedState = RSAUSharedState();
     sharedState.initialize(widget.pit);
     scaleFactor = widget.width / 400;
+
+    if (widget.pit) {
+      assert(DataEntry.exportData['auto'] != null);
+      assert(DataEntry.exportData['auto']['auto1'] != null);
+      assert(DataEntry.exportData['auto']['auto1']['autoCS'] != null);
+    }
   }
 
   @override
@@ -87,7 +93,8 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                               ],
                               onChanged: (selection) {
                                 setState(() {
-                                  sharedState.currentAuto = selection! as int; //flutter is being weird about this one, so I'm gonna keep this cast for now...
+                                  sharedState.setCurrentAuto(selection!
+                                      as int); //flutter is being weird about this one, so I'm gonna keep this cast for now...
                                 });
                               }),
                         ),
@@ -142,7 +149,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 }
 
 class RSAUReef extends StatefulWidget {
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   final double scaleFactor;
   const RSAUReef(
       {super.key, required this.sharedState, required this.scaleFactor});
@@ -153,7 +160,7 @@ class RSAUReef extends StatefulWidget {
 
 class _RSAUReefState extends State<RSAUReef>
     with AutomaticKeepAliveClientMixin {
-  final sharedState = SharedState();
+  final sharedState = RSAUSharedState();
 
   @override
   bool get wantKeepAlive => true;
@@ -262,7 +269,7 @@ class RSAUTrough extends StatefulWidget {
 }
 
 class _RSAUTroughState extends State<RSAUTrough> {
-  final sharedState = SharedState();
+  final sharedState = RSAUSharedState();
   late int counter;
 
   @override
@@ -375,7 +382,7 @@ class RSAUReefButton extends StatefulWidget {
 }
 
 class _RSAUReefButtonState extends State<RSAUReefButton> {
-  final sharedState = SharedState();
+  final sharedState = RSAUSharedState();
   late bool active;
 
   @override
@@ -433,7 +440,7 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
 }
 
 class RSAUHexagon extends StatelessWidget {
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   final double scaleFactor;
   const RSAUHexagon(
       {super.key, required this.sharedState, required this.scaleFactor});
@@ -517,7 +524,7 @@ class HexagonPainter extends CustomPainter {
 class TriangleTapRegion extends StatefulWidget {
   final int index;
   final String label;
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   final double scaleFactor;
   const TriangleTapRegion(
       {super.key,
@@ -670,7 +677,7 @@ class RSAUCoralStation extends StatefulWidget {
 }
 
 class _RSAUCoralStationState extends State<RSAUCoralStation> {
-  final sharedState = SharedState();
+  final sharedState = RSAUSharedState();
   @override
   void initState() {
     super.initState();
@@ -722,12 +729,17 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
   }
 }
 
-class SharedState extends ChangeNotifier {
+class RSAUSharedState extends ChangeNotifier {
+  static final RSAUSharedState _instance = RSAUSharedState._internal();
+  factory RSAUSharedState() => _instance;
+  RSAUSharedState._internal();
+
   int currentAuto = 1;
   String? activeTriangle;
-  bool pitMode = false;
+  late bool pitMode = false;
 
   Map<String, dynamic> get targetData {
+    print(pitMode);
     if (!pitMode) return DataEntry.exportData;
 
     return (DataEntry.exportData['auto']
@@ -746,7 +758,7 @@ class SharedState extends ChangeNotifier {
   }
 
   Map<String, dynamic> _createAutoEntry() =>
-      {'CS': [], 'coralScored': [], 'algaeRemoved': [], 'coralScoredL1': '0'};
+      {'autoCS': [], 'autoCoralScored': [], 'autoAlgaeRemoved': [], 'autoCoralScoredL1': '0'};
 
   void setCurrentAuto(int auto) {
     currentAuto = auto;
