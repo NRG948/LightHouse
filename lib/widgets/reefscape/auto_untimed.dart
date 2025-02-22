@@ -492,7 +492,7 @@ class RSAUHexagon extends StatelessWidget {
 }
 
 class HexagonPainter extends CustomPainter {
-  final SharedState sharedState;
+  final RSAUSharedState sharedState;
   List<String> labels = ["IJ", "GH", "EF", "CD", "AB", "KL"];
   HexagonPainter(this.sharedState);
 
