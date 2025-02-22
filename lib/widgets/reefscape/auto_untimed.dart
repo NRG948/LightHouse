@@ -270,29 +270,29 @@ class RSAUTrough extends StatefulWidget {
 
 class _RSAUTroughState extends State<RSAUTrough> {
   final sharedState = RSAUSharedState();
-  late int counter;
 
   @override
   void initState() {
     super.initState();
-    counter = 0;
   }
 
   void increment() {
     setState(() {
-      if (counter < 99) {
-        counter++;
+      if (int.parse(sharedState.targetData["autoCoralScoredL1"]) < 99) {
+        sharedState.targetData["autoCoralScoredL1"] =
+            (int.parse(sharedState.targetData["autoCoralScoredL1"]) + 1)
+                .toString();
       }
-      sharedState.targetData["autoCoralScoredL1"] = counter.toString();
     });
   }
 
   void decrement() {
     setState(() {
-      if (counter > 0) {
-        counter--;
+      if (int.parse(sharedState.targetData["autoCoralScoredL1"]) > 0) {
+        sharedState.targetData["autoCoralScoredL1"] =
+            (int.parse(sharedState.targetData["autoCoralScoredL1"]) - 1)
+                .toString();;
       }
-      sharedState.targetData["autoCoralScoredL1"] = counter.toString();
     });
   }
 
@@ -305,7 +305,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
         width: 301 * widget.scaleFactor,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: counter > 0 ? Constants.pastelRed : Constants.pastelGray),
+            color: int.parse(sharedState.targetData["autoCoralScoredL1"]) > 0 ? Constants.pastelRed : Constants.pastelGray),
         child: Center(
           child: GestureDetector(
             onTap: increment,
@@ -339,7 +339,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                             width: 250 * widget.scaleFactor,
                             //the number count of the coral being scored on that level
                             child: Text(
-                              counter.toString(),
+                              sharedState.targetData["autoCoralScoredL1"],
                               style: comfortaaBold(23 * widget.scaleFactor,
                                   color: Constants.pastelWhite),
                               textAlign: TextAlign.center,
@@ -757,8 +757,12 @@ class RSAUSharedState extends ChangeNotifier {
     }
   }
 
-  Map<String, dynamic> _createAutoEntry() =>
-      {'autoCS': [], 'autoCoralScored': [], 'autoAlgaeRemoved': [], 'autoCoralScoredL1': '0'};
+  Map<String, dynamic> _createAutoEntry() => {
+        'autoCS': [],
+        'autoCoralScored': [],
+        'autoAlgaeRemoved': [],
+        'autoCoralScoredL1': '0'
+      };
 
   void setCurrentAuto(int auto) {
     currentAuto = auto;
