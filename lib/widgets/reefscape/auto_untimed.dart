@@ -292,7 +292,8 @@ class _RSAUTroughState extends State<RSAUTrough> {
       if (int.parse(sharedState.targetData["autoCoralScoredL1"]) > 0) {
         sharedState.targetData["autoCoralScoredL1"] =
             (int.parse(sharedState.targetData["autoCoralScoredL1"]) - 1)
-                .toString();;
+                .toString();
+        ;
       }
     });
   }
@@ -306,7 +307,9 @@ class _RSAUTroughState extends State<RSAUTrough> {
         width: 301 * widget.scaleFactor,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: int.parse(sharedState.targetData["autoCoralScoredL1"]) > 0 ? Constants.pastelRed : Constants.pastelGray),
+            color: int.parse(sharedState.targetData["autoCoralScoredL1"]) > 0
+                ? Constants.pastelRed
+                : Constants.pastelGray),
         child: Center(
           child: GestureDetector(
             onTap: increment,
@@ -735,12 +738,24 @@ class RSAUSharedState extends ChangeNotifier {
   factory RSAUSharedState() => _instance;
   RSAUSharedState._internal();
 
+  List<VoidCallback> _listeners = [];
   int currentAuto = 1;
   String? activeTriangle;
   late bool pitMode = false;
 
+  @override
+  void addListener(VoidCallback listener) {
+    super.addListener(listener);
+    _listeners.add(listener);
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    super.removeListener(listener);
+    _listeners.remove(listener);
+  }
+
   Map<String, dynamic> get targetData {
-    print(pitMode);
     if (!pitMode) return DataEntry.exportData;
 
     return (DataEntry.exportData['auto']
@@ -748,6 +763,10 @@ class RSAUSharedState extends ChangeNotifier {
   }
 
   void initialize(bool pit) {
+    for (final listener in List.of(_listeners)) {
+      removeListener(listener);
+    }
+
     pitMode = pit;
     if (pitMode) {
       DataEntry.exportData['auto'] = {
@@ -771,7 +790,6 @@ class RSAUSharedState extends ChangeNotifier {
   }
 
   void setActiveTriangle(String triangle) {
-    print(triangle);
     activeTriangle = triangle;
     notifyListeners();
   }
