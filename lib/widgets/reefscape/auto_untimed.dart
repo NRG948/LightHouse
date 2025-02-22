@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 
 class RSAutoUntimed extends StatefulWidget {
   final double width;
@@ -135,10 +136,15 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
         sharedState: sharedState,
         scaleFactor: scaleFactor,
       ),
-      RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor)
+      RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor),
+      pit ? NRGCheckbox(
+          title: "Drops Algae on Ground",
+          jsonKey: "dropsAlgaeAuto",
+          height: 40,
+          width: 400) : SizedBox()
     ];
     return Container(
-      height: 700 * scaleFactor,
+      height: pit ? 670 : 700 * scaleFactor,
       width: widget.width,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
@@ -738,7 +744,7 @@ class RSAUSharedState extends ChangeNotifier {
   factory RSAUSharedState() => _instance;
   RSAUSharedState._internal();
 
-  List<VoidCallback> _listeners = [];
+  final List<VoidCallback> _listeners = [];
   int currentAuto = 1;
   String? activeTriangle;
   late bool pitMode = false;
@@ -766,7 +772,7 @@ class RSAUSharedState extends ChangeNotifier {
     for (final listener in List.of(_listeners)) {
       removeListener(listener);
     }
-
+    activeTriangle = null;
     pitMode = pit;
     if (pitMode) {
       DataEntry.exportData['auto'] = {

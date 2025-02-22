@@ -273,12 +273,6 @@ Map<String, dynamic> pitscout = {
             "autoCoralScoredL1"
           ],
         },
-        {
-          "title": "Drops Algae on Ground",
-          "type": "checkbox",
-          "height": "17", 
-          "jsonKey": "dropsAlgaeAuto"
-        }
       ]
     },
     {

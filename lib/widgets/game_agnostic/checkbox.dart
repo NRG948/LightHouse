@@ -7,10 +7,12 @@ import "package:lighthouse/pages/data_entry.dart";
 // A custom checkbox widget that can be used in different parts of the app.
 class NRGCheckbox extends StatefulWidget {
   final String title; // The title of the checkbox.
-  final String jsonKey; // The key used to store the checkbox state in exportData.
+  final String
+      jsonKey; // The key used to store the checkbox state in exportData.
   final double height; // The height of the checkbox widget.
   final double width; // The width of the checkbox widget.
-  final bool vertical; // Determines if the checkbox and title are arranged vertically or horizontally.
+  final bool
+      vertical; // Determines if the checkbox and title are arranged vertically or horizontally.
   const NRGCheckbox(
       {super.key,
       required this.title,
@@ -39,7 +41,6 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
     // Initialize the exportData with the checkbox state.
     DataEntry.exportData[widget.jsonKey] = false;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,6 +77,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
             ],
           )
         : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Updates the checkbox when [isChecked] is updated.
               ValueListenableBuilder(
