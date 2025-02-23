@@ -18,6 +18,29 @@ class RSAutoUntimed extends StatefulWidget {
 }
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
+  final List<DropdownMenuItem> dropdownItems = [
+    DropdownMenuItem(
+      value: 1,
+      child: Text(
+        "      1",
+        style: comfortaaBold(20, color: Colors.black),
+      ),
+    ),
+    DropdownMenuItem(
+      value: 0,
+      child: Text(
+        "Add",
+        style: comfortaaBold(20, color: Colors.black),
+      ),
+    ),
+    DropdownMenuItem(
+      value: -1,
+      child: Text(
+        "Remove",
+        style: comfortaaBold(20, color: Colors.black),
+      ),
+    ),
+  ];
   bool get pit => widget.pit;
   late RSAUSharedState sharedState;
   late double scaleFactor;
@@ -30,7 +53,6 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 
     if (widget.pit) {
       assert(DataEntry.exportData['auto'] != null);
-      print(DataEntry.exportData['auto'].runtimeType);
       assert(DataEntry.exportData['auto'][0] != null);
       assert(DataEntry.exportData['auto'][0]['autoCS'] != null);
     }
@@ -67,33 +89,31 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                           height: 23,
                           child: DropdownButton(
                               value: sharedState.currentAuto,
-                              items: [
-                                DropdownMenuItem(
-                                  value: 1,
-                                  child: Text(
-                                    "1",
-                                    style:
-                                        comfortaaBold(20, color: Colors.black),
-                                  ),
-                                ),
-                                DropdownMenuItem(
-                                  value: 2,
-                                  child: Text(
-                                    "2",
-                                    style:
-                                        comfortaaBold(20, color: Colors.black),
-                                  ),
-                                ),
-                                DropdownMenuItem(
-                                  value: 3,
-                                  child: Text(
-                                    "3",
-                                    style:
-                                        comfortaaBold(20, color: Colors.black),
-                                  ),
-                                ),
-                              ],
+                              items: dropdownItems,
                               onChanged: (selection) {
+                                if (selection == 0) {
+                                  DataEntry.exportData['auto'].add(sharedState._createAutoEntry());
+                                  dropdownItems.insert(
+                                    dropdownItems.length - 2,
+                                    DropdownMenuItem(
+                                      value: dropdownItems.length - 1,
+                                      child: Text(
+                                        "      ${dropdownItems.length - 1}",
+                                        style: comfortaaBold(20,
+                                            color: Colors.black),
+                                      ),
+                                    ),
+                                  );
+                                  sharedState.currentAuto += 1;
+                                  return;
+                                }
+                                if (selection == -1) {
+                                  if (sharedState.currentAuto == 1) return;
+                                  DataEntry.exportData['auto'].removeLast();
+                                  dropdownItems.removeAt(dropdownItems.length - 3);
+                                  sharedState.currentAuto -= 1;
+                                  return;
+                                }
                                 setState(() {
                                   sharedState.setCurrentAuto(selection!
                                       as int); //flutter is being weird about this one, so I'm gonna keep this cast for now...
@@ -788,7 +808,8 @@ class RSAUSharedState extends ChangeNotifier {
   dynamic get targetData {
     if (!pitMode) return DataEntry.exportData;
 
-    return (DataEntry.exportData['auto'][currentAuto - 1] as Map<String, dynamic>);
+    return (DataEntry.exportData['auto'][currentAuto - 1]
+        as Map<String, dynamic>);
   }
 
   void initialize(bool pit) {
@@ -800,8 +821,6 @@ class RSAUSharedState extends ChangeNotifier {
     if (pitMode) {
       DataEntry.exportData['auto'] = [
         _createAutoEntry(),
-        _createAutoEntry(),
-        _createAutoEntry()
       ] as List<dynamic>;
     }
   }
