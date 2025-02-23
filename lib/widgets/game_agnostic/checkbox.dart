@@ -9,7 +9,7 @@ class NRGCheckbox extends StatefulWidget {
   final String title; // The title of the checkbox.
   final String
       jsonKey; // The key used to store the checkbox state in exportData.
-  final Map<String, dynamic>?
+  final dynamic
       jsonKeyPath; // alternate path to provide more control
   final double height; // The height of the checkbox widget.
   final double width; // The width of the checkbox widget.
@@ -30,7 +30,7 @@ class NRGCheckbox extends StatefulWidget {
 
 class _NRGCheckboxState extends State<NRGCheckbox> {
   String get _key => widget.jsonKey; // Getter for the jsonKey.
-  Map<String, dynamic>? get _keyPath => widget.jsonKeyPath;
+  dynamic get _keyPath => widget.jsonKeyPath;
   bool isChecked = false; // Initial state of the checkbox.
 
   // Notifier to update the checkbox state.
