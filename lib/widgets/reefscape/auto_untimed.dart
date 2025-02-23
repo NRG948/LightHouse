@@ -22,7 +22,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
     DropdownMenuItem(
       value: 1,
       child: Text(
-        "1",
+        "      1",
         style: comfortaaBold(20, color: Colors.black),
       ),
     ),
@@ -30,6 +30,13 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
       value: 0,
       child: Text(
         "Add",
+        style: comfortaaBold(20, color: Colors.black),
+      ),
+    ),
+    DropdownMenuItem(
+      value: -1,
+      child: Text(
+        "Remove",
         style: comfortaaBold(20, color: Colors.black),
       ),
     ),
@@ -87,17 +94,24 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                                 if (selection == 0) {
                                   DataEntry.exportData['auto'].add(sharedState._createAutoEntry());
                                   dropdownItems.insert(
-                                    dropdownItems.length - 1,
+                                    dropdownItems.length - 2,
                                     DropdownMenuItem(
-                                      value: dropdownItems.length,
+                                      value: dropdownItems.length - 1,
                                       child: Text(
-                                        dropdownItems.length.toString(),
+                                        "      ${dropdownItems.length - 1}",
                                         style: comfortaaBold(20,
                                             color: Colors.black),
                                       ),
                                     ),
                                   );
                                   sharedState.currentAuto += 1;
+                                  return;
+                                }
+                                if (selection == -1) {
+                                  if (sharedState.currentAuto == 1) return;
+                                  DataEntry.exportData['auto'].removeLast();
+                                  dropdownItems.removeAt(dropdownItems.length - 3);
+                                  sharedState.currentAuto -= 1;
                                   return;
                                 }
                                 setState(() {
