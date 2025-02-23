@@ -30,8 +30,9 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
 
     if (widget.pit) {
       assert(DataEntry.exportData['auto'] != null);
-      assert(DataEntry.exportData['auto']['auto1'] != null);
-      assert(DataEntry.exportData['auto']['auto1']['autoCS'] != null);
+      print(DataEntry.exportData['auto'].runtimeType);
+      assert(DataEntry.exportData['auto'][0] != null);
+      assert(DataEntry.exportData['auto'][0]['autoCS'] != null);
     }
   }
 
@@ -137,12 +138,14 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
         scaleFactor: scaleFactor,
       ),
       RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor),
-      pit ? NRGCheckbox(
-          title: "Drops Algae on Ground",
-          jsonKey: "dropsAlgaeAuto",
-          jsonKeyPath: sharedState.targetData,
-          height: 40,
-          width: 400) : SizedBox()
+      pit
+          ? NRGCheckbox(
+              title: "Drops Algae on Ground",
+              jsonKey: "dropsAlgaeAuto",
+              jsonKeyPath: sharedState.targetData,
+              height: 40,
+              width: 400)
+          : SizedBox()
     ];
     return Container(
       height: pit ? 670 : 700 * scaleFactor,
@@ -709,6 +712,8 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
   @override
   void initState() {
     super.initState();
+    print(sharedState.targetData);
+    print(sharedState.targetData.runtimeType);
     sharedState.targetData[widget.jsonKey] = [];
   }
 
@@ -779,11 +784,11 @@ class RSAUSharedState extends ChangeNotifier {
     _listeners.remove(listener);
   }
 
-  Map<String, dynamic> get targetData {
+  /// returns EITHER a Map<String, dynamic> or List<dynamic>
+  dynamic get targetData {
     if (!pitMode) return DataEntry.exportData;
 
-    return (DataEntry.exportData['auto']
-        as Map<String, dynamic>)['auto$currentAuto'] as Map<String, dynamic>;
+    return (DataEntry.exportData['auto'][currentAuto - 1] as Map<String, dynamic>);
   }
 
   void initialize(bool pit) {
@@ -793,11 +798,11 @@ class RSAUSharedState extends ChangeNotifier {
     activeTriangle = null;
     pitMode = pit;
     if (pitMode) {
-      DataEntry.exportData['auto'] = {
-        'auto1': _createAutoEntry(),
-        'auto2': _createAutoEntry(),
-        'auto3': _createAutoEntry()
-      };
+      DataEntry.exportData['auto'] = [
+        _createAutoEntry(),
+        _createAutoEntry(),
+        _createAutoEntry()
+      ] as List<dynamic>;
     }
   }
 
@@ -805,7 +810,7 @@ class RSAUSharedState extends ChangeNotifier {
         'autoCS': [],
         'autoCoralScored': [],
         'autoAlgaeRemoved': [],
-        'autoCoralScoredL1': '0', 
+        'autoCoralScoredL1': '0',
         'dropsAlgaeAuto': false
       };
 
