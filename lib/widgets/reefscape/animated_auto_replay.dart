@@ -237,20 +237,8 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
 class AutoReefPainter extends CustomPainter {
   FragmentProgram? program;
   AutoReef? autoReef;
-  List<String> orderedReefBranches = [
-    "G",
-    "F",
-    "E",
-    "D",
-    "C",
-    "B",
-    "A",
-    "L",
-    "K",
-    "J",
-    "I",
-    "H"
-  ];
+  List<String> orderedReefBranches = ["G", "F", "E", "D", "C", "B", "A", "L", "K", "J", "I", "H"];
+  List<String> orderedAlgaeSpots = ["EF", "CD", "AB", "KL", "IJ", "GH"];
 
   AutoReefPainter({this.program, this.autoReef});
 
@@ -260,35 +248,20 @@ class AutoReefPainter extends CustomPainter {
     double centerX = radius * sqrt(3) / 2;
     double centerY = radius;
 
-    autoReef = AutoReef(scores: [
-      "E4",
-      "F4",
-      "G3",
-      "H2",
-      "C3",
-      "D3",
-      "B4",
-      "A2",
-      "L3",
-      "K4",
-      "K3"
-    ],
-    algaeRemoved: [
-      "GH2",
-      "IJ3",
-      "EF3",
-      "CD2",
-      "AB3",
-      "KL3"
-    ]);
+    autoReef = AutoReef(scores: ["E4", "F4", "G3", "H2", "C3", "D3", "B4", "A2", "L3", "K4", "K3"],
+    algaeRemoved: ["GH2", "KL3"]);
 
-    Map<String, List<int>> scoreDistribution = {};
+    Map<String, List<int>> coralDistrbution = {};
     for (String branch in orderedReefBranches) {
-      scoreDistribution[branch] = [];
+      coralDistrbution[branch] = [];
+    }
+    for (String scoreInstance in autoReef!.scores) {
+      coralDistrbution[scoreInstance[0]]!.add(int.parse(scoreInstance[1]));
     }
 
-    for (String scoreInstance in autoReef!.scores) {
-      scoreDistribution[scoreInstance[0]]!.add(int.parse(scoreInstance[1]));
+    Map<String, bool> algaeDistrbution = {};
+    for (String removeInstance in autoReef!.algaeRemoved) {
+      algaeDistrbution[removeInstance.substring(0, 2)] = true;
     }
 
     List<List<Offset>> reef = getRingPoints(Offset(centerX, centerY), radius);
@@ -299,6 +272,8 @@ class AutoReefPainter extends CustomPainter {
       Color.fromARGB(255, 82, 197, 69),
       Color.fromARGB(255, 236, 87, 87)
     ];
+
+    Color algaeColor = Color.fromARGB(255, 90, 216, 179);
 
     Paint defaultPaint = Paint()
       ..color = Constants.pastelGray
@@ -311,19 +286,19 @@ class AutoReefPainter extends CustomPainter {
 
     for (int i = 0; i < 12; i++) {
       Paint fillPaint = defaultPaint;
-      switch (scoreDistribution[orderedReefBranches[i]]!.length) {
+      switch (coralDistrbution[orderedReefBranches[i]]!.length) {
         case 1:
           fillPaint = Paint()
             ..color =
-                coralColors[scoreDistribution[orderedReefBranches[i]]![0] - 1]
+                coralColors[coralDistrbution[orderedReefBranches[i]]![0] - 1]
             ..style = PaintingStyle.fill;
         case 2:
           var shader = program?.fragmentShader();
 
           Color color1 =
-              coralColors[scoreDistribution[orderedReefBranches[i]]![0] - 1];
+              coralColors[coralDistrbution[orderedReefBranches[i]]![0] - 1];
           Color color2 =
-              coralColors[scoreDistribution[orderedReefBranches[i]]![1] - 1];
+              coralColors[coralDistrbution[orderedReefBranches[i]]![1] - 1];
 
           List<double> params = [
             80,
@@ -369,7 +344,9 @@ class AutoReefPainter extends CustomPainter {
         ], true)
         ..close();
 
-        canvas.drawPath(path, defaultPaint); // TODO
+        Paint fillPaint = (algaeDistrbution[orderedAlgaeSpots[i]] ?? false) ? (Paint()..color = algaeColor ..style = PaintingStyle.fill) : defaultPaint;
+
+        canvas.drawPath(path, fillPaint);
         canvas.drawPath(path, borderPaint);
     }
   }
