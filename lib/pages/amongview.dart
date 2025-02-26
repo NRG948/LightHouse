@@ -395,7 +395,6 @@ class AmongViewSharedState extends ChangeNotifier {
 Map<String,dynamic> sortKeys = {
 "Atlas": {
   "coralScoredL1": "average",
-  "autoBargeCS": "average",
   "coralPickupsStation": "average",
   "coralPickupsGround": "average",
   "coralScoredL2": "average",
@@ -407,7 +406,7 @@ Map<String,dynamic> sortKeys = {
   "algaeScoreNet": "average",
   "algaeMissProcessor": "average",
   "algaeMissNet": "average",
-  "autoProcessorCS": "average",
+  "autoCS": "averagebyitems",
   "climbStartTime": "average",
   "autoCoralScored":"averagebyitems",
   "autoAlgaeRemoved":"averagebyitems",
