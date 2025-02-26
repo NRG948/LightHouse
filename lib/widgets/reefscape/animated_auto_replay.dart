@@ -72,7 +72,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     loadShader();
 
     // Initialize robot size and animation controller.
-    _robotSideLength = (min(_height / 2, _width / 2) - 20) / 12;
+    _robotSideLength = ( _width / 2 - 20) / 12;
     _controller =
         AnimationController(duration: Duration(seconds: 3), vsync: this);
     _controller.addStatusListener((status) {
@@ -166,8 +166,8 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
             children: [
               Center(
                 child: Container(
-                  width: min(_width / 2, _height / 2),
-                  height: min(_width / 2, _height / 2),
+                  width: _width / 2,
+                  height: _width / 2,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/images/auto_field_map.png"),
@@ -204,27 +204,27 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
                 ),
               ),
               CustomPaint(
-                  size: Size(_width / 2 * sqrt(3) / 2, _height / 2),
+                  size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
                   painter: AutoReefPainter(program: program))
             ],
           ),
           Row(
-            spacing: 5,
+            spacing: 15,
             children: [
               Text("L1: 3",
-                  style: comfortaaBold(11,
+                  style: comfortaaBold(24,
                       color: Color.fromARGB(255, 195, 103, 191))),
               Text("L2: 2",
-                  style: comfortaaBold(11,
+                  style: comfortaaBold(24,
                       color: Color.fromARGB(255, 77, 110, 211))),
-              Text("L3: 4",
-                  style: comfortaaBold(11,
+              Text("L3: 5",
+                  style: comfortaaBold(24,
                       color: Color.fromARGB(255, 82, 197, 69))),
               Text("L4: 4",
-                  style: comfortaaBold(11,
+                  style: comfortaaBold(24,
                       color: Color.fromARGB(255, 236, 87, 87))),
               Text("A: 2",
-                  style: comfortaaBold(11,
+                  style: comfortaaBold(24,
                       color: Color.fromARGB(255, 90, 216, 179))),
             ],
           )
@@ -237,8 +237,8 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
 class AutoReefPainter extends CustomPainter {
   FragmentProgram? program;
   AutoReef? autoReef;
-  List<String> orderedReefBranches = ["G", "F", "E", "D", "C", "B", "A", "L", "K", "J", "I", "H"];
-  List<String> orderedAlgaeSpots = ["EF", "CD", "AB", "KL", "IJ", "GH"];
+  static const List<String> orderedReefBranches = ["G", "F", "E", "D", "C", "B", "A", "L", "K", "J", "I", "H"];
+  static const List<String> orderedAlgaeSpots = ["EF", "CD", "AB", "KL", "IJ", "GH"];
 
   AutoReefPainter({this.program, this.autoReef});
 
@@ -248,7 +248,7 @@ class AutoReefPainter extends CustomPainter {
     double centerX = radius * sqrt(3) / 2;
     double centerY = radius;
 
-    autoReef = AutoReef(scores: ["E4", "F4", "G3", "H2", "C3", "D3", "B4", "A2", "L3", "K4", "K3"],
+    autoReef = AutoReef(scores: ["E4", "E3", "F4", "G4", "G2", "H2", "C3", "D3", "B4", "A2", "L3", "L2", "K4", "K3"],
     algaeRemoved: ["GH2", "KL3"]);
 
     Map<String, List<int>> coralDistrbution = {};
@@ -266,15 +266,6 @@ class AutoReefPainter extends CustomPainter {
 
     List<List<Offset>> reef = getRingPoints(Offset(centerX, centerY), radius);
 
-    List<Color> coralColors = [
-      Color.fromARGB(255, 195, 103, 191),
-      Color.fromARGB(255, 77, 110, 211),
-      Color.fromARGB(255, 82, 197, 69),
-      Color.fromARGB(255, 236, 87, 87)
-    ];
-
-    Color algaeColor = Color.fromARGB(255, 90, 216, 179);
-
     Paint defaultPaint = Paint()
       ..color = Constants.pastelGray
       ..style = PaintingStyle.fill;
@@ -290,15 +281,15 @@ class AutoReefPainter extends CustomPainter {
         case 1:
           fillPaint = Paint()
             ..color =
-                coralColors[coralDistrbution[orderedReefBranches[i]]![0] - 1]
+                Constants.reefColors[coralDistrbution[orderedReefBranches[i]]![0] - 1]
             ..style = PaintingStyle.fill;
         case 2:
           var shader = program?.fragmentShader();
 
           Color color1 =
-              coralColors[coralDistrbution[orderedReefBranches[i]]![0] - 1];
+              Constants.reefColors[coralDistrbution[orderedReefBranches[i]]![0] - 1];
           Color color2 =
-              coralColors[coralDistrbution[orderedReefBranches[i]]![1] - 1];
+              Constants.reefColors[coralDistrbution[orderedReefBranches[i]]![1] - 1];
 
           List<double> params = [
             80,
@@ -344,7 +335,7 @@ class AutoReefPainter extends CustomPainter {
         ], true)
         ..close();
 
-        Paint fillPaint = (algaeDistrbution[orderedAlgaeSpots[i]] ?? false) ? (Paint()..color = algaeColor ..style = PaintingStyle.fill) : defaultPaint;
+        Paint fillPaint = (algaeDistrbution[orderedAlgaeSpots[i]] ?? false) ? (Paint()..color = Constants.reefColors[4] ..style = PaintingStyle.fill) : defaultPaint;
 
         canvas.drawPath(path, fillPaint);
         canvas.drawPath(path, borderPaint);

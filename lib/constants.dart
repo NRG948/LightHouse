@@ -16,6 +16,14 @@ class Constants {
   static const Color pastelGray = Color.fromARGB(255, 199, 185, 186);
   static const Color pastelReddishBrown = Color.fromARGB(255, 103, 50, 47);
   static const Color pastelRedMuted = Color.fromARGB(255, 162, 90, 83);
+
+  static const List<Color> reefColors = [
+      Color.fromARGB(255, 195, 103, 191), // L1
+      Color.fromARGB(255, 77, 110, 211), // L2
+      Color.fromARGB(255, 82, 197, 69), // L3
+      Color.fromARGB(255, 236, 87, 87), // L4
+      Color.fromARGB(255, 90, 216, 179) // Algae
+  ];
   
   static final double borderRadius = 8;
   /// There is always a delay between the end of, for example, 

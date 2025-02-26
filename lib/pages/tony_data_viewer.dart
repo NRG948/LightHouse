@@ -280,7 +280,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Algae",
-        height: 220 * verticalScaleFactor,
+        height: 180 * verticalScaleFactor,
         width: 190 * horizontalScaleFactor,
         removedData: removedData,
         multiData: chartData,
@@ -324,7 +324,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return NRGBarChart(
         title: "Coral",
-        height: 240 * verticalScaleFactor,
+        height: 270 * verticalScaleFactor,
         width: 190 * horizontalScaleFactor,
         removedData: removedData,
         multiData: chartData,
@@ -338,8 +338,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in chronosData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-            height: 160 * verticalScaleFactor,
-            width: 160 * horizontalScaleFactor,
+            height: 240 * verticalScaleFactor,
+            width: 360 * horizontalScaleFactor,
             path: AutoPath(
               startingPosition: List<double>.from(matchData["startingPosition"]
                   .split(",")
@@ -362,8 +362,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     }
 
     return ScrollableAutoPaths(
-        height: 220 * verticalScaleFactor,
-        width: 190 * horizontalScaleFactor,
+        height: 300 * verticalScaleFactor,
+        width: 400 * horizontalScaleFactor,
         title: "Autos",
         autos: autos.values.toList());
   }
@@ -397,6 +397,57 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     horizontalScaleFactor = screenWidth / 411;
     marginSize = 10 * verticalScaleFactor;
 
+    List<Widget> scrollableDataColumn = [
+      Row(
+        spacing: marginSize,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          getCoralBarChart(),
+          Column(
+            spacing: marginSize,
+            children: [
+              Container(
+                  width: 190 * horizontalScaleFactor,
+                  height: 80 * verticalScaleFactor,
+                  decoration: BoxDecoration(
+                      color: Constants.pastelWhite,
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(Constants.borderRadius))),
+                  child: getTeamSelectDropdown()),
+              getAlgaeBarChart(),
+            ],
+          )
+        ],
+      ),
+      getAutoPreviews(),
+      getCommentBox(),
+      Row(
+        spacing: marginSize,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          getDisableReasonCommentBox(),
+          Container(
+            padding: EdgeInsets.all(marginSize),
+            width: 140 * horizontalScaleFactor,
+            height: 110 * verticalScaleFactor,
+            decoration: BoxDecoration(
+                color: Constants.pastelWhite,
+                borderRadius:
+                    BorderRadius.all(Radius.circular(Constants.borderRadius))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: marginSize,
+              children: [
+                getFunctionalMatches(),
+                getPreferredStrategy(),
+                getHumanPlayerAccuracy()
+              ],
+            ),
+          )
+        ],
+      )
+    ];
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Constants.pastelRed,
@@ -424,65 +475,13 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               image: DecorationImage(
                   image: AssetImage("assets/images/background-hires.png"),
                   fit: BoxFit.cover)),
-          child: Column(
-            spacing: marginSize,
-            children: [
-              Row(
-                spacing: marginSize,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  getCoralBarChart(),
-                  Column(
-                    spacing: marginSize,
-                    children: [
-                      Container(
-                          width: 190 * horizontalScaleFactor,
-                          height: 80 * verticalScaleFactor,
-                          decoration: BoxDecoration(
-                              color: Constants.pastelWhite,
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(Constants.borderRadius))),
-                          child: getTeamSelectDropdown()),
-                      getClimbStartTimeBarChart(),
-                    ],
-                  )
-                ],
-              ),
-              Row(
-                spacing: marginSize,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  getAlgaeBarChart(),
-                  getAutoPreviews(),
-                ],
-              ),
-              getCommentBox(),
-              Row(
-                spacing: marginSize,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  getDisableReasonCommentBox(),
-                  Container(
-                    padding: EdgeInsets.all(marginSize),
-                    width: 140 * horizontalScaleFactor,
-                    height: 110 * verticalScaleFactor,
-                    decoration: BoxDecoration(
-                        color: Constants.pastelWhite,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(Constants.borderRadius))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: marginSize,
-                      children: [
-                        getFunctionalMatches(),
-                        getPreferredStrategy(),
-                        getHumanPlayerAccuracy()
-                      ],
-                    ),
-                  )
-                ],
-              )
-            ],
+          child: ListView.separated(
+            itemCount: scrollableDataColumn.length,
+            itemBuilder: (BuildContext context, int index) {
+              return scrollableDataColumn[index];
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                Divider(height: marginSize, color: Colors.transparent),
           )),
     );
   }
