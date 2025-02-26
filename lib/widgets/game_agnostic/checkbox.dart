@@ -94,7 +94,6 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                     return Checkbox(
                         value: _keyPath == null ? DataEntry.exportData[_key] : _keyPath![widget.jsonKey],
                         onChanged: (bool? newValue) {
-                          HapticFeedback.mediumImpact();
                           // Update the checkbox state.
                           checkboxNotifier.value = newValue ?? false;
                         });
@@ -116,6 +115,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
           // Toggle the checkbox state.
           checkboxNotifier.value = !checkboxNotifier.value;
           print(checkboxNotifier.value);
+          HapticFeedback.mediumImpact();
           // Update the exportData with the new state.
           if (_keyPath == null) {
             DataEntry.exportData[_key] = checkboxNotifier.value;
