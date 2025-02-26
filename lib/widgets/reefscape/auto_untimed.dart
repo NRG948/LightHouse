@@ -91,6 +91,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                               value: sharedState.currentAuto,
                               items: dropdownItems,
                               onChanged: (selection) {
+                                HapticFeedback.mediumImpact();
                                 if (selection == 0) {
                                   DataEntry.exportData['auto'].add(sharedState._createAutoEntry());
                                   dropdownItems.insert(
@@ -331,7 +332,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: increment,
+      onTap: () {increment(); HapticFeedback.lightImpact();},
       child: Container(
         height: 85 * widget.scaleFactor,
         width: 301 * widget.scaleFactor,
@@ -342,7 +343,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                 : Constants.pastelGray),
         child: Center(
           child: GestureDetector(
-            onTap: increment,
+            onTap: () {increment(); HapticFeedback.lightImpact();},
             child: Column(
               children: [
                 Row(
@@ -381,7 +382,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                         SizedBox(
                             width: 24,
                             child: IconButton(
-                                onPressed: decrement,
+                                onPressed: () {decrement(); HapticFeedback.lightImpact();},
                                 icon: Icon(Icons.keyboard_arrow_down,
                                     size: 25 * widget.scaleFactor),
                                 color: Constants.pastelWhite,
@@ -614,7 +615,7 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
             ? GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  HapticFeedback.mediumImpact();
+                  HapticFeedback.heavyImpact();
                   widget.sharedState.setActiveTriangle(widget.label);
                 },
                 child: Text(
@@ -626,7 +627,7 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
             : GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () {
-                  HapticFeedback.mediumImpact();
+                  HapticFeedback.heavyImpact();
                   widget.sharedState.setActiveTriangle(widget.label);
                 },
                 child: Text(widget.label,
@@ -666,7 +667,7 @@ class _TriangleTapRegionState extends State<TriangleTapRegion> {
               clipper: TriangleClipper(center, vertex1, vertex2),
               child: GestureDetector(
                 onTap: () {
-                  HapticFeedback.mediumImpact();
+                  HapticFeedback.heavyImpact();
                   widget.sharedState.setActiveTriangle(widget.label);
                 },
                 child: Container(
