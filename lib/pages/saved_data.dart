@@ -253,7 +253,7 @@ class _SavedFileState extends State<SavedFile> {
                         child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,)),
                     ],),
                   ),
-                ],
+                ], 
               ),
               Column(
                 children: [
@@ -275,8 +275,167 @@ class _SavedFileState extends State<SavedFile> {
           ],
         ),
       );
-    } else {
-      matchInfo = Text("doesn't satisfy",style: comfortaaBold(10));
+    } else if (["teamNumber","teamName","interviewerName","interviewerName"].every((value) => savedFileJson.containsKey(value))) {
+       matchInfo = Padding(
+        padding: EdgeInsets.all(8.0 * SavedData.scaleFactor),
+        child: Column(
+          children: [
+            SizedBox(
+              width: 400 * SavedData.scaleFactor,
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                AutoSizeText(savedFileJson["teamNumber"].toString(),style: comfortaaBold(40 * SavedData.scaleFactor, color:Colors.black),),
+                SizedBox(width: 200*SavedData.scaleFactor, child: AutoSizeText(savedFileJson["teamName"].toString(),style: comfortaaBold(20 * SavedData.scaleFactor,color: Colors.black),maxLines: 2,))
+              ],),
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  
+                  SizedBox(
+                    height: 50 * SavedData.scaleFactor,
+                    width: 100 * SavedData.scaleFactor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                      Icon(Icons.data_object,size:30 * SavedData.scaleFactor),
+                      SizedBox(
+                        width: 70 * SavedData.scaleFactor,
+                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,)),
+                    ],),
+                  ),
+                ], 
+              ),
+              Column(
+                children: [
+                Row(mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                  Icon(Icons.schedule,size: 2 * SavedData.scaleFactor),
+                  SizedBox(
+                    width: 185 * SavedData.scaleFactor,
+                    child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
+                ],),
+                Column(
+                  children: [
+                    Row(children: [
+                      Icon(Icons.account_circle,size: 23 * SavedData.scaleFactor,),
+                      SizedBox(
+                        width: 185 * SavedData.scaleFactor,
+                        child: AutoSizeText(savedFileJson["interviewerName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
+                    ],),
+                    Row(children: [
+                      Icon(Icons.no_accounts,size: 23 * SavedData.scaleFactor,),
+                      SizedBox(
+                        width: 185 * SavedData.scaleFactor,
+                        child: AutoSizeText(savedFileJson["intervieweeName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
+                    ],),
+                  ],
+                )
+              ],)
+            ],)
+          ],
+        ),
+      );
+    }
+    else if (["matchType","matchNumber","scouterName","redHPTeam","blueHPTeam"].every((value) => savedFileJson.containsKey(value))) {
+      matchInfo = Padding(
+        padding: EdgeInsets.all(8.0 * SavedData.scaleFactor),
+        child: Column(
+          children: [
+            SizedBox(
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                Column(
+                  children: [
+                    AutoSizeText(savedFileJson["redHPTeam"].toString(),style: comfortaaBold(40 * SavedData.scaleFactor, color:Constants.pastelRed),),
+                    AutoSizeText(savedFileJson["blueHPTeam"].toString(),style: comfortaaBold(40 * SavedData.scaleFactor, color:Constants.pastelBlue),),
+                  ],
+                ),
+                Column(children: [
+                  AutoSizeText(savedFileJson["matchType"],style: comfortaaBold(16 * SavedData.scaleFactor,color:Colors.black),),
+                  AutoSizeText(savedFileJson["matchNumber"].toString(),style: comfortaaBold(35 * SavedData.scaleFactor,color:Colors.black),)
+                ],)
+              ],),
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+            
+                  SizedBox(
+                    height: 50 * SavedData.scaleFactor,
+                    width: 100 * SavedData.scaleFactor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                      Icon(Icons.data_object,size:30 * SavedData.scaleFactor),
+                      SizedBox(
+                        width: 70 * SavedData.scaleFactor,
+                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,)),
+                    ],),
+                  ),
+                ], 
+              ),
+              Column(
+                children: [
+                Row(mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                  Icon(Icons.schedule,size: 2 * SavedData.scaleFactor),
+                  SizedBox(
+                    width: 185 * SavedData.scaleFactor,
+                    child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
+                ],),
+                Row(children: [
+                  Icon(Icons.account_circle,size: 23 * SavedData.scaleFactor,),
+                  SizedBox(
+                    width: 185 * SavedData.scaleFactor,
+                    child: AutoSizeText(savedFileJson["scouterName"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
+                ],)
+              ],)
+            ],)
+          ],
+        ),
+      );
+    }
+    else {
+      matchInfo = Padding(
+        padding: EdgeInsets.all(8.0 * SavedData.scaleFactor),
+        child: Column(
+          children: [
+            
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  SizedBox(
+                    height: 50 * SavedData.scaleFactor,
+                    width: 100 * SavedData.scaleFactor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                      Icon(Icons.data_object,size:30 * SavedData.scaleFactor),
+                      SizedBox(
+                        width: 70 * SavedData.scaleFactor,
+                        child: AutoSizeText(savedFileJson["layout"],style: comfortaaBold(25 * SavedData.scaleFactor,color: Colors.black),maxLines: 1,)),
+                    ],),
+                  ),
+                ], 
+              ),
+              Column(
+                children: [
+                Row(mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                  Icon(Icons.schedule,size: 2 * SavedData.scaleFactor),
+                  SizedBox(
+                    width: 185 * SavedData.scaleFactor,
+                    child: AutoSizeText(savedFileJson["timestamp"],maxLines: 1,overflow: TextOverflow.ellipsis,minFontSize: 6,style: comfortaaBold(18,color: Colors.black),))
+                ],),
+              ],)
+            ],)
+          ],
+        ),
+      );
     }
     return Padding(
       padding: EdgeInsets.only(
@@ -378,7 +537,6 @@ class _DataEditState extends State<DataEdit> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      
       backgroundColor: Constants.pastelWhite,
       child: Center(
         child: GestureDetector(
