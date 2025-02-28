@@ -24,12 +24,11 @@ class RSAutoTimed extends StatefulWidget {
 class _RSAutoTimedState extends State<RSAutoTimed> {
   late double scaleFactor;
   static List<bool> widgetStates = List.filled(8, false);
-  late double _textAngle;
+  double _textAngle = pi / 2;
 
   @override
   void initState() {
     super.initState();
-    _textAngle = (DataEntry.exportData["driverStation"].contains("Red") ? -1 : 1) * pi / 2;
     scaleFactor = widget.width / 400;
     DataEntry.exportData["autoEventList"] = [];
   }
@@ -48,65 +47,76 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
-      child: Column(
-        children: [
-          Stack(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Transform.translate(
-                    offset: Offset(5, 5),
-                    child: RSATCoralStation(left: true, index: 6)),
-                Transform.translate(
-                  offset: Offset(0, 5),
-                  child: Container(
-                    width: 175,
-                    height: 75,
-                    decoration: BoxDecoration(
-                        color: Constants.pastelGray,
-                        borderRadius:
-                            BorderRadius.circular(Constants.borderRadius)),
-                    child: TextButton(
-                      onPressed: () {
-                        HapticFeedback.heavyImpact();
-                        DataEntry.exportData["autoEventList"].add([
-                          "intakeCoral",
-                          (DataEntry.stopwatchMap[1] ??
-                                  Duration(milliseconds: 0))
-                              .deciseconds
-                        ]);
-                      },
-                      child: Transform.rotate(
-                        angle: _textAngle,
-                        child: Column(
-                          children: [
-                            Text(
-                              "Ground",
-                              style: comfortaaBold(18),
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "Coral",
-                              style: comfortaaBold(18),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
+      child: GestureDetector(
+        onLongPress: () => {
+          setState(() {
+            _textAngle += pi;
+            if (_textAngle > 2 * pi) {
+              _textAngle -= 2 * pi;
+            }
+          })
+        },
+        child: Column(
+          children: [
+            Stack(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Transform.translate(
+                      offset: Offset(5, 5),
+                      child: RSATCoralStation(left: true, index: 6, textAngle: _textAngle)),
+                  Transform.translate(
+                    offset: Offset(0, 5),
+                    child: Container(
+                      width: 175,
+                      height: 75,
+                      decoration: BoxDecoration(
+                          color: Constants.pastelGray,
+                          borderRadius:
+                              BorderRadius.circular(Constants.borderRadius)),
+                      child: TextButton(
+                        onPressed: () {
+                          HapticFeedback.heavyImpact();
+                          DataEntry.exportData["autoEventList"].add([
+                            "intakeCoral",
+                            (DataEntry.stopwatchMap[1] ??
+                                    Duration(milliseconds: 0))
+                                .deciseconds
+                          ]);
+                        },
+                        child: Transform.rotate(
+                          angle: _textAngle,
+                          child: Column(
+                            children: [
+                              Text(
+                                "Ground",
+                                style: comfortaaBold(18),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                "Coral",
+                                style: comfortaaBold(18),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Transform.translate(
-                    offset: Offset(-5, 5),
-                    child: RSATCoralStation(left: false, index: 7))
-              ],
-            ),
-          ]),
-          // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
-          RSATHexagon(
-            radius: 150,
-          )
-        ],
+                  Transform.translate(
+                      offset: Offset(-5, 5),
+                      child: RSATCoralStation(left: false, index: 7, textAngle: _textAngle))
+                ],
+              ),
+            ]),
+            // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
+            RSATHexagon(
+              radius: 150,
+              textAngle: _textAngle
+            )
+          ],
+        ),
       ),
     );
   }
@@ -115,7 +125,8 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
 class RSATCoralStation extends StatefulWidget {
   final bool left;
   final int index;
-  const RSATCoralStation({super.key, this.left = true, required this.index});
+  final double textAngle;
+  const RSATCoralStation({super.key, this.left = true, required this.index, required this.textAngle});
 
   @override
   State<RSATCoralStation> createState() => _RSATCoralStationState();
@@ -158,7 +169,7 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
             Transform.translate(
                 offset: Offset(widget.left ? 14 : 30, 10),
                 child: Transform.rotate(
-                    angle: pi / 2,
+                    angle: widget.textAngle,
                     child: AutoSizeText("CS", style: comfortaaBold(20))))
           ],
         ),
@@ -208,7 +219,9 @@ class TrianglePainter extends CustomPainter {
 
 class RSATHexagon extends StatefulWidget {
   final double radius;
-  const RSATHexagon({super.key, required this.radius});
+  final double textAngle;
+
+  const RSATHexagon({super.key, required this.radius, required this.textAngle});
   @override
   State<RSATHexagon> createState() => _RSATHexagonState();
 }
@@ -282,7 +295,7 @@ class _RSATHexagonState extends State<RSATHexagon> {
       },
       child: CustomPaint(
         size: Size(widget.radius * 2, widget.radius * 2),
-        painter: HexagonPainter(_RSAutoTimedState.widgetStates.sublist(0, 6)),
+        painter: HexagonPainter(_RSAutoTimedState.widgetStates.sublist(0, 6), widget.textAngle),
       ),
     );
   }
@@ -322,7 +335,8 @@ class _RSATHexagonState extends State<RSATHexagon> {
 
 class HexagonPainter extends CustomPainter {
   final List<bool> sectionStates;
-  HexagonPainter(this.sectionStates);
+  final double textAngle;
+  HexagonPainter(this.sectionStates, this.textAngle);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -354,7 +368,7 @@ class HexagonPainter extends CustomPainter {
       // Draw text labels
       Offset center = getTriangleCenter(triangles[i]);
       //drawText(canvas, _RSATHexagonState.triangleLabels[i], center);
-      drawImage(canvas, _RSATHexagonState.triangleCache[i], center);
+      drawImage(canvas, _RSATHexagonState.triangleCache[i], center, textAngle);
     }
   }
 
@@ -384,7 +398,7 @@ class HexagonPainter extends CustomPainter {
     );
   }
 
-  void drawImage(Canvas canvas, ui.Image image, Offset position) {
+  void drawImage(Canvas canvas, ui.Image image, Offset position, double angle) {
     //final image = await assetImageToUiImage("assets/images/reef-chronos/$text.png");
     paintImage(
         canvas: canvas,
