@@ -72,6 +72,7 @@ class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
             ),
             GestureDetector(
               onTap: increment,
+              onLongPress: decrement,
             )
           ],
         ));
