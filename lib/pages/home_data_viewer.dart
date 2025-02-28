@@ -99,13 +99,13 @@ class DataViewerHome extends StatelessWidget {
               children: [
                 DrawerHeader(child: Text("Switch Mode",style: comfortaaBold(18,color: Constants.pastelReddishBrown))),
                 ListTile(
-                    leading: Icon(Icons.home),
+                    leading: Icon(Icons.home,color: Constants.pastelReddishBrown,),
                     title: Text("Scouter Home",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
                     onTap: () {
                       Navigator.pushNamed(context, "/home-scouter");
                     }),
                 ListTile(
-                    leading: Icon(Icons.bar_chart),
+                    leading: Icon(Icons.bar_chart,color: Constants.pastelReddishBrown,),
                     title: Text("Data Viewer Home",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
                     onTap: () {
                       Navigator.pop(context); // Closes the drawer, since the user is already on this page.

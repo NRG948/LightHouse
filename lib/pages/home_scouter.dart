@@ -65,17 +65,17 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              DrawerHeader(child: Text("Switch Mode")),
+              DrawerHeader(child: Text("Switch Mode",style: comfortaaBold(18,color: Constants.pastelReddishBrown))),
               ListTile(
-                  leading: Icon(Icons.home),
-                  title: Text("Scouter Home"),
+                  leading: Icon(Icons.home,color: Constants.pastelReddishBrown,),
+                  title: Text("Scouter Home",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
                   onTap: () {
                     HapticFeedback.mediumImpact();
                     Navigator.pop(context);
                   }),
               ListTile(
-                  leading: Icon(Icons.bar_chart),
-                  title: Text("Data Viewer Home"),
+                  leading: Icon(Icons.bar_chart,color: Constants.pastelReddishBrown,),
+                  title: Text("Data Viewer Home",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
                   onTap: () async {
                     HapticFeedback.mediumImpact();
                     Navigator.pushNamed(context, "/home-data-viewer");
