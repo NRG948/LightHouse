@@ -295,10 +295,29 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
             style: comfortaaBold(14 * scaleFactor,
                 color: Constants.pastelReddishBrown),
           ));
+        case "autoPit":
+          for (int auto = 0; auto < match[i].length; auto++) {
+            listViewChildren.add(AutoSizeText("Auto ${auto + 1}",style: comfortaaBold(14 * scaleFactor,
+                color: Constants.pastelReddishBrown),));
+            for (String autoKey in [
+              "autoCS","autoCoralScored","autoAlgaeRemoved","autoCoralScoredL1"
+            ]) {
+              listViewChildren.add(AutoSizeText(
+              "    $autoKey: ${match[i][auto][autoKey]}",
+              style: comfortaaBold(14 * scaleFactor,
+                color: Constants.pastelReddishBrown),));
+            }
+          }
       }
     }
 
-    return ListView(children: listViewChildren);
+    return Scrollbar(
+      interactive: true,
+      thumbVisibility: true,
+      thickness: 10 * scaleFactor,
+      child: ListView(
+        children: listViewChildren),
+    );
     //return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
   }
 }
@@ -617,9 +636,7 @@ Map<String, dynamic> displayKeys = {
     "robotWeight": "raw",
     "robotDrivetrain": "raw",
     "robotMechanisms": "raw",
-    "autoCoralScored": "raw",
-    "autoAlgaeRemoved": "raw",
-    "dropsAlgaeAuto": "raw",
+    "auto": "autoPit",
     "coralScoringAbilityL1": "raw",
     "coralScoringAbilityL2": "raw",
     "coralScoringAbilityL3": "raw",
@@ -639,7 +656,6 @@ Map<String, dynamic> displayKeys = {
     "averageAlgaeCycles": "raw",
     "idealAlliancePartnerQualities": "raw",
     "otherComments": "raw",
-    "coralScoredL1": "raw",
     "layout": "raw",
     "exportName": "raw",
     "timestamp": "raw"
