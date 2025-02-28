@@ -122,6 +122,9 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
                       history.addLast("redNetAlgae"),
                       HapticFeedback.heavyImpact()
                     },
+                    onDecrement: () => {
+                      if (history.isNotEmpty && history.last == "redScore") counters[history.removeLast()]!.currentState?.decrement()
+                    }
                   ),
                 ],
               ),
@@ -166,6 +169,9 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
                       history.addLast("blueNetAlgae"),
                       HapticFeedback.heavyImpact()
                     },
+                    onDecrement: () => {
+                      if (history.isNotEmpty && history.last == "blueScore") counters[history.removeLast()]!.currentState?.decrement()
+                    }
                   ),
                 ],
               )

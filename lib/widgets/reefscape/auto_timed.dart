@@ -24,9 +24,12 @@ class RSAutoTimed extends StatefulWidget {
 class _RSAutoTimedState extends State<RSAutoTimed> {
   late double scaleFactor;
   static List<bool> widgetStates = List.filled(8, false);
+  late double _textAngle;
+
   @override
   void initState() {
     super.initState();
+    _textAngle = (DataEntry.exportData["driverStation"].contains("Red") ? -1 : 1) * pi / 2;
     scaleFactor = widget.width / 400;
     DataEntry.exportData["autoEventList"] = [];
   }
@@ -74,7 +77,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                         ]);
                       },
                       child: Transform.rotate(
-                        angle: pi / 2,
+                        angle: _textAngle,
                         child: Column(
                           children: [
                             Text(
