@@ -428,6 +428,7 @@ class DataEntryState extends State<DataEntry> {
                       fit: BoxFit.fill)),
               child: NotificationListener<OverscrollNotification>(
                 onNotification: (notification) {
+                  print(notification.overscroll);
                   if (notification.overscroll < -25) {
                     showReturnDialog(context);
                   }
@@ -436,29 +437,33 @@ class DataEntryState extends State<DataEntry> {
                   }
                   return true;
                 },
-                child: PageView(
-                  controller: controller,
-                  scrollDirection: Axis.horizontal,
-                  children: createWidgetPages(layoutJSON["pages"]),
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentPage = index;
-
-                      // this tells the stopwatches what they should start
-                      // counting down from.
-                      switch (currentPage) {
-                        case 1:
-                          {
-                            stopwatchInitialValue = Duration(seconds: 15);
-                          }
-                        case 2:
-                          {
-                            stopwatchInitialValue =
-                                Duration(minutes: 2, seconds: 15);
-                          }
-                      }
-                    });
-                  },
+                child: ScrollConfiguration(
+                  behavior: ScrollBehavior().copyWith(overscroll: false),
+                  child: PageView(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    physics: ClampingScrollPhysics(),
+                    children: createWidgetPages(layoutJSON["pages"]),
+                    onPageChanged: (index) {
+                      setState(() {
+                        currentPage = index;
+                  
+                        // this tells the stopwatches what they should start
+                        // counting down from.
+                        switch (currentPage) {
+                          case 1:
+                            {
+                              stopwatchInitialValue = Duration(seconds: 15);
+                            }
+                          case 2:
+                            {
+                              stopwatchInitialValue =
+                                  Duration(minutes: 2, seconds: 15);
+                            }
+                        }
+                      });
+                    },
+                  ),
                 ),
               ),
             )),
