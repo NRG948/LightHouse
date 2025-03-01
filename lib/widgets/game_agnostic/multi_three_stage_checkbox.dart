@@ -94,7 +94,7 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
 
             // Create an individual three-stage checkbox.
             return NRGThreeStageCheckbox(
-                title: title, jsonKey: keyList[nameList.indexOf(title)], height: 50, width: textwidth * 3.4,);
+                title: title, jsonKey: keyList[nameList.indexOf(title)], height: 50, width: textwidth * 3.5,);
           }).toList() as List<Widget>);
     }).toList();
 
