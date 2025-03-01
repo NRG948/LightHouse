@@ -363,6 +363,12 @@ Map<String, dynamic> pitscout = {
 
         },
         {
+          "title": "Preferred General Strategy", 
+          "type": "dropdown", 
+          "options": "Coral Cycle,Algae Cycle,Hybrid Cycle,Defense,Feed/Pass,Other", 
+          "jsonKey": "generalStrategyPreference", 
+        },
+        {
           "type": "row",
           "children": [
             {

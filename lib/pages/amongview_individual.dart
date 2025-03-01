@@ -652,6 +652,7 @@ Map<String, dynamic> displayKeys = {
     "averageClimbTime": "raw",
     "driveExperience": "raw",
     "humanPlayerPreference": "raw",
+    "generalStrategyPreference": "raw", 
     "averageCoralCycles": "raw",
     "averageAlgaeCycles": "raw",
     "idealAlliancePartnerQualities": "raw",
