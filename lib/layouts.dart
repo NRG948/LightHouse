@@ -204,8 +204,11 @@ Map<String, dynamic> pitscout = {
       "title": "Initial Info",
       "icon": CustomIcons.chartBar,
       "widgets": [
-        {"title": "Team Number", "type": "textbox", "jsonKey": "teamNumber"},
-        {"title": "Team Name", "type": "textbox", "jsonKey": "teamName"},
+        //{"title": "Team Number", "type": "textbox", "jsonKey": "teamNumber"},
+        //{"title": "Team Name", "type": "textbox", "jsonKey": "teamName"},
+        {
+          "type": "team_info"
+        },
         {
           "title": "Interviewee Name",
           "type": "textbox",

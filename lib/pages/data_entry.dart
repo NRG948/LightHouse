@@ -24,6 +24,7 @@ import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/start_pos.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
+import "package:lighthouse/widgets/game_agnostic/team_info.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
 import "package:lighthouse/widgets/reefscape/atlas_teleop_selection.dart";
@@ -300,6 +301,8 @@ class DataEntryState extends State<DataEntry> {
           return AtlasTeleopSelection(width: width, height: height);
         case "hp-teleop":
           return HPTeleopSelection(height: height, width: width);
+        case "team_info": 
+          return TeamInfo();
       }
       return Text("type $type isn't a valid type");
     }).toList();
