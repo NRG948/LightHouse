@@ -31,7 +31,7 @@ class Constants {
   /// adding a bit of delay before the next section. :)
   static final double startDelay = 3;
   
-  static const String versionName = "Feb 16 Update";
+  static const String versionName = "Feb 27 Update";
 
 }
 

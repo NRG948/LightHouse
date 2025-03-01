@@ -35,7 +35,11 @@ class NRGTextbox extends StatefulWidget {
   State<NRGTextbox> createState() => _NRGTextboxState();
 }
 
-class _NRGTextboxState extends State<NRGTextbox> {
+class _NRGTextboxState extends State<NRGTextbox> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   // Getters for widget properties
   String get _title => widget.title;
   String get _key => widget.jsonKey;
