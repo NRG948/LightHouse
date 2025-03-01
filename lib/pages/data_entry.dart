@@ -37,8 +37,7 @@ import "package:lighthouse/widgets/reefscape/teleop_timed.dart";
 class DataEntry extends StatefulWidget {
   const DataEntry({super.key});
   static final Map<String, dynamic> exportData = {};
-  static final Map<int, Duration> stopwatchMap = {
-  };
+  static final Map<int, Duration> stopwatchMap = {};
   static late String activeConfig;
 
   @override
@@ -62,10 +61,13 @@ class DataEntryState extends State<DataEntry> {
   late PageController controller;
   static final DESharedState sharedState = DESharedState();
   bool isUnderGuidance = false;
-  // This is because stopwatches on different pages need to start 
+  // This is because stopwatches on different pages need to start
   // at different times, sooooo... the stopwatches can simply look
   // at this value...
   Duration stopwatchInitialValue = Duration(seconds: 15);
+
+  bool hasEventKeyWarningShown = false;
+
   @override
   void initState() {
     super.initState();
@@ -104,8 +106,8 @@ class DataEntryState extends State<DataEntry> {
         return SizedBox(
           width: 70 * resizeScaleFactorWidth,
           height: height,
-          child: Row(
-              children: createWidgetList(widgetData["children"]!, height)),
+          child:
+              Row(children: createWidgetList(widgetData["children"]!, height)),
         );
       }
       final title = widgetData["title"] ?? "NO TITLE";
@@ -174,38 +176,52 @@ class DataEntryState extends State<DataEntry> {
         case "multispinbox":
           final List<String>? otherJsonKeys = widgetData["otherJsonKey"];
           return NRGMultiSpinbox(
-              title: title,
-              jsonKey: jsonKey,
-              height: height,
-              width: width,
-              boxNames: widgetData["boxNames"] ??
-                  [
-                    ["NO OPTIONS SPECIFIED"]
-                  ],
-              updateOtherFields: otherJsonKeys,
-              sharedState: sharedState,);
+            title: title,
+            jsonKey: jsonKey,
+            height: height,
+            width: width,
+            boxNames: widgetData["boxNames"] ??
+                [
+                  ["NO OPTIONS SPECIFIED"]
+                ],
+            updateOtherFields: otherJsonKeys,
+            sharedState: sharedState,
+          );
         case "textbox":
           final int maxLines = widgetData["maxLines"] ?? 1;
           final double fontSize = widgetData["fontSize"] ?? 30.0;
           final String? autoFill = widgetData["autoFill"];
           return NRGTextbox(
-              title: title, jsonKey: jsonKey, height: height, width: width, maxLines: maxLines,fontSize: fontSize,autoFill: autoFill,);
+            title: title,
+            jsonKey: jsonKey,
+            height: height,
+            width: width,
+            maxLines: maxLines,
+            fontSize: fontSize,
+            autoFill: autoFill,
+          );
         case "checkbox":
           return NRGCheckbox(
               title: title, jsonKey: jsonKey, height: height, width: width);
         case "checkbox_vertical":
-          return NRGCheckbox(title: title, jsonKey: jsonKey, height: height, width: width,vertical:true);
-        case "numberbox":
-         final int maxLines = widgetData["maxLines"] ?? 1;
-          final double fontSize = widgetData["fontSize"] ?? 30.0;
-          return NRGTextbox(
+          return NRGCheckbox(
               title: title,
               jsonKey: jsonKey,
-              numeric: true,
               height: height,
               width: width,
-              fontSize: fontSize,
-              maxLines: maxLines,);
+              vertical: true);
+        case "numberbox":
+          final int maxLines = widgetData["maxLines"] ?? 1;
+          final double fontSize = widgetData["fontSize"] ?? 30.0;
+          return NRGTextbox(
+            title: title,
+            jsonKey: jsonKey,
+            numeric: true,
+            height: height,
+            width: width,
+            fontSize: fontSize,
+            maxLines: maxLines,
+          );
         case "dropdown":
           if (!(widgetData.containsKey("options"))) {
             return Text(
@@ -228,7 +244,7 @@ class DataEntryState extends State<DataEntry> {
         case "rsTeleopTimed":
           return RSTeleopTimed(width: width);
         case "rsAutoUntimedPit":
-          return RSAutoUntimed(width: width, pit:true);
+          return RSAutoUntimed(width: width, pit: true);
         case "barchart":
           return NRGBarChart(
               title: title,
@@ -242,8 +258,10 @@ class DataEntryState extends State<DataEntry> {
         case "matchInfo":
           return MatchInfo(width: width);
         case "matchInfoHP":
-          return MatchInfoHumanPlayer(width: width,);
-        case "rating": 
+          return MatchInfoHumanPlayer(
+            width: width,
+          );
+        case "rating":
           return NRGRating(
             title: title,
             height: height,
@@ -280,7 +298,7 @@ class DataEntryState extends State<DataEntry> {
               sort: sortType);
         case "atlas-teleop":
           return AtlasTeleopSelection(width: width, height: height);
-        case "hp-teleop": 
+        case "hp-teleop":
           return HPTeleopSelection(height: height, width: width);
       }
       return Text("type $type isn't a valid type");
@@ -314,9 +332,10 @@ class DataEntryState extends State<DataEntry> {
             itemCount: widgetList.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Center(child: widgetList[index],)
-              );
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Center(
+                    child: widgetList[index],
+                  ));
             },
           ),
         ),
@@ -333,14 +352,31 @@ class DataEntryState extends State<DataEntry> {
     final layoutJSON = layoutMap.containsKey(DataEntry.activeConfig)
         ? layoutMap[DataEntry.activeConfig]!
         : {};
+
+    if (!hasEventKeyWarningShown && defaultConfig["eventKey"] == configData["eventKey"]) {
+      hasEventKeyWarningShown = true;
+      Future.delayed(Duration.zero, () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                child: Container(
+                    padding: EdgeInsets.all(Constants.borderRadius),
+                    child: Text(
+                        "You are using the default event key! Go to Settings to change your event key.")),
+              );
+            });
+      });
+    }
+
     return PopScope(
       canPop: false,
       child: GestureDetector(
         // Allows keyboard to be closed when anywhere else is clicked on screen
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-          // Prevents background image from being resized when keyboard opens
-          resizeToAvoidBottomInset: false,
+            // Prevents background image from being resized when keyboard opens
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               backgroundColor: Constants.pastelRed,
               title: FittedBox(
@@ -392,13 +428,10 @@ class DataEntryState extends State<DataEntry> {
                       fit: BoxFit.fill)),
               child: NotificationListener<OverscrollNotification>(
                 onNotification: (notification) {
-                  if (
-                    notification.overscroll < -25
-                      ) {
+                  if (notification.overscroll < -25) {
                     showReturnDialog(context);
                   }
-                  if (notification.overscroll > 25
-                          ) {
+                  if (notification.overscroll > 25) {
                     saveJson(context);
                   }
                   return true;
@@ -410,16 +443,19 @@ class DataEntryState extends State<DataEntry> {
                   onPageChanged: (index) {
                     setState(() {
                       currentPage = index;
-                      
+
                       // this tells the stopwatches what they should start
-                      // counting down from. 
+                      // counting down from.
                       switch (currentPage) {
-                        case 1: {
-                          stopwatchInitialValue = Duration(seconds: 15);
-                        }
-                        case 2: {
-                          stopwatchInitialValue = Duration(minutes: 2, seconds: 15);
-                        }
+                        case 1:
+                          {
+                            stopwatchInitialValue = Duration(seconds: 15);
+                          }
+                        case 2:
+                          {
+                            stopwatchInitialValue =
+                                Duration(minutes: 2, seconds: 15);
+                          }
                       }
                     });
                   },
@@ -451,9 +487,11 @@ class DataEntryState extends State<DataEntry> {
                   curve: Curves.decelerate);
             });
           },
-          unselectedIconTheme: IconThemeData(color: Constants.pastelWhite, size: 25),
+          unselectedIconTheme:
+              IconThemeData(color: Constants.pastelWhite, size: 25),
           unselectedItemColor: Constants.pastelWhite,
-          selectedIconTheme: IconThemeData(color: Constants.pastelWhite, size: 35),
+          selectedIconTheme:
+              IconThemeData(color: Constants.pastelWhite, size: 35),
           selectedItemColor: Constants.pastelWhite,
           currentIndex: currentPage,
           showUnselectedLabels: false,
@@ -527,32 +565,38 @@ void saveJson(BuildContext context) async {
                   HapticFeedback.mediumImpact();
                   List<String> missingFields = dataVerification();
                   if (missingFields.isEmpty) {
-                  if (await saveExport() == 0) {
+                    if (await saveExport() == 0) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text("Successfully saved"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          "/home-scouter",
+                                          (Route<dynamic> route) => false);
+                                    },
+                                    child: Text("OK"))
+                              ],
+                            );
+                          });
+                    }
+                  } else {
                     showDialog(
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            content: Text("Successfully saved"),
+                            content: Text("MISSING DATA:\n$missingFields"),
                             actions: [
                               TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                        context, "/home-scouter", (Route<dynamic> route) => false);
-                                  },
+                                  onPressed: () => Navigator.pop(context),
                                   child: Text("OK"))
                             ],
                           );
                         });
-                  }
-                  } else {
-                    showDialog(context: context, builder: (context) {
-                      return AlertDialog(
-                        content: Text("MISSING DATA:\n$missingFields"),
-                        actions: [
-                          TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))
-                        ],
-                      );
-                    });
                   }
                 },
                 child: Text("Yes")),
@@ -564,24 +608,43 @@ void saveJson(BuildContext context) async {
 List<String> dataVerification() {
   List<String> missingFields = [];
   for (String i in missingFieldMap[DataEntry.activeConfig]!) {
-    if (DataEntry.exportData[i] == null 
-    || DataEntry.exportData[i] == "" 
-    || DataEntry.exportData[i] == 0.0
-    || DataEntry.exportData[i] == 0
-    ) {
+    if (DataEntry.exportData[i] == null ||
+        DataEntry.exportData[i] == "" ||
+        DataEntry.exportData[i] == 0.0 ||
+        DataEntry.exportData[i] == 0) {
       missingFields.add(i);
     }
   }
   return missingFields;
 }
 
-Map<String,List<String>> missingFieldMap = {
-  "Atlas": ["scouterName","matchNumber","teamNumber","matchType","driverStation","dataQuality"],
-  "Chronos": ["scouterName","matchNumber","teamNumber","matchType","driverStation","dataQuality"],
-  "Pit": ["interviewerName","teamNumber","humanPlayerPreference"],
-  "Human Player": ["scouterName","matchNumber","redHPTeam","blueHPTeam","matchType","dataQuality"]
+Map<String, List<String>> missingFieldMap = {
+  "Atlas": [
+    "scouterName",
+    "matchNumber",
+    "teamNumber",
+    "matchType",
+    "driverStation",
+    "dataQuality"
+  ],
+  "Chronos": [
+    "scouterName",
+    "matchNumber",
+    "teamNumber",
+    "matchType",
+    "driverStation",
+    "dataQuality"
+  ],
+  "Pit": ["interviewerName", "teamNumber", "humanPlayerPreference"],
+  "Human Player": [
+    "scouterName",
+    "matchNumber",
+    "redHPTeam",
+    "blueHPTeam",
+    "matchType",
+    "dataQuality"
+  ]
 };
-
 
 void showReturnDialog(BuildContext context) {
   HapticFeedback.mediumImpact();
@@ -612,6 +675,8 @@ void showReturnDialog(BuildContext context) {
 }
 
 enum GuidanceState { setup, auto, teleop, endgame }
+
 extension DurationExtensions on Duration {
-  double get deciseconds => double.parse((inMilliseconds / 1000).toStringAsFixed(1));
+  double get deciseconds =>
+      double.parse((inMilliseconds / 1000).toStringAsFixed(1));
 }
