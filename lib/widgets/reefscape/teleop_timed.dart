@@ -116,8 +116,9 @@ class _RSTTNet extends State<RSTTNet> {
       width: 165 * _RSTeleopTimedState.scaleFactor,
       height: 130 * _RSTeleopTimedState.scaleFactor,
       decoration: BoxDecoration(
-          color: enabled ? Colors.green : Constants.pastelGray,
-          borderRadius: BorderRadius.circular(Constants.borderRadius)),
+          color: enabled ? Constants.pastelGreen : Constants.pastelGray,
+          borderRadius: BorderRadius.circular(Constants.borderRadius),
+          border: Border.all(color: Constants.pastelGreen, width: 5)),
       child: TextButton(
           onPressed: () {
             HapticFeedback.heavyImpact();
@@ -160,8 +161,9 @@ class _RSTTClimbState extends State<RSTTClimb> {
         width: 165 * _RSTeleopTimedState.scaleFactor,
         height: 130 * _RSTeleopTimedState.scaleFactor,
         decoration: BoxDecoration(
-            color: enabled ? Colors.green : Constants.pastelGray,
-            borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            color: enabled ? Constants.pastelBlue : Constants.pastelGray,
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
+            border: Border.all(color: Constants.pastelBlue, width: 5)),
         child: TextButton(
             onPressed: () {
               HapticFeedback.heavyImpact();
@@ -203,8 +205,9 @@ class _RSTTCoralState extends State<RSTTCoral> {
       width: 165 * _RSTeleopTimedState.scaleFactor,
       height: 130 * _RSTeleopTimedState.scaleFactor,
       decoration: BoxDecoration(
-          color: enabled ? Colors.green : Constants.pastelGray,
-          borderRadius: BorderRadius.circular(Constants.borderRadius)),
+          color: enabled ? Constants.pastelRed : Constants.pastelGray,
+          borderRadius: BorderRadius.circular(Constants.borderRadius),
+          border: Border.all(color: Constants.pastelRed, width: 5)),
       child: TextButton(
           onPressed: () {
             HapticFeedback.heavyImpact();
@@ -247,8 +250,9 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
         width: 165 * _RSTeleopTimedState.scaleFactor,
         height: 130 * _RSTeleopTimedState.scaleFactor,
         decoration: BoxDecoration(
-            color: enabled ? Colors.green : Constants.pastelGray,
-            borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            color: enabled ? Constants.pastelYellow : Constants.pastelGray,
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
+            border: Border.all(color: Constants.pastelYellow, width: 5)),
         child: TextButton(
             onPressed: () {
               HapticFeedback.heavyImpact();
