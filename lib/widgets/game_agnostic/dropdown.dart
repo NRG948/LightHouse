@@ -76,7 +76,7 @@ class _NRGDropdownState extends State<NRGDropdown> {
               items: _options.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(value,style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
                 );
               }).toList(),
               value: selectedValue,
