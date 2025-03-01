@@ -26,6 +26,8 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
   static late double scaleFactor;
   static late double screenHeight;
   static List<bool> widgetStates = List.filled(5, false);
+  double _textAngle = pi / 2;
+
   @override
   void initState() {
     super.initState();
@@ -48,48 +50,60 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: widget.width,
-      height: 600 * scaleFactor,
-      decoration: BoxDecoration(
-          color: Constants.pastelWhite,
-          borderRadius: BorderRadius.circular(Constants.borderRadius)),
-      child: Column(
-        spacing: 25 * scaleFactor,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Transform.translate(
-                offset: Offset(5, 5),
-                child: RSTTClimb(),
-              ),
-              Transform.translate(offset: Offset(-5, 5), child: RSTTCoral()),
-            ],
-          ),
-          // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
-          RSTTHexagon(
-            radius: 165 * scaleFactor,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Transform.translate(
-                offset: Offset(5, 0),
-                child: RSTTNet(),
-              ),
-              Transform.translate(
-                  offset: Offset(-5, 0), child: RSTTProcessor()),
-            ],
-          )
-        ],
+    return GestureDetector(
+      onLongPress: () => {
+        setState(() {
+          _textAngle += pi;
+          if (_textAngle > 2 * pi) {
+            _textAngle -= 2 * pi;
+          }
+        })
+      },
+      child: Container(
+        width: widget.width,
+        height: 600 * scaleFactor,
+        decoration: BoxDecoration(
+            color: Constants.pastelWhite,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: Column(
+          spacing: 25 * scaleFactor,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Transform.translate(
+                  offset: Offset(5, 5),
+                  child: RSTTClimb(textAngle: _textAngle),
+                ),
+                Transform.translate(
+                    offset: Offset(-5, 5),
+                    child: RSTTCoral(textAngle: _textAngle)),
+              ],
+            ),
+            // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
+            RSTTHexagon(radius: 165 * scaleFactor, textAngle: _textAngle),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Transform.translate(
+                  offset: Offset(5, 0),
+                  child: RSTTNet(textAngle: _textAngle),
+                ),
+                Transform.translate(
+                    offset: Offset(-5, 0),
+                    child: RSTTProcessor(textAngle: _textAngle)),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
 class RSTTNet extends StatefulWidget {
-  const RSTTNet({super.key});
+  final double textAngle;
+  const RSTTNet({super.key, required this.textAngle});
   @override
   State<RSTTNet> createState() => _RSTTNet();
 }
@@ -121,7 +135,7 @@ class _RSTTNet extends State<RSTTNet> {
             }
           },
           child: Transform.rotate(
-              angle: pi / 2,
+              angle: widget.textAngle,
               child: Text(
                 "Score\nNet",
                 style: comfortaaBold(18 * _RSTeleopTimedState.scaleFactor),
@@ -132,7 +146,8 @@ class _RSTTNet extends State<RSTTNet> {
 }
 
 class RSTTClimb extends StatefulWidget {
-  const RSTTClimb({super.key});
+  final double textAngle;
+  const RSTTClimb({super.key, required this.textAngle});
   @override
   State<RSTTClimb> createState() => _RSTTClimbState();
 }
@@ -164,7 +179,7 @@ class _RSTTClimbState extends State<RSTTClimb> {
               }
             },
             child: Transform.rotate(
-                angle: pi / 2,
+                angle: widget.textAngle,
                 child: Text(
                   "Climb",
                   style: comfortaaBold(18),
@@ -174,7 +189,8 @@ class _RSTTClimbState extends State<RSTTClimb> {
 }
 
 class RSTTCoral extends StatefulWidget {
-  const RSTTCoral({super.key});
+  final double textAngle;
+  const RSTTCoral({super.key, required this.textAngle});
   @override
   State<RSTTCoral> createState() => _RSTTCoralState();
 }
@@ -206,7 +222,7 @@ class _RSTTCoralState extends State<RSTTCoral> {
             }
           },
           child: Transform.rotate(
-              angle: pi / 2,
+              angle: widget.textAngle,
               child: Text(
                 "Intake\nCoral",
                 style: comfortaaBold(18 * _RSTeleopTimedState.scaleFactor),
@@ -217,7 +233,8 @@ class _RSTTCoralState extends State<RSTTCoral> {
 }
 
 class RSTTProcessor extends StatefulWidget {
-  const RSTTProcessor({super.key});
+  final double textAngle;
+  const RSTTProcessor({super.key, required this.textAngle});
   @override
   State<RSTTProcessor> createState() => _RSTTProcessorState();
 }
@@ -249,7 +266,7 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
               }
             },
             child: Transform.rotate(
-                angle: pi / 2,
+                angle: widget.textAngle,
                 child: Text(
                   "Processor",
                   style: comfortaaBold(12),
@@ -260,7 +277,8 @@ class _RSTTProcessorState extends State<RSTTProcessor> {
 
 class RSTTHexagon extends StatefulWidget {
   final double radius;
-  const RSTTHexagon({super.key, required this.radius});
+  final double textAngle;
+  const RSTTHexagon({super.key, required this.radius, required this.textAngle});
   @override
   State<RSTTHexagon> createState() => _RSTTHexagonState();
 }
@@ -298,12 +316,12 @@ class _RSTTHexagonState extends State<RSTTHexagon> {
           painter: HexagonPainter(_RSTeleopTimedState.widgetStates[0]),
           child: Center(
             child: Transform.rotate(
-              angle: pi / 2,
-              child: Text(
-                "Score Coral",
-                style: comfortaaBold(18),
-                textAlign: TextAlign.center,
-              )),
+                angle: widget.textAngle,
+                child: Text(
+                  "Score Coral",
+                  style: comfortaaBold(18),
+                  textAlign: TextAlign.center,
+                )),
           ),
         ),
       ),

@@ -399,11 +399,17 @@ class HexagonPainter extends CustomPainter {
   }
 
   void drawImage(Canvas canvas, ui.Image image, Offset position, double angle) {
+    canvas.save();
+    canvas.translate(position.dx, position.dy);
+    canvas.rotate(angle - pi / 2);
+    canvas.translate(-position.dx, -position.dy);
     //final image = await assetImageToUiImage("assets/images/reef-chronos/$text.png");
     paintImage(
         canvas: canvas,
         rect: Rect.fromCircle(center: position, radius: 30),
         image: image);
+
+    canvas.restore();
   }
 
   void drawText(Canvas canvas, String text, Offset position) {
