@@ -43,7 +43,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
-      height: 500 * scaleFactor,
+      height: 550 * scaleFactor,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -57,6 +57,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
           })
         },
         child: Column(
+          spacing: 20,
           children: [
             Stack(children: [
               Row(
@@ -68,8 +69,8 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                   Transform.translate(
                     offset: Offset(0, 5),
                     child: Container(
-                      width: 175,
-                      height: 75,
+                      width: 125,
+                      height: 100,
                       decoration: BoxDecoration(
                           color: Constants.pastelGray,
                           borderRadius:
@@ -112,7 +113,7 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
             ]),
             // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
             RSATHexagon(
-              radius: 150,
+              radius: 170,
               textAngle: _textAngle
             )
           ],
@@ -137,8 +138,8 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 75,
-      width: 75,
+      height: 100,
+      width: 100,
       child: GestureDetector(
         onTap: () {
           HapticFeedback.heavyImpact();
@@ -170,7 +171,7 @@ class _RSATCoralStationState extends State<RSATCoralStation> {
                 offset: Offset(widget.left ? 14 : 30, 10),
                 child: Transform.rotate(
                     angle: widget.textAngle,
-                    child: AutoSizeText("CS", style: comfortaaBold(20))))
+                    child: AutoSizeText("CS", style: comfortaaBold(30))))
           ],
         ),
       ),
