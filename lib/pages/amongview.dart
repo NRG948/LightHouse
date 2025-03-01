@@ -307,9 +307,17 @@ class AmongViewSharedState extends ChangeNotifier {
         List searchTerms = [];
         List<double> timeDiffs = [];
         if (activeSortKey.contains("Reef")) {
-          searchTerms = ["AB","CD","EF","GH","IJ","KL"];
+          if (activeSortKey.contains("Auto")) {
+            searchTerms = ["AB","CD","EF","GH","IJ","KL"];
+          } else {
+            searchTerms = ["Reef"];
+          }
         } else if (activeSortKey.contains("CS")) {
-          searchTerms = ["BargeCS","ProcessorCS"];
+          if (activeSortKey.contains("Auto")) {
+            searchTerms = ["BargeCS","ProcessorCS"];
+          } else {
+            searchTerms = ["CoralStation"];
+          }
         } else if (activeSortKey.contains("Processor")) {
           searchTerms = ["Processor"];
         }
