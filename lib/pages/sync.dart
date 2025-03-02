@@ -137,7 +137,7 @@ class _UploadButtonState extends State<UploadButton> {
                       child: Center(child: Text("UPLOAD", style: comfortaaBold(25)))),
                     Text(
                         "Upload ${(snapshot.data ?? []).length} items to server",
-                        style: comfortaaBold(18,color: Constants.pastelReddishBrown,bold: false))
+                        style: comfortaaBold(18,color: Constants.pastelBrown,bold: false))
                   ],
                 )),
           );
@@ -182,7 +182,7 @@ class _UploadDialogState extends State<UploadDialog> {
         if (mounted) {
           showDialog(context: context, builder: (context) {
             return AlertDialog(content: Text("No files to upload",
-            style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
+            style: comfortaaBold(18,color: Constants.pastelBrown),),
             );
           });
         }
@@ -337,7 +337,7 @@ class _DownloadButtonState extends State<DownloadButton> {
                         color: Constants.pastelGray
                       ),
                       child: Center(child: Text("DOWNLOAD", style: comfortaaBold(25)))),
-          Text("Download Items from server", style: comfortaaBold(18,color: Constants.pastelReddishBrown,bold: false))
+          Text("Download Items from server", style: comfortaaBold(18,color: Constants.pastelBrown,bold: false))
         ]),
       ),
     );

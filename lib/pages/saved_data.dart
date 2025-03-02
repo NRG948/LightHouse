@@ -458,12 +458,12 @@ class _SavedFileState extends State<SavedFile> {
               IconButton(onPressed: () {showDialog(context: context, builder: (context) {return DataEdit(fileName: widget.fileName,);});}, icon: Icon(Icons.edit_note,size:50 * SavedData.scaleFactor)),
               IconButton(onPressed: () {
                 showDialog(context: context, builder: (BuildContext context) {
-                  return AlertDialog(title:Text("Delete Data",style: comfortaaBold(25,color: Constants.pastelReddishBrown),),
-                  content: Text("Are you sure you want to delete ${widget.fileName}?",style: comfortaaBold(12,color: Constants.pastelReddishBrown)),
+                  return AlertDialog(title:Text("Delete Data",style: comfortaaBold(25,color: Constants.pastelBrown),),
+                  content: Text("Are you sure you want to delete ${widget.fileName}?",style: comfortaaBold(12,color: Constants.pastelBrown)),
                   actions: [
                     TextButton(onPressed: () {
                       Navigator.pop(context);
-                    }, child: Text("No",style: comfortaaBold(18,color: Constants.pastelReddishBrown))),
+                    }, child: Text("No",style: comfortaaBold(18,color: Constants.pastelBrown))),
                     TextButton(onPressed: () {
                       if (deleteFile(SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout, widget.fileName) == 0) {
                         Navigator.pushReplacementNamed(context, "/saved_data",arguments: SavedData.sharedState.activeLayout);
@@ -471,7 +471,7 @@ class _SavedFileState extends State<SavedFile> {
                         showDialog(context: context, builder: (BuildContext context) {return AlertDialog(content: Text("Error"));});
                       }
                       //
-                    }, child: Text("Yes",style: comfortaaBold(18,color: Constants.pastelReddishBrown)))
+                    }, child: Text("Yes",style: comfortaaBold(18,color: Constants.pastelBrown)))
                   ],
                   );
                 });

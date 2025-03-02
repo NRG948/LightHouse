@@ -56,7 +56,7 @@ class Constants {
 
 TextStyle comfortaaBold(double fontSize,
     {bool bold = true,
-    Color color = Colors.white,
+    Color color = Constants.pastelWhite,
     FontWeight? customFontWeight,
     bool italic = false,
     double? spacing}) {
