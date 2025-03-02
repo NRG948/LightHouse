@@ -108,11 +108,11 @@ class _NRGTextboxState extends State<NRGTextbox> with AutomaticKeepAliveClientMi
                 inputFormatters:
                     _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
                 controller: _controller,
-                style: comfortaaBold(_fontSize, color: Constants.pastelReddishBrown),
+                style: comfortaaBold(_fontSize, color: Constants.pastelBrown),
                 maxLines: _maxLines,
                 decoration: InputDecoration(
                     labelText: _title,
-                    labelStyle: comfortaaBold(_fontSize, color: Constants.pastelReddishBrown, italic: true),
+                    labelStyle: comfortaaBold(_fontSize, color: Constants.pastelBrown, italic: true),
                     fillColor: Constants.pastelYellow,
                     filled: true,
                     floatingLabelBehavior: FloatingLabelBehavior.never,

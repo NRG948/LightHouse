@@ -166,7 +166,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
             averages[i],
             _multiColor != null
                 ? _multiColor![i % _multiColor!.length]
-                : Constants.pastelReddishBrown,
+                : Constants.pastelBrown,
             _dataLabels.isNotEmpty ? _dataLabels[i % _dataLabels.length] : ""));
       }
 
@@ -200,7 +200,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
           // Title Text.
           if (widget.chartOnly != true)
             Text("$_title (${roundAtPlace(_multiData != null && _multiData!.isNotEmpty ? getMultiAverageData().sum : getAverageData(), 2)})",
-                style: comfortaaBold(_height / 10, color: Constants.pastelReddishBrown)),
+                style: comfortaaBold(_height / 10, color: Constants.pastelBrown)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
@@ -231,7 +231,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                           child: Text(value.toStringAsFixed(1),
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Constants.pastelReddishBrown,
+                                  color: Constants.pastelBrown,
                                   fontSize: 12)));
                     },
                   )),
@@ -247,7 +247,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: !_removedData.contains(value)
-                                          ? Constants.pastelReddishBrown
+                                          ? Constants.pastelBrown
                                           : Colors.grey,
                                       fontSize: 12)))
                           : SideTitleWidget(
@@ -259,7 +259,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: !_removedData.contains(value)
-                                        ? Constants.pastelReddishBrown
+                                        ? Constants.pastelBrown
                                         : Colors.grey,
                                     fontSize: 12),
                               ),

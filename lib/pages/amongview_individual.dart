@@ -69,7 +69,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data. i'm actually impressed that you got here", style: comfortaaBold(18,color: Constants.pastelReddishBrown)));
+          body: Text("No data. i'm actually impressed that you got here", style: comfortaaBold(18,color: Constants.pastelBrown)));
     }
 
     state.activeTeam = ModalRoute.of(context)?.settings.arguments as int;
@@ -283,7 +283,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
             ? "Team ${match["teamNumber"]} Pit Data"
             : "Team ${match["teamNumber"]} ${match["matchType"]} ${match["matchNumber"]}",
         textAlign: TextAlign.center,
-        style: comfortaaBold(18, color: Constants.pastelReddishBrown),
+        style: comfortaaBold(18, color: Constants.pastelBrown),
       ),
     ];
     String layout = pit ? "Pit" : state.activeLayout;
@@ -293,19 +293,19 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
           listViewChildren.add(AutoSizeText(
             "${i.toSentenceCase}: ${match[i].toString()}",
             style: comfortaaBold(14 * scaleFactor,
-                color: Constants.pastelReddishBrown),
+                color: Constants.pastelBrown),
           ));
         case "autoPit":
           for (int auto = 0; auto < match[i].length; auto++) {
             listViewChildren.add(AutoSizeText("Auto ${auto + 1}",style: comfortaaBold(14 * scaleFactor,
-                color: Constants.pastelReddishBrown),));
+                color: Constants.pastelBrown),));
             for (String autoKey in [
               "autoCS","autoCoralScored","autoAlgaeRemoved","autoCoralScoredL1"
             ]) {
               listViewChildren.add(AutoSizeText(
               "    $autoKey: ${match[i][auto][autoKey]}",
               style: comfortaaBold(14 * scaleFactor,
-                color: Constants.pastelReddishBrown),));
+                color: Constants.pastelBrown),));
             }
           }
       }

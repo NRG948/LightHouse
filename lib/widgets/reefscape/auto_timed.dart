@@ -417,7 +417,7 @@ class HexagonPainter extends CustomPainter {
     TextPainter textPainter = TextPainter(
       text: TextSpan(
         text: text,
-        style: comfortaaBold(18, color: Constants.pastelReddishBrown),
+        style: comfortaaBold(18, color: Constants.pastelBrown),
       ),
       textDirection: TextDirection.ltr,
     );

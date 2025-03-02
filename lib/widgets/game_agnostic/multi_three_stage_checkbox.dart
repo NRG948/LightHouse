@@ -52,7 +52,7 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
             // Title of the checkbox group.
             Text(
               _title,
-              style: comfortaaBold(18,color: Constants.pastelReddishBrown),
+              style: comfortaaBold(18,color: Constants.pastelBrown),
               textAlign: TextAlign.center,
             ),
             // Build the three-stage checkboxes.

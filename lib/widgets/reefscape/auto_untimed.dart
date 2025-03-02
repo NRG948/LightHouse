@@ -746,7 +746,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
       Container(
         width: width * 1.5,
         height: height,
-        color: Constants.pastelRedMuted,
+        color: Constants.pastelRedDark,
         child: TextButton(
             onPressed: () {
               HapticFeedback.heavyImpact();

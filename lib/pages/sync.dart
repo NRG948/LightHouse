@@ -464,7 +464,7 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                         Text(
                           "Attempting Connection...",
                           style: comfortaaBold(18,
-                              color: Constants.pastelReddishBrown),
+                              color: Constants.pastelBrown),
                         ),
                         CircularProgressIndicator()
                       ],
@@ -476,7 +476,7 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                         Text(
                           "Recieved code ${snapshot.data}",
                           style: comfortaaBold(18,
-                              color: Constants.pastelReddishBrown),
+                              color: Constants.pastelBrown),
                         ),
                         Container(
                           width: 30 * SyncPageState.sizeScaleFactor,

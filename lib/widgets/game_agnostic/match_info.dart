@@ -169,7 +169,7 @@ class _MatchInfoState extends State<MatchInfo>
                       labelText: "Team Number",
                       labelStyle: comfortaaBold(
                         20 * scaleFactor,
-                        color: Constants.pastelRedMuted,
+                        color: Constants.pastelRedDark,
                       ),
                       fillColor: Constants.pastelRed,
                       filled: true),
@@ -182,7 +182,7 @@ class _MatchInfoState extends State<MatchInfo>
                     child: AutoSizeText(
                   "Replay",
                   style: comfortaaBold(13 * scaleFactor,
-                      color: Constants.pastelReddishBrown),
+                      color: Constants.pastelBrown),
                   maxLines: 1,
                   textAlign: TextAlign.start,
                 )),
@@ -224,7 +224,7 @@ class _MatchInfoState extends State<MatchInfo>
                           child: Text(
                             v,
                             style: comfortaaBold(15 * scaleFactor,
-                                color: Constants.pastelReddishBrown),
+                                color: Constants.pastelBrown),
                           ));
                     }).toList(),
                     onChanged: (value) {
@@ -259,7 +259,7 @@ class _MatchInfoState extends State<MatchInfo>
                           child: Text(
                             v,
                             style: comfortaaBold(15 * scaleFactor,
-                                color: Constants.pastelReddishBrown),
+                                color: Constants.pastelBrown),
                           ));
                     }).toList(),
                     onChanged: (value) {
@@ -291,7 +291,7 @@ class _MatchInfoState extends State<MatchInfo>
                       labelText: "#",
                       labelStyle: comfortaaBold(
                         20 * scaleFactor,
-                        color: Constants.pastelRedMuted,
+                        color: Constants.pastelRedDark,
                         italic: true,
                       ),
                       fillColor: Constants.pastelRed,

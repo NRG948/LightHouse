@@ -108,7 +108,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection>
                       jsonKey: "redMiss",
                       height: _height / 4,
                       width: _width / 2,
-                      color: Constants.pastelRedMuted,
+                      color: Constants.pastelRedDark,
                       boxColor: Constants.pastelWhite,
                       onIncrement: () => {
                             history.addLast("redMiss"),
@@ -122,7 +122,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection>
                       jsonKey: "redNetAlgae",
                       height: _height / 4,
                       width: _width / 2,
-                      color: Constants.pastelReddishBrown,
+                      color: Constants.pastelBrown,
                       boxColor: Constants.pastelWhite,
                       onIncrement: () => {
                             history.addLast("redNetAlgae"),
@@ -158,7 +158,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection>
                       jsonKey: "blueMiss",
                       height: _height / 4,
                       width: _width / 2,
-                      color: Constants.pastelBlueAgain,
+                      color: Constants.pastelBlueSuperDark,
                       boxColor: Constants.pastelWhite,
                       onIncrement: () => {
                             history.addLast("blueMiss"),
@@ -172,7 +172,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection>
                       jsonKey: "blueNetAlgae",
                       height: _height / 4,
                       width: _width / 2,
-                      color: Constants.pastelBlueMuted,
+                      color: Constants.pastelBlueDark,
                       boxColor: Constants.pastelWhite,
                       onIncrement: () => {
                             history.addLast("blueNetAlgae"),

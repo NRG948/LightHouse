@@ -46,7 +46,7 @@ class _NRGStartPosState extends State<NRGStartPos> {
                 return Container(
                   height: widget.height * 0.5,
                   width: widget.width * 0.75,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),border: Border.all(color: Constants.pastelReddishBrown,width: 2.0)),
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),border: Border.all(color: Constants.pastelBrown,width: 2.0)),
                   child: Image(image: AssetImage("assets/images/startPosWhiteLabel.png"),color: Constants.pastelYellow,),
                 );
               }
@@ -110,12 +110,12 @@ void showStartPos(BuildContext context, double width, double height) {
                               child: Container(
                                 width: 30,
                                 height: 30,
-                                decoration: BoxDecoration(color: Constants.markerLightGray,borderRadius: BorderRadius.circular(16)),
+                                decoration: BoxDecoration(color: Constants.pastelGrayDark,borderRadius: BorderRadius.circular(16)),
                                 child: Center(
                                   child: Container(
                                     width: 15,
                                     height: 15,
-                                    decoration: BoxDecoration(color: Constants.markerDarkGray,borderRadius: BorderRadius.circular(8)),
+                                    decoration: BoxDecoration(color: Constants.pastelGraySuperDark,borderRadius: BorderRadius.circular(8)),
                                   ),
                                 ),
                               ),

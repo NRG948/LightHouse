@@ -235,7 +235,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
                       labelText: "Red Team #",
                       labelStyle: comfortaaBold(
                         20 * scaleFactor,
-                        color: Constants.pastelRedMuted,
+                        color: Constants.pastelRedDark,
                       ),
                       fillColor: Constants.pastelRed,
                       filled: true),
@@ -257,7 +257,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
                       labelText: "Blue Team #",
                       labelStyle: comfortaaBold(
                         20 * scaleFactor,
-                        color: Constants.pastelBlueMuted,
+                        color: Constants.pastelBlueDark,
                       ),
                       fillColor: Constants.pastelBlue,
                       filled: true),
@@ -286,7 +286,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
                           child: Text(
                             v,
                             style: comfortaaBold(15 * scaleFactor,
-                                color: Constants.pastelReddishBrown),
+                                color: Constants.pastelBrown),
                           ));
                     }).toList(),
                     onChanged: (value) {
@@ -308,7 +308,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
                         child: AutoSizeText(
                       "Replay",
                       style: comfortaaBold(30 * scaleFactor,
-                          color: Constants.pastelReddishBrown),
+                          color: Constants.pastelBrown),
                       maxLines: 1,
                       textAlign: TextAlign.start,
                     )),
@@ -362,7 +362,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
                       labelText: "#",
                       labelStyle: comfortaaBold(
                         20 * scaleFactor,
-                        color: Constants.pastelRedMuted,
+                        color: Constants.pastelRedDark,
                         italic: true,
                       ),
                       fillColor: Constants.pastelRed,

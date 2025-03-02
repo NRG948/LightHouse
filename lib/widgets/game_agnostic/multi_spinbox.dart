@@ -72,7 +72,7 @@ class _NRGMultiSpinboxState extends State<NRGMultiSpinbox>
           children: [
             Text(
               _title,
-              style: comfortaaBold(18 * _scaleFactor,color: Constants.pastelReddishBrown),
+              style: comfortaaBold(18 * _scaleFactor,color: Constants.pastelBrown),
               textAlign: TextAlign.center,
             ),
             buildSpinboxes(_scaleFactor) // Build the spinboxes
@@ -138,7 +138,7 @@ class _NRGMultiSpinChildState extends State<NRGMultiSpinChild> {
         children: [
           SizedBox(
             height: 95 * 0.3 * _scaleFactor,
-            child: AutoSizeText(_title,maxLines: 1,style: comfortaaBold(40,color: Constants.pastelReddishBrown),),
+            child: AutoSizeText(_title,maxLines: 1,style: comfortaaBold(40,color: Constants.pastelBrown),),
           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,

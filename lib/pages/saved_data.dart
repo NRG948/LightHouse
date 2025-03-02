@@ -26,8 +26,8 @@ class SavedData extends StatelessWidget {
         appBar: AppBar(leading: IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.arrow_back_ios_new)),),
         body: Column(
           children: [
-            Text("NO DATA",style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
-            Text(configData.toString(),style: comfortaaBold(18,color: Constants.pastelReddishBrown)),
+            Text("NO DATA",style: comfortaaBold(18,color: Constants.pastelBrown)),
+            Text(configData.toString(),style: comfortaaBold(18,color: Constants.pastelBrown)),
             TextButton(onPressed: () {build(context);}, child: Text("Reload Page"))
           ],
         ),);
@@ -549,7 +549,7 @@ class _DataEditState extends State<DataEdit> {
             width: 300 * SavedData.scaleFactor,
             child: Column(
               children: [
-                AutoSizeText("Edit Data",style: comfortaaBold(30 * SavedData.scaleFactor,color: Constants.pastelReddishBrown),),
+                AutoSizeText("Edit Data",style: comfortaaBold(30 * SavedData.scaleFactor,color: Constants.pastelBrown),),
                 AutoSizeText(statusText,style: comfortaaBold(15,color: Colors.red),maxLines: 1,),
                 DropdownButton(items: 
                 jsonFile.keys.map(

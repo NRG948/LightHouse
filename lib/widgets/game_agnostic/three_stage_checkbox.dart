@@ -96,7 +96,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                   ]
                 ),
                 SizedBox(width: 3), 
-                Text(_title, style: comfortaaBold(20, color: Constants.pastelReddishBrown)), // Display the title.
+                Text(_title, style: comfortaaBold(20, color: Constants.pastelBrown)), // Display the title.
               ],
             )));
   }

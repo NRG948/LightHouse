@@ -52,9 +52,9 @@ class _NRGGuidanceButtonState extends State<NRGGuidanceButton> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                 // Display the button text with specific styling.
-                Text("GUIDED NAVIGATION",style: comfortaaBold(21,color: Constants.pastelReddishBrown),),
+                Text("GUIDED NAVIGATION",style: comfortaaBold(21,color: Constants.pastelBrown),),
                 // Display an arrow icon next to the text.
-                Icon(Icons.arrow_forward,color: Constants.pastelReddishBrown,size:33)
+                Icon(Icons.arrow_forward,color: Constants.pastelBrown,size:33)
               ],)
       ),
     );

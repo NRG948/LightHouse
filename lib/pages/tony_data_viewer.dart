@@ -77,15 +77,15 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         decoration: InputDecoration(
             label: Text('Team Number',
                 style: comfortaaBold(12,
-                    color: Constants.pastelReddishBrown,
+                    color: Constants.pastelBrown,
                     customFontWeight: FontWeight.w900)),
-            iconColor: Constants.pastelReddishBrown),
+            iconColor: Constants.pastelBrown),
         items: teamsInDatabase
             .map((int team) => DropdownMenuItem(
                 value: team,
                 child: Text("$team",
                     style: comfortaaBold(12,
-                        color: Constants.pastelReddishBrown))))
+                        color: Constants.pastelBrown))))
             .toList(),
         onChanged: (n) {
           setState(() {
@@ -110,7 +110,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return Text(
         "Functional Matches: ${totalMatches - disabledMatches}/$totalMatches",
         textAlign: TextAlign.left,
-        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
+        style: comfortaaBold(10, color: Constants.pastelBrown));
   }
 
   Widget getPreferredStrategy() {
@@ -126,7 +126,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return Text(
         "Preferred Strategy: ${frequencyMap.isNotEmpty ? frequencyMap.entries.reduce((a, b) => a.value > b.value ? a : b).key : "None"}",
         textAlign: TextAlign.left,
-        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
+        style: comfortaaBold(10, color: Constants.pastelBrown));
   }
 
   Widget getHumanPlayerAccuracy() {
@@ -149,7 +149,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return Text("Algae Accuracy: $algaeScored/$totalAlgae",
         textAlign: TextAlign.left,
-        style: comfortaaBold(10, color: Constants.pastelReddishBrown));
+        style: comfortaaBold(10, color: Constants.pastelBrown));
   }
 
   Widget getDisableReasonCommentBox() {
@@ -259,7 +259,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
-    List<Color> colors = [Constants.pastelBlue, Constants.pastelBlueAgain];
+    List<Color> colors = [Constants.pastelBlue, Constants.pastelBlueSuperDark];
     List<String> labels = ["NET", "PROC"];
 
     for (Map<String, dynamic> matchData in atlasData) {
@@ -296,8 +296,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
     List<Color> colors = [
-      Constants.pastelReddishBrown,
-      Constants.pastelRedMuted,
+      Constants.pastelBrown,
+      Constants.pastelRedDark,
       Constants.pastelRed,
       Constants.pastelYellow
     ];
@@ -384,7 +384,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 icon: Icon(Icons.arrow_back)),
           ),
           body: Text("No data",
-              style: comfortaaBold(18, color: Constants.pastelReddishBrown)));
+              style: comfortaaBold(18, color: Constants.pastelBrown)));
     }
 
     if (currentTeamNumber == 0) {

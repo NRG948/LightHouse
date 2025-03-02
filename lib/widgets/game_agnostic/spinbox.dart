@@ -41,7 +41,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
           children: [
             SizedBox(
             width: _width * 0.8,
-            child: AutoSizeText(_title, style: comfortaaBold(30,color: Constants.pastelReddishBrown))), // Display the title
+            child: AutoSizeText(_title, style: comfortaaBold(30,color: Constants.pastelBrown))), // Display the title
             Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +56,7 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
                       )),
                   AutoSizeText(
                     "$_counter",
-                    style: comfortaaBold(30,color: Constants.pastelReddishBrown), // Display the counter value
+                    style: comfortaaBold(30,color: Constants.pastelBrown), // Display the counter value
                   ),
                   IconButton(
                       onPressed: () {

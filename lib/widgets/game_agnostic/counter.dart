@@ -56,7 +56,7 @@ class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
               children: [
                 SizedBox(
                 height: _height * 0.3,
-                child: AutoSizeText(_title, style: comfortaaBold(30, color: Constants.pastelReddishBrown))),
+                child: AutoSizeText(_title, style: comfortaaBold(30, color: Constants.pastelBrown))),
                 Center(
                   child: Container(
                     height: _height * 0.4,

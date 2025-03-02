@@ -204,19 +204,19 @@ class HoriVertText extends StatelessWidget {
       children: [
         Transform.rotate(
           angle: pi/2,
-          child: Text(((stopwatchDisplay.inMilliseconds / 100) % 10).toInt().toString(),style: comfortaaBold(20,color: Constants.markerDarkGray),)),
+          child: Text(((stopwatchDisplay.inMilliseconds / 100) % 10).toInt().toString(),style: comfortaaBold(20,color: Constants.pastelGraySuperDark),)),
           Transform.rotate(
           angle: pi/2,
-          child: Text(".",style: comfortaaBold(20,color: Constants.markerDarkGray))),
+          child: Text(".",style: comfortaaBold(20,color: Constants.pastelGraySuperDark))),
           Transform.rotate(
           angle: pi/2,
-          child: Text((stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0"),style: comfortaaBold(20,color: Constants.markerDarkGray))),
+          child: Text((stopwatchDisplay.inSeconds % 60).toInt().toString().padLeft(2, "0"),style: comfortaaBold(20,color: Constants.pastelGraySuperDark))),
           Transform.rotate(
           angle: pi/2,
-          child: Text(":",style: comfortaaBold(20,color: Constants.markerDarkGray))),
+          child: Text(":",style: comfortaaBold(20,color: Constants.pastelGraySuperDark))),
           Transform.rotate(
           angle: pi/2,
-          child: Text(stopwatchDisplay.inMinutes.toString(),style: comfortaaBold(20,color: Constants.markerDarkGray))),
+          child: Text(stopwatchDisplay.inMinutes.toString(),style: comfortaaBold(20,color: Constants.pastelGraySuperDark))),
     
       ],
     )

@@ -603,7 +603,7 @@ Map<String, Color> colorMap = {
   "Human Player": Constants.pastelRed,
   "Data Viewer": Constants.pastelYellow,
   "View Saved Data": Constants.pastelGray,
-  "Sync to Server": Constants.pastelBlueAgain
+  "Sync to Server": Constants.pastelBlue
 };
 
 class DESharedState extends ChangeNotifier {
