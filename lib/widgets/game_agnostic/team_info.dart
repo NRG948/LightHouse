@@ -55,6 +55,7 @@ class _TeamInfoState extends State<TeamInfo>
                 child: TextField(
                   keyboardType: TextInputType.text,
                   controller: teamNumberController,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   style:
                       comfortaaBold(25.0, color: Constants.pastelBrown),
                   maxLines: 1,

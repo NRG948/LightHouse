@@ -228,6 +228,10 @@ Map<String, dynamic> pitscout = {
       "icon": CustomIcons.wrench,
       "widgets": [
         {
+          "title":"Measurements include bumpers",
+          "type": "hint-text"
+        },
+        {
           "title": "Robot Height (in)",
           "type": "numberbox",
           "jsonKey": "robotHeight",
@@ -241,6 +245,10 @@ Map<String, dynamic> pitscout = {
           "title": "Robot Width (in)",
           "type": "numberbox",
           "jsonKey": "robotWidth"
+        },
+         {
+          "title":"Weight includes bumpers and battery",
+          "type": "hint-text"
         },
         {
           "title": "Robot Weight (lbs)",

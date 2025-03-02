@@ -13,7 +13,6 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
-import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
 import "package:lighthouse/widgets/game_agnostic/rating.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
