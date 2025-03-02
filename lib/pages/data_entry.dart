@@ -13,6 +13,7 @@ import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
+import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
 import "package:lighthouse/widgets/game_agnostic/rating.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
@@ -334,7 +335,7 @@ class DataEntryState extends State<DataEntry> {
               left: 2 * resizeScaleFactorWidth,
               right: 2 * resizeScaleFactorWidth),
           child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
+           // physics: const NeverScrollableScrollPhysics(),
             itemCount: widgetList.length,
             itemBuilder: (context, index) {
               return Padding(
@@ -434,6 +435,9 @@ class DataEntryState extends State<DataEntry> {
                       fit: BoxFit.fill)),
               child: NotificationListener<OverscrollNotification>(
                 onNotification: (notification) {
+                  if (notification.metrics.axis == Axis.vertical) {
+                    return true;
+                  }
                   print(notification.overscroll);
                   if (notification.overscroll < -25) {
                     showReturnDialog(context);
@@ -448,6 +452,8 @@ class DataEntryState extends State<DataEntry> {
                   child: PageView(
                     controller: controller,
                     scrollDirection: Axis.horizontal,
+                    // Forces overscroll to trigger OverscrollNotification instead
+                    // of allowing overscroll itself
                     // Forces overscroll to trigger OverscrollNotification instead
                     // of allowing overscroll itself
                     physics: ClampingScrollPhysics(),

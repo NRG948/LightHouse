@@ -35,6 +35,7 @@ Map<String, dynamic> atlascout = {
     {
       "title": "Auto",
       "icon": CoralAlgaeIcons.autonomous,
+      "scrollable": true,
       "widgets": [
         {
           "type": "rsAutoUntimed",
