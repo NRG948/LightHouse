@@ -56,12 +56,12 @@ class _TeamInfoState extends State<TeamInfo>
                   keyboardType: TextInputType.text,
                   controller: teamNumberController,
                   style:
-                      comfortaaBold(25.0, color: Constants.pastelReddishBrown),
+                      comfortaaBold(25.0, color: Constants.pastelBrown),
                   maxLines: 1,
                   decoration: InputDecoration(
                       labelText: "Team Number",
                       labelStyle: comfortaaBold(30.0,
-                          color: Constants.pastelReddishBrown, italic: true),
+                          color: Constants.pastelBrown, italic: true),
                       fillColor: Constants.pastelYellow,
                       filled: true,
                       floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -85,7 +85,7 @@ class _TeamInfoState extends State<TeamInfo>
                     alignment: Alignment(-0.85, 0),
                     child: Text(teamName ?? "Team Name",
                         style: comfortaaBold(30,
-                            color: Constants.pastelReddishBrown,
+                            color: Constants.pastelBrown,
                             italic: teamName == null)),
                   ),
                 ),
