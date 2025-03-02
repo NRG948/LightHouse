@@ -16,7 +16,8 @@ class AtlasTeleopSelection extends StatefulWidget {
   State<AtlasTeleopSelection> createState() => _AtlasTeleopSelectionState();
 }
 
-class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with AutomaticKeepAliveClientMixin {
+class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
+    with AutomaticKeepAliveClientMixin {
   double get _height => widget.height;
   double get _width => widget.width;
 
@@ -45,7 +46,7 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
 
     void undo() {
       if (history.isNotEmpty) {
-        counters[history.removeLast()]!.currentState?.decrement();
+        counters[history.last]!.currentState?.decrement();
       }
     }
 
@@ -92,7 +93,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelGreen,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaeScoreNet"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("algaeScoreNet"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "algaeScoreNet")},
               ),
               Counter(
                 key: counters["algaeScoreProcessor"],
@@ -102,7 +108,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelGreen,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaeScoreProcessor"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("algaeScoreProcessor"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "algaeScoreProcessor")},
               ),
               Counter(
                 key: counters["algaeRemove"],
@@ -112,7 +123,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelGreen,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaeRemove"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("algaeRemove"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "algaeRemove")},
               ),
               Counter(
                 key: counters["algaePickups"],
@@ -122,7 +138,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelBlue,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("algaePickups"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("algaePickups"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "algaePickups")},
               ),
             ],
           ),
@@ -136,7 +157,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelYellow,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL4"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("coralScoredL4"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "coralScoredL4")},
               ),
               Counter(
                 key: counters["coralScoredL3"],
@@ -146,7 +172,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelYellow,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL3"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("coralScoredL3"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "coralScoredL3")},
               ),
               Counter(
                 key: counters["coralScoredL2"],
@@ -156,7 +187,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelYellow,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL2"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("coralScoredL2"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "coralScoredL2")},
               ),
               Counter(
                 key: counters["coralScoredL1"],
@@ -166,7 +202,12 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelYellow,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralScoredL1"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("coralScoredL1"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "coralScoredL1")},
               ),
               Counter(
                 key: counters["coralPickups"],
@@ -176,13 +217,34 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection> with Automa
                 width: _width / 2,
                 color: Constants.pastelBlue,
                 boxColor: Constants.pastelWhite,
-                onIncrement: () => {history.addLast("coralPickups"), HapticFeedback.heavyImpact()},
+                onIncrement: () => {
+                  history.addLast("coralPickups"),
+                  HapticFeedback.heavyImpact()
+                },
+                onDecrement: () =>
+                    {removeLastInstance(history, "coralPickups")},
               ),
             ],
           )
         ]));
   }
-  
+
   @override
   bool get wantKeepAlive => true;
+
+  void removeLastInstance(Queue<String> queue, String value) {
+    Queue<String> tempQueue = Queue<String>();
+    bool removed = false;
+
+    while (queue.isNotEmpty) {
+      String current = queue.removeLast();
+      if (!removed && current == value) {
+        removed = true;
+      } else {
+        tempQueue.addFirst(current);
+      }
+    }
+
+    queue.addAll(tempQueue);
+  }
 }

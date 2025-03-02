@@ -16,7 +16,8 @@ class HPTeleopSelection extends StatefulWidget {
   State<HPTeleopSelection> createState() => _HPTeleopSelectionState();
 }
 
-class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKeepAliveClientMixin {
+class _HPTeleopSelectionState extends State<HPTeleopSelection>
+    with AutomaticKeepAliveClientMixin {
   double get _height => widget.height;
   double get _width => widget.width;
 
@@ -42,7 +43,7 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
 
     void undo() {
       if (history.isNotEmpty) {
-        counters[history.removeLast()]!.currentState?.decrement();
+        counters[history.last]!.currentState?.decrement();
       }
     }
 
@@ -92,40 +93,43 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
                     color: Constants.pastelRed,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
+                      counters["redNetAlgae"]!.currentState!.increment(),
                       history.addLast("redScore"),
-                      HapticFeedback.heavyImpact(),
-                      counters["redNetAlgae"]!.currentState!.increment()
-                    },
-                  ),
-                  Counter(
-                    key: counters["redMiss"],
-                    title: "Red Miss",
-                    jsonKey: "redMiss",
-                    height: _height / 4,
-                    width: _width / 2,
-                    color: Constants.pastelRedMuted,
-                    boxColor: Constants.pastelWhite,
-                    onIncrement: () => {
-                      history.addLast("redMiss"),
-                      HapticFeedback.heavyImpact()
-                    },
-                  ),
-                  Counter(
-                    key: counters["redNetAlgae"],
-                    title: "Red Algae in Net",
-                    jsonKey: "redNetAlgae",
-                    height: _height / 4,
-                    width: _width / 2,
-                    color: Constants.pastelReddishBrown,
-                    boxColor: Constants.pastelWhite,
-                    onIncrement: () => {
-                      history.addLast("redNetAlgae"),
                       HapticFeedback.heavyImpact()
                     },
                     onDecrement: () => {
-                      if (history.isNotEmpty && history.last == "redScore") counters[history.removeLast()]!.currentState?.decrement()
-                    }
+                      removeLastInstance(history, "redScore"),
+                      counters["redNetAlgae"]!.currentState!.decrement()
+                    },
                   ),
+                  Counter(
+                      key: counters["redMiss"],
+                      title: "Red Miss",
+                      jsonKey: "redMiss",
+                      height: _height / 4,
+                      width: _width / 2,
+                      color: Constants.pastelRedMuted,
+                      boxColor: Constants.pastelWhite,
+                      onIncrement: () => {
+                            history.addLast("redMiss"),
+                            HapticFeedback.heavyImpact()
+                          },
+                      onDecrement: () =>
+                          {removeLastInstance(history, "redMiss")}),
+                  Counter(
+                      key: counters["redNetAlgae"],
+                      title: "Red Algae in Net",
+                      jsonKey: "redNetAlgae",
+                      height: _height / 4,
+                      width: _width / 2,
+                      color: Constants.pastelReddishBrown,
+                      boxColor: Constants.pastelWhite,
+                      onIncrement: () => {
+                            history.addLast("redNetAlgae"),
+                            HapticFeedback.heavyImpact()
+                          },
+                      onDecrement: () =>
+                          {removeLastInstance(history, "redNetAlgae")}),
                 ],
               ),
               Column(
@@ -139,47 +143,66 @@ class _HPTeleopSelectionState extends State<HPTeleopSelection> with AutomaticKee
                     color: Constants.pastelBlue,
                     boxColor: Constants.pastelWhite,
                     onIncrement: () => {
+                      counters["blueNetAlgae"]!.currentState!.increment(),
                       history.addLast("blueScore"),
-                      HapticFeedback.heavyImpact(),
-                      counters["blueNetAlgae"]!.currentState!.increment()
-                    },
-                  ),
-                  Counter(
-                    key: counters["blueMiss"],
-                    title: "Blue Miss",
-                    jsonKey: "blueMiss",
-                    height: _height / 4,
-                    width: _width / 2,
-                    color: Constants.pastelBlueAgain,
-                    boxColor: Constants.pastelWhite,
-                    onIncrement: () => {
-                      history.addLast("blueMiss"),
-                      HapticFeedback.heavyImpact()
-                    },
-                  ),
-                  Counter(
-                    key: counters["blueNetAlgae"],
-                    title: "Blue Algae in Net",
-                    jsonKey: "blueNetAlgae",
-                    height: _height / 4,
-                    width: _width / 2,
-                    color: Constants.pastelBlueMuted,
-                    boxColor: Constants.pastelWhite,
-                    onIncrement: () => {
-                      history.addLast("blueNetAlgae"),
                       HapticFeedback.heavyImpact()
                     },
                     onDecrement: () => {
-                      if (history.isNotEmpty && history.last == "blueScore") counters[history.removeLast()]!.currentState?.decrement()
-                    }
+                      removeLastInstance(history, "blueScore"),
+                      counters["blueNetAlgae"]!.currentState!.decrement()
+                    },
                   ),
+                  Counter(
+                      key: counters["blueMiss"],
+                      title: "Blue Miss",
+                      jsonKey: "blueMiss",
+                      height: _height / 4,
+                      width: _width / 2,
+                      color: Constants.pastelBlueAgain,
+                      boxColor: Constants.pastelWhite,
+                      onIncrement: () => {
+                            history.addLast("blueMiss"),
+                            HapticFeedback.heavyImpact()
+                          },
+                      onDecrement: () =>
+                          {removeLastInstance(history, "blueMiss")}),
+                  Counter(
+                      key: counters["blueNetAlgae"],
+                      title: "Blue Algae in Net",
+                      jsonKey: "blueNetAlgae",
+                      height: _height / 4,
+                      width: _width / 2,
+                      color: Constants.pastelBlueMuted,
+                      boxColor: Constants.pastelWhite,
+                      onIncrement: () => {
+                            history.addLast("blueNetAlgae"),
+                            HapticFeedback.heavyImpact()
+                          },
+                      onDecrement: () =>
+                          {removeLastInstance(history, "blueNetAlgae")}),
                 ],
               )
             ]),
           ],
         ));
   }
-  
+
   @override
   bool get wantKeepAlive => true;
+
+  void removeLastInstance(Queue<String> queue, String value) {
+    Queue<String> tempQueue = Queue<String>();
+    bool removed = false;
+
+    while (queue.isNotEmpty) {
+      String current = queue.removeLast();
+      if (!removed && current == value) {
+        removed = true;
+      } else {
+        tempQueue.addFirst(current);
+      }
+    }
+
+    queue.addAll(tempQueue);
+  }
 }
