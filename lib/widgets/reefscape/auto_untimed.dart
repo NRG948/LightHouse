@@ -779,7 +779,7 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
             },
             child: Text(
               "CS",
-              style: comfortaaBold(35 * widget.scaleFactor,
+              style: comfortaaBold(30 * widget.scaleFactor,
                   color: Constants.pastelWhite.withValues(alpha: 0.5)),
               textAlign: TextAlign.center,
             )),

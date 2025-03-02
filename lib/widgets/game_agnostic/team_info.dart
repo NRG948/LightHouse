@@ -93,26 +93,31 @@ class _TeamInfoState extends State<TeamInfo>
             ]));
   }
 
-  Future<String?> getTeamName(int teamNumber) async {
+  void getTeamName(int teamNumber) async {
     dynamic teamPage;
     try {
       teamPage = jsonDecode(await rootBundle.loadString(
           "assets/text/teams${(teamNumber ~/ 500) * 500}-${(teamNumber ~/ 500) * 500 + 500}.txt"));
     } catch (e) {
-      teamName = null;
+      setState(() {
+        teamName = null;
+        DataEntry.exportData["teamName"] = "";
+        print(teamName);
+      });
+      return;
     }
-    bool foundTeam = false;
     for (dynamic teamObject in teamPage) {
       if (teamObject["key"] == "frc$teamNumber") {
-        if (teamObject["city"] == null) {
-          print('found this team $teamNumber');
-          break;
-        }
         setState(() {
           teamName = teamObject["nickname"];
+          DataEntry.exportData["teamName"] = teamName ?? "";
         });
+        return;
       }
     }
-    DataEntry.exportData["teamName"] = teamName ?? "";
+    setState(() {
+      teamName = null;
+      DataEntry.exportData["teamName"] = teamName ?? "";
+    });
   }
 }
