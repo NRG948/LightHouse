@@ -154,8 +154,37 @@ Future<List<dynamic>> getUploadQueue() async{
   if (!(await queueFile.exists())) {
     return [];
   }
-  final List<dynamic> queue = jsonDecode(queueFile.readAsStringSync());
+  final queueString = await queueFile.readAsString();
+  print(queueString);
+  print("a ${jsonDecode(queueString)}");
+  final List<dynamic> queue = jsonDecode(queueString);
   return queue;
+}
+
+void setUploadQueue(List<dynamic> queue) {
+  final queueFile = File("$configFolder/uploadQueue.nrg");
+  // This should never run, since this function is only called after
+  // the queue is confirmed to not be empty, meaning that uploadQueue.nrg
+  // *must* exist
+  if (!(queueFile.existsSync())) {
+    throw UnimplementedError("what the fart -catie");
+  }
+  String queueString = "";
+  if (queue.isNotEmpty) {
+  // Start of a list
+  queueString = "[";
+  // very scuffed way of recreating a List<String>
+  for (dynamic i in queue) {
+    // Adds item to list with quotes
+    queueString += "\"$i\",";
+  }
+  // Removes final comma
+  queueString = queueString.substring(0,queueString.length - 1);
+  // End of list
+  queueString += "]";} else {
+    queueString = "";
+  }
+  queueFile.writeAsStringSync(queueString);
 }
 
 Future<int> saveConfig() async {

@@ -70,6 +70,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
   TextEditingController blueTeamNumberController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       width: 400 * scaleFactor,
       height: 340 * scaleFactor,

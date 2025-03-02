@@ -12,6 +12,8 @@ import "package:lighthouse/layouts.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
+import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
 import "package:lighthouse/widgets/game_agnostic/rating.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
@@ -24,6 +26,7 @@ import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/game_agnostic/spinbox.dart";
 import "package:lighthouse/widgets/game_agnostic/start_pos.dart";
 import "package:lighthouse/widgets/game_agnostic/stopwatch.dart";
+import "package:lighthouse/widgets/game_agnostic/team_info.dart";
 import "package:lighthouse/widgets/game_agnostic/textbox.dart";
 import "package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart";
 import "package:lighthouse/widgets/reefscape/atlas_teleop_selection.dart";
@@ -189,7 +192,7 @@ class DataEntryState extends State<DataEntry> {
           );
         case "textbox":
           final int maxLines = widgetData["maxLines"] ?? 1;
-          final double fontSize = widgetData["fontSize"] ?? 30.0;
+          final double fontSize = widgetData["fontSize"] ?? 20.0;
           final String? autoFill = widgetData["autoFill"];
           return NRGTextbox(
             title: title,
@@ -212,7 +215,7 @@ class DataEntryState extends State<DataEntry> {
               vertical: true);
         case "numberbox":
           final int maxLines = widgetData["maxLines"] ?? 1;
-          final double fontSize = widgetData["fontSize"] ?? 30.0;
+          final double fontSize = widgetData["fontSize"] ?? 20.0;
           return NRGTextbox(
             title: title,
             jsonKey: jsonKey,
@@ -300,6 +303,10 @@ class DataEntryState extends State<DataEntry> {
           return AtlasTeleopSelection(width: width, height: height);
         case "hp-teleop":
           return HPTeleopSelection(height: height, width: width);
+        case "team_info": 
+          return TeamInfo();
+        case "hint-text":
+          return HintText(text: title);
       }
       return Text("type $type isn't a valid type");
     }).toList();
@@ -328,7 +335,7 @@ class DataEntryState extends State<DataEntry> {
               left: 2 * resizeScaleFactorWidth,
               right: 2 * resizeScaleFactorWidth),
           child: ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
+           // physics: const NeverScrollableScrollPhysics(),
             itemCount: widgetList.length,
             itemBuilder: (context, index) {
               return Padding(
@@ -428,6 +435,10 @@ class DataEntryState extends State<DataEntry> {
                       fit: BoxFit.fill)),
               child: NotificationListener<OverscrollNotification>(
                 onNotification: (notification) {
+                  if (notification.metrics.axis == Axis.vertical) {
+                    return true;
+                  }
+                  print(notification.overscroll);
                   if (notification.overscroll < -25) {
                     showReturnDialog(context);
                   }
@@ -436,29 +447,37 @@ class DataEntryState extends State<DataEntry> {
                   }
                   return true;
                 },
-                child: PageView(
-                  controller: controller,
-                  scrollDirection: Axis.horizontal,
-                  children: createWidgetPages(layoutJSON["pages"]),
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentPage = index;
-
-                      // this tells the stopwatches what they should start
-                      // counting down from.
-                      switch (currentPage) {
-                        case 1:
-                          {
-                            stopwatchInitialValue = Duration(seconds: 15);
-                          }
-                        case 2:
-                          {
-                            stopwatchInitialValue =
-                                Duration(minutes: 2, seconds: 15);
-                          }
-                      }
-                    });
-                  },
+                child: ScrollConfiguration(
+                  behavior: ScrollBehavior().copyWith(overscroll: false),
+                  child: PageView(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    // Forces overscroll to trigger OverscrollNotification instead
+                    // of allowing overscroll itself
+                    // Forces overscroll to trigger OverscrollNotification instead
+                    // of allowing overscroll itself
+                    physics: ClampingScrollPhysics(),
+                    children: createWidgetPages(layoutJSON["pages"]),
+                    onPageChanged: (index) {
+                      setState(() {
+                        currentPage = index;
+                  
+                        // this tells the stopwatches what they should start
+                        // counting down from.
+                        switch (currentPage) {
+                          case 1:
+                            {
+                              stopwatchInitialValue = Duration(seconds: 15);
+                            }
+                          case 2:
+                            {
+                              stopwatchInitialValue =
+                                  Duration(minutes: 2, seconds: 15);
+                            }
+                        }
+                      });
+                    },
+                  ),
                 ),
               ),
             )),

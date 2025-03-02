@@ -27,7 +27,6 @@ class _NRGSpinboxState extends State<NRGSpinbox> {
   double get _height => widget.height; // Getter for height
   double get _width => widget.width; // Getter for width
   late int _counter; // Counter value
-  String _value = ""; // String representation of the counter value
 
   @override
   Widget build(BuildContext context) {

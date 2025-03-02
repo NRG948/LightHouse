@@ -9,8 +9,7 @@ class NRGCheckbox extends StatefulWidget {
   final String title; // The title of the checkbox.
   final String
       jsonKey; // The key used to store the checkbox state in exportData.
-  final dynamic
-      jsonKeyPath; // alternate path to provide more control
+  final dynamic jsonKeyPath; // alternate path to provide more control
   final double height; // The height of the checkbox widget.
   final double width; // The width of the checkbox widget.
   final bool
@@ -67,8 +66,19 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                           value: isChecked,
                           visualDensity: VisualDensity.compact,
                           onChanged: (bool? newValue) {
-                            // Update the checkbox state.
-                            checkboxNotifier.value = newValue ?? false;
+                            setState(() {
+                              // Toggle the checkbox state.
+                              checkboxNotifier.value = !checkboxNotifier.value;
+                              HapticFeedback.mediumImpact();
+                              // Update the exportData with the new state.
+                              if (_keyPath == null) {
+                                DataEntry.exportData[_key] =
+                                    checkboxNotifier.value;
+                              } else {
+                                _keyPath![widget.jsonKey] =
+                                    checkboxNotifier.value;
+                              }
+                            });
                           }),
                     );
                   }),
@@ -92,10 +102,23 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
                   valueListenable: checkboxNotifier,
                   builder: (context, isChecked, child) {
                     return Checkbox(
-                        value: _keyPath == null ? DataEntry.exportData[_key] : _keyPath![widget.jsonKey],
+                        value: _keyPath == null
+                            ? DataEntry.exportData[_key]
+                            : _keyPath![widget.jsonKey],
                         onChanged: (bool? newValue) {
-                          // Update the checkbox state.
-                          checkboxNotifier.value = newValue ?? false;
+                          setState(() {
+                            // Toggle the checkbox state.
+                            checkboxNotifier.value = !checkboxNotifier.value;
+                            HapticFeedback.mediumImpact();
+                            // Update the exportData with the new state.
+                            if (_keyPath == null) {
+                              DataEntry.exportData[_key] =
+                                  checkboxNotifier.value;
+                            } else {
+                              _keyPath![widget.jsonKey] =
+                                  checkboxNotifier.value;
+                            }
+                          });
                         });
                   }),
               SizedBox(
@@ -112,16 +135,17 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
     return GestureDetector(
         // Updates a [ValueNotifier] to alert the checkbox when clicked.
         onTap: () {
-          // Toggle the checkbox state.
-          checkboxNotifier.value = !checkboxNotifier.value;
-          print(checkboxNotifier.value);
-          HapticFeedback.mediumImpact();
-          // Update the exportData with the new state.
-          if (_keyPath == null) {
-            DataEntry.exportData[_key] = checkboxNotifier.value;
-          } else {
-            _keyPath![widget.jsonKey] = checkboxNotifier.value;
-          }
+          setState(() {
+            // Toggle the checkbox state.
+            checkboxNotifier.value = !checkboxNotifier.value;
+            HapticFeedback.mediumImpact();
+            // Update the exportData with the new state.
+            if (_keyPath == null) {
+              DataEntry.exportData[_key] = checkboxNotifier.value;
+            } else {
+              _keyPath![widget.jsonKey] = checkboxNotifier.value;
+            }
+          });
         },
         child: Container(
             height: _height,

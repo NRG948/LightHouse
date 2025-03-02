@@ -5,6 +5,7 @@ import 'package:lighthouse/filemgr.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/pages/saved_data.dart';
 
 // Main widget for the Sync page
 class SyncPage extends StatefulWidget {
@@ -103,11 +104,11 @@ class _UploadButtonState extends State<UploadButton> {
   @override
   void initState() {
     super.initState();
-    uploadQueue = getUploadQueue();
   }
 
   @override
   Widget build(BuildContext context) {
+    uploadQueue = getUploadQueue();
     return FutureBuilder(
         future: uploadQueue,
         builder: (context, snapshot) {
@@ -125,11 +126,18 @@ class _UploadButtonState extends State<UploadButton> {
                   openUploadDialog(context, snapshot.data ?? []);
                 },
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("UPLOAD", style: comfortaaBold(10)),
+                    Container(
+                      width: 200 * SyncPageState.sizeScaleFactor,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                        color: Constants.pastelGray
+                      ),
+                      child: Center(child: Text("UPLOAD", style: comfortaaBold(25)))),
                     Text(
                         "Upload ${(snapshot.data ?? []).length} items to server",
-                        style: comfortaaBold(10))
+                        style: comfortaaBold(18,color: Constants.pastelReddishBrown,bold: false))
                   ],
                 )),
           );
@@ -158,6 +166,7 @@ class UploadDialog extends StatefulWidget {
 class _UploadDialogState extends State<UploadDialog> {
   late String currentFile;
   Map<String, String> uploadedFiles = {};
+  final List<dynamic> filesToKeep = [];
 
   @override
   void initState() {
@@ -167,6 +176,19 @@ class _UploadDialogState extends State<UploadDialog> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.queue.isEmpty) {
+    Navigator.pop(context);
+      Future.delayed(Duration.zero,() {
+        if (mounted) {
+          showDialog(context: context, builder: (context) {
+            return AlertDialog(content: Text("No files to upload",
+            style: comfortaaBold(18,color: Constants.pastelReddishBrown),),
+            );
+          });
+        }
+      });
+      return Placeholder();
+      }
     return Center(
       child: Container(
         width: 350 * SyncPageState.sizeScaleFactor,
@@ -184,6 +206,8 @@ class _UploadDialogState extends State<UploadDialog> {
   // Upload files to the server
   void uploadFiles() async {
     if (widget.queue.isEmpty) {
+      print("queue is empty");
+      currentFile = "";
       return;
     }
     currentFile = widget.queue[0];
@@ -192,15 +216,23 @@ class _UploadDialogState extends State<UploadDialog> {
         currentFile = file;
       });
       String code = await uploadFile(file);
+      // If file was uploaded successfully or doesn't exist, remove it from the upload queue
+      if (!(code == "OK" || code == "File Missing")) {
+        filesToKeep.add(file);
+      }
+
       setState(() {
         uploadedFiles.addEntries([MapEntry(file, code)]);
       });
     }
     currentFile = "";
+    // Clears upload queue (except for files that returned an error)
+    setUploadQueue(filesToKeep);
     if (mounted) {
-      // TODO: Add function to clear upload queue
       Navigator.pop(context);
+      Navigator.pushReplacementNamed(context, "/sync");
     }
+    
   }
 
   // Build the list of uploaded files
@@ -235,7 +267,7 @@ class _UploadDialogState extends State<UploadDialog> {
       );
     }
     return list;
-  }
+  } 
 
   // Upload a single file to the server
   Future<String> uploadFile(String fileName) async {
@@ -256,12 +288,17 @@ class _UploadDialogState extends State<UploadDialog> {
     } else {
       api = "none";
     }
-    final response = await http.post(
+    try {
+      final response = await http.post(
         (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
         headers: {"Content-Type": "application/json"},
         body: fileContent);
     return Future.value(
-        responseCodes[response.statusCode] ?? response.statusCode.toString());
+        responseCodes[response.statusCode] ?? response.statusCode.toString()); }
+    catch (_) {
+      print ("here");
+      return Future.value("ERROR");
+    }
   }
 }
 
@@ -290,9 +327,17 @@ class _DownloadButtonState extends State<DownloadButton> {
                 return DownloadDialog();
               });
         },
-        child: Column(children: [
-          Text("DOWNLOAD", style: comfortaaBold(10)),
-          Text("Download Items from server", style: comfortaaBold(10))
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          Container(
+                      width: 200 * SyncPageState.sizeScaleFactor,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                        color: Constants.pastelGray
+                      ),
+                      child: Center(child: Text("DOWNLOAD", style: comfortaaBold(25)))),
+          Text("Download Items from server", style: comfortaaBold(18,color: Constants.pastelReddishBrown,bold: false))
         ]),
       ),
     );
@@ -420,6 +465,7 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -460,6 +506,7 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
                           "Attempting Connection...",

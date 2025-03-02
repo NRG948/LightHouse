@@ -1,6 +1,5 @@
 import "dart:convert";
 
-import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
@@ -18,6 +17,7 @@ class NRGTextbox extends StatefulWidget {
   final double fontSize; // Font size of the text
   final int maxLines; // Maximum number of lines for the text box
   final String? autoFill; // Optional autofill value
+  final String? hintText; // Optional hint text
 
   const NRGTextbox(
       {super.key,
@@ -29,14 +29,15 @@ class NRGTextbox extends StatefulWidget {
       this.numeric = false,
       required this.fontSize,
       required this.maxLines,
-      this.defaultText = "Enter Text"});
+      this.defaultText = "Enter Text",
+      this.hintText});
 
   @override
   State<NRGTextbox> createState() => _NRGTextboxState();
 }
 
-class _NRGTextboxState extends State<NRGTextbox> with AutomaticKeepAliveClientMixin {
-
+class _NRGTextboxState extends State<NRGTextbox>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -48,7 +49,7 @@ class _NRGTextboxState extends State<NRGTextbox> with AutomaticKeepAliveClientMi
   bool get _numeric => widget.numeric;
   int get _maxLines => widget.maxLines;
   double get _fontSize => widget.fontSize;
-  
+
   // Controller for the text field
   final TextEditingController _controller = TextEditingController();
 
@@ -60,17 +61,17 @@ class _NRGTextboxState extends State<NRGTextbox> with AutomaticKeepAliveClientMi
     _controller.addListener(() {
       setState(() {
         if (widget.numeric) {
-        try {
-          // Try to parse the text as JSON
-          DataEntry.exportData[_key] = jsonDecode(_controller.text);
-        } catch (_) {
-          // If parsing fails, store number 0
-          DataEntry.exportData[_key] = 0;
-
+          try {
+            // Try to parse the text as JSON
+            DataEntry.exportData[_key] = jsonDecode(_controller.text);
+          } catch (_) {
+            // If parsing fails, store number 0
+            DataEntry.exportData[_key] = 0;
+          }
+        } else {
+          DataEntry.exportData[_key] = _controller.text;
         }
-      } else {
-        DataEntry.exportData[_key] = _controller.text;
-      }});
+      });
     });
     // Initialize exportData with an empty string
     DataEntry.exportData[_key] = "";
@@ -93,6 +94,7 @@ class _NRGTextboxState extends State<NRGTextbox> with AutomaticKeepAliveClientMi
   // Build the widget
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
         height: _height,
         width: _width,
@@ -103,24 +105,26 @@ class _NRGTextboxState extends State<NRGTextbox> with AutomaticKeepAliveClientMi
           child: Padding(
             padding: EdgeInsets.all(10),
             child: TextField(
-                keyboardType:
-                    _numeric ? TextInputType.number : TextInputType.text,
-                inputFormatters:
-                    _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
-                controller: _controller,
-                style: comfortaaBold(_fontSize, color: Constants.pastelBrown),
-                maxLines: _maxLines,
-                decoration: InputDecoration(
-                    labelText: _title,
-                    labelStyle: comfortaaBold(_fontSize, color: Constants.pastelBrown, italic: true),
-                    fillColor: Constants.pastelYellow,
-                    filled: true,
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(Constants.borderRadius),
-                      borderSide: BorderSide.none
-                    )),
-                ),
+              keyboardType:
+                  _numeric ? TextInputType.number : TextInputType.text,
+              inputFormatters:
+                  _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
+              controller: _controller,
+              style:
+                  comfortaaBold(_fontSize, color: Constants.pastelBrown),
+              maxLines: _maxLines,
+              decoration: InputDecoration(
+                  labelText: _title,
+                  labelStyle: comfortaaBold(_fontSize,
+                      color: Constants.pastelBrown, italic: true),
+                  fillColor: Constants.pastelYellow,
+                  filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(Constants.borderRadius),
+                      borderSide: BorderSide.none)),
+            ),
           ),
         ));
   }

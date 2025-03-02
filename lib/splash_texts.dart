@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:lighthouse/filemgr.dart';
 
 
 final List<String> splashTexts = [
@@ -47,7 +46,11 @@ final List<String> splashTexts = [
         "'It'll be fineeeeeee' famous last words",
         "ong frfr",
         "TODO: Come up with more splash texts",
-        "Bring back build szn mac n cheese"
+        "Bring back build szn mac n cheese",
+        "Is the sistine chapel cool",
+        "Made with smiles and enriched wheat flour",
+        "I lowkey forgot miami was a city - our cad vp",
+
 ];
 
 

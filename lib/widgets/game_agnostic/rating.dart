@@ -39,6 +39,7 @@ class _NRGRatingState extends State<NRGRating> with AutomaticKeepAliveClientMixi
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       height: widget.height,
       width: widget.width,
