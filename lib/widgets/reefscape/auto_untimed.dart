@@ -93,7 +93,8 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                               onChanged: (selection) {
                                 HapticFeedback.mediumImpact();
                                 if (selection == 0) {
-                                  DataEntry.exportData['auto'].add(sharedState._createAutoEntry());
+                                  DataEntry.exportData['auto']
+                                      .add(sharedState._createAutoEntry());
                                   dropdownItems.insert(
                                     dropdownItems.length - 2,
                                     DropdownMenuItem(
@@ -111,7 +112,8 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                                 if (selection == -1) {
                                   if (sharedState.currentAuto == 1) return;
                                   DataEntry.exportData['auto'].removeLast();
-                                  dropdownItems.removeAt(dropdownItems.length - 3);
+                                  dropdownItems
+                                      .removeAt(dropdownItems.length - 3);
                                   sharedState.currentAuto -= 1;
                                   return;
                                 }
@@ -163,6 +165,14 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
           ? NRGCheckbox(
               title: "Drops Algae on Ground",
               jsonKey: "dropsAlgaeAuto",
+              jsonKeyPath: sharedState.targetData,
+              height: 40,
+              width: 400)
+          : SizedBox(),
+      pit
+          ? NRGCheckbox(
+              title: "Drives Out",
+              jsonKey: "drivesOut",
               jsonKeyPath: sharedState.targetData,
               height: 40,
               width: 400)
@@ -224,9 +234,13 @@ class _RSAUReefState extends State<RSAUReef>
     }
     String at = widget.sharedState.activeTriangle!;
     return Container(
-        height: 320 * widget.scaleFactor,
-        width: 318 * widget.scaleFactor,
-        padding: EdgeInsets.all(8 * widget.scaleFactor),
+        height: 280 * widget.scaleFactor,
+        width: 320 * widget.scaleFactor,
+        padding: EdgeInsets.only(
+            top: 4 * widget.scaleFactor,
+            bottom: 8 * widget.scaleFactor,
+            left: 8 * widget.scaleFactor,
+            right: 8 * widget.scaleFactor),
         child: Column(
           spacing: 2 * widget.scaleFactor,
           children: [
@@ -332,9 +346,12 @@ class _RSAUTroughState extends State<RSAUTrough> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {increment(); HapticFeedback.lightImpact();},
+      onTap: () {
+        increment();
+        HapticFeedback.lightImpact();
+      },
       child: Container(
-        height: 85 * widget.scaleFactor,
+        height: 65 * widget.scaleFactor,
         width: 301 * widget.scaleFactor,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
@@ -343,7 +360,10 @@ class _RSAUTroughState extends State<RSAUTrough> {
                 : Constants.pastelGray),
         child: Center(
           child: GestureDetector(
-            onTap: () {increment(); HapticFeedback.lightImpact();},
+            onTap: () {
+              increment();
+              HapticFeedback.lightImpact();
+            },
             child: Column(
               children: [
                 Row(
@@ -352,7 +372,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                   children: [
                     Icon(
                       CoralAlgaeIcons.coral,
-                      size: 24 * widget.scaleFactor,
+                      size: 20 * widget.scaleFactor,
                       color: Constants.pastelWhite,
                     ),
                     Text(
@@ -366,7 +386,7 @@ class _RSAUTroughState extends State<RSAUTrough> {
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   child: SizedBox(
-                    height: 49 * widget.scaleFactor,
+                    height: 30 * widget.scaleFactor,
                     child: Row(
                       spacing: 0,
                       children: [
@@ -380,9 +400,12 @@ class _RSAUTroughState extends State<RSAUTrough> {
                               textAlign: TextAlign.center,
                             )),
                         SizedBox(
-                            width: 24,
+                            width: 30,
                             child: IconButton(
-                                onPressed: () {decrement(); HapticFeedback.lightImpact();},
+                                onPressed: () {
+                                  decrement();
+                                  HapticFeedback.lightImpact();
+                                },
                                 icon: Icon(Icons.keyboard_arrow_down,
                                     size: 25 * widget.scaleFactor),
                                 color: Constants.pastelWhite,
@@ -455,7 +478,7 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
     return GestureDetector(
       onTap: setActive,
       child: Container(
-          height: 60 * widget.scaleFactor,
+          height: 55 * widget.scaleFactor,
           width: (widget.algae ? 75 : 100) * widget.scaleFactor,
           decoration: BoxDecoration(
               color: active
