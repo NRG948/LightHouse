@@ -12,6 +12,7 @@ import "package:lighthouse/layouts.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
+import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
 import "package:lighthouse/widgets/game_agnostic/rating.dart";
 import "package:lighthouse/widgets/game_agnostic/guidance_start_button.dart";
 import "package:lighthouse/widgets/game_agnostic/horizontal_spacer.dart";
@@ -190,7 +191,7 @@ class DataEntryState extends State<DataEntry> {
           );
         case "textbox":
           final int maxLines = widgetData["maxLines"] ?? 1;
-          final double fontSize = widgetData["fontSize"] ?? 30.0;
+          final double fontSize = widgetData["fontSize"] ?? 20.0;
           final String? autoFill = widgetData["autoFill"];
           return NRGTextbox(
             title: title,
@@ -213,7 +214,7 @@ class DataEntryState extends State<DataEntry> {
               vertical: true);
         case "numberbox":
           final int maxLines = widgetData["maxLines"] ?? 1;
-          final double fontSize = widgetData["fontSize"] ?? 30.0;
+          final double fontSize = widgetData["fontSize"] ?? 20.0;
           return NRGTextbox(
             title: title,
             jsonKey: jsonKey,
@@ -303,6 +304,8 @@ class DataEntryState extends State<DataEntry> {
           return HPTeleopSelection(height: height, width: width);
         case "team_info": 
           return TeamInfo();
+        case "hint-text":
+          return HintText(text: title);
       }
       return Text("type $type isn't a valid type");
     }).toList();
@@ -445,6 +448,8 @@ class DataEntryState extends State<DataEntry> {
                   child: PageView(
                     controller: controller,
                     scrollDirection: Axis.horizontal,
+                    // Forces overscroll to trigger OverscrollNotification instead
+                    // of allowing overscroll itself
                     physics: ClampingScrollPhysics(),
                     children: createWidgetPages(layoutJSON["pages"]),
                     onPageChanged: (index) {

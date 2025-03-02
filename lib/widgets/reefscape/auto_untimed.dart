@@ -226,6 +226,7 @@ class _RSAUReefState extends State<RSAUReef>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (widget.sharedState.activeTriangle == null) {
       return Text(
         "No Section Selected",

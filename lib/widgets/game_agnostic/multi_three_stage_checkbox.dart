@@ -38,6 +38,7 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     // Container for the multi three-stage checkbox with a title and checkboxes.
     return Container(
         height: _height,

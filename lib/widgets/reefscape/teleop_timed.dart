@@ -1,4 +1,3 @@
-import 'dart:async';
 
 //TODO: Bugfixes
 //  - Timer starts at 2:00 instead of 2:15
@@ -10,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import "dart:math";
-import "dart:ui" as ui;
 
 import 'package:lighthouse/pages/data_entry.dart';
 
@@ -24,7 +22,6 @@ class RSTeleopTimed extends StatefulWidget {
 
 class _RSTeleopTimedState extends State<RSTeleopTimed> {
   static late double scaleFactor;
-  static late double screenHeight;
   static List<bool> widgetStates = List.filled(5, false);
   double _textAngle = pi / 2;
 
@@ -45,7 +42,6 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    screenHeight = MediaQuery.of(context).size.height;
   }
 
   @override
