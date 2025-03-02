@@ -1,3 +1,4 @@
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
@@ -16,36 +17,15 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    settingsList = configData.keys.map<Widget>((setting) {
-      return Container(
-          height: 110, //sets the height of the setting container
-          width: 400, // sets the width of the setting container
-          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-          //margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-          decoration: BoxDecoration(
-              color: Constants.pastelRed,
-              borderRadius: BorderRadius.circular(8)),
-          child: Column(
-            spacing: 8.0, // Space between child widgets.
-            children: [
-              // Displays the setting name with a custom style.
-              Container(
-                  margin: const EdgeInsets.only(top: 8.0),
-                  child:
-                      Text(setting.toSentenceCase, style: comfortaaBold(20))),
-              // TextField for modifying the setting value.
-              TextField(
-                controller: TextEditingController(text: configData[setting]),
-                onChanged: (text) {
-                  configData[setting] = text;
-                },
-                decoration: InputDecoration(
-                    labelText: "Enter Text",
-                    labelStyle: comfortaaBold(20),
-                    border: OutlineInputBorder()), // Adds a border around the text field.
-              )
-            ],
-          ));
+    settingsList = settingsMap.keys.map<Widget>((setting) {
+      switch (settingsMap[setting]) {
+        case "text":
+          return SettingsTextBox(setting: setting);
+        case "bool":
+          return SettingsCheckbox(setting: setting);
+        default:
+          return Placeholder();
+      }
     }).toList();
     // Adds a button to save settings.
     settingsList.add(SaveSettingsButton());
@@ -54,19 +34,20 @@ class _SettingsPageState extends State<SettingsPage> {
         onPressed: () {
           HapticFeedback.mediumImpact();
           loadConfig(reset: true); //resets setting to default values
-          Navigator.pushReplacementNamed(context, "/settings"); //reloads the setting page
+          Navigator.pushReplacementNamed(
+              context, "/settings"); //reloads the setting page
         },
         child: Text("Reset Configuration")));
-    
   }
 
   @override
   Widget build(BuildContext context) {
     // Creates a list of setting widgets based on configData keys.
     final screenWidth = MediaQuery.of(context).size.width; //gets screen width
-    final screenHeight = MediaQuery.of(context).size.height; //gets screen height
+    final screenHeight =
+        MediaQuery.of(context).size.height; //gets screen height
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: false,
         // App bar with back navigation and title.
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
@@ -79,6 +60,19 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.white),
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text(configData.toString()),
+                        );
+                      });
+                },
+                icon: Icon(Icons.javascript))
+          ],
           leading: IconButton(
               onPressed: () {
                 HapticFeedback.mediumImpact();
@@ -112,6 +106,116 @@ class _SettingsPageState extends State<SettingsPage> {
         ));
   }
 }
+
+class SettingsTextBox extends StatefulWidget {
+  final String setting;
+  const SettingsTextBox({
+    super.key,
+    required this.setting
+  });
+
+  @override
+  State<SettingsTextBox> createState() => _SettingsTextBoxState();
+}
+
+class _SettingsTextBoxState extends State<SettingsTextBox> {
+
+  @override
+  void initState() {
+    super.initState();
+    if (!(configData.containsKey(widget.setting))) {
+            configData[widget.setting] = "";
+          }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 110, //sets the height of the setting container
+        width: 400, // sets the width of the setting container
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+        //margin: const EdgeInsets.only(left: 10.0, right: 10.0),
+        decoration: BoxDecoration(
+            color: Constants.pastelRed,
+            borderRadius: BorderRadius.circular(8)),
+        child: Column(
+          spacing: 8.0, // Space between child widgets.
+          children: [
+            // Displays the setting name with a custom style.
+            Container(
+                margin: const EdgeInsets.only(top: 8.0),
+                child: Text(widget.setting.toSentenceCase,
+                    style: comfortaaBold(20))),
+            // TextField for modifying the setting value.
+            TextField(
+              controller:
+                  TextEditingController(text: configData[widget.setting] ?? ""),
+              onChanged: (text) {
+                configData[widget.setting] = text;
+              },
+              decoration: InputDecoration(
+                  labelText: "Enter Text",
+                  labelStyle: comfortaaBold(20),
+                  border:
+                      OutlineInputBorder()), // Adds a border around the text field.
+            )
+          ],
+        ));
+  }
+}
+
+class SettingsCheckbox extends StatefulWidget {
+  final String setting;
+
+  const SettingsCheckbox({super.key, required this.setting});
+
+  @override
+  State<SettingsCheckbox> createState() => _SettingsCheckboxState();
+}
+
+class _SettingsCheckboxState extends State<SettingsCheckbox> {
+  ValueNotifier enabled = ValueNotifier<bool>(false);
+  @override
+  void initState() {
+    super.initState();
+    if (!(configData.containsKey(widget.setting))) {
+      configData[widget.setting] = "false";
+    }
+    enabled.value = configData[widget.setting] == "true";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        enabled.value = !enabled.value;
+        configData[widget.setting] = enabled.value ? "true" : "false";
+      },
+      child: Container(
+        height: 100,
+        width: 400,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
+            color: Constants.pastelRed),
+        child: Row(
+          children: [
+            ValueListenableBuilder(valueListenable: enabled, builder: (context,isChecked,child) {
+              return Checkbox(value: isChecked, onChanged: 
+             (e) {
+              setState(() {
+                enabled.value = !enabled.value;
+                configData[widget.setting] = enabled.value ? "true" : "false";
+              });  
+             });
+            }),
+            AutoSizeText(widget.setting.toSentenceCase,style: comfortaaBold(20),)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // a stateful widget that saves the user's settings
 class SaveSettingsButton extends StatefulWidget {
   const SaveSettingsButton({super.key});
@@ -130,7 +234,8 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
           if (!mounted) {
             return;
           } // Ensures widget is still part of the tree before proceeding.
-          if (await saveConfig() == 0) { // Saves settings and checks if the operation was successful.
+          if (await saveConfig() == 0) {
+            // Saves settings and checks if the operation was successful.
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -140,7 +245,8 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
                       TextButton(
                           onPressed: () {
                             HapticFeedback.mediumImpact();
-                            Navigator.pushNamed(context, "/home-scouter"); //navigates back to home
+                            Navigator.pushNamed(context,
+                                "/home-scouter"); //navigates back to home
                           },
                           child: Text("OK"))
                     ],

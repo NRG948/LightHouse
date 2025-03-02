@@ -257,5 +257,13 @@ int deleteFile(String eventKey, String layout, String fileName) {
 final Map<String, String> defaultConfig = {
   "eventKey": "2025nrg",
   "scouterName": "Scouter",
-  "serverIP": "http://169.254.9.48:8080"
+  "serverIP": "http://169.254.9.48:8080",
+  "autofillMatchNumber": "false"
+};
+
+final Map<String,String> settingsMap = {
+  "eventKey" : "text",
+  "scouterName": "text",
+  "serverIP": "text",
+  "autofillMatchNumber":"bool"
 };
