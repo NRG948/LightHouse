@@ -63,90 +63,90 @@ class _MatchInfoState extends State<MatchInfo>
 
     return Container(
       width: 400 * scaleFactor,
-      height: 275 * scaleFactor,
+      height: 290 * scaleFactor,
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
+        spacing: 10,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              height: 105 * scaleFactor,
-              width: 390 * scaleFactor,
-              decoration: BoxDecoration(
-                  color: Constants.pastelGray,
-                  borderRadius: BorderRadius.circular(Constants.borderRadius)),
-              child: Center(
-                  child: Column(
-                children: [
-                  // Display event key
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.event,
-                        size: 30 * scaleFactor,
-                        color: Constants.pastelWhite,
-                      ),
-                      SizedBox(
-                          width: 300 * scaleFactor,
-                          height: 35 * scaleFactor,
-                          child: Center(
-                              child: AutoSizeText(
-                            eventKey.toUpperCase(),
-                            style: comfortaaBold(18),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          )))
-                    ],
-                  ),
-                  // Display team name
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.person,
-                        size: 30 * scaleFactor,
-                        color: Constants.pastelWhite,
-                      ),
-                      SizedBox(
-                          width: 300 * scaleFactor,
-                          height: 35 * scaleFactor,
-                          child: Center(
-                              child: AutoSizeText(
-                            teamName ?? "No Team Selected",
-                            style: comfortaaBold(18),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          )))
-                    ],
-                  ),
-                  // Display team location
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Icon(
-                        Icons.location_pin,
-                        size: 30 * scaleFactor,
-                        color: Constants.pastelWhite,
-                      ),
-                      SizedBox(
-                          width: 300 * scaleFactor,
-                          height: 35 * scaleFactor,
-                          child: Center(
-                              child: AutoSizeText(
-                            teamLocation ?? "",
-                            style: comfortaaBold(18),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.start,
-                          )))
-                    ],
-                  )
-                ],
-              )),
-            ),
+          Container(
+            height: 120 * scaleFactor,
+            width: 390 * scaleFactor,
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                color: Constants.pastelGray,
+                borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            child: Center(
+                child: Column(
+              children: [
+                // Display event key
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      Icons.event,
+                      size: 30 * scaleFactor,
+                      color: Constants.pastelWhite,
+                    ),
+                    SizedBox(
+                        width: 300 * scaleFactor,
+                        height: 35 * scaleFactor,
+                        child: Center(
+                            child: AutoSizeText(
+                          eventKey.toUpperCase(),
+                          style: comfortaaBold(18),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        )))
+                  ],
+                ),
+                // Display team name
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      Icons.person,
+                      size: 30 * scaleFactor,
+                      color: Constants.pastelWhite,
+                    ),
+                    SizedBox(
+                        width: 300 * scaleFactor,
+                        height: 35 * scaleFactor,
+                        child: Center(
+                            child: AutoSizeText(
+                          teamName ?? "No Team Selected",
+                          style: comfortaaBold(18),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        )))
+                  ],
+                ),
+                // Display team location
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Icon(
+                      Icons.location_pin,
+                      size: 30 * scaleFactor,
+                      color: Constants.pastelWhite,
+                    ),
+                    SizedBox(
+                        width: 300 * scaleFactor,
+                        height: 35 * scaleFactor,
+                        child: Center(
+                            child: AutoSizeText(
+                          teamLocation ?? "",
+                          style: comfortaaBold(18),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.start,
+                        )))
+                  ],
+                )
+              ],
+            )),
           ),
           // Input for team number and replay checkbox
           Row(
@@ -155,7 +155,7 @@ class _MatchInfoState extends State<MatchInfo>
             children: [
               SizedBox(
                 height: 50 * scaleFactor,
-                width: 200 * scaleFactor,
+                width: 250 * scaleFactor,
                 child: TextField(
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -176,7 +176,7 @@ class _MatchInfoState extends State<MatchInfo>
                 ),
               ),
               SizedBox(
-                width: 50 * scaleFactor,
+                width: 70 * scaleFactor,
                 height: 50 * scaleFactor,
                 child: Center(
                     child: AutoSizeText(
@@ -203,13 +203,11 @@ class _MatchInfoState extends State<MatchInfo>
               )
             ],
           ),
-          SizedBox(height: 5 * scaleFactor),
-          // Dropdowns for match type and driver station, and input for match number
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            spacing: 10,
             children: [
               Container(
-                width: 150 * scaleFactor,
+                width: 170 * scaleFactor,
                 height: 65 * scaleFactor,
                 decoration: BoxDecoration(
                     color: Constants.pastelYellow,
@@ -236,11 +234,38 @@ class _MatchInfoState extends State<MatchInfo>
                   ),
                 ),
               ),
+              SizedBox(
+                height: 65 * scaleFactor,
+                width: 75 * scaleFactor,
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  onChanged: (value) {
+                    HapticFeedback.mediumImpact();
+                    DataEntry.exportData["matchNumber"] =
+                        int.tryParse(value) ?? 0;
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(Constants.borderRadius),
+                          borderSide: BorderSide.none),
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      labelText: "#",
+                      labelStyle: comfortaaBold(
+                        20 * scaleFactor,
+                        color: Constants.pastelYellowDark,
+                        italic: true,
+                      ),
+                      fillColor: Constants.pastelYellow,
+                      filled: true),
+                ),
+              ),
               Container(
-                width: 100 * scaleFactor,
+                width: 110 * scaleFactor,
                 height: 65 * scaleFactor,
                 decoration: BoxDecoration(
-                    color: Constants.pastelYellow,
+                    color: Constants.pastelRed,
                     borderRadius:
                         BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
@@ -267,35 +292,8 @@ class _MatchInfoState extends State<MatchInfo>
                       driverStation = value ?? "Red 1";
                       DataEntry.exportData["driverStation"] = value;
                     },
-                    dropdownColor: Constants.pastelYellow,
+                    dropdownColor: Constants.pastelRed,
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 65 * scaleFactor,
-                width: 75 * scaleFactor,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onChanged: (value) {
-                    HapticFeedback.mediumImpact();
-                    DataEntry.exportData["matchNumber"] =
-                        int.tryParse(value) ?? 0;
-                  },
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Constants.borderRadius),
-                          borderSide: BorderSide.none),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: "#",
-                      labelStyle: comfortaaBold(
-                        20 * scaleFactor,
-                        color: Constants.pastelRedDark,
-                        italic: true,
-                      ),
-                      fillColor: Constants.pastelRed,
-                      filled: true),
                 ),
               ),
             ],
