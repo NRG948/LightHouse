@@ -179,7 +179,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
           : SizedBox()
     ];
     return Container(
-      height: pit ? 670 : 700 * scaleFactor,
+      height: pit ? 630 : 700 * scaleFactor,
       width: widget.width,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
@@ -518,8 +518,8 @@ class RSAUHexagon extends StatelessWidget {
     ];
     return Container(
         color: Constants.pastelWhite,
-        height: 250 * scaleFactor,
-        width: 275 * scaleFactor,
+        height: 200 * scaleFactor,
+        width: 200 * scaleFactor,
         alignment: Alignment.center,
         child: AspectRatio(
             aspectRatio: 1,
