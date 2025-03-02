@@ -360,7 +360,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         }
       }
     }
-
+    if (autos.values.toList().isEmpty) {
+      return Placeholder();
+    }
     return ScrollableAutoPaths(
         height: 300 * verticalScaleFactor,
         width: 400 * horizontalScaleFactor,

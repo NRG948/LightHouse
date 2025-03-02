@@ -126,7 +126,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   // Generate animation path based on waypoints.
   Animation<Offset> _getAnimationPath() {
     if (_autoPath == null) {
-      return TweenSequence<Offset>([]).animate(_controller);
+      return TweenSequence<Offset>([TweenSequenceItem(tween: Tween(begin: Offset.zero,end: Offset.zero), weight: 0.1)]).animate(_controller);
     }
 
     List<TweenSequenceItem<Offset>> items = [];
