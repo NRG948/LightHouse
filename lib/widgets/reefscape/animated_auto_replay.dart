@@ -109,9 +109,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   }
 
   void loadShader() async {
-    program =
-        await FragmentProgram.fromAsset('assets/shaders/stripes_shader.frag');
-    print('Shader Loaded');
+    program = await FragmentProgram.fromAsset('assets/shaders/stripes_shader.frag');
     setState(() {});
   }
 
@@ -257,7 +255,6 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     List<int> scoreDistribution = [0, 0, 0]; // L2, L3, L4
 
     for (String coral in _autoReef!.scores) {
-      print(coral);
       scoreDistribution[int.parse(coral[1]) - 2] += 1;
     }
 

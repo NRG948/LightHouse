@@ -168,7 +168,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return ScrollableBox(
         width: 240 * horizontalScaleFactor,
-        height: 110 * verticalScaleFactor,
+        height: 200 * verticalScaleFactor,
         title: "Disable Reason",
         comments: comments,
         sort: Sort.LENGTH_MAX);
@@ -207,13 +207,49 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return ScrollableBox(
         width: 400 * horizontalScaleFactor,
-        height: 170 * verticalScaleFactor,
+        height: 220 * verticalScaleFactor,
         title: "Comments",
         comments: comments,
         sort: Sort.LENGTH_MAX);
   }
 
+  Widget getClimbStartTimeAverage() {
+    if (chronosData.isEmpty) {
+      return Container();
+    }
+
+    double totalTime = 0;
+    int matches = 0;
+
+    for (Map<String, dynamic> matchData in chronosData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        double startingTime = -1;
+        double endingTime = 135; // Assumes climb stop at end of match
+
+        List<List<dynamic>> teleopEvents = List<List<dynamic>>.from(matchData["teleopEventList"]);
+        for (List<dynamic> event in teleopEvents) {
+          if (event[0] == "enterClimbArea") {
+            startingTime = event[1];
+          } else if (event[0] == "exitClimbArea") {
+            endingTime = event[1];
+          }
+          // Takes the last one right now. Might want to take the first starting time and the last ending time.
+        }
+        
+        if (startingTime != -1 && (matchData["endLocation"] == "Deep Climb" || matchData["endLocation"] == "Shallow Climb")) {
+          totalTime += endingTime - startingTime;
+          matches++;
+        }
+      }
+    }
+
+    return Text("Average Climb Time: ${matches == 0 ? 0 : (totalTime / matches).toStringAsFixed(3)}",
+        textAlign: TextAlign.left,
+        style: comfortaaBold(10, color: Constants.pastelBrown));
+  }
+
   Widget getClimbStartTimeBarChart() {
+    // THIS USES OUTDATED JSON KEYS. UPDATE BEFORE USING.
     if (chronosData.isEmpty) {
       return Container();
     }
@@ -363,7 +399,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
             algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
             troughCount: int.parse(matchData["autoCoralScoredL1"]),
           );
-          autos[matchData["matchNumber"]]!.scouterNames.add(matchData["scouterName"]);
+          autos[matchData["matchNumber"]]!
+              .scouterNames
+              .add(matchData["scouterName"]);
         }
       }
     }
@@ -439,7 +477,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           Container(
             padding: EdgeInsets.all(marginSize),
             width: 140 * horizontalScaleFactor,
-            height: 110 * verticalScaleFactor,
+            height: 200 * verticalScaleFactor,
             decoration: BoxDecoration(
                 color: Constants.pastelWhite,
                 borderRadius:
@@ -450,7 +488,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               children: [
                 getFunctionalMatches(),
                 getPreferredStrategy(),
-                getHumanPlayerAccuracy()
+                getHumanPlayerAccuracy(),
+                getClimbStartTimeAverage()
               ],
             ),
           )

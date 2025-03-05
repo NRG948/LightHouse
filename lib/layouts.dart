@@ -188,6 +188,12 @@ Map<String, dynamic> chronoscout = {
           "options": "Coral Cycle,Algae Cycle,Hybrid Cycle,Defense,Feed/Pass,Other"
         },
         {
+          "title": "End Location",
+          "type": "dropdown",
+          "options": "None,Park,Deep Climb,Shallow Climb",
+          "jsonKey": "endLocation"
+        },
+        {
           "title": "Data Quality",
           "type": "rating",
           "jsonKey": "rating"
