@@ -1,11 +1,8 @@
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
-import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
-import 'package:lighthouse/widgets/game_agnostic/scrollable_box.dart';
 
 
 
@@ -14,10 +11,9 @@ class DataViewerHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double scaleFactor;
     final screenWidth = MediaQuery.of(context).size.width; // gets screen width
     final screenHeight = MediaQuery.of(context).size.height; // gets screen height
-    scaleFactor = screenHeight / 914; //calculate scaling factor based on height
+//calculate scaling factor based on height
     loadConfig();
     
     return PopScope(

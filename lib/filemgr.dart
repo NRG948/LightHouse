@@ -103,6 +103,14 @@ List<String> getFilesInLayout(String eventKey, String layout) {
   }).toList();
 }
 
+Future<int> ensureEventKeyDirectoryExists() async {
+  final eventKeyDirectory = Directory("$configFolder/${configData["eventKey"]}");
+  if (!(await eventKeyDirectory.exists())) {
+    await eventKeyDirectory.create(recursive: true);
+  }
+  return Future.value(0);
+}
+
 Future<int> saveExport() async {
   final random = Random();
 
@@ -254,16 +262,33 @@ int deleteFile(String eventKey, String layout, String fileName) {
   return 0;
 }
 
+void saveTBAFile(String eventKey, String content,String type) async {
+  File tbaMatchesFile = File("$configFolder/$eventKey/tba_$type.nrg");
+  await ensureEventKeyDirectoryExists();
+  tbaMatchesFile.writeAsString(content);
+}
+
+Future<String> loadTBAFile(String eventKey,String type) async {
+  File tbaMatchesFile = File("$configFolder/$eventKey/tba_$type.nrg");
+  await ensureEventKeyDirectoryExists();
+  if (!(await tbaMatchesFile.exists())) {
+    return "";
+  }
+  return await tbaMatchesFile.readAsString();
+}
+
+
+
 final Map<String, String> defaultConfig = {
   "eventKey": "2025nrg",
   "scouterName": "Scouter",
   "serverIP": "http://169.254.9.48:8080",
-  "autofillMatchNumber": "false"
+  "downloadTheBlueAllianceInfo": "false"
 };
 
 final Map<String,String> settingsMap = {
   "eventKey" : "text",
   "scouterName": "text",
   "serverIP": "text",
-  "autofillMatchNumber":"bool"
+  "downloadTheBlueAllianceInfo":"bool"
 };

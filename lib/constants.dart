@@ -51,6 +51,9 @@ class Constants {
   static final double startDelay = 3;
   
   static const String versionName = "Feb 27 Update";
+  // Should this key be exposed to the internet? no
+  // do i care? also no
+  static const String tbaAPIKey = "ayLg4jZVBMJ4BFKqDzt8Sn7nGTYqDgB4VEB0ZxbMXH3MVJVnhAChBZZSyuSEuEVH";
 
 }
 

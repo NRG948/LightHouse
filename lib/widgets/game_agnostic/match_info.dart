@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -19,15 +20,32 @@ class MatchInfo extends StatefulWidget {
 class _MatchInfoState extends State<MatchInfo>
     with AutomaticKeepAliveClientMixin {
   static late double scaleFactor;
-
+  static dynamic matchData = [];
+  Completer<String> displayEventKey = Completer<String>();
   @override
   bool get wantKeepAlive => true;
 
+  void parseTBAMatchesFile() async {
+    String content = await loadTBAFile(eventKey,"matches");
+    matchData = jsonDecode(content);
+  }
+
+  void checkForTBAEventInfo() async {
+    String eventInfo = await loadTBAFile(eventKey, "event_info");
+    if (eventInfo != "") {
+      dynamic eventInfoJson = jsonDecode(eventInfo);
+      displayEventKey.complete(Future.value("${eventInfoJson["year"]} ${eventInfoJson["name"]}"));
+    } else {
+      displayEventKey.complete(eventKey.toUpperCase());
+    }
+  }
   @override
   void initState() {
     super.initState();
     scaleFactor = widget.width / 400;
     eventKey = configData["eventKey"]!;
+    parseTBAMatchesFile();
+    checkForTBAEventInfo();
     teamNumberController.addListener(() {
       setState(() {
         DataEntry.exportData["teamNumber"] =
@@ -90,16 +108,24 @@ class _MatchInfoState extends State<MatchInfo>
                       size: 30 * scaleFactor,
                       color: Constants.pastelWhite,
                     ),
-                    SizedBox(
-                        width: 300 * scaleFactor,
-                        height: 35 * scaleFactor,
-                        child: Center(
-                            child: AutoSizeText(
-                          eventKey.toUpperCase(),
-                          style: comfortaaBold(18),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        )))
+                    FutureBuilder(
+                      future: displayEventKey.future,
+                      builder: (context,snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Text("");
+                        }
+                        return SizedBox(
+                            width: 300 * scaleFactor,
+                            height: 35 * scaleFactor,
+                            child: Center(
+                                child: AutoSizeText(
+                              snapshot.data ?? "",
+                              style: comfortaaBold(18),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            )));
+                      }
+                    )
                   ],
                 ),
                 // Display team name
@@ -229,6 +255,10 @@ class _MatchInfoState extends State<MatchInfo>
                       HapticFeedback.mediumImpact();
                       matchType = value ?? "Qualifications";
                       DataEntry.exportData["matchType"] = value;
+                      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+                        matchData != []) {
+                      autofillTeamNumber();
+                    }
                     },
                     dropdownColor: Constants.pastelYellow,
                   ),
@@ -244,6 +274,10 @@ class _MatchInfoState extends State<MatchInfo>
                     HapticFeedback.mediumImpact();
                     DataEntry.exportData["matchNumber"] =
                         int.tryParse(value) ?? 0;
+                    if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+                        matchData != []) {
+                      autofillTeamNumber();
+                    }
                   },
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
@@ -291,6 +325,10 @@ class _MatchInfoState extends State<MatchInfo>
                       HapticFeedback.mediumImpact();
                       driverStation = value ?? "Red 1";
                       DataEntry.exportData["driverStation"] = value;
+                      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+                          matchData != []) {
+                        autofillTeamNumber();
+                      }
                     },
                     dropdownColor: Constants.pastelRed,
                   ),
@@ -335,4 +373,52 @@ class _MatchInfoState extends State<MatchInfo>
       teamLocation = null;
     }
   }
+
+  void autofillTeamNumber() {
+    int stationIndex = driverStation.contains("1")
+        ? 0
+        : driverStation.contains("2")
+            ? 1
+            : 2;
+    for (dynamic match in matchData) {
+      if (match["comp_level"] ==
+              tbaAPIMatchTypes[DataEntry.exportData["matchType"]]) {
+
+        // Skips if match number in iterated match doesn't match
+        // entered match number, (confusingly enough) using negation
+        // and continue statements unlike the logic above
+        // to make this even more confusing, semifinals put the match number
+        // in a different place >:(
+        if (match["comp_level"] == "sf") {
+          if (!(match["set_number"] == DataEntry.exportData["matchNumber"])) {
+            continue;
+          }
+        } else {
+          if (!(match["match_number"] == DataEntry.exportData["matchNumber"])) {
+            continue;
+          }
+        }
+        setState(() {
+          int.tryParse(teamNumberController.text = match["alliances"][
+                      DataEntry.exportData["driverStation"].contains("Red")
+                          ? "red"
+                          : "blue"]["team_keys"][stationIndex]
+                  .substring(3)) ??
+              0;
+        });
+        return;
+      }
+    }
+    print("no matches");
+    setState(() {
+      teamNumberController.text = "";
+    });
+    
+  }
 }
+
+Map<String, String> tbaAPIMatchTypes = {
+  "Qualifications": "qm",
+  "Playoffs": "sf",
+  "Finals": "f"
+};
