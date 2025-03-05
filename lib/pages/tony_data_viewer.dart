@@ -84,8 +84,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
             .map((int team) => DropdownMenuItem(
                 value: team,
                 child: Text("$team",
-                    style: comfortaaBold(12,
-                        color: Constants.pastelBrown))))
+                    style: comfortaaBold(12, color: Constants.pastelBrown))))
             .toList(),
         onChanged: (n) {
           setState(() {
@@ -195,15 +194,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         ]);
       }
     }
-    for (Map<String, dynamic> matchData in pitData) {
-      if (matchData["teamNumber"] == currentTeamNumber) {
-        comments.add([
-          matchData["scouterName"],
-          matchData["comments"],
-          matchData["matchNumber"].toString()
-        ]);
-      }
-    }
+    // Pit data not included in comments. That is in a separate section.
     for (Map<String, dynamic> matchData in humanPlayerData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         comments.add([
@@ -338,8 +329,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in chronosData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-            height: 240 * verticalScaleFactor,
+            height: 270 * verticalScaleFactor,
             width: 360 * horizontalScaleFactor,
+            scouterNames: [matchData["scouterName"]],
+            matchNumber: matchData["matchNumber"],
             path: AutoPath(
               startingPosition: List<double>.from(matchData["startingPosition"]
                   .split(",")
@@ -355,11 +348,26 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       if (matchData["teamNumber"] == currentTeamNumber) {
         if (!autos.containsKey(matchData["matchNumber"])) {
           autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-              height: 160 * verticalScaleFactor,
-              width: 160 * horizontalScaleFactor);
+              height: 270 * verticalScaleFactor,
+              width: 360 * horizontalScaleFactor,
+              scouterNames: [matchData["scouterName"]],
+              matchNumber: matchData["matchNumber"],
+              reef: AutoReef(
+                algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
+                scores: List<String>.from(matchData["autoCoralScored"]),
+                troughCount: int.parse(matchData["autoCoralScoredL1"]),
+              ));
+        } else {
+          autos[matchData["matchNumber"]]!.reef = AutoReef(
+            scores: List<String>.from(matchData["autoCoralScored"]),
+            algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
+            troughCount: int.parse(matchData["autoCoralScoredL1"]),
+          );
+          autos[matchData["matchNumber"]]!.scouterNames.add(matchData["scouterName"]);
         }
       }
     }
+
     if (autos.values.toList().isEmpty) {
       return Placeholder();
     }

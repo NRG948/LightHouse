@@ -133,7 +133,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
 
   /// Returns the average of [_data] excluding specified data from [_removedData].
   double getAverageData() =>
-      (sum(_data!.values) - sum(_removedData.map((x) => _data![x]))) /
+      _data!.length - _removedData.length == 0 ? 0 : (sum(_data!.values) - sum(_removedData.map((x) => _data![x]))) /
       (_data!.length - _removedData.length);
 
   /// Returns the averages of [_multiData].
@@ -146,8 +146,10 @@ class _NRGBarChartState extends State<NRGBarChart> {
         if (_removedData.contains(key)) continue; // To skip removed data.
         sums[i] += _multiData![key]![i];
       }
+
+      sums[i] = keys.length - _removedData.length == 0 ? 0 : sums[i] / (keys.length - _removedData.length);
     }
-    return sums.map((x) => x / (keys.length - _removedData.length)).toList();
+    return sums;
   }
 
   /// Gets a column of texts or a single text depending on the type of graph.
@@ -181,7 +183,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
               color: color, customFontWeight: FontWeight.w900));
 
   /// Returns the sum of an [Iterable].
-  double sum(Iterable l) => l.fold(0.0, (x, y) => x + y!);
+  double sum(Iterable l) => l.fold(0.0, (x, y) => x + y);
 
   /// Rounds a number to a specified number of decimal places.
   num roundAtPlace(double number, int place) =>

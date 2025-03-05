@@ -7,15 +7,19 @@ import 'package:lighthouse/constants.dart';
 
 // This widget animates an object along a predefined path with auto-replay functionality.
 class AnimatedAutoReplay extends StatefulWidget {
-  final double height;
-  final double width;
-  final AutoPath? path;
-  final AutoReef? reef;
+  double height;
+  double width;
+  List<String> scouterNames;
+  int matchNumber;
+  AutoPath? path;
+  AutoReef? reef;
 
-  const AnimatedAutoReplay(
+  AnimatedAutoReplay(
       {super.key,
       required this.height,
       required this.width,
+      required this.scouterNames,
+      required this.matchNumber,
       this.path,
       this.reef});
 
@@ -26,7 +30,7 @@ class AnimatedAutoReplay extends StatefulWidget {
 class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     with SingleTickerProviderStateMixin {
   // Define key locations and event mappings.
-  Map<String, Offset> keyLocations = {
+  static final Map<String, Offset> keyLocations = {
     "AB": Offset(-0.8, 0),
     "CD": Offset(-0.05, 1.3),
     "EF": Offset(1.45, 1.3),
@@ -38,7 +42,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     "bargeCS": Offset(-4.4, -4.4),
   };
 
-  Map<String, String> eventToLocation = {
+  static final Map<String, String> eventToLocation = {
     "enterAB": "AB",
     "exitAB": "AB",
     "enterCD": "CD",
@@ -61,8 +65,11 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   late AnimationController _controller;
   double get _height => widget.height;
   double get _width => widget.width;
+  List<String> get _scouterNames => widget.scouterNames;
+  int get _matchNumber => widget.matchNumber;
   AutoPath? get _autoPath => widget.path;
-  late Animation<Offset> _animation;
+  AutoReef? get _autoReef => widget.reef;
+  Animation<Offset>? _animation;
   late double _robotSideLength;
   FragmentProgram? program;
 
@@ -72,7 +79,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     loadShader();
 
     // Initialize robot size and animation controller.
-    _robotSideLength = ( _width / 2 - 20) / 12;
+    _robotSideLength = (_width / 2 - 20) / 12;
     _controller =
         AnimationController(duration: Duration(seconds: 3), vsync: this);
     _controller.addStatusListener((status) {
@@ -80,7 +87,10 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
         _resetAutoPath();
       }
     });
-    _animation = _getAnimationPath();
+
+    if (_autoPath != null) {
+      _animation = _getAnimationPath();
+    }
   }
 
   @override
@@ -125,10 +135,6 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
 
   // Generate animation path based on waypoints.
   Animation<Offset> _getAnimationPath() {
-    if (_autoPath == null) {
-      return TweenSequence<Offset>([TweenSequenceItem(tween: Tween(begin: Offset.zero,end: Offset.zero), weight: 0.1)]).animate(_controller);
-    }
-
     List<TweenSequenceItem<Offset>> items = [];
     items.add(TweenSequenceItem(
         tween: Tween(
@@ -136,7 +142,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
                     _autoPath!.startingPosition, _autoPath!.flipStarting),
                 end: keyLocations[eventToLocation[_autoPath!.waypoints[0][0]]])
             .chain(CurveTween(curve: Curves.easeInOutCubic)),
-        weight: 1));
+        weight: max(_autoPath!.waypoints[0][1], 0.1)));
 
     for (int i = 1; i < _autoPath!.waypoints.length; i++) {
       items.add(TweenSequenceItem(
@@ -145,7 +151,9 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
                 keyLocations[eventToLocation[_autoPath!.waypoints[i - 1][0]]],
             end: keyLocations[eventToLocation[_autoPath!.waypoints[i][0]]],
           ).chain(CurveTween(curve: Curves.easeInOutCubic)),
-          weight: _autoPath!.waypoints[i][1] - _autoPath!.waypoints[i - 1][1]));
+          weight: max(
+              _autoPath!.waypoints[i][1] - _autoPath!.waypoints[i - 1][1],
+              0.1)));
     }
     return TweenSequence(items).animate(_controller);
   }
@@ -162,94 +170,145 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
       child: Column(
         spacing: 3,
         children: [
+          Row(spacing: 10, children: [
+            Text(_scouterNames.join(", "),
+                style: comfortaaBold(22, color: Constants.pastelBrown)),
+            Text(_matchNumber.toString(),
+                style: comfortaaBold(22, color: Constants.pastelRedSuperDark))
+          ]),
           Row(
             children: [
-              Center(
-                child: Container(
-                  width: _width / 2,
-                  height: _width / 2,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/auto_field_map.png"),
-                        fit: BoxFit.contain),
-                  ),
-                  child: Stack(
-                    children: [
-                      AnimatedBuilder(
-                        animation: _animation,
-                        builder: (context, child) {
-                          return Align(
-                            alignment: Alignment.center,
-                            child: FractionalTranslation(
-                              translation: _animation.value,
-                              child: child,
+              _animation == null
+                  ? Container(
+                      width: _width / 2,
+                      height: _width / 2,
+                      color: Constants.pastelGray,
+                      child: Center(
+                        child: Text("No path data", style: comfortaaBold(21)),
+                      ),
+                    )
+                  : Center(
+                      child: Container(
+                        width: _width / 2,
+                        height: _width / 2,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  "assets/images/auto_field_map.png"),
+                              fit: BoxFit.contain),
+                        ),
+                        child: Stack(
+                          children: [
+                            AnimatedBuilder(
+                              animation: _animation!,
+                              builder: (context, child) {
+                                return Align(
+                                  alignment: Alignment.center,
+                                  child: FractionalTranslation(
+                                    translation: _animation!.value,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                width: _robotSideLength,
+                                height: _robotSideLength,
+                                decoration: BoxDecoration(
+                                  color: Constants.pastelRed,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
                             ),
-                          );
-                        },
-                        child: Container(
-                          width: _robotSideLength,
-                          height: _robotSideLength,
-                          decoration: BoxDecoration(
-                            color: Constants.pastelRed,
-                            shape: BoxShape.circle,
-                          ),
+                            GestureDetector(
+                              onTap: _autoPathSingleClick,
+                              onLongPress: _resetAutoPath,
+                            ),
+                          ],
                         ),
                       ),
-                      GestureDetector(
-                        onTap: _autoPathSingleClick,
-                        onLongPress: _resetAutoPath,
+                    ),
+              _autoReef == null
+                  ? Container(
+                      width: _width / 2 * sqrt(3) / 2,
+                      height: _width / 2,
+                      color: Constants.pastelGray,
+                      child: Center(
+                        child: Text("No reef data", style: comfortaaBold(21)),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              CustomPaint(
-                  size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
-                  painter: AutoReefPainter(program: program))
+                    )
+                  : CustomPaint(
+                      size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
+                      painter: AutoReefPainter(
+                          program: program, autoReef: _autoReef))
             ],
           ),
-          Row(
-            spacing: 15,
-            children: [
-              Text("L1: 3",
-                  style: comfortaaBold(24,
-                      color: Color.fromARGB(255, 195, 103, 191))),
-              Text("L2: 2",
-                  style: comfortaaBold(24,
-                      color: Color.fromARGB(255, 77, 110, 211))),
-              Text("L3: 5",
-                  style: comfortaaBold(24,
-                      color: Color.fromARGB(255, 82, 197, 69))),
-              Text("L4: 4",
-                  style: comfortaaBold(24,
-                      color: Color.fromARGB(255, 236, 87, 87))),
-              Text("A: 2",
-                  style: comfortaaBold(24,
-                      color: Color.fromARGB(255, 90, 216, 179))),
-            ],
-          )
+          _autoReef == null
+              ? Container()
+              : Row(
+                  spacing: 15,
+                  children: getReefDataText(),
+                )
         ],
       ),
     );
+  }
+
+  List<Widget> getReefDataText() {
+    List<int> scoreDistribution = [0, 0, 0]; // L2, L3, L4
+
+    for (String coral in _autoReef!.scores) {
+      print(coral);
+      scoreDistribution[int.parse(coral[1]) - 2] += 1;
+    }
+
+    return [
+      Text("L1: ${_autoReef!.troughCount}",
+          style: comfortaaBold(22, color: Constants.reefColors[0])),
+      Text("L2: ${scoreDistribution[0]}",
+          style: comfortaaBold(22, color: Constants.reefColors[1])),
+      Text("L3: ${scoreDistribution[1]}",
+          style: comfortaaBold(22, color: Constants.reefColors[2])),
+      Text("L4: ${scoreDistribution[2]}",
+          style: comfortaaBold(22, color: Constants.reefColors[3])),
+      Text("A: ${_autoReef!.algaeRemoved.length}",
+          style: comfortaaBold(22, color: Constants.reefColors[4])),
+    ];
   }
 }
 
 class AutoReefPainter extends CustomPainter {
   FragmentProgram? program;
   AutoReef? autoReef;
-  static const List<String> orderedReefBranches = ["G", "F", "E", "D", "C", "B", "A", "L", "K", "J", "I", "H"];
-  static const List<String> orderedAlgaeSpots = ["EF", "CD", "AB", "KL", "IJ", "GH"];
+  static const List<String> orderedReefBranches = [
+    "G",
+    "F",
+    "E",
+    "D",
+    "C",
+    "B",
+    "A",
+    "L",
+    "K",
+    "J",
+    "I",
+    "H"
+  ];
+  static const List<String> orderedAlgaeSpots = [
+    "EF",
+    "CD",
+    "AB",
+    "KL",
+    "IJ",
+    "GH"
+  ];
 
-  AutoReefPainter({this.program, this.autoReef});
+  AutoReefPainter({required this.program, required this.autoReef});
 
   @override
   void paint(ui.Canvas canvas, ui.Size size) {
     double radius = size.height / 2;
     double centerX = radius * sqrt(3) / 2;
     double centerY = radius;
-
-    autoReef = AutoReef(scores: ["E4", "E3", "F4", "G4", "G2", "H2", "C3", "D3", "B4", "A2", "L3", "L2", "K4", "K3"],
-    algaeRemoved: ["GH2", "KL3"]);
 
     Map<String, List<int>> coralDistrbution = {};
     for (String branch in orderedReefBranches) {
@@ -280,16 +339,16 @@ class AutoReefPainter extends CustomPainter {
       switch (coralDistrbution[orderedReefBranches[i]]!.length) {
         case 1:
           fillPaint = Paint()
-            ..color =
-                Constants.reefColors[coralDistrbution[orderedReefBranches[i]]![0] - 1]
+            ..color = Constants
+                .reefColors[coralDistrbution[orderedReefBranches[i]]![0] - 1]
             ..style = PaintingStyle.fill;
         case 2:
           var shader = program?.fragmentShader();
 
-          Color color1 =
-              Constants.reefColors[coralDistrbution[orderedReefBranches[i]]![0] - 1];
-          Color color2 =
-              Constants.reefColors[coralDistrbution[orderedReefBranches[i]]![1] - 1];
+          Color color1 = Constants
+              .reefColors[coralDistrbution[orderedReefBranches[i]]![0] - 1];
+          Color color2 = Constants
+              .reefColors[coralDistrbution[orderedReefBranches[i]]![1] - 1];
 
           List<double> params = [
             80,
@@ -310,6 +369,10 @@ class AutoReefPainter extends CustomPainter {
           fillPaint = Paint()
             ..color = Colors.black
             ..shader = shader
+            ..style = PaintingStyle.fill;
+        case 3:
+          fillPaint = Paint()
+            ..color = Constants.pastelYellow
             ..style = PaintingStyle.fill;
       }
 
@@ -335,10 +398,14 @@ class AutoReefPainter extends CustomPainter {
         ], true)
         ..close();
 
-        Paint fillPaint = (algaeDistrbution[orderedAlgaeSpots[i]] ?? false) ? (Paint()..color = Constants.reefColors[4] ..style = PaintingStyle.fill) : defaultPaint;
+      Paint fillPaint = (algaeDistrbution[orderedAlgaeSpots[i]] ?? false)
+          ? (Paint()
+            ..color = Constants.reefColors[4]
+            ..style = PaintingStyle.fill)
+          : defaultPaint;
 
-        canvas.drawPath(path, fillPaint);
-        canvas.drawPath(path, borderPaint);
+      canvas.drawPath(path, fillPaint);
+      canvas.drawPath(path, borderPaint);
     }
   }
 
@@ -378,5 +445,9 @@ class AutoPath {
 class AutoReef {
   final List<String> scores;
   final List<String> algaeRemoved;
-  const AutoReef({required this.scores, required this.algaeRemoved});
+  final int troughCount;
+  const AutoReef(
+      {required this.scores,
+      required this.algaeRemoved,
+      required this.troughCount});
 }
