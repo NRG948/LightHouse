@@ -1,8 +1,11 @@
+import "dart:async";
+
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import 'package:http/http.dart' as http;
 
 // a stateful widget that allows users to modify application settings.
 class SettingsPage extends StatefulWidget {
@@ -208,7 +211,9 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
               });  
              });
             }),
-            AutoSizeText(widget.setting.toSentenceCase,style: comfortaaBold(20),)
+            SizedBox(
+              width: 300,
+              child: AutoSizeText(widget.setting.toSentenceCase,style: comfortaaBold(20),maxLines: 2,))
           ],
         ),
       ),
@@ -230,10 +235,14 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
     return TextButton(
         onPressed: () async {
           HapticFeedback.mediumImpact();
-
+          if (configData["downloadTheBlueAllianceInfo"] == "true") {
+              
+              await showTBADownloadDialog(context);
+            }
+          // Ensures widget is still part of the tree before proceeding.
           if (!mounted) {
             return;
-          } // Ensures widget is still part of the tree before proceeding.
+          } 
           if (await saveConfig() == 0) {
             // Saves settings and checks if the operation was successful.
             showDialog(
@@ -254,6 +263,87 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
                 });
           }
         },
-        child: Text("Save"));
+        child: Text("Save",style: comfortaaBold(18),));
+  }
+}
+
+Future<bool> showTBADownloadDialog(BuildContext context) async {
+  showDialog(context: context, builder: (context) {
+    return TBADownloadDialog();
+  });
+  int? code = await TBADownloadDialog.responseCode.future;
+  debugPrint("Recieved code $code");
+  return Future.value(true);
+}
+
+class TBADownloadDialog extends StatefulWidget {
+  const TBADownloadDialog({super.key});
+  static Completer<int?> responseCode = Completer<int?>();
+
+  void setResponseCode(int code) {
+    if (!responseCode.isCompleted) {
+    responseCode.complete(code);
+    }
+  }
+
+  @override
+  State<TBADownloadDialog> createState() => _TBADownloadDialogState();
+}
+
+class _TBADownloadDialogState extends State<TBADownloadDialog> {
+
+  String progressIndicator = "Downloading TBA Match data for ${configData["eventKey"]}...";
+  @override
+  void initState() {
+    super.initState();
+    downloadTBAInfo();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 350,
+        height: 600,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),
+        color: Constants.pastelWhite),
+        child: Row(
+          children: [
+            CircularProgressIndicator(),
+            Text(progressIndicator),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  void downloadTBAInfo() async {
+    http.Response responseMatches = await http.get(Uri.parse("https://www.thebluealliance.com/api/v3/event/${configData["eventKey"]}/matches/simple"),
+    headers: {"X-TBA-Auth-Key":Constants.tbaAPIKey});
+    http.Response responseEventInfo = await http.get(Uri.parse("https://www.thebluealliance.com/api/v3/event/${configData["eventKey"]}/simple"),
+    headers: {"X-TBA-Auth-Key":Constants.tbaAPIKey});
+
+    if (responseMatches.statusCode == 200) {
+      saveTBAFile(configData["eventKey"]!,responseMatches.body,"matches");
+      progressIndicator = "Downloaded Matches.";
+    } else {
+      setState(() {
+        progressIndicator = "MATCH ERROR ${responseMatches.statusCode}: ${responseMatches.body}";
+        
+      });
+      await Future.delayed(Duration(seconds: 1));
+    }
+
+      if (responseEventInfo.statusCode == 200) {
+      saveTBAFile(configData["eventKey"]!,responseEventInfo.body,"event_info");
+      progressIndicator += "\nDownloaded Event Info.";
+    } else {
+      setState(() {
+        progressIndicator += "\nEVENT INFO ERROR ${responseEventInfo.statusCode}: ${responseEventInfo.body}";
+        
+      });
+      await Future.delayed(Duration(seconds: 1));
+    }
+    widget.setResponseCode(responseMatches.statusCode);
   }
 }
