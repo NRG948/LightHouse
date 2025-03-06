@@ -505,7 +505,7 @@ class AVISharedState extends ChangeNotifier {
       return;
     }
     for (dynamic i in allPitData) {
-      if (int.tryParse(i["teamNumber"]) == activeTeam) {
+      if (i["teamNumber"] == activeTeam) {
         pitData = i;
       }
     }

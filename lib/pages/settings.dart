@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
           Navigator.pushReplacementNamed(
               context, "/settings"); //reloads the setting page
         },
-        child: Text("Reset Configuration")));
+        child: Text("Reset Configuration",style: comfortaaBold(18),)));
   }
 
   @override
