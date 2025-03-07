@@ -120,7 +120,9 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
 
   // Calculate offset from starting location.
   Offset _calculateOffsetFromStartingLocation(List<double> pos, bool flip) {
-    assert(pos.length == 2);
+    if (pos.length != 2) {
+      pos = [0, 0];
+    }
     double x = pos[0];
     double y = pos[1];
     if (flip) {
