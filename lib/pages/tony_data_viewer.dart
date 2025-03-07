@@ -37,9 +37,11 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in chronosData) {
       teams.add(matchData["teamNumber"]);
     }
+    /*
     for (Map<String, dynamic> matchData in pitData) {
       teams.add(matchData["teamNumber"]);
     }
+    */
     for (Map<String, dynamic> matchData in humanPlayerData) {
       teams.add(matchData["redHPTeam"]);
       teams.add(matchData["blueHPTeam"]);
@@ -431,7 +433,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     atlasData = getDataAsMapFromDatabase("Atlas");
     chronosData = getDataAsMapFromDatabase("Chronos");
     humanPlayerData = getDataAsMapFromDatabase("Human Player");
-    pitData = getDataAsMapFromDatabase("Pit");
+    //pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
     if (teamsInDatabase.isEmpty) {
