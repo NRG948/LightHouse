@@ -50,7 +50,7 @@ class Constants {
   /// adding a bit of delay before the next section. :)
   static final double startDelay = 3;
   
-  static const String versionName = "Feb 27 Update";
+  static const String versionName = "Sammy RC1";
   // Should this key be exposed to the internet? no
   // do i care? also no
   static const String tbaAPIKey = "ayLg4jZVBMJ4BFKqDzt8Sn7nGTYqDgB4VEB0ZxbMXH3MVJVnhAChBZZSyuSEuEVH";
