@@ -27,7 +27,11 @@ class _MatchInfoState extends State<MatchInfo>
 
   void parseTBAMatchesFile() async {
     String content = await loadTBAFile(eventKey,"matches");
-    matchData = jsonDecode(content);
+    try {
+      matchData = jsonDecode(content);
+    } catch(e) {
+      print("frick");
+    }
   }
 
   void checkForTBAEventInfo() async {
