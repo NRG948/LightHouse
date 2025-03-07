@@ -170,14 +170,13 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         width: 240 * horizontalScaleFactor,
         height: 200 * verticalScaleFactor,
         title: "Disable Reason",
-        comments: comments,
-        sort: Sort.LENGTH_MAX);
+        comments: comments);
   }
 
   Widget getCommentBox() {
     List<List<String>> comments = [];
     for (Map<String, dynamic> matchData in atlasData) {
-      if (matchData["teamNumber"] == currentTeamNumber) {
+      if (matchData["teamNumber"] == currentTeamNumber && matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
           matchData["comments"],
@@ -186,7 +185,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       }
     }
     for (Map<String, dynamic> matchData in chronosData) {
-      if (matchData["teamNumber"] == currentTeamNumber) {
+      if (matchData["teamNumber"] == currentTeamNumber && matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
           matchData["comments"],
@@ -196,7 +195,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     }
     // Pit data not included in comments. That is in a separate section.
     for (Map<String, dynamic> matchData in humanPlayerData) {
-      if (matchData["teamNumber"] == currentTeamNumber) {
+      if ((matchData["redHPTeam"] == currentTeamNumber || matchData["blueHPTeam"] == currentTeamNumber) && matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
           matchData["comments"],
@@ -209,8 +208,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         width: 400 * horizontalScaleFactor,
         height: 220 * verticalScaleFactor,
         title: "Comments",
-        comments: comments,
-        sort: Sort.LENGTH_MAX);
+        comments: comments);
   }
 
   Widget getClimbStartTimeAverage() {
@@ -391,13 +389,13 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               reef: AutoReef(
                 algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
                 scores: List<String>.from(matchData["autoCoralScored"]),
-                troughCount: int.parse(matchData["autoCoralScoredL1"]),
+                troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
               ));
         } else {
           autos[matchData["matchNumber"]]!.reef = AutoReef(
             scores: List<String>.from(matchData["autoCoralScored"]),
             algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
-            troughCount: int.parse(matchData["autoCoralScoredL1"]),
+            troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
           );
           autos[matchData["matchNumber"]]!
               .scouterNames

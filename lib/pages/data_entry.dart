@@ -296,8 +296,7 @@ class DataEntryState extends State<DataEntry> {
               width: width,
               height: height,
               title: title,
-              comments: comments,
-              sort: sortType);
+              comments: comments);
         case "atlas-teleop":
           return AtlasTeleopSelection(width: width, height: height);
         case "hp-teleop":
