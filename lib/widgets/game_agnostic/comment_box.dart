@@ -33,9 +33,9 @@ class _CommentBoxState extends State<CommentBox> {
       case "chronos":
         return Constants.pastelYellow;
       case "pit":
-        return Constants.pastelGray;
+        return Constants.pastelGreen;
       case _:
-        return Constants.pastelGreen; // This should never happen.
+        return Constants.pastelGray; // This should never happen.
     }
     
   }

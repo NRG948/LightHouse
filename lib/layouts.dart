@@ -618,7 +618,7 @@ Map<String, Color> colorMap = {
   "Atlas": Constants.pastelRed,
   "Chronos": Constants.pastelYellow,
   "Pit": Constants.pastelGray,
-  "Human Player": Constants.pastelRed,
+  "Human Player": Constants.pastelGreen,
   "Data Viewer": Constants.pastelYellow,
   "View Saved Data": Constants.pastelGray,
   "Sync to Server": Constants.pastelBlue
