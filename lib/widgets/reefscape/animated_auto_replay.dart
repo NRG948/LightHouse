@@ -76,7 +76,6 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   @override
   void initState() {
     super.initState();
-    loadShader();
 
     // Initialize robot size and animation controller.
     _robotSideLength = (_width / 2 - 20) / 12;
@@ -91,6 +90,7 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
     if (_autoPath != null) {
       _animation = _getAnimationPath();
     }
+    loadShader(); // Last to avoid initState not completing autoPaths before it loads, leading to old paths being displayed
   }
 
   @override
@@ -158,6 +158,10 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
 
   @override
   Widget build(BuildContext context) {
+    // Temp fix for preventing old autos from being loaded instead of new ones.
+    if (_autoPath != null) {
+      _animation = _getAnimationPath();
+    }
     return Container(
       height: _height,
       width: _width,

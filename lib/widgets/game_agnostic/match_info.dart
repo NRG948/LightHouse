@@ -30,7 +30,7 @@ class _MatchInfoState extends State<MatchInfo>
     try {
       matchData = jsonDecode(content);
     } catch(e) {
-      print("frick");
+      print(e);
     }
   }
 
