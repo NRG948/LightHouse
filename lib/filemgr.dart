@@ -103,6 +103,33 @@ List<String> getFilesInLayout(String eventKey, String layout) {
   }).toList();
 }
 
+Future<bool> clearAllData() async {
+  try {
+    final directory = Directory(configFolder);
+    
+    if (await directory.exists()) {
+      // Delete all contents of the directory
+      await for (var entity in directory.list(recursive: true)) {
+        if (entity is File) {
+          await entity.delete();
+        } else if (entity is Directory) {
+          await entity.delete(recursive: true);
+        }
+      }
+      
+      // Reset the config data
+      configData.clear();
+      
+      return true;
+    }
+    
+    return false;
+  } catch (e) {
+    print('Error clearing data: $e');
+    return false;
+  }
+}
+
 Future<int> ensureEventKeyDirectoryExists() async {
   final eventKeyDirectory = Directory("$configFolder/${configData["eventKey"]}");
   if (!(await eventKeyDirectory.exists())) {
