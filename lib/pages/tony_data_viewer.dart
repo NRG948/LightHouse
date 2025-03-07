@@ -176,30 +176,37 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   Widget getCommentBox() {
     List<List<String>> comments = [];
     for (Map<String, dynamic> matchData in atlasData) {
-      if (matchData["teamNumber"] == currentTeamNumber && matchData["comments"].isNotEmpty) {
+      if (matchData["teamNumber"] == currentTeamNumber &&
+          matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
           matchData["comments"],
-          matchData["matchNumber"].toString()
+          matchData["matchNumber"].toString(),
+          "atlas",
         ]);
       }
     }
     for (Map<String, dynamic> matchData in chronosData) {
-      if (matchData["teamNumber"] == currentTeamNumber && matchData["comments"].isNotEmpty) {
+      if (matchData["teamNumber"] == currentTeamNumber &&
+          matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
           matchData["comments"],
-          matchData["matchNumber"].toString()
+          matchData["matchNumber"].toString(),
+          "chronos",
         ]);
       }
     }
     // Pit data not included in comments. That is in a separate section.
     for (Map<String, dynamic> matchData in humanPlayerData) {
-      if ((matchData["redHPTeam"] == currentTeamNumber || matchData["blueHPTeam"] == currentTeamNumber) && matchData["comments"].isNotEmpty) {
+      if ((matchData["redHPTeam"] == currentTeamNumber ||
+              matchData["blueHPTeam"] == currentTeamNumber) &&
+          matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
           matchData["comments"],
-          matchData["matchNumber"].toString()
+          matchData["matchNumber"].toString(),
+          "pit",
         ]);
       }
     }
@@ -224,7 +231,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         double startingTime = -1;
         double endingTime = 135; // Assumes climb stop at end of match
 
-        List<List<dynamic>> teleopEvents = List<List<dynamic>>.from(matchData["teleopEventList"]);
+        List<List<dynamic>> teleopEvents =
+            List<List<dynamic>>.from(matchData["teleopEventList"]);
         for (List<dynamic> event in teleopEvents) {
           if (event[0] == "enterClimbArea") {
             startingTime = event[1];
@@ -233,15 +241,18 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           }
           // Takes the last one right now. Might want to take the first starting time and the last ending time.
         }
-        
-        if (startingTime != -1 && (matchData["endLocation"] == "Deep Climb" || matchData["endLocation"] == "Shallow Climb")) {
+
+        if (startingTime != -1 &&
+            (matchData["endLocation"] == "Deep Climb" ||
+                matchData["endLocation"] == "Shallow Climb")) {
           totalTime += endingTime - startingTime;
           matches++;
         }
       }
     }
 
-    return Text("Average Climb Time: ${matches == 0 ? 0 : (totalTime / matches).toStringAsFixed(3)}",
+    return Text(
+        "Average Climb Time: ${matches == 0 ? 0 : (totalTime / matches).toStringAsFixed(3)}",
         textAlign: TextAlign.left,
         style: comfortaaBold(10, color: Constants.pastelBrown));
   }
@@ -363,7 +374,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in chronosData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-            height: 270 * horizontalScaleFactor, // Scaled with horizontal since that's what the auto replay and reef are scaled with
+            height: 270 *
+                horizontalScaleFactor, // Scaled with horizontal since that's what the auto replay and reef are scaled with
             width: 360 * horizontalScaleFactor,
             scouterNames: [matchData["scouterName"]],
             matchNumber: matchData["matchNumber"],

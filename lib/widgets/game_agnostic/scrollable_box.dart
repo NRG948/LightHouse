@@ -107,7 +107,8 @@ class _ScrollableBoxState extends State<ScrollableBox> {
                       return CommentBox(
                           name: _comments[index][0], // Scouter name
                           text: _comments[index][1], // Comment text
-                          time: _comments[index][2]); // Match number
+                          time: _comments[index][2],
+                          type: _comments[index][3]); // Match number
                     }),
               ),
             ],

@@ -8,10 +8,11 @@ class CommentBox extends StatefulWidget {
   final String name; // Name of the commenter
   final String text; // Comment text
   final String time; // Time of the comment
+  final String type; // Where the comment comes from (atlas, chronos, pit)
 
   // Constructor for CommentBox
   const CommentBox(
-      {super.key, required this.name, required this.text, required this.time});
+      {super.key, required this.name, required this.text, required this.time, required this.type});
 
   @override
   State<CommentBox> createState() => _CommentBoxState(); // Creating state for CommentBox
@@ -23,6 +24,21 @@ class _CommentBoxState extends State<CommentBox> {
   String get _text => widget.text;
   String get _name => widget.name;
   String get _time => widget.time;
+  String get _type => widget.type;
+
+  Color getBoxColor() {
+    switch (_type) {
+      case "atlas":
+        return Constants.pastelRed;
+      case "chronos":
+        return Constants.pastelYellow;
+      case "pit":
+        return Constants.pastelGray;
+      case _:
+        return Constants.pastelGreen; // This should never happen.
+    }
+    
+  }
 
   @override
   void initState() {
@@ -34,7 +50,7 @@ class _CommentBoxState extends State<CommentBox> {
     return Container(
       // Container decoration
       decoration: BoxDecoration(
-          color: Constants.pastelRed, // Background color
+          color: getBoxColor() , // Background color
           boxShadow: [
             BoxShadow(
               color: Color.fromARGB(50, 0, 0, 0), // Shadow color
