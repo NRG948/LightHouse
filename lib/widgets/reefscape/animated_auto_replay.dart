@@ -356,7 +356,7 @@ class AutoReefPainter extends CustomPainter {
             color2.r,
             color2.g,
             color2.b,
-            80,
+            30,
             pi / 4
           ];
           for (int i = 0; i < 10; i++) {

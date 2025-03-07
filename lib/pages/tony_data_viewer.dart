@@ -365,7 +365,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in chronosData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-            height: 270 * verticalScaleFactor,
+            height: 270 * horizontalScaleFactor, // Scaled with horizontal since that's what the auto replay and reef are scaled with
             width: 360 * horizontalScaleFactor,
             scouterNames: [matchData["scouterName"]],
             matchNumber: matchData["matchNumber"],
@@ -384,7 +384,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       if (matchData["teamNumber"] == currentTeamNumber) {
         if (!autos.containsKey(matchData["matchNumber"])) {
           autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-              height: 270 * verticalScaleFactor,
+              height: 270 * horizontalScaleFactor,
               width: 360 * horizontalScaleFactor,
               scouterNames: [matchData["scouterName"]],
               matchNumber: matchData["matchNumber"],
