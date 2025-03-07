@@ -162,7 +162,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           comments.add([
             matchData["scouterName"],
             matchData["robotDisableReason"],
-            matchData["matchNumber"].toString()
+            matchData["matchNumber"].toString(),
+            "atlas",
           ]);
         }
       }
