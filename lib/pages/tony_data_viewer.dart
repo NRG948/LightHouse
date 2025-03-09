@@ -528,7 +528,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
             onPressed: () {
               Navigator.pushNamed(context, "/home-data-viewer");
             },
-            icon: Icon(Icons.home)),
+            icon: Icon(Icons.home,color: Constants.pastelWhite,)),
       ),
       body: Container(
           width: screenWidth,
