@@ -109,7 +109,8 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   }
 
   void loadShader() async {
-    program = await FragmentProgram.fromAsset('assets/shaders/stripes_shader.frag');
+    program =
+        await FragmentProgram.fromAsset('assets/shaders/stripes_shader.frag');
     setState(() {});
   }
 
@@ -136,13 +137,17 @@ class _AnimatedAutoReplayState extends State<AnimatedAutoReplay>
   // Generate animation path based on waypoints.
   Animation<Offset> _getAnimationPath() {
     List<TweenSequenceItem<Offset>> items = [];
+
+    Offset starting = _calculateOffsetFromStartingLocation(
+        _autoPath!.startingPosition, _autoPath!.flipStarting);
+
+    // TODO: Temporary fixes. Make rigorous later.
     items.add(TweenSequenceItem(
         tween: Tween(
-                begin: _calculateOffsetFromStartingLocation(
-                    _autoPath!.startingPosition, _autoPath!.flipStarting),
-                end: keyLocations[eventToLocation[_autoPath!.waypoints[0][0]]])
+                begin: starting,
+                end: _autoPath!.waypoints.isEmpty ? starting : keyLocations[eventToLocation[_autoPath!.waypoints[0][0]]])
             .chain(CurveTween(curve: Curves.easeInOutCubic)),
-        weight: max(_autoPath!.waypoints[0][1], 0.1)));
+        weight: max(_autoPath!.waypoints.isEmpty ? 0.1 : _autoPath!.waypoints[0][1], 0.1)));
 
     for (int i = 1; i < _autoPath!.waypoints.length; i++) {
       items.add(TweenSequenceItem(

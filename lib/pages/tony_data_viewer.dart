@@ -204,6 +204,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in humanPlayerData) {
       if ((matchData["redHPTeam"] == currentTeamNumber ||
               matchData["blueHPTeam"] == currentTeamNumber) &&
+          matchData["comments"] != null && // TODO: Temporary fix for null comments. They should default to empty strings.
           matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
