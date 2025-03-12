@@ -311,7 +311,8 @@ final Map<String, String> defaultConfig = {
   "scouterName": "Scouter",
   "serverIP": "http://169.254.9.48:8080",
   "downloadTheBlueAllianceInfo": "false",
-  "debugMode": "false"
+  "debugMode": "false",
+  "flipField": "false"
 };
 
 final Map<String,String> settingsMap = {
@@ -319,12 +320,14 @@ final Map<String,String> settingsMap = {
   "scouterName": "text",
   "serverIP": "text",
   "downloadTheBlueAllianceInfo":"tba",
-  "debugMode": "bool"
+  "debugMode": "bool",
+  "flipField": "bool"
 };
 
 final Map<String,IconData> settingsIconMap = {
   "eventKey": Icons.calendar_today,
   "scouterName": Icons.person,
   "serverIP": Icons.language,
-  "debugMode": Icons.bug_report
+  "debugMode": Icons.bug_report,
+  "flipField": Icons.cached_rounded
 };

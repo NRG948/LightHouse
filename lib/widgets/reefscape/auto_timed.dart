@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/filemgr.dart';
 import "dart:math";
 import "dart:ui" as ui;
 
@@ -41,6 +42,14 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
 
   @override
   Widget build(BuildContext context) {
+    _textAngle = (DataEntry.exportData["driverStation"].contains("Red")
+            ? pi / 2
+            : -pi / 2) +
+        (configData["flipField"] == "true" ? pi : 0);
+    if (_textAngle > 2 * pi) {
+      _textAngle -= 2 * pi;
+    }
+
     return Container(
       width: widget.width,
       height: 550 * scaleFactor,
@@ -50,10 +59,8 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
       child: GestureDetector(
         onLongPress: () => {
           setState(() {
-            _textAngle += pi;
-            if (_textAngle > 2 * pi) {
-              _textAngle -= 2 * pi;
-            }
+            configData["flipField"] = configData["flipField"] == "true" ? "false" : "true";
+            saveConfig();
           })
         },
         child: Column(
@@ -65,7 +72,8 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                 children: [
                   Transform.translate(
                       offset: Offset(5, 5),
-                      child: RSATCoralStation(left: true, index: 6, textAngle: _textAngle)),
+                      child: RSATCoralStation(
+                          left: true, index: 6, textAngle: _textAngle)),
                   Transform.translate(
                     offset: Offset(0, 5),
                     child: Container(
@@ -107,15 +115,13 @@ class _RSAutoTimedState extends State<RSAutoTimed> {
                   ),
                   Transform.translate(
                       offset: Offset(-5, 5),
-                      child: RSATCoralStation(left: false, index: 7, textAngle: _textAngle))
+                      child: RSATCoralStation(
+                          left: false, index: 7, textAngle: _textAngle))
                 ],
               ),
             ]),
             // Row(children: [Container(child: Text("TODO: ADD CORAL STATIONS/CORAL INTAKE",textAlign: TextAlign.center,),)],),
-            RSATHexagon(
-              radius: 170,
-              textAngle: _textAngle
-            )
+            RSATHexagon(radius: 170, textAngle: _textAngle)
           ],
         ),
       ),
@@ -127,7 +133,11 @@ class RSATCoralStation extends StatefulWidget {
   final bool left;
   final int index;
   final double textAngle;
-  const RSATCoralStation({super.key, this.left = true, required this.index, required this.textAngle});
+  const RSATCoralStation(
+      {super.key,
+      this.left = true,
+      required this.index,
+      required this.textAngle});
 
   @override
   State<RSATCoralStation> createState() => _RSATCoralStationState();
@@ -296,7 +306,8 @@ class _RSATHexagonState extends State<RSATHexagon> {
       },
       child: CustomPaint(
         size: Size(widget.radius * 2, widget.radius * 2),
-        painter: HexagonPainter(_RSAutoTimedState.widgetStates.sublist(0, 6), widget.textAngle),
+        painter: HexagonPainter(
+            _RSAutoTimedState.widgetStates.sublist(0, 6), widget.textAngle),
       ),
     );
   }

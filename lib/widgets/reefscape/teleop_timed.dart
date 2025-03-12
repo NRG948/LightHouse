@@ -1,4 +1,3 @@
-
 //TODO: Bugfixes
 //  - Timer starts at 2:00 instead of 2:15
 //  - Start climb should be a button and also stay on
@@ -8,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/filemgr.dart';
 import "dart:math";
 
 import 'package:lighthouse/pages/data_entry.dart';
@@ -46,13 +46,20 @@ class _RSTeleopTimedState extends State<RSTeleopTimed> {
 
   @override
   Widget build(BuildContext context) {
+    _textAngle = (DataEntry.exportData["driverStation"].contains("Red")
+            ? pi / 2
+            : -pi / 2) +
+        (configData["flipField"] == "true" ? pi : 0);
+    if (_textAngle > 2 * pi) {
+      _textAngle -= 2 * pi;
+    }
+
     return GestureDetector(
       onLongPress: () => {
         setState(() {
-          _textAngle += pi;
-          if (_textAngle > 2 * pi) {
-            _textAngle -= 2 * pi;
-          }
+          configData["flipField"] =
+              configData["flipField"] == "true" ? "false" : "true";
+          saveConfig();
         })
       },
       child: Container(
