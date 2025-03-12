@@ -270,8 +270,21 @@ class _MatchInfoState extends State<MatchInfo>
               SizedBox(
                 height: 65 * scaleFactor,
                 width: 75 * scaleFactor,
-                child: TextField(
+                child: TextFormField(
                   keyboardType: TextInputType.number,
+                  initialValue: () {
+                    if (configData["autofillLastMatch"] == "true") {
+                      int value = int.parse(configData["currentMatch"]!) + 1;
+
+                      DataEntry.exportData["matchNumber"] = value;
+                      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+                          matchData != []) {
+                        autofillTeamNumber();
+                      }
+                      return "$value";
+                    }
+                    return null;
+                  } (),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) {
                     HapticFeedback.mediumImpact();

@@ -309,7 +309,10 @@ final Map<String, String> defaultConfig = {
   "serverIP": "http://169.254.9.48:8080",
   "downloadTheBlueAllianceInfo": "false",
   "debugMode": "false",
-  "flipField": "false"
+  "flipField": "false",
+  "currentMatch": "0",
+  "currentDriverStation": "Red 1",
+  "autofillLastMatch": "false"
 };
 
 final Map<String,String> settingsMap = {
@@ -318,7 +321,8 @@ final Map<String,String> settingsMap = {
   "serverIP": "text",
   "downloadTheBlueAllianceInfo":"tba",
   "debugMode": "bool",
-  "flipField": "bool"
+  "flipField": "bool",
+  "autofillLastMatch": "bool"
 };
 
 final Map<String,IconData> settingsIconMap = {
@@ -326,5 +330,6 @@ final Map<String,IconData> settingsIconMap = {
   "scouterName": Icons.person,
   "serverIP": Icons.language,
   "debugMode": Icons.bug_report,
-  "flipField": Icons.cached_rounded
+  "flipField": Icons.cached_rounded,
+  "autofillLastMatch": Icons.password_rounded
 };

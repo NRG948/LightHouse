@@ -585,6 +585,10 @@ void saveJson(BuildContext context) async {
                   List<String> missingFields = dataVerification();
                   if (missingFields.isEmpty) {
                     if (await saveExport() == 0) {
+                      if (["Atlas", "Chronos", "Human Player"].contains(DataEntry.exportData["layout"])) {
+                        configData["currentMatch"] = "${DataEntry.exportData["matchNumber"]}";
+                        saveConfig();
+                      }
                       showDialog(
                           context: context,
                           builder: (context) {
