@@ -37,7 +37,11 @@ class MainWidget extends StatelessWidget {
     
     return MaterialApp(
       theme: ThemeData(
-        
+        textTheme: TextTheme(
+          bodyLarge: comfortaaBold(18,color: Colors.black),
+          bodyMedium: comfortaaBold(14,color: Colors.black),
+          bodySmall: comfortaaBold(10,color:Colors.black)
+        )
       ),
       title: "LightHouse",
       home: ScouterHomePage(),
