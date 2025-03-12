@@ -41,7 +41,7 @@ class SavedData extends StatelessWidget {
                 style: comfortaaBold(18, color: Constants.pastelBrown)),
             TextButton(
                 onPressed: () {
-                  build(context);
+                  Navigator.pushReplacementNamed(context, "/saved_data");
                 },
                 child: Text("Reload Page"))
           ],
@@ -1028,7 +1028,7 @@ class _DataEditState extends State<DataEdit> {
                                     context, "/home-scouter");
                               }
                             },
-                            child: Text("Save", style: comfortaaBold(10))))
+                            child: Text("Save", style: comfortaaBold(18,color: Colors.black))))
                   ],
                 ),
               )),

@@ -110,7 +110,17 @@ class _UploadButtonState extends State<UploadButton> {
         future: uploadQueue,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Placeholder();
+            return Container(
+              width: 350 * SyncPageState.sizeScaleFactor,
+              height: 100 * SyncPageState.sizeScaleFactor,
+              decoration: BoxDecoration(
+                  color: Constants.pastelWhite,
+                  borderRadius: BorderRadius.circular(Constants.borderRadius)),
+              child: Text(
+                "Loading...",
+                style: comfortaaBold(18, color: Colors.black),
+              ),
+            );
           }
           return Container(
             width: 350 * SyncPageState.sizeScaleFactor,
@@ -126,15 +136,17 @@ class _UploadButtonState extends State<UploadButton> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: 200 * SyncPageState.sizeScaleFactor,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Constants.borderRadius),
-                        color: Constants.pastelGray
-                      ),
-                      child: Center(child: Text("UPLOAD", style: comfortaaBold(25)))),
+                        width: 200 * SyncPageState.sizeScaleFactor,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius),
+                            color: Constants.pastelGray),
+                        child: Center(
+                            child: Text("UPLOAD", style: comfortaaBold(25)))),
                     Text(
                         "Upload ${(snapshot.data ?? []).length} items to server",
-                        style: comfortaaBold(18,color: Constants.pastelBrown,bold: false))
+                        style: comfortaaBold(18,
+                            color: Constants.pastelBrown, bold: false))
                   ],
                 )),
           );
@@ -174,18 +186,30 @@ class _UploadDialogState extends State<UploadDialog> {
   @override
   Widget build(BuildContext context) {
     if (widget.queue.isEmpty) {
-    Navigator.pop(context);
-      Future.delayed(Duration.zero,() {
+      Navigator.pop(context);
+      Future.delayed(Duration.zero, () {
         if (mounted) {
-          showDialog(context: context, builder: (context) {
-            return AlertDialog(content: Text("No files to upload",
-            style: comfortaaBold(18,color: Constants.pastelBrown),),
-            );
-          });
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text(
+                    "No files to upload",
+                    style: comfortaaBold(18, color: Constants.pastelBrown),
+                  ),
+                );
+              });
         }
       });
-      return Placeholder();
-      }
+      return Container(
+        width: 300 * SyncPageState.sizeScaleFactor,
+        height: 300 * SyncPageState.sizeScaleFactor,
+        decoration: BoxDecoration(
+        color: Constants.pastelWhite,
+        borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: Text("Loading...",style: comfortaaBold(18,color: Colors.black),),
+      );
+    }
     return Center(
       child: Container(
         width: 350 * SyncPageState.sizeScaleFactor,
@@ -229,7 +253,6 @@ class _UploadDialogState extends State<UploadDialog> {
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, "/sync");
     }
-    
   }
 
   // Build the list of uploaded files
@@ -257,14 +280,14 @@ class _UploadDialogState extends State<UploadDialog> {
             SizedBox(
               height: 20 * SyncPageState.sizeScaleFactor,
               width: 20 * SyncPageState.sizeScaleFactor,
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color:Colors.black),
             )
           ],
         ),
       );
     }
     return list;
-  } 
+  }
 
   // Upload a single file to the server
   Future<String> uploadFile(String fileName) async {
@@ -287,13 +310,13 @@ class _UploadDialogState extends State<UploadDialog> {
     }
     try {
       final response = await http.post(
-        (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
-        headers: {"Content-Type": "application/json"},
-        body: fileContent);
-    return Future.value(
-        responseCodes[response.statusCode] ?? response.statusCode.toString()); }
-    catch (_) {
-      print ("here");
+          (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
+          headers: {"Content-Type": "application/json"},
+          body: fileContent);
+      return Future.value(
+          responseCodes[response.statusCode] ?? response.statusCode.toString());
+    } catch (_) {
+      print("here");
       return Future.value("ERROR");
     }
   }
@@ -324,17 +347,16 @@ class _DownloadButtonState extends State<DownloadButton> {
                 return DownloadDialog();
               });
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Container(
-                      width: 200 * SyncPageState.sizeScaleFactor,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Constants.borderRadius),
-                        color: Constants.pastelGray
-                      ),
-                      child: Center(child: Text("DOWNLOAD", style: comfortaaBold(25)))),
-          Text("Download Items from server", style: comfortaaBold(18,color: Constants.pastelBrown,bold: false))
+              width: 200 * SyncPageState.sizeScaleFactor,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(Constants.borderRadius),
+                  color: Constants.pastelGray),
+              child: Center(child: Text("DOWNLOAD", style: comfortaaBold(25)))),
+          Text("Download Items from server",
+              style:
+                  comfortaaBold(18, color: Constants.pastelBrown, bold: false))
         ]),
       ),
     );
@@ -386,8 +408,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
     statuses.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text("Downloading $currentlyDownloading", style: comfortaaBold(10)),
-        CircularProgressIndicator()
+        Text("Downloading $currentlyDownloading", style: comfortaaBold(10,color: Colors.black)),
+        CircularProgressIndicator(color:Colors.black)
       ],
     ));
     return statuses;
@@ -507,10 +529,10 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                       children: [
                         Text(
                           "Attempting Connection...",
-                          style: comfortaaBold(18,
-                              color: Constants.pastelBrown),
+                          style:
+                              comfortaaBold(18, color: Constants.pastelBrown),
                         ),
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(color:Colors.black)
                       ],
                     );
                   } else {
@@ -519,8 +541,8 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
                       children: [
                         Text(
                           "Recieved code ${snapshot.data}",
-                          style: comfortaaBold(18,
-                              color: Constants.pastelBrown),
+                          style:
+                              comfortaaBold(18, color: Constants.pastelBrown),
                         ),
                         Container(
                           width: 30 * SyncPageState.sizeScaleFactor,
@@ -548,8 +570,9 @@ class _ServerConnectStatusState extends State<ServerConnectStatus> {
       return "";
     }
     late final dynamic response;
-    try {response = await http.get(uri);}
-    catch (_) {
+    try {
+      response = await http.get(uri);
+    } catch (_) {
       print(_);
       return "problem";
     }

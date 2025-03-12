@@ -70,6 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           centerTitle: true,
           actions: [
+            if (configData["debugMode"] == "true")
             IconButton(
                 onPressed: () {
                   showDialog(

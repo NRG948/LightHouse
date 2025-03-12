@@ -401,6 +401,7 @@ class DataEntryState extends State<DataEntry> {
                   },
                   icon: Icon(Icons.home, color: Constants.pastelWhite)),
               actions: [
+                if (configData["debugMode"] == "true")
                 IconButton(
                   icon: Icon(Icons.javascript, color: Constants.pastelWhite),
                   onPressed: () {
