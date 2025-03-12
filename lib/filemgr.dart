@@ -310,18 +310,21 @@ final Map<String, String> defaultConfig = {
   "eventKey": "2025nrg",
   "scouterName": "Scouter",
   "serverIP": "http://169.254.9.48:8080",
-  "downloadTheBlueAllianceInfo": "false"
+  "downloadTheBlueAllianceInfo": "false",
+  "debugMode": "false"
 };
 
 final Map<String,String> settingsMap = {
   "eventKey" : "text",
   "scouterName": "text",
   "serverIP": "text",
-  "downloadTheBlueAllianceInfo":"tba"
+  "downloadTheBlueAllianceInfo":"tba",
+  "debugMode": "bool"
 };
 
 final Map<String,IconData> settingsIconMap = {
   "eventKey": Icons.calendar_today,
   "scouterName": Icons.person,
-  "serverIP": Icons.language
+  "serverIP": Icons.language,
+  "debugMode": Icons.bug_report
 };

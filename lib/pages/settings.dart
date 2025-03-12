@@ -276,6 +276,7 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
             borderRadius: BorderRadius.circular(Constants.borderRadius),
             color: Constants.pastelWhite),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ValueListenableBuilder(valueListenable: enabled, builder: (context,isChecked,child) {
               return Checkbox(value: isChecked, onChanged: 
@@ -286,9 +287,10 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
               });  
              });
             }),
+            Icon(settingsIconMap[widget.setting]),
             SizedBox(
-              width: 300,
-              child: AutoSizeText(widget.setting.toSentenceCase,style: comfortaaBold(20),maxLines: 2,))
+              width: 200,
+              child: AutoSizeText(widget.setting.toSentenceCase,style: comfortaaBold(20,color: Colors.black),maxLines: 2,))
           ],
         ),
       ),
