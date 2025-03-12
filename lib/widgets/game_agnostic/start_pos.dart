@@ -19,7 +19,7 @@ class _NRGStartPosState extends State<NRGStartPos> {
   void initState() {
     super.initState();
     // Initialize starting position to "0"
-    DataEntry.exportData["startingPosition"] = "0";
+    DataEntry.exportData["startingPosition"] = "0,0";
   }
 
   @override
@@ -69,7 +69,7 @@ void showStartPos(BuildContext context, double width, double height) {
       child: StatefulBuilder(
         builder: (context, setState) {
           // Initialize isActive, x, and y based on existing data
-          isActive ??= DataEntry.exportData["startingPosition"] != "0";
+          isActive ??= DataEntry.exportData["startingPosition"] != "0,0";
           x ??= isActive! ? double.parse(DataEntry.exportData["startingPosition"].split(",")[0]): null;
           y ??= isActive! ? double.parse(DataEntry.exportData["startingPosition"].split(",")[1]) : null;
           return Column(
@@ -130,7 +130,7 @@ void showStartPos(BuildContext context, double width, double height) {
                 // Reset starting position when tapped
                 onTap: () {
                   setState(() {
-                    DataEntry.exportData["startingPosition"] = "0";
+                    DataEntry.exportData["startingPosition"] = "0,0";
                     isActive = false;
                   });
                 },
