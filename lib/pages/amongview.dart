@@ -242,10 +242,6 @@ class AmongViewSharedState extends ChangeNotifier {
     updateChartData();
     notifyListeners();
   }
-  
-  void navToIndividualPage(int index) {
-    print("Going to page ${teamsInEvent[index]}");
-  }
 
   void updateChartData({bool? sort}) {
     chartData.clear();

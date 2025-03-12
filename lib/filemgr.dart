@@ -16,7 +16,6 @@ Future<void> initConfig() async {
   if (Platform.isAndroid) {
     final directoryInstance = await getExternalStorageDirectory();
     if (directoryInstance == null) {
-      print("wtf");
       return;
     }
     configFolder = directoryInstance.path;
@@ -190,8 +189,6 @@ Future<List<dynamic>> getUploadQueue() async{
     return [];
   }
   final queueString = await queueFile.readAsString();
-  print(queueString);
-  print("a ${jsonDecode(queueString)}");
   final List<dynamic> queue = jsonDecode(queueString);
   return queue;
 }

@@ -57,7 +57,6 @@ class _MatchInfoState extends State<MatchInfo>
         getTeamInfo(int.tryParse(teamNumberController.text) ?? 0);
       });
     });
-    print("INIT STATE");
     DataEntry.exportData["matchNumber"] ??= 0;
     DataEntry.exportData["teamNumber"] ??= 0;
     DataEntry.exportData["replay"] ??= false;
@@ -303,7 +302,7 @@ class _MatchInfoState extends State<MatchInfo>
                 width: 110 * scaleFactor,
                 height: 65 * scaleFactor,
                 decoration: BoxDecoration(
-                    color: Constants.pastelRed,
+                    color: DataEntry.exportData["driverStation"].contains("Red") ? Constants.pastelRed : Constants.pastelBlue,
                     borderRadius:
                         BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
@@ -334,7 +333,7 @@ class _MatchInfoState extends State<MatchInfo>
                         autofillTeamNumber();
                       }
                     },
-                    dropdownColor: Constants.pastelRed,
+                    dropdownColor: DataEntry.exportData["driverStation"].contains("Red") ? Constants.pastelRed : Constants.pastelBlue,
                   ),
                 ),
               ),

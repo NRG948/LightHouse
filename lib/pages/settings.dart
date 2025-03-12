@@ -33,7 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
       }
     }).toList();
     // Adds a button to save settings.
-    settingsList.add(SaveSettingsButton());
+    //settingsList.add(SaveSettingsButton());
     // Adds a button to reset configuration.
     settingsList.add(Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),
@@ -84,9 +84,35 @@ class _SettingsPageState extends State<SettingsPage> {
                 icon: Icon(Icons.javascript))
           ],
           leading: IconButton(
-              onPressed: () {
+              onPressed: () async {
                 HapticFeedback.mediumImpact();
-                Navigator.pop(context); // navigates back to home
+            if (configData["downloadTheBlueAllianceInfo"] == "true") {
+                
+                await showTBADownloadDialog(context);
+              }
+            // Ensures widget is still part of the tree before proceeding.
+            if (!mounted) {
+              return;
+            } 
+            if (await saveConfig() == 0) {
+              // Saves settings and checks if the operation was successful.
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Text("Successfully saved."), //confirmation message
+                      actions: [
+                        TextButton(
+                            onPressed: () {
+                              HapticFeedback.mediumImpact();
+                              Navigator.pushNamed(context,
+                                  "/home-scouter"); //navigates back to home
+                            },
+                            child: Text("OK"))
+                      ],
+                    );
+                  });
+            } // navigates back to home
               },
               icon: Icon(Icons.home)),
         ),
@@ -391,8 +417,8 @@ class _TBADownloadDialogState extends State<TBADownloadDialog> {
         color: Constants.pastelWhite),
         child: Row(
           children: [
-            CircularProgressIndicator(),
-            Text(progressIndicator),
+            CircularProgressIndicator(color: Colors.black,),
+            AutoSizeText(progressIndicator,style: comfortaaBold(10,color: Colors.black),),
           ],
         ),
       ),
