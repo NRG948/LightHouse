@@ -227,7 +227,6 @@ class _UploadDialogState extends State<UploadDialog> {
   // Upload files to the server
   void uploadFiles() async {
     if (widget.queue.isEmpty) {
-      print("queue is empty");
       currentFile = "";
       return;
     }

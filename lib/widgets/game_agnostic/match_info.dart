@@ -57,7 +57,6 @@ class _MatchInfoState extends State<MatchInfo>
         getTeamInfo(int.tryParse(teamNumberController.text) ?? 0);
       });
     });
-    print("INIT STATE");
     DataEntry.exportData["matchNumber"] ??= 0;
     DataEntry.exportData["teamNumber"] ??= 0;
     DataEntry.exportData["replay"] ??= false;

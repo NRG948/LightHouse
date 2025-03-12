@@ -495,13 +495,11 @@ class AVISharedState extends ChangeNotifier {
   void loadPitData() {
     List<dynamic> allPitData = [];
     if (loadDatabaseFile(activeEvent, "Pit") == "") {
-      print("EMPTY");
       return;
     }
     allPitData = jsonDecode(loadDatabaseFile(activeEvent, "Pit"));
   
     if (allPitData.isEmpty) {
-      // print("allPitData is empty");
       return;
     }
     for (dynamic i in allPitData) {

@@ -546,7 +546,6 @@ class HexagonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print(sharedState.activeTriangle);
     final Paint paint = Paint()
       ..color = Constants.pastelWhite
       ..style = PaintingStyle.stroke
@@ -757,8 +756,6 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
   @override
   void initState() {
     super.initState();
-    print(sharedState.targetData);
-    print(sharedState.targetData.runtimeType);
     sharedState.targetData[widget.jsonKey] = [];
   }
 
