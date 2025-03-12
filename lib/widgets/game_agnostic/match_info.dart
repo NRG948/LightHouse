@@ -303,7 +303,7 @@ class _MatchInfoState extends State<MatchInfo>
                 width: 110 * scaleFactor,
                 height: 65 * scaleFactor,
                 decoration: BoxDecoration(
-                    color: Constants.pastelRed,
+                    color: DataEntry.exportData["driverStation"].contains("Red") ? Constants.pastelRed : Constants.pastelBlue,
                     borderRadius:
                         BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
@@ -334,7 +334,7 @@ class _MatchInfoState extends State<MatchInfo>
                         autofillTeamNumber();
                       }
                     },
-                    dropdownColor: Constants.pastelRed,
+                    dropdownColor: DataEntry.exportData["driverStation"].contains("Red") ? Constants.pastelRed : Constants.pastelBlue,
                   ),
                 ),
               ),
