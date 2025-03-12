@@ -60,7 +60,6 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
     _timer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
       setState(() {
         stopwatchResult = _stopwatch.elapsed;
-        print(stopwatchResult);
         stopwatchDisplay = widget.dataEntryState.stopwatchInitialValue - stopwatchResult;
         if (stopwatchDisplay < Duration(seconds: 0)) {
           stopwatchDisplay = Duration(seconds: 0);
