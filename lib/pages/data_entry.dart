@@ -331,7 +331,8 @@ class DataEntryState extends State<DataEntry> {
           padding: EdgeInsets.only(
               top: 2 * resizeScaleFactorHeight,
               left: 2 * resizeScaleFactorWidth,
-              right: 2 * resizeScaleFactorWidth),
+              right: 2 * resizeScaleFactorWidth,
+              bottom: MediaQuery.of(context).viewInsets.bottom),
           child: ListView.builder(
            // physics: const NeverScrollableScrollPhysics(),
             itemCount: widgetList.length,
