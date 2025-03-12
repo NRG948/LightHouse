@@ -146,7 +146,7 @@ class _TBACheckboxState extends State<TBACheckbox> {
         configData[widget.setting] = enabled.value ? "true" : "false";
       },
       child: Container(
-        height: 100,
+        height: 50,
         width: 400,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Constants.borderRadius),
@@ -271,7 +271,7 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
         configData[widget.setting] = enabled.value ? "true" : "false";
       },
       child: Container(
-        height: 100,
+        height: 50,
         width: 400,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Constants.borderRadius),
