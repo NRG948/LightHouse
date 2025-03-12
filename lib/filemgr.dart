@@ -317,5 +317,11 @@ final Map<String,String> settingsMap = {
   "eventKey" : "text",
   "scouterName": "text",
   "serverIP": "text",
-  "downloadTheBlueAllianceInfo":"bool"
+  "downloadTheBlueAllianceInfo":"tba"
+};
+
+final Map<String,IconData> settingsIconMap = {
+  "eventKey": Icons.calendar_today,
+  "scouterName": Icons.person,
+  "serverIP": Icons.language
 };
