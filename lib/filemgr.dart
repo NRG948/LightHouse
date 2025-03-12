@@ -118,7 +118,7 @@ Future<bool> clearAllData() async {
       }
       
       // Reset the config data
-      configData.clear();
+      // configData.clear();
       
       return true;
     }
