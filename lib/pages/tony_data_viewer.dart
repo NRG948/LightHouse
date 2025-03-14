@@ -6,8 +6,8 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
-import "package:lighthouse/widgets/reefscape/animated_auto_replay.dart";
-import "package:lighthouse/widgets/reefscape/scrollable_auto_paths.dart";
+import "package:lighthouse/widgets/reefscape/auto_reef_view.dart";
+import "package:lighthouse/widgets/reefscape/scrollable_auto_reefs.dart";
 
 class TonyDataViewerPage extends StatefulWidget {
   const TonyDataViewerPage({super.key});
@@ -204,7 +204,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in humanPlayerData) {
       if ((matchData["redHPTeam"] == currentTeamNumber ||
               matchData["blueHPTeam"] == currentTeamNumber) &&
-          matchData["comments"] != null && // TODO: Temporary fix for null comments. They should default to empty strings.
+          matchData["comments"] !=
+              null && // TODO: Temporary fix for null comments. They should default to empty strings.
           matchData["comments"].isNotEmpty) {
         comments.add([
           matchData["scouterName"],
@@ -373,50 +374,27 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAutoPreviews() {
-    Map<int, AnimatedAutoReplay> autos = {};
-
-    for (Map<String, dynamic> matchData in chronosData) {
-      if (matchData["teamNumber"] == currentTeamNumber) {
-        autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-            height: 270 *
-                horizontalScaleFactor, // Scaled with horizontal since that's what the auto replay and reef are scaled with
-            width: 360 * horizontalScaleFactor,
-            scouterNames: [matchData["scouterName"]],
-            matchNumber: matchData["matchNumber"],
-            path: AutoPath(
-              startingPosition: List<double>.from(matchData["startingPosition"]
-                  .split(",")
-                  .map((x) => double.parse(x))
-                  .toList()),
-              waypoints: List<List<dynamic>>.from(matchData["autoEventList"]),
-              flipStarting: matchData["driverStation"][0] == "R",
-            ));
-      }
-    }
+    Map<int, AutoReefView> autos = {};
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
-        if (!autos.containsKey(matchData["matchNumber"])) {
-          autos[matchData["matchNumber"]] = AnimatedAutoReplay(
-              height: 270 * horizontalScaleFactor,
-              width: 360 * horizontalScaleFactor,
-              scouterNames: [matchData["scouterName"]],
-              matchNumber: matchData["matchNumber"],
-              reef: AutoReef(
+        autos[matchData["matchNumber"]] = AutoReefView(
+            height: 270 * horizontalScaleFactor,
+            width: 360 * horizontalScaleFactor,
+            scouterNames: [matchData["scouterName"]],
+            matchNumber: matchData["matchNumber"],
+            flipStartingPosition: matchData["driverStation"][0] == "R",
+            startingPosition: List<double>.from(matchData["startingPosition"]
+                .split(",")
+                .map((x) => double.parse(x))
+                .toList()),
+            reef: AutoReef(
                 algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
                 scores: List<String>.from(matchData["autoCoralScored"]),
                 troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
-              ));
-        } else {
-          autos[matchData["matchNumber"]]!.reef = AutoReef(
-            scores: List<String>.from(matchData["autoCoralScored"]),
-            algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
-            troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
-          );
-          autos[matchData["matchNumber"]]!
-              .scouterNames
-              .add(matchData["scouterName"]);
-        }
+                groundIntake: matchData["groundIntake"],
+                processorCS: matchData["processorCS"],
+                bargeCS: matchData["bargeCS"]));
       }
     }
 
@@ -432,9 +410,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   @override
   Widget build(BuildContext context) {
-    atlasData = getDataAsMapFromDatabase("Atlas");
-    chronosData = getDataAsMapFromDatabase("Chronos");
-    humanPlayerData = getDataAsMapFromDatabase("Human Player");
+    atlasData = getDataAsMapFromSavedMatches("Atlas");
+    chronosData = getDataAsMapFromSavedMatches("Chronos");
+    humanPlayerData = getDataAsMapFromSavedMatches("Human Player");
     //pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
@@ -528,7 +506,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
             onPressed: () {
               Navigator.pushNamed(context, "/home-data-viewer");
             },
-            icon: Icon(Icons.home,color: Constants.pastelWhite,)),
+            icon: Icon(
+              Icons.home,
+              color: Constants.pastelWhite,
+            )),
       ),
       body: Container(
           width: screenWidth,

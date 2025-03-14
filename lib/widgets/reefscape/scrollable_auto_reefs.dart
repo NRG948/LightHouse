@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 // Importing necessary packages and files
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/widgets/reefscape/animated_auto_replay.dart';
+import 'package:lighthouse/widgets/reefscape/auto_reef_view.dart';
 
 // Stateful widget to display scrollable auto paths
 class ScrollableAutoPaths extends StatefulWidget {
   final double width;
   final double height;
   final String title;
-  final List<AnimatedAutoReplay> autos;
+  final List<AutoReefView> autos;
 
   // Constructor for ScrollableAutoPaths
   const ScrollableAutoPaths(
@@ -27,7 +27,7 @@ class _ScrollableAutoPathsState extends State<ScrollableAutoPaths> {
   double get _width => widget.width;
   double get _height => widget.height;
   String get _title => widget.title;
-  List<AnimatedAutoReplay> get _autos => widget.autos;
+  List<AutoReefView> get _autos => widget.autos;
 
   @override
   void initState() {

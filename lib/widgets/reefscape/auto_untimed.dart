@@ -475,7 +475,7 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
           width: (widget.algae ? 75 : 100) * widget.scaleFactor,
           decoration: BoxDecoration(
               color: active
-                  ? (widget.algae ? Constants.pastelGreen : Constants.pastelRed)
+                  ? (widget.algae ? Constants.pastelGreenDark : Constants.pastelRed)
                   : Constants.pastelGray),
           //coral icons for the corals that you can choose to click within the map within auto section within atlas section
           child: Center(
