@@ -114,11 +114,11 @@ class _CommentBoxDialogState extends State<CommentBoxDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: EdgeInsets.only(left: 25, right: 25, top: 50, bottom: 200),
+      backgroundColor: Constants.pastelWhite,
       child: Center(
         child: Container(
           width: screenWidth * 0.9,
-          height: screenHeight,
+          height: screenHeight * 0.5,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Constants.borderRadius),
               color: Constants.pastelWhite),
@@ -138,7 +138,7 @@ class _CommentBoxDialogState extends State<CommentBoxDialog> {
                     filled: true,
                     labelStyle: comfortaaBold(screenWidth * 0.03),
                   ),
-                  maxLines: 19,
+                  maxLines: (screenHeight * 0.014).truncate(),
                 ),
               )
             ],
