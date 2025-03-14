@@ -1,81 +1,156 @@
-import 'dart:math';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/pages/data_entry.dart';
 
-// CommentBox widget which is a stateful widget
-class CommentBox extends StatefulWidget {
-  final String name; // Name of the commenter
-  final String text; // Comment text
-  final String time; // Time of the comment
-  final String type; // Where the comment comes from (atlas, chronos, pit)
+class NRGCommentBox extends StatefulWidget {
+  final String title; // Title of the comment box
+  final String jsonKey; // Key to store the comment box data in JSON
+  final double height; // Height of the comment box
+  final double width; // Width of the comment box
 
-  // Constructor for CommentBox
-  const CommentBox(
-      {super.key, required this.name, required this.text, required this.time, required this.type});
+  const NRGCommentBox(
+      {super.key,
+      required this.title,
+      required this.jsonKey,
+      required this.height,
+      required this.width});
 
   @override
-  State<CommentBox> createState() => _CommentBoxState(); // Creating state for CommentBox
+  State<NRGCommentBox> createState() => _NRGCommentBoxState();
 }
 
-// State class for CommentBox
-class _CommentBoxState extends State<CommentBox> {
-  // Getters to access widget properties
-  String get _text => widget.text;
-  String get _name => widget.name;
-  String get _time => widget.time;
-  String get _type => widget.type;
+class _NRGCommentBoxState extends State<NRGCommentBox>
+    with AutomaticKeepAliveClientMixin {
+  CommentBoxSharedState state = CommentBoxSharedState();
 
-  Color getBoxColor() {
-    switch (_type) {
-      case "atlas":
-        return Constants.pastelRed;
-      case "chronos":
-        return Constants.pastelYellow;
-      case "pit":
-        return Constants.pastelGreen;
-      case _:
-        return Constants.pastelGray; // This should never happen.
-    }
-    
-  }
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
-    super.initState(); // Initializing state
+    super.initState();
+    DataEntry.exportData[widget.jsonKey] = "";
+    state.addListener(() => build(context));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // Container decoration
-      decoration: BoxDecoration(
-          color: getBoxColor() , // Background color
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromARGB(50, 0, 0, 0), // Shadow color
-              offset: Offset.fromDirection(pi / 2, 5), // Shadow offset
-              blurRadius: 2, // Shadow blur radius
-            )
-          ],
-          borderRadius: BorderRadius.circular(Constants.borderRadius)), // Rounded corners
-      padding: EdgeInsets.all(8), // Padding inside the container
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
-        children: [
-          // Displaying name and time
-          Text("$_name  $_time",
-              textAlign: TextAlign.left,
-              style: comfortaaBold(18,
-                  customFontWeight: FontWeight.w900,
-                  color: Constants.pastelWhite)),
-          // Displaying comment text
-          Text(_text,
-              textAlign: TextAlign.left,
-              style:
-                  comfortaaBold(14, bold: true, color: Constants.pastelWhite)),
-        ],
+    super.build(context);
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return CommentBoxDialog(jsonKey: widget.jsonKey, state: state);
+            });
+      },
+      child: Container(
+        height: widget.height,
+        width: widget.width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
+            color: Constants.pastelWhite),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Constants.borderRadius),
+              color: Constants.pastelYellow,
+            ),
+            child: DataEntry.exportData[widget.jsonKey] == "" ? Center(
+                child: Text(
+              "Comments",
+              style: comfortaaBold(35, color: Colors.black),
+            )) : Column(
+              children: [
+                Text("Comments",style: comfortaaBold(20,color: Colors.black),),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5,right: 5),
+                  child: AutoSizeText(DataEntry.exportData[widget.jsonKey],maxLines: 2,minFontSize: 12,),
+                )
+              ],
+            ),
+          ),
+        ),
       ),
     );
+  }
+}
+
+class CommentBoxDialog extends StatefulWidget {
+  final String jsonKey;
+  final CommentBoxSharedState state;
+  const CommentBoxDialog(
+      {super.key, required this.jsonKey, required this.state});
+
+  @override
+  State<CommentBoxDialog> createState() => _CommentBoxDialogState();
+}
+
+class _CommentBoxDialogState extends State<CommentBoxDialog> {
+  late double screenHeight;
+  late double screenWidth;
+  TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+
+    controller.text = DataEntry.exportData[widget.jsonKey];
+
+    controller.addListener(() {
+      widget.state.update();
+      DataEntry.exportData[widget.jsonKey] = controller.text;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: EdgeInsets.only(left: 25, right: 25, top: 50, bottom: 200),
+      child: Center(
+        child: Container(
+          width: screenWidth * 0.9,
+          height: screenHeight,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Constants.borderRadius),
+              color: Constants.pastelWhite),
+          child: Column(
+            children: [
+              Text(
+                "COMMENTS",
+                style: comfortaaBold(screenWidth * 0.1, color: Colors.black),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    fillColor: Constants.pastelYellow,
+                    filled: true,
+                    labelStyle: comfortaaBold(screenWidth * 0.03),
+                  ),
+                  maxLines: 19,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CommentBoxSharedState extends ChangeNotifier {
+  void update() {
+    notifyListeners();
   }
 }

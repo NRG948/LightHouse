@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
+import 'package:lighthouse/widgets/game_agnostic/tdv_comment_box.dart';
 
 // Enum to define different sorting options
 enum Sort { LENGTH_MAX, NAME_AZ, NAME_ZA, EARLIEST, LATEST }
@@ -104,7 +104,7 @@ class _ScrollableBoxState extends State<ScrollableBox> {
                             Constants.pastelWhite), // Divider between comments
                     itemBuilder: (BuildContext context, int index) {
                       // Build each comment box
-                      return CommentBox(
+                      return TDVCommentBox(
                           name: _comments[index][0], // Scouter name
                           text: _comments[index][1], // Comment text
                           time: _comments[index][2],

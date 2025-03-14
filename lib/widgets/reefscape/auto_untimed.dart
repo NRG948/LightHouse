@@ -176,7 +176,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
               jsonKeyPath: sharedState.targetData,
               height: 40,
               width: 400)
-          : SizedBox()
+          : SizedBox(),
     ];
     return Container(
       height: pit ? 630 : 700 * scaleFactor,

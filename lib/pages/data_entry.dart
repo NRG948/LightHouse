@@ -11,6 +11,7 @@ import "package:lighthouse/layouts.dart";
 
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/checkbox.dart";
+import "package:lighthouse/widgets/game_agnostic/comment_box.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import "package:lighthouse/widgets/game_agnostic/hint_text.dart";
 import "package:lighthouse/widgets/game_agnostic/rating.dart";
@@ -291,6 +292,8 @@ class DataEntryState extends State<DataEntry> {
             width: width,
             startGuidance: startGuidanceStopwatch,
           );
+        case "comment-box":
+          return NRGCommentBox(title: title, jsonKey: jsonKey, height: height, width: width);
         case "scrollable-box":
           return ScrollableBox(
               width: width, height: height, title: title, comments: comments);

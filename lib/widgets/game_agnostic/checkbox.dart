@@ -54,6 +54,7 @@ class _NRGCheckboxState extends State<NRGCheckbox> {
     // Determine the layout based on the vertical property.
     Widget rowOrColumn = widget.vertical
         ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Updates the checkbox when [isChecked] is updated.
               ValueListenableBuilder(
