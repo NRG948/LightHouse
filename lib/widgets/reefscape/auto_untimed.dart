@@ -10,8 +10,8 @@ import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 
 class RSAutoUntimed extends StatefulWidget {
   final double width;
-  final bool pit;
-  const RSAutoUntimed({super.key, required this.width, this.pit = false});
+  final bool isPitAuto;
+  const RSAutoUntimed({super.key, required this.width, this.isPitAuto = false});
 
   @override
   State<RSAutoUntimed> createState() => _RSAutoUntimedState();
@@ -41,20 +41,19 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
       ),
     ),
   ];
-  bool get pit => widget.pit;
+  bool get isPitAuto => widget.isPitAuto;
   late RSAUSharedState sharedState;
   late double scaleFactor;
   @override
   void initState() {
     super.initState();
     sharedState = RSAUSharedState();
-    sharedState.initialize(widget.pit);
+    sharedState.initialize(widget.isPitAuto);
     scaleFactor = widget.width / 400;
 
-    if (widget.pit) {
+    if (widget.isPitAuto) {
       assert(DataEntry.exportData['auto'] != null);
       assert(DataEntry.exportData['auto'][0] != null);
-      assert(DataEntry.exportData['auto'][0]['autoCS'] != null);
     }
   }
 
@@ -75,14 +74,14 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
               alignment: Alignment.topCenter,
               child: RSAUCoralStation(
                 title: "Processor",
-                jsonKey: "autoCS",
+                jsonKey: "processorCS",
                 scaleFactor: scaleFactor,
                 flipped: false,
               ),
             ),
             Column(
               children: [
-                pit
+                isPitAuto
                     ? Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
@@ -127,20 +126,10 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                     : Container(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: pit ? 40 : 50 * scaleFactor,
-                    width: 100 * scaleFactor,
-                    decoration: BoxDecoration(
-                        color: Constants.pastelRed,
-                        borderRadius:
-                            BorderRadius.circular(Constants.borderRadius)),
-                    child: Center(
-                        child: AutoSizeText(
-                      "DRIVER STATION",
-                      textAlign: TextAlign.center,
-                      style: comfortaaBold(10 * scaleFactor),
-                    )),
-                  ),
+                  child: RSAUGroundIntake(
+                      jsonKey: 'groundIntake',
+                      scaleFactor: scaleFactor,
+                      isPitAuto: isPitAuto),
                 ),
               ],
             ),
@@ -148,7 +137,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
               alignment: Alignment.topCenter,
               child: RSAUCoralStation(
                 title: "Barge",
-                jsonKey: "autoCS",
+                jsonKey: "bargeCS",
                 scaleFactor: scaleFactor,
                 flipped: true,
               ),
@@ -159,9 +148,16 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
       RSAUHexagon(
         sharedState: sharedState,
         scaleFactor: scaleFactor,
+        isPitAuto: isPitAuto,
       ),
       RSAUReef(sharedState: sharedState, scaleFactor: scaleFactor),
-      pit
+      NRGCheckbox(
+          title: "Has No Auto",
+          jsonKey: "hasNoAuto",
+          jsonKeyPath: isPitAuto ? sharedState.targetData : null,
+          height: 40,
+          width: 400),
+      isPitAuto
           ? NRGCheckbox(
               title: "Drops Algae on Ground",
               jsonKey: "dropsAlgaeAuto",
@@ -169,7 +165,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
               height: 40,
               width: 400)
           : SizedBox(),
-      pit
+      isPitAuto
           ? NRGCheckbox(
               title: "Drives Out",
               jsonKey: "drivesOut",
@@ -179,7 +175,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
           : SizedBox(),
     ];
     return Container(
-      height: pit ? 630 : 700 * scaleFactor,
+      height: (isPitAuto ? 740 : 720) * scaleFactor,
       width: widget.width,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
@@ -233,7 +229,7 @@ class _RSAUReefState extends State<RSAUReef>
         style: comfortaaBold(18, color: Colors.black),
       );
     }
-    String at = widget.sharedState.activeTriangle!;
+    String activeTriangle = widget.sharedState.activeTriangle!;
     return Container(
         height: 280 * widget.scaleFactor,
         width: 320 * widget.scaleFactor,
@@ -254,11 +250,11 @@ class _RSAUReefState extends State<RSAUReef>
               children: [
                 RSAUReefButton(
                     icon: CoralAlgaeIcons.coral4,
-                    location: "${at[0]}4",
+                    location: "${activeTriangle[0]}4",
                     scaleFactor: widget.scaleFactor),
                 RSAUReefButton(
                     icon: CoralAlgaeIcons.coral4,
-                    location: "${at[1]}4",
+                    location: "${activeTriangle[1]}4",
                     scaleFactor: widget.scaleFactor),
               ],
             ),
@@ -267,16 +263,17 @@ class _RSAUReefState extends State<RSAUReef>
               children: [
                 RSAUReefButton(
                     icon: CoralAlgaeIcons.coral3,
-                    location: "${at[0]}3",
+                    location: "${activeTriangle[0]}3",
                     scaleFactor: widget.scaleFactor),
                 RSAUReefButton(
-                    icon: CoralAlgaeIcons.algae3FRCLogo,
-                    location: "${at}3",
+                    icon: CoralAlgaeIcons
+                        .algae3FRCLogo, // TODO: Change icon to one algae icon, not by 2 or 3
+                    location: activeTriangle,
                     algae: true,
                     scaleFactor: widget.scaleFactor),
                 RSAUReefButton(
                     icon: CoralAlgaeIcons.coral3,
-                    location: "${at[1]}3",
+                    location: "${activeTriangle[1]}3",
                     scaleFactor: widget.scaleFactor),
               ],
             ),
@@ -285,16 +282,11 @@ class _RSAUReefState extends State<RSAUReef>
               children: [
                 RSAUReefButton(
                     icon: CoralAlgaeIcons.coral2,
-                    location: "${at[0]}2",
-                    scaleFactor: widget.scaleFactor),
-                RSAUReefButton(
-                    icon: CoralAlgaeIcons.algae2FRCLogo,
-                    location: "${at}2",
-                    algae: true,
+                    location: "${activeTriangle[0]}2",
                     scaleFactor: widget.scaleFactor),
                 RSAUReefButton(
                     icon: CoralAlgaeIcons.coral2,
-                    location: "${at[1]}2",
+                    location: "${activeTriangle[1]}2",
                     scaleFactor: widget.scaleFactor),
               ],
             ),
@@ -503,8 +495,12 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
 class RSAUHexagon extends StatelessWidget {
   final RSAUSharedState sharedState;
   final double scaleFactor;
+  final bool isPitAuto;
   const RSAUHexagon(
-      {super.key, required this.sharedState, required this.scaleFactor});
+      {super.key,
+      required this.sharedState,
+      required this.scaleFactor,
+      required this.isPitAuto});
 
   @override
   Widget build(BuildContext context) {
@@ -519,8 +515,8 @@ class RSAUHexagon extends StatelessWidget {
     ];
     return Container(
         color: Constants.pastelWhite,
-        height: 200 * scaleFactor,
-        width: 200 * scaleFactor,
+        height: (isPitAuto ? 200 : 280) * scaleFactor,
+        width: (isPitAuto ? 200 : 280) * scaleFactor,
         alignment: Alignment.center,
         child: AspectRatio(
             aspectRatio: 1,
@@ -735,6 +731,61 @@ class TriangleClipper extends CustomClipper<Path> {
   }
 }
 
+class RSAUGroundIntake extends StatefulWidget {
+  final String jsonKey;
+  final double scaleFactor;
+  final bool isPitAuto;
+  const RSAUGroundIntake(
+      {super.key,
+      required this.jsonKey,
+      required this.scaleFactor,
+      required this.isPitAuto});
+
+  @override
+  State<StatefulWidget> createState() => _RSAUGroundIntakeState();
+}
+
+class _RSAUGroundIntakeState extends State<RSAUGroundIntake> {
+  final sharedState = RSAUSharedState();
+
+  @override
+  void initState() {
+    super.initState();
+    sharedState.targetData[widget.jsonKey] = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double width = 180 * widget.scaleFactor;
+    double height = (widget.isPitAuto ? 40 : 80) * widget.scaleFactor;
+    List<Widget> rowChildren = [
+      Container(
+        width: width,
+        height: height,
+        color: sharedState.targetData[widget.jsonKey]
+            ? Constants.pastelRedDark
+            : Constants.pastelGray,
+        child: TextButton(
+            onPressed: () {
+              setState(() {
+                HapticFeedback.heavyImpact();
+                sharedState.targetData[widget.jsonKey] =
+                    !sharedState.targetData[widget.jsonKey];
+              });
+            },
+            child: Text(
+              "Ground Intake",
+              style: comfortaaBold(20 * widget.scaleFactor,
+                  color: Constants.pastelWhite),
+              textAlign: TextAlign.center,
+            )),
+      ),
+    ];
+
+    return Row(children: rowChildren);
+  }
+}
+
 class RSAUCoralStation extends StatefulWidget {
   final String jsonKey;
   final String title;
@@ -756,47 +807,35 @@ class _RSAUCoralStationState extends State<RSAUCoralStation> {
   @override
   void initState() {
     super.initState();
-    sharedState.targetData[widget.jsonKey] = [];
+    sharedState.targetData[widget.jsonKey] = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    double width = 55 * widget.scaleFactor;
-    double height = 80 * widget.scaleFactor;
+    double width = 100 * widget.scaleFactor;
+    double height = 100 * widget.scaleFactor;
     List<Widget> rowChildren = [
       Container(
-        width: width * 1.5,
+        width: width,
         height: height,
-        color: Constants.pastelRedDark,
+        color: sharedState.targetData[widget.jsonKey]
+            ? Constants.pastelRedDark
+            : Constants.pastelGray,
         child: TextButton(
             onPressed: () {
-              HapticFeedback.heavyImpact();
-              sharedState.targetData[widget.jsonKey]
-                  .add(widget.title.toLowerCase());
+              setState(() {
+                HapticFeedback.heavyImpact();
+                sharedState.targetData[widget.jsonKey] =
+                    !sharedState.targetData[widget.jsonKey];
+              });
             },
             child: Text(
               "CS",
-              style: comfortaaBold(30 * widget.scaleFactor,
-                  color: Constants.pastelWhite.withValues(alpha: 0.5)),
+              style: comfortaaBold(40 * widget.scaleFactor,
+                  color: Constants.pastelWhite),
               textAlign: TextAlign.center,
             )),
       ),
-      Container(
-        height: height,
-        width: width * 0.8,
-        color: Constants.pastelGray,
-        child: TextButton(
-            onPressed: () {
-              if (sharedState.targetData[widget.jsonKey].length > 0) {
-                HapticFeedback.lightImpact();
-                sharedState.targetData[widget.jsonKey].removeLast();
-              }
-            },
-            child: Text("U\nN\nD\nO",
-                style: comfortaaBold(10 * widget.scaleFactor,
-                    color: Constants.pastelWhite.withValues(alpha: 0.75)),
-                textAlign: TextAlign.center)),
-      )
     ];
 
     return Row(
@@ -848,11 +887,15 @@ class RSAUSharedState extends ChangeNotifier {
   }
 
   Map<String, dynamic> _createAutoEntry() => {
-        'autoCS': [],
+        'bargeCS': false,
+        'processorCS': false,
+        'groundIntake': false,
         'autoCoralScored': [],
         'autoAlgaeRemoved': [],
         'autoCoralScoredL1': '0',
-        'dropsAlgaeAuto': false
+        'dropsAlgaeAuto': false,
+        'hasNoAuto': false,
+        'drivesOut': false
       };
 
   void setCurrentAuto(int auto) {
