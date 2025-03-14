@@ -247,7 +247,7 @@ class DataEntryState extends State<DataEntry> {
         case "rsTeleopTimed":
           return RSTeleopTimed(width: width);
         case "rsAutoUntimedPit":
-          return RSAutoUntimed(width: width, pit: true);
+          return RSAutoUntimed(width: width, isPitAuto: true);
         case "barchart":
           return NRGBarChart(
               title: title,
