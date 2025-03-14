@@ -293,15 +293,12 @@ class DataEntryState extends State<DataEntry> {
           );
         case "scrollable-box":
           return ScrollableBox(
-              width: width,
-              height: height,
-              title: title,
-              comments: comments);
+              width: width, height: height, title: title, comments: comments);
         case "atlas-teleop":
           return AtlasTeleopSelection(width: width, height: height);
         case "hp-teleop":
           return HPTeleopSelection(height: height, width: width);
-        case "team_info": 
+        case "team_info":
           return TeamInfo();
         case "hint-text":
           return HintText(text: title);
@@ -329,12 +326,13 @@ class DataEntryState extends State<DataEntry> {
       return Center(
         child: Padding(
           padding: EdgeInsets.only(
-              top: 2 * resizeScaleFactorHeight,
-              left: 2 * resizeScaleFactorWidth,
-              right: 2 * resizeScaleFactorWidth,
-              bottom: MediaQuery.of(context).viewInsets.bottom),
+            top: 2 * resizeScaleFactorHeight,
+            left: 2 * resizeScaleFactorWidth,
+            right: 2 * resizeScaleFactorWidth,
+            //bottom: MediaQuery.of(context).viewInsets.bottom
+          ),
           child: ListView.builder(
-           // physics: const NeverScrollableScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(),
             itemCount: widgetList.length,
             itemBuilder: (context, index) {
               return Padding(
@@ -359,7 +357,8 @@ class DataEntryState extends State<DataEntry> {
         ? layoutMap[DataEntry.activeConfig]!
         : {};
 
-    if (!hasEventKeyWarningShown && defaultConfig["eventKey"] == configData["eventKey"]) {
+    if (!hasEventKeyWarningShown &&
+        defaultConfig["eventKey"] == configData["eventKey"]) {
       hasEventKeyWarningShown = true;
       Future.delayed(Duration.zero, () {
         showDialog(
@@ -403,18 +402,18 @@ class DataEntryState extends State<DataEntry> {
                   icon: Icon(Icons.home, color: Constants.pastelWhite)),
               actions: [
                 if (configData["debugMode"] == "true")
-                IconButton(
-                  icon: Icon(Icons.javascript, color: Constants.pastelWhite),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext) {
-                          return Dialog(
-                            child: Text(jsonEncode(DataEntry.exportData)),
-                          );
-                        });
-                  },
-                ),
+                  IconButton(
+                    icon: Icon(Icons.javascript, color: Constants.pastelWhite),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext) {
+                            return Dialog(
+                              child: Text(jsonEncode(DataEntry.exportData)),
+                            );
+                          });
+                    },
+                  ),
                 IconButton(
                     onPressed: () {
                       saveJson(context);
@@ -461,7 +460,7 @@ class DataEntryState extends State<DataEntry> {
                     onPageChanged: (index) {
                       setState(() {
                         currentPage = index;
-                  
+
                         // this tells the stopwatches what they should start
                         // counting down from.
                         switch (currentPage) {
@@ -585,8 +584,10 @@ void saveJson(BuildContext context) async {
                   List<String> missingFields = dataVerification();
                   if (missingFields.isEmpty) {
                     if (await saveExport() == 0) {
-                      if (["Atlas", "Chronos", "Human Player"].contains(DataEntry.exportData["layout"])) {
-                        configData["currentMatch"] = "${DataEntry.exportData["matchNumber"]}";
+                      if (["Atlas", "Chronos", "Human Player"]
+                          .contains(DataEntry.exportData["layout"])) {
+                        configData["currentMatch"] =
+                            "${DataEntry.exportData["matchNumber"]}";
                         saveConfig();
                       }
                       showDialog(
