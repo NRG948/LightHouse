@@ -153,7 +153,7 @@ class _AutoReefViewState extends State<AutoReefView>
                       child: Center(
                           child: Text("No Auto", style: comfortaaBold(20))),
                     ),
-              (_startingPosition[0] == 0 && _startingPosition[1] == 0)
+              (_startingPosition[0] != 0 || _startingPosition[1] != 0)
                   ? Stack(
                       children: [
                         Container(
