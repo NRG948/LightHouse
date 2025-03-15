@@ -34,9 +34,11 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in atlasData) {
       teams.add(matchData["teamNumber"]);
     }
+    /*
     for (Map<String, dynamic> matchData in chronosData) {
       teams.add(matchData["teamNumber"]);
     }
+    */
     /*
     for (Map<String, dynamic> matchData in pitData) {
       teams.add(matchData["teamNumber"]);
@@ -189,17 +191,6 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         ]);
       }
     }
-    for (Map<String, dynamic> matchData in chronosData) {
-      if (matchData["teamNumber"] == currentTeamNumber &&
-          matchData["comments"].isNotEmpty) {
-        comments.add([
-          matchData["scouterName"],
-          matchData["comments"],
-          matchData["matchNumber"].toString(),
-          "chronos",
-        ]);
-      }
-    }
     // Pit data not included in comments. That is in a separate section.
     for (Map<String, dynamic> matchData in humanPlayerData) {
       if ((matchData["redHPTeam"] == currentTeamNumber ||
@@ -223,7 +214,50 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         comments: comments);
   }
 
-  Widget getClimbStartTimeAverage() {
+  Widget getMatchesOnDefense() {
+    if (atlasData.isEmpty) {
+      return Container();
+    }
+
+    List<int> matches = [];
+
+    for (Map<String, dynamic> matchData in atlasData) {
+      if (matchData["teamNumber"] == currentTeamNumber &&
+          matchData["crossedMidline"]) {
+        matches.add(matchData["matchNumber"]);
+      }
+    }
+
+    return Text("Matches on Defense: ${matches.join(", ")}",
+        textAlign: TextAlign.left,
+        style: comfortaaBold(10, color: Constants.pastelBrown));
+  }
+
+  Widget getAtlasClimbStartTimeAverage() {
+    if (atlasData.isEmpty) {
+      return Container();
+    }
+
+    double totalTime = 0;
+    int matches = 0;
+
+    for (Map<String, dynamic> matchData in atlasData) {
+      if (matchData["teamNumber"] == currentTeamNumber &&
+          matchData["attemptedClimb"]) {
+        matches++;
+        if (matchData["climbStartTime"] is num) {
+          totalTime += matchData["climbStartTime"];
+        }
+      }
+    }
+
+    return Text(
+        "Average Climb Time: ${matches == 0 ? 0 : (totalTime / matches).toStringAsFixed(3)}",
+        textAlign: TextAlign.left,
+        style: comfortaaBold(10, color: Constants.pastelBrown));
+  }
+
+  Widget getChronosClimbStartTimeAverage() {
     if (chronosData.isEmpty) {
       return Container();
     }
@@ -294,7 +328,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAlgaeBarChart() {
-    if (chronosData.isEmpty) {
+    if (atlasData.isEmpty) {
       return Container();
     }
 
@@ -330,7 +364,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getCoralBarChart() {
-    if (chronosData.isEmpty) {
+    if (atlasData.isEmpty) {
       return Container();
     }
 
@@ -394,7 +428,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
                 groundIntake: matchData["groundIntake"],
                 processorCS: matchData["processorCS"],
-                bargeCS: matchData["bargeCS"]));
+                bargeCS: matchData["bargeCS"]),
+            hasNoAuto: matchData["hasNoAuto"],
+            );
+            
       }
     }
 
@@ -410,9 +447,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   @override
   Widget build(BuildContext context) {
-    atlasData = getDataAsMapFromSavedMatches("Atlas");
-    chronosData = getDataAsMapFromSavedMatches("Chronos");
-    humanPlayerData = getDataAsMapFromSavedMatches("Human Player");
+    atlasData = getDataAsMapFromDatabase("Atlas");
+    //chronosData = getDataAsMapFromDatabase("Chronos");
+    humanPlayerData = getDataAsMapFromDatabase("Human Player");
     //pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
@@ -479,9 +516,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               spacing: marginSize,
               children: [
                 getFunctionalMatches(),
-                getPreferredStrategy(),
                 getHumanPlayerAccuracy(),
-                getClimbStartTimeAverage()
+                getAtlasClimbStartTimeAverage(),
+                getMatchesOnDefense()
               ],
             ),
           )

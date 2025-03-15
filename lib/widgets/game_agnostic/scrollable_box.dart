@@ -65,22 +65,23 @@ class _ScrollableBoxState extends State<ScrollableBox> {
   @override
   void initState() {
     super.initState();
-    setSortingAlgorithm(); // Set the sorting algorithm on initialization
-    sortComments(); // Sort the comments on initialization
   }
 
   @override
   Widget build(BuildContext context) {
+    setSortingAlgorithm();
+    sortComments();
+
     return GestureDetector(
-      onDoubleTap: () => {setState(() {
-        if (_sort == Sort.LATEST) {
-          _sort = Sort.LENGTH_MAX;
-        } else {
-          _sort = Sort.LATEST;
-        }
-        setSortingAlgorithm();
-        sortComments();
-      })},
+      onDoubleTap: () => {
+        setState(() {
+          if (_sort == Sort.LATEST) {
+            _sort = Sort.LENGTH_MAX;
+          } else {
+            _sort = Sort.LATEST;
+          }
+        })
+      },
       child: Container(
           width: _width, // Set the width of the container
           height: _height, // Set the height of the container

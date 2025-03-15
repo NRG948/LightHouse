@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'dart:ui' as ui;
 import 'dart:ui';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 
@@ -14,6 +15,7 @@ class AutoReefView extends StatefulWidget {
   AutoReef reef;
   List<double> startingPosition;
   bool flipStartingPosition;
+  bool hasNoAuto;
 
   AutoReefView(
       {super.key,
@@ -23,7 +25,8 @@ class AutoReefView extends StatefulWidget {
       required this.matchNumber,
       required this.reef,
       required this.startingPosition,
-      required this.flipStartingPosition});
+      required this.flipStartingPosition,
+      required this.hasNoAuto});
 
   @override
   State<AutoReefView> createState() => _AutoReefViewState();
@@ -31,7 +34,6 @@ class AutoReefView extends StatefulWidget {
 
 class _AutoReefViewState extends State<AutoReefView>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
   double get _height => widget.height;
   double get _width => widget.width;
   List<String> get _scouterNames => widget.scouterNames;
@@ -39,6 +41,7 @@ class _AutoReefViewState extends State<AutoReefView>
   AutoReef get _autoReef => widget.reef;
   List<double> get _startingPosition => widget.startingPosition;
   bool get _flipStartingPosition => widget.flipStartingPosition;
+  bool get _hasNoAuto => widget.hasNoAuto;
   FragmentProgram? program;
 
   @override
@@ -49,7 +52,6 @@ class _AutoReefViewState extends State<AutoReefView>
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -68,15 +70,15 @@ class _AutoReefViewState extends State<AutoReefView>
     double y = pos[1];
 
     if (flip) {
-      x = 0.9 - x;
-      y = 0.9 - y;
+      x = 1.0 - x;
+      y = 1.0 - y;
     }
 
     double x_start_calculated = 0.119;
     double x_full_scout = 0.9;
     double y_full_scout = 1.0;
 
-    return Offset(x_start_calculated + x * 0.056 / x_full_scout,
+    return Offset(x_start_calculated + x * 0.063 / x_full_scout,
         y * 0.403 / y_full_scout);
   }
 
@@ -99,7 +101,7 @@ class _AutoReefViewState extends State<AutoReefView>
                 style: comfortaaBold(22, color: Constants.pastelRedSuperDark))
           ]),
           Row(
-            spacing: 3,
+            spacing: _width / 16,
             children: [
               Column(
                 spacing: 5,
@@ -136,36 +138,60 @@ class _AutoReefViewState extends State<AutoReefView>
                   )
                 ],
               ),
-              CustomPaint(
-                  size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
-                  painter:
-                      AutoReefPainter(program: program, autoReef: _autoReef)),
-              Stack(
-                children: [
-                  Container(
-                    width: _width / 2 * (320 / 552),
-                    height: _width / 2,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(
-                                "assets/images/startingLocationField.png"),
-                            fit: BoxFit.cover)),
-                  ),
-                  Transform.translate(
-                      offset: _calculateOffsetFromStartingLocation(
-                              _startingPosition, _flipStartingPosition) *
-                          _width, // (0.147w middle, 0.175w edge, 0.028w half-width | 0.403w height)
-                      child: Container(
-                        width: _width / 36,
-                        height: _width / 36,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Constants.pastelRed,
-                            border: Border.all(
-                                width: 0.1, color: Constants.pastelWhite)),
-                      ))
-                ],
-              )
+              _hasNoAuto
+                  ? CustomPaint(
+                      size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
+                      painter: AutoReefPainter(
+                          program: program, autoReef: _autoReef))
+                  : Container(
+                      width: _width / 2 * sqrt(3) / 2,
+                      height: _width / 2,
+                      decoration: BoxDecoration(
+                          color: Constants.pastelGray,
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constants.borderRadius))),
+                      child: Center(
+                          child: Text("No Auto", style: comfortaaBold(20))),
+                    ),
+              (_startingPosition[0] == 0 && _startingPosition[1] == 0)
+                  ? Stack(
+                      children: [
+                        Container(
+                          width: _width / 2 * (320 / 552),
+                          height: _width / 2,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage(
+                                      "assets/images/startingLocationField.png"),
+                                  fit: BoxFit.cover)),
+                        ),
+                        Transform.translate(
+                            offset: _calculateOffsetFromStartingLocation(
+                                    _startingPosition, _flipStartingPosition) *
+                                _width, // (0.147w middle, 0.175w edge, 0.028w half-width | 0.403w height)
+                            child: Container(
+                              width: _width / 28,
+                              height: _width / 28,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Constants.pastelRed,
+                                  border: Border.all(
+                                      width: _width / 120,
+                                      color: Constants.pastelWhite)),
+                            ))
+                      ],
+                    )
+                  : Container(
+                      width: _width / 2 * (320 / 552),
+                      height: _width / 2,
+                      decoration: BoxDecoration(
+                          color: Constants.pastelGray,
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constants.borderRadius))),
+                      child: Center(
+                          child: AutoSizeText("No Starting Location",
+                              textAlign: TextAlign.center,
+                              style: comfortaaBold(20))))
             ],
           ),
           Row(
