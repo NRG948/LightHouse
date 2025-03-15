@@ -55,91 +55,94 @@ class _SettingsPageState extends State<SettingsPage> {
     final screenWidth = MediaQuery.of(context).size.width; //gets screen width
     final screenHeight =
         MediaQuery.of(context).size.height; //gets screen height
-    return Scaffold(
-        resizeToAvoidBottomInset: false,
-        // App bar with back navigation and title.
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
-          title: const Text(
-            "Settings",
-            style: TextStyle(
-                fontFamily: "Comfortaa",
-                fontWeight: FontWeight.w900,
-                color: Colors.white),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          // App bar with back navigation and title.
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Constants.pastelWhite),
+            backgroundColor: Constants.pastelRed,
+            title: const Text(
+              "Settings",
+              style: TextStyle(
+                  fontFamily: "Comfortaa",
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white),
+            ),
+            centerTitle: true,
+            actions: [
+              if (configData["debugMode"] == "true")
+              IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text(configData.toString()),
+                          );
+                        });
+                  },
+                  icon: Icon(Icons.javascript))
+            ],
+            leading: IconButton(
+                onPressed: () async {
+                  HapticFeedback.mediumImpact();
+              if (configData["downloadTheBlueAllianceInfo"] == "true") {
+                  
+                  await showTBADownloadDialog(context);
+                }
+              // Ensures widget is still part of the tree before proceeding.
+              if (!mounted) {
+                return;
+              } 
+              if (await saveConfig() == 0) {
+                // Saves settings and checks if the operation was successful.
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text("Successfully saved."), //confirmation message
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                HapticFeedback.mediumImpact();
+                                Navigator.pushNamed(context,
+                                    "/home-scouter"); //navigates back to home
+                              },
+                              child: Text("OK"))
+                        ],
+                      );
+                    });
+              } // navigates back to home
+                },
+                icon: Icon(Icons.home)),
           ),
-          centerTitle: true,
-          actions: [
-            if (configData["debugMode"] == "true")
-            IconButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          content: Text(configData.toString()),
-                        );
-                      });
-                },
-                icon: Icon(Icons.javascript))
-          ],
-          leading: IconButton(
-              onPressed: () async {
-                HapticFeedback.mediumImpact();
-            if (configData["downloadTheBlueAllianceInfo"] == "true") {
-                
-                await showTBADownloadDialog(context);
-              }
-            // Ensures widget is still part of the tree before proceeding.
-            if (!mounted) {
-              return;
-            } 
-            if (await saveConfig() == 0) {
-              // Saves settings and checks if the operation was successful.
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      content: Text("Successfully saved."), //confirmation message
-                      actions: [
-                        TextButton(
-                            onPressed: () {
-                              HapticFeedback.mediumImpact();
-                              Navigator.pushNamed(context,
-                                  "/home-scouter"); //navigates back to home
-                            },
-                            child: Text("OK"))
-                      ],
+          // Background container with image.
+          body: Container(
+            height: screenHeight,
+            width: screenWidth,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/background-hires.png"),
+                    fit: BoxFit.cover)), // covers the entire background
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: ListView.builder(
+                  itemCount: settingsList.length, // Number of settings widgets.
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10.0, left: 10.0, right: 10.0),
+                      child: settingsList[index], // Displays each setting widget.
                     );
-                  });
-            } // navigates back to home
-              },
-              icon: Icon(Icons.home)),
-        ),
-        // Background container with image.
-        body: Container(
-          height: screenHeight,
-          width: screenWidth,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/background-hires.png"),
-                  fit: BoxFit.cover)), // covers the entire background
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: ListView.builder(
-                itemCount: settingsList.length, // Number of settings widgets.
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 10.0, left: 10.0, right: 10.0),
-                    child: settingsList[index], // Displays each setting widget.
-                  );
-                },
+                  },
+                ),
               ),
             ),
-          ),
-        ));
+          )),
+    );
   }
 }
 

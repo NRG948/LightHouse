@@ -66,7 +66,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
           iconTheme: IconThemeData(color: Constants.pastelWhite),
           backgroundColor: Constants.pastelRed,
           title: const Text(
-            "LightHouse",
+            "AmongView",
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
@@ -105,7 +105,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                             items: state.enabledLayouts.map((e) {
                             return DropdownMenuItem(
                             value:e,
-                            child: Text(e));}).toList(),
+                            child: Text(e,style: comfortaaBold(12,color: Colors.black),));}).toList(),
                           onChanged: (newValue) {setState(() {
                             state.setActiveLayout(newValue??"");
                             
@@ -116,13 +116,13 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                        Text("Sort by", style: comfortaaBold(10)),
+                        Text("Sort by:", style: comfortaaBold(12,color: Colors.black)),
                         DropdownButton(
                             value: state.activeSortKey,
                             items: state.getSortKeys().map((e) {
                             return DropdownMenuItem(
                             value:e,
-                            child: Text(e));}).toList(),
+                            child: Text(e,style: comfortaaBold(12,color: Colors.black),));}).toList(),
                           onChanged: (newValue) {setState(() {
                             state.setActiveSortKey(newValue ?? "");
                           });
@@ -274,6 +274,18 @@ class AmongViewSharedState extends ChangeNotifier {
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
+      case "averageboolean":
+        for (int team in teamsInEvent) {
+          List<double> dataPoints = [];
+          for (dynamic match in data) {
+            if (match["teamNumber"]! == team) {
+              dataPoints.add(match[activeSortKey.removeAfterSpace]! == true ? 1 : 0);
+            }
+        }
+        final average = dataPoints.sum / dataPoints.length;
+        chartData.addEntries([MapEntry(team, average.fourDigits)]);
+        }
+      
        case "hpaverage":
         for (int team in teamsInEvent) {
         List<double> dataPoints = [];
@@ -298,6 +310,22 @@ class AmongViewSharedState extends ChangeNotifier {
         }
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
+        }
+      case "totalaverage":
+        Map<String,List<String>> searchTerms = {
+          "coralScoredTotal": ["coralScoredL1","coralScoredL2","coralScoredL3","coralScoredL4"]
+        };
+        for (int team in teamsInEvent) {
+          List<double> dataPoints = [];
+          for (dynamic match in data) {
+            double sumOfItems = 0;
+            for (String term in searchTerms[activeSortKey]!) {
+              sumOfItems += match[term]!;
+            }
+            dataPoints.add(sumOfItems);
+          }
+          final average = dataPoints.sum / dataPoints.length;
+          chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
       case "cycleTime":
         List searchTerms = [];
@@ -398,20 +426,21 @@ class AmongViewSharedState extends ChangeNotifier {
 
 Map<String,dynamic> sortKeys = {
 "Atlas": {
+  "coralPickups": "average",
+  "coralScoredTotal": "totalaverage",
   "coralScoredL1": "average",
-  "coralPickupsStation": "average",
-  "coralPickupsGround": "average",
   "coralScoredL2": "average",
   "coralScoredL3": "average",
   "coralScoredL4": "average",
-  "algaeRemoveL2": "average",
-  "algaeRemoveL3": "average",
+  "algaePickups": "average",
+  "algaeRemove": "average",
   "algaeScoreProcessor": "average",
   "algaeScoreNet": "average",
-  "algaeMissProcessor": "average",
-  "algaeMissNet": "average",
-  "autoCS": "averagebyitems",
   "climbStartTime": "average",
+  "bargeCS used in auto (% of matches)" : "averageboolean",
+  "processorCS used in auto (% of matches)": "averageboolean",
+  "hasNoAuto (% of matches)" : "averageboolean",
+  "groundIntake in auto (% of matches)" : "averageboolean",
   "autoCoralScored":"averagebyitems",
   "autoAlgaeRemoved":"averagebyitems",
 },

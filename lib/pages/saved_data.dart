@@ -77,7 +77,7 @@ class SavedData extends StatelessWidget {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         content:
-                            Text("Are you sure you want to delete EVERYTHING?"),
+                            Text("Are you sure you want to delete EVERYTHING for this event?"),
                         actions: [
                           TextButton(
                               onPressed: () {
@@ -90,7 +90,7 @@ class SavedData extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        content: Text("Are you REALLY sure?"),
+                                        content: Text("Are you REALLY sure? Your data will be lost forever (a long time)!"),
                                         actions: [
                                           TextButton(
                                               onPressed: () {

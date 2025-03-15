@@ -50,6 +50,10 @@ final List<String> splashTexts = [
         "Is the sistine chapel cool",
         "Made with smiles and enriched wheat flour",
         "I lowkey forgot miami was a city - our cad vp",
+        "The new carti album is mid",
+        "five guys is too expensive",
+        "Ampharos is the best pokemon"
+        "wish!"
 
 ];
 

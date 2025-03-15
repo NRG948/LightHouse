@@ -2,6 +2,7 @@ import "dart:convert";
 import "dart:io";
 import "dart:math";
 import "package:flutter/material.dart";
+import "package:lighthouse/layouts.dart";
 import "package:lighthouse/pages/data_entry.dart";
 import "package:path/path.dart";
 
@@ -103,24 +104,29 @@ List<String> getFilesInLayout(String eventKey, String layout) {
 }
 
 Future<bool> clearAllData() async {
+  await loadConfig();
   try {
-    final directory = Directory(configFolder);
-    
+    final directory = Directory("$configFolder/${configData["eventKey"]}");
     if (await directory.exists()) {
-      // Delete all contents of the directory
-      await for (var entity in directory.list(recursive: true)) {
-        if (entity is File) {
-          await entity.delete();
-        } else if (entity is Directory) {
-          await entity.delete(recursive: true);
-        }
-      }
-      
-      // Reset the config data
-      // configData.clear();
-      
+      await directory.delete(recursive: true);
       return true;
     }
+    
+    // if (await directory.exists()) {
+    //   // Delete all contents of the directory
+    //   await for (var entity in directory.list(recursive: true)) {
+    //     if (entity is File) {
+    //       await entity.delete();
+    //     } else if (entity is Directory) {
+    //       await entity.delete(recursive: true);
+    //     }
+    //   }
+      
+    //   // Reset the config data
+    //   // configData.clear();
+      
+    //   return true;
+    // }
     
     return false;
   } catch (e) {

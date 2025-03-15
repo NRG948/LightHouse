@@ -532,7 +532,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       appBar: AppBar(
         backgroundColor: Constants.pastelRed,
         title: const Text(
-          "LightHouse",
+          "Tony's Data Viewer",
           style: TextStyle(
               fontFamily: "Comfortaa",
               fontWeight: FontWeight.w900,

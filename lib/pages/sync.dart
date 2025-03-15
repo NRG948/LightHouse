@@ -402,7 +402,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
     for (String status in downloadStatuses.keys) {
       statuses.add(Text(
           "Database $status downloaded w/ code ${downloadStatuses[status]}",
-          style: comfortaaBold(10)));
+          style: comfortaaBold(10,color: Colors.black)));
     }
     statuses.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

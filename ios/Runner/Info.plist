@@ -73,6 +73,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIStatusBarStyle</key>
 	<string></string>
 	<key>UISupportedInterfaceOrientations</key>

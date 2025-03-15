@@ -16,7 +16,7 @@ class AutoReefView extends StatefulWidget {
   List<double> startingPosition;
   bool flipStartingPosition;
   bool hasNoAuto;
-
+  
   AutoReefView(
       {super.key,
       required this.height,
@@ -139,11 +139,7 @@ class _AutoReefViewState extends State<AutoReefView>
                 ],
               ),
               _hasNoAuto
-                  ? CustomPaint(
-                      size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
-                      painter: AutoReefPainter(
-                          program: program, autoReef: _autoReef))
-                  : Container(
+                  ? Container(
                       width: _width / 2 * sqrt(3) / 2,
                       height: _width / 2,
                       decoration: BoxDecoration(
@@ -152,9 +148,24 @@ class _AutoReefViewState extends State<AutoReefView>
                               Radius.circular(Constants.borderRadius))),
                       child: Center(
                           child: Text("No Auto", style: comfortaaBold(20))),
-                    ),
-              (_startingPosition[0] != 0 || _startingPosition[1] != 0)
-                  ? Stack(
+                    )
+                  : CustomPaint(
+                      size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
+                      painter: AutoReefPainter(
+                          program: program, autoReef: _autoReef)),
+              (_startingPosition[0] == 0 && _startingPosition[1] == 0)
+                  ? Container(
+                      width: _width / 2 * (320 / 552),
+                      height: _width / 2,
+                      decoration: BoxDecoration(
+                          color: Constants.pastelGray,
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(Constants.borderRadius))),
+                      child: Center(
+                          child: AutoSizeText("No Starting Location",
+                              textAlign: TextAlign.center,
+                              style: comfortaaBold(20))))
+                  : Stack(
                       children: [
                         Container(
                           width: _width / 2 * (320 / 552),
@@ -181,17 +192,6 @@ class _AutoReefViewState extends State<AutoReefView>
                             ))
                       ],
                     )
-                  : Container(
-                      width: _width / 2 * (320 / 552),
-                      height: _width / 2,
-                      decoration: BoxDecoration(
-                          color: Constants.pastelGray,
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(Constants.borderRadius))),
-                      child: Center(
-                          child: AutoSizeText("No Starting Location",
-                              textAlign: TextAlign.center,
-                              style: comfortaaBold(20))))
             ],
           ),
           Row(

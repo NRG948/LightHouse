@@ -69,7 +69,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(Icons.arrow_back)),
           ),
-          body: Text("No data. i'm actually impressed that you got here", style: comfortaaBold(18,color: Constants.pastelBrown)));
+          body: Text("No data. i'm actually impressed that you got here",
+              style: comfortaaBold(18, color: Constants.pastelBrown)));
     }
 
     state.activeTeam = ModalRoute.of(context)?.settings.arguments as int;
@@ -120,11 +121,11 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text("Layout:",style: comfortaaBold(10)),
+                        Text("Layout:", style: comfortaaBold(10,color: Colors.black)),
                         DropdownButton(
                             value: state.activeLayout,
                             items: state.enabledLayouts.map((e) {
-                              return DropdownMenuItem(value: e, child: Text(e));
+                              return DropdownMenuItem(value: e, child: Text(e,style: comfortaaBold(12,color: Colors.black),));
                             }).toList(),
                             onChanged: (newValue) {
                               setState(() {
@@ -137,12 +138,12 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("Sort by",style: comfortaaBold(10)),
+                          Text("Sort by", style: comfortaaBold(10,color: Colors.black)),
                           DropdownButton(
                               value: state.activeSortKey,
                               items: state.getSortKeys().map((e) {
                                 return DropdownMenuItem(
-                                    value: e, child: Text(e));
+                                    value: e, child: Text(e,style: comfortaaBold(12,color: Colors.black),));
                               }).toList(),
                               onChanged: (newValue) {
                                 setState(() {
@@ -229,7 +230,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                         width: 400 * scaleFactor,
                         height: 0.25 * screenHeight,
                         child: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
+                            physics: NeverScrollableScrollPhysics(),
                             controller: matchPitController,
                             children: [
                               Container(
@@ -240,7 +241,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                                         Constants.borderRadius),
                                     border: Border.all(width: scaleFactor * 2)),
                                 child: (state.clickedMatch == null)
-                                    ? Text("No match selected",style: comfortaaBold(10))
+                                    ? Text("No match selected",
+                                        style: comfortaaBold(10))
                                     : buildMatchData(context),
                               ),
                               Container(
@@ -252,7 +254,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                                       border:
                                           Border.all(width: scaleFactor * 2)),
                                   child: state.pitData.isEmpty
-                                      ? Text("No pit data",style: comfortaaBold(10))
+                                      ? Text("No pit data",
+                                          style: comfortaaBold(10))
                                       : buildMatchData(context, pit: true))
                             ]),
                       ),
@@ -274,7 +277,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
       }
     }
     if (match == {}) {
-      return Text("how did you get here? email infotech@nrg948.com",style: comfortaaBold(10));
+      return Text("how did you get here? email infotech@nrg948.com",
+          style: comfortaaBold(10));
     }
 
     List<Widget> listViewChildren = [
@@ -292,20 +296,27 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
         case "raw":
           listViewChildren.add(AutoSizeText(
             "${i.toSentenceCase}: ${match[i].toString()}",
-            style: comfortaaBold(14 * scaleFactor,
-                color: Constants.pastelBrown),
+            style:
+                comfortaaBold(14 * scaleFactor, color: Constants.pastelBrown),
           ));
         case "autoPit":
           for (int auto = 0; auto < match[i].length; auto++) {
-            listViewChildren.add(AutoSizeText("Auto ${auto + 1}",style: comfortaaBold(14 * scaleFactor,
-                color: Constants.pastelBrown),));
+            listViewChildren.add(AutoSizeText(
+              "Auto ${auto + 1}",
+              style:
+                  comfortaaBold(14 * scaleFactor, color: Constants.pastelBrown),
+            ));
             for (String autoKey in [
-              "autoCS","autoCoralScored","autoAlgaeRemoved","autoCoralScoredL1"
+              "autoCS",
+              "autoCoralScored",
+              "autoAlgaeRemoved",
+              "autoCoralScoredL1"
             ]) {
               listViewChildren.add(AutoSizeText(
-              "    $autoKey: ${match[i][auto][autoKey]}",
-              style: comfortaaBold(14 * scaleFactor,
-                color: Constants.pastelBrown),));
+                "    $autoKey: ${match[i][auto][autoKey]}",
+                style: comfortaaBold(14 * scaleFactor,
+                    color: Constants.pastelBrown),
+              ));
             }
           }
       }
@@ -315,8 +326,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
       interactive: true,
       thumbVisibility: true,
       thickness: 10 * scaleFactor,
-      child: ListView(
-        children: listViewChildren),
+      child: ListView(children: listViewChildren),
     );
     //return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
   }
@@ -384,6 +394,30 @@ class AVISharedState extends ChangeNotifier {
             MapEntry(
                 getParsedMatchNumber(match), match[activeSortKey]!.toDouble())
           ]);
+        }
+      case "totalraw":
+        Map<String, List<String>> searchTerms = {
+          "coralScoredTotal": [
+            "coralScoredL1",
+            "coralScoredL2",
+            "coralScoredL3",
+            "coralScoredL4"
+          ]
+        };
+        for (dynamic match in data) {
+          double total = 0;
+          for (String term in searchTerms[activeSortKey]!) {
+            total += match[term]!;
+          }
+          chartData.addEntries([MapEntry(getParsedMatchNumber(match), total)]);
+        }
+      case "rawboolean":
+        for (dynamic match in data) {
+          if (match[activeSortKey.removeAfterSpace]! == true) {
+            chartData.addEntries([MapEntry(getParsedMatchNumber(match), 1.0)]);
+          } else {
+            chartData.addEntries([MapEntry(getParsedMatchNumber(match), 0.0)]);
+          }
         }
       case "rawbyitems":
         for (dynamic match in data) {
@@ -498,7 +532,7 @@ class AVISharedState extends ChangeNotifier {
       return;
     }
     allPitData = jsonDecode(loadDatabaseFile(activeEvent, "Pit"));
-  
+
     if (allPitData.isEmpty) {
       return;
     }
@@ -513,21 +547,21 @@ class AVISharedState extends ChangeNotifier {
 // These keys are used by the chart to determine how to parse data
 Map<String, dynamic> sortKeys = {
   "Atlas": {
+    "coralPickups": "raw",
+    "coralScoredTotal": "totalraw",
     "coralScoredL1": "raw",
-    "autoBargeCS": "raw",
-    "coralPickupsStation": "raw",
-    "coralPickupsGround": "raw",
     "coralScoredL2": "raw",
     "coralScoredL3": "raw",
     "coralScoredL4": "raw",
-    "algaeRemoveL2": "raw",
-    "algaeRemoveL3": "raw",
+    "algaePickups": "raw",
+    "algaeRemove": "raw",
     "algaeScoreProcessor": "raw",
     "algaeScoreNet": "raw",
-    "algaeMissProcessor": "raw",
-    "algaeMissNet": "raw",
-    "autoProcessorCS": "raw",
     "climbStartTime": "raw",
+    "bargeCS used in auto": "rawboolean",
+    "processorCS used in auto": "rawboolean",
+    "hasNoAuto": "rawboolean",
+    "groundIntake in auto": "rawboolean",
     "autoCoralScored": "rawbyitems",
     "autoAlgaeRemoved": "rawbyitems",
   },
@@ -559,25 +593,23 @@ Map<String, dynamic> displayKeys = {
     "startingPosition": "raw",
 
     "preload": "raw",
-
+    "hasNoAuto": "raw",
+    "groundIntake": "raw",
     // TODO: Change these two
     "autoCoralScored": "raw",
+    "autoCoralScoredL1": "raw",
     "autoAlgaeRemoved": "raw",
 
+    "bargeCS": "raw",
+    "processorCS": "raw",
+    "coralPickups": "raw",
     "coralScoredL1": "raw",
-    "autoBargeCS": "raw",
-    "coralPickupsStation": "raw",
-    "coralPickupsGround": "raw",
     "coralScoredL2": "raw",
     "coralScoredL3": "raw",
     "coralScoredL4": "raw",
-    "algaeRemoveL2": "raw",
-    "algaeRemoveL3": "raw",
+    "algaeRemove": "raw",
     "algaeScoreProcessor": "raw",
     "algaeScoreNet": "raw",
-    "algaeMissProcessor": "raw",
-    "algaeMissNet": "raw",
-    "autoProcessorCS": "raw",
     "endLocation": "raw",
     "attemptedClimb": "raw",
 
@@ -650,7 +682,7 @@ Map<String, dynamic> displayKeys = {
     "averageClimbTime": "raw",
     "driveExperience": "raw",
     "humanPlayerPreference": "raw",
-    "generalStrategyPreference": "raw", 
+    "generalStrategyPreference": "raw",
     "averageCoralCycles": "raw",
     "averageAlgaeCycles": "raw",
     "idealAlliancePartnerQualities": "raw",

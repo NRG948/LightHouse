@@ -97,8 +97,10 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("algaeScoreNet"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "algaeScoreNet")},
+                onDecrement: () 
+                    {removeLastInstance(history, "algaeScoreNet");
+                    HapticFeedback.vibrate();},
+                    
               ),
               Counter(
                 key: counters["algaeScoreProcessor"],
@@ -112,8 +114,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("algaeScoreProcessor"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "algaeScoreProcessor")},
+                onDecrement: () 
+                    {removeLastInstance(history, "algaeScoreProcessor");HapticFeedback.vibrate();},
               ),
               Counter(
                 key: counters["algaeRemove"],
@@ -127,8 +129,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("algaeRemove"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "algaeRemove")},
+                onDecrement: () 
+                    {removeLastInstance(history, "algaeRemove");HapticFeedback.vibrate();},
               ),
               Counter(
                 key: counters["algaePickups"],
@@ -142,8 +144,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("algaePickups"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "algaePickups")},
+                onDecrement: () 
+                    {removeLastInstance(history, "algaePickups");HapticFeedback.vibrate();},
               ),
             ],
           ),
@@ -161,8 +163,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("coralScoredL4"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "coralScoredL4")},
+                onDecrement: () 
+                    {removeLastInstance(history, "coralScoredL4");HapticFeedback.vibrate();},
               ),
               Counter(
                 key: counters["coralScoredL3"],
@@ -176,8 +178,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("coralScoredL3"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "coralScoredL3")},
+                onDecrement: () 
+                    {removeLastInstance(history, "coralScoredL3");HapticFeedback.vibrate();},
               ),
               Counter(
                 key: counters["coralScoredL2"],
@@ -191,8 +193,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("coralScoredL2"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "coralScoredL2")},
+                onDecrement: ()
+                    {removeLastInstance(history, "coralScoredL2");HapticFeedback.vibrate();},
               ),
               Counter(
                 key: counters["coralScoredL1"],
@@ -206,8 +208,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("coralScoredL1"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "coralScoredL1")},
+                onDecrement: () 
+                    {removeLastInstance(history, "coralScoredL1");HapticFeedback.vibrate();},
               ),
               Counter(
                 key: counters["coralPickups"],
@@ -221,8 +223,8 @@ class _AtlasTeleopSelectionState extends State<AtlasTeleopSelection>
                   history.addLast("coralPickups"),
                   HapticFeedback.heavyImpact()
                 },
-                onDecrement: () =>
-                    {removeLastInstance(history, "coralPickups")},
+                onDecrement: () 
+                    {removeLastInstance(history, "coralPickups");HapticFeedback.vibrate();},
               ),
             ],
           )

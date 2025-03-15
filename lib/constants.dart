@@ -50,7 +50,7 @@ class Constants {
   /// adding a bit of delay before the next section. :)
   static final double startDelay = 3;
   
-  static const String versionName = "Mar 11 Test";
+  static const String versionName = "Bonney RC3";
   // Should this key be exposed to the internet? no
   // do i care? also no
   static const String tbaAPIKey = "ayLg4jZVBMJ4BFKqDzt8Sn7nGTYqDgB4VEB0ZxbMXH3MVJVnhAChBZZSyuSEuEVH";
@@ -92,6 +92,7 @@ extension StringExtensions on String {
     RegExp(r'^[a-z]'),
     (Match m) => m[0]!.toUpperCase(),
   );
+  String get removeAfterSpace => contains(" ") ? split(" ")[0] : this;
 }
 extension DoubleExtensions on double {
   double get fourDigits => double.parse(toStringAsFixed(4));
