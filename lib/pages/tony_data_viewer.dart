@@ -150,7 +150,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       }
     }
 
-    return Text("Algae Accuracy: $algaeScored/$totalAlgae",
+    return Text("HP Net Accuracy: $algaeScored/$totalAlgae",
         textAlign: TextAlign.left,
         style: comfortaaBold(10, color: Constants.pastelBrown));
   }
