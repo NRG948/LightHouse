@@ -233,6 +233,30 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         style: comfortaaBold(10, color: Constants.pastelBrown));
   }
 
+  Widget getSuccessfulClimbRate() {
+    if (atlasData.isEmpty) {
+      return Container();
+    }
+
+    int successfulClimbs = 0;
+    int attemptedClimbs = 0;
+
+    for (Map<String, dynamic> matchData in atlasData) {
+      if (matchData["teamNumber"] == currentTeamNumber &&
+          matchData["attemptedClimb"]) {
+        attemptedClimbs++;
+        if (["Deep Climb", "Shallow Climb"]
+            .contains(matchData["endLocation"])) {
+          successfulClimbs++;
+        }
+      }
+    }
+
+    return Text("Climb Rate: $successfulClimbs/$attemptedClimbs",
+        textAlign: TextAlign.left,
+        style: comfortaaBold(10, color: Constants.pastelBrown));
+  }
+
   Widget getAtlasClimbStartTimeAverage() {
     if (atlasData.isEmpty) {
       return Container();
@@ -243,9 +267,10 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber &&
-          matchData["attemptedClimb"]) {
+          matchData["attemptedClimb"] &&
+          ["Deep Climb", "Shallow Climb"].contains(matchData["endLocation"])) {
         matches++;
-        if (matchData["climbStartTime"] is num) {
+        if (matchData["climbStartTime"] is num && matchData["climbStartTime"] != 0) {
           totalTime += matchData["climbStartTime"];
         }
       }
@@ -334,8 +359,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     SplayTreeMap<int, List<double>> chartData = SplayTreeMap();
     List<int> removedData = [];
-    List<Color> colors = [Constants.pastelBlue, Constants.pastelBlueSuperDark];
-    List<String> labels = ["NET", "PROC"];
+    List<Color> colors = [Constants.pastelBlue, Constants.pastelBlueDark];
+    List<String> labels = ["PROC", "NET"];
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
@@ -413,25 +438,24 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
         autos[matchData["matchNumber"]] = AutoReefView(
-            height: 270 * horizontalScaleFactor,
-            width: 360 * horizontalScaleFactor,
-            scouterNames: [matchData["scouterName"]],
-            matchNumber: matchData["matchNumber"],
-            flipStartingPosition: matchData["driverStation"][0] == "R",
-            startingPosition: List<double>.from(matchData["startingPosition"]
-                .split(",")
-                .map((x) => double.parse(x))
-                .toList()),
-            reef: AutoReef(
-                algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
-                scores: List<String>.from(matchData["autoCoralScored"]),
-                troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
-                groundIntake: matchData["groundIntake"],
-                processorCS: matchData["processorCS"],
-                bargeCS: matchData["bargeCS"]),
-            hasNoAuto: matchData["hasNoAuto"],
-            );
-            
+          height: 270 * horizontalScaleFactor,
+          width: 360 * horizontalScaleFactor,
+          scouterNames: [matchData["scouterName"]],
+          matchNumber: matchData["matchNumber"],
+          flipStartingPosition: matchData["driverStation"][0] == "R",
+          startingPosition: List<double>.from(matchData["startingPosition"]
+              .split(",")
+              .map((x) => double.parse(x))
+              .toList()),
+          reef: AutoReef(
+              algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
+              scores: List<String>.from(matchData["autoCoralScored"]),
+              troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
+              groundIntake: matchData["groundIntake"],
+              processorCS: matchData["processorCS"],
+              bargeCS: matchData["bargeCS"]),
+          hasNoAuto: matchData["hasNoAuto"],
+        );
       }
     }
 
@@ -518,6 +542,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
                 getFunctionalMatches(),
                 getHumanPlayerAccuracy(),
                 getAtlasClimbStartTimeAverage(),
+                getSuccessfulClimbRate(),
                 getMatchesOnDefense()
               ],
             ),
