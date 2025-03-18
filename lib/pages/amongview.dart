@@ -202,8 +202,16 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                         SizedBox(
                                          width: 250 * scaleFactor,
                                           child: AutoSizeText(snapshot.data.toString(),style: comfortaaBold(18),textAlign: TextAlign.center,)),
-                                        Image(image: getTeamPicture(AmongViewSharedState.clickedTeam),height:60 * scaleFactor,width: 60 * scaleFactor,
-                                        fit: BoxFit.fill,)
+                                        FutureBuilder(
+                                          future: getTeamPicture(AmongViewSharedState.clickedTeam),
+                                          builder: (context,snapshot) {
+                                            if (snapshot.connectionState != ConnectionState.done) {
+                                              return Image(image: AssetImage("assets/images/unknown.png"),height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
+                                            }
+                                            return Image(image: snapshot.data!,height:60 * scaleFactor,width: 60 * scaleFactor,
+                                            fit: BoxFit.fill,);
+                                          }
+                                        )
                                       ],
                                     ),
                                   ],
@@ -529,6 +537,6 @@ Future<String> getTeamName(int teamNumber) async {
     }
   }
 
-  AssetImage getTeamPicture(int teamNumber){
-    return AssetImage("assets/images/unknown.png");
+  Future<AssetImage> getTeamPicture(int teamNumber){
+    return Future.value(AssetImage("assets/images/unknown.png"));
   }
