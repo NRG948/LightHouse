@@ -125,7 +125,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                         DropdownButton(
                             value: state.activeLayout,
                             items: state.enabledLayouts.map((e) {
-                              return DropdownMenuItem(value: e, child: Text(e,style: comfortaaBold(12,color: Colors.black),));
+                              return DropdownMenuItem(value: e, child: Text(e.toSentenceCase,style: comfortaaBold(12,color: Colors.black),));
                             }).toList(),
                             onChanged: (newValue) {
                               setState(() {
@@ -138,12 +138,12 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("Sort by", style: comfortaaBold(10,color: Colors.black)),
+                          Text("Sort by:", style: comfortaaBold(10,color: Colors.black)),
                           DropdownButton(
                               value: state.activeSortKey,
                               items: state.getSortKeys().map((e) {
                                 return DropdownMenuItem(
-                                    value: e, child: Text(e,style: comfortaaBold(12,color: Colors.black),));
+                                    value: e, child: Text(e.toSentenceCase,style: comfortaaBold(12,color: Colors.black),));
                               }).toList(),
                               onChanged: (newValue) {
                                 setState(() {
@@ -193,7 +193,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                       ),
                     ),
                     SizedBox(
-                      height: 0.25 * screenHeight,
+                      height: 0.3 * screenHeight,
                       width: 350 * scaleFactor,
                       child: Scrollbar(
                         controller: scrollController,
@@ -307,13 +307,14 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                   comfortaaBold(14 * scaleFactor, color: Constants.pastelBrown),
             ));
             for (String autoKey in [
-              "autoCS",
+              "bargeCS",
+              "processorCS",
               "autoCoralScored",
               "autoAlgaeRemoved",
               "autoCoralScoredL1"
             ]) {
               listViewChildren.add(AutoSizeText(
-                "    $autoKey: ${match[i][auto][autoKey]}",
+                "    ${autoKey.toSentenceCase}: ${match[i][auto][autoKey]}",
                 style: comfortaaBold(14 * scaleFactor,
                     color: Constants.pastelBrown),
               ));
@@ -394,6 +395,10 @@ class AVISharedState extends ChangeNotifier {
             MapEntry(
                 getParsedMatchNumber(match), match[activeSortKey]!.toDouble())
           ]);
+        }
+      case "viewAllMatches":
+        for (dynamic match in data) {
+          chartData.addEntries([MapEntry(getParsedMatchNumber(match), 1.0)]);
         }
       case "totalraw":
         Map<String, List<String>> searchTerms = {
@@ -532,12 +537,11 @@ class AVISharedState extends ChangeNotifier {
       return;
     }
     allPitData = jsonDecode(loadDatabaseFile(activeEvent, "Pit"));
-
     if (allPitData.isEmpty) {
       return;
     }
     for (dynamic i in allPitData) {
-      if (i["teamNumber"] == activeTeam) {
+      if (int.parse(i["teamNumber"]) == activeTeam) {
         pitData = i;
       }
     }
@@ -547,6 +551,7 @@ class AVISharedState extends ChangeNotifier {
 // These keys are used by the chart to determine how to parse data
 Map<String, dynamic> sortKeys = {
   "Atlas": {
+    "viewAllMatches" : "viewAllMatches",
     "coralPickups": "raw",
     "coralScoredTotal": "totalraw",
     "coralScoredL1": "raw",
@@ -558,10 +563,10 @@ Map<String, dynamic> sortKeys = {
     "algaeScoreProcessor": "raw",
     "algaeScoreNet": "raw",
     "climbStartTime": "raw",
-    "bargeCS used in auto": "rawboolean",
-    "processorCS used in auto": "rawboolean",
+    "bargeCS Used in Auto": "rawboolean",
+    "processorCS Used in Auto": "rawboolean",
     "hasNoAuto": "rawboolean",
-    "groundIntake in auto": "rawboolean",
+    "groundIntake in Auto": "rawboolean",
     "autoCoralScored": "rawbyitems",
     "autoAlgaeRemoved": "rawbyitems",
   },

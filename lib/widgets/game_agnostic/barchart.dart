@@ -198,6 +198,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           // Title Text.
           if (widget.chartOnly != true)
@@ -314,7 +315,8 @@ class _NRGBarChartState extends State<NRGBarChart> {
                         const FlLine(color: Colors.grey, strokeWidth: 1)))),
           ),
           // Average value text.
-          if (widget.chartOnly != true) getAverageText()
+          if (widget.chartOnly != true) getAverageText(),
+          if (widget.chartOnly == true) SizedBox(height: 30,)
         ],
       ),
     );

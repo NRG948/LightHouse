@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
@@ -156,8 +157,9 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                           ],),
                         ),
                       ),
+                     
                       SizedBox(
-                        height: 350 * scaleFactor,
+                        height: 300 * scaleFactor,
                         width: 350 * scaleFactor,
                         child: Scrollbar(
                           controller: scrollController,
@@ -179,13 +181,38 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                       ),
                         
                       if (AmongViewSharedState.clickedTeam != 0)
-                      Container(
-                        width: 325 * scaleFactor,
-                        height: 40 * scaleFactor,
-                        decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                        child: TextButton(onPressed: () {
-                          Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
-                        }, child: Text("Go to page ${AmongViewSharedState.clickedTeam}",style: comfortaaBold(10))),
+                      GestureDetector(
+                        onTap: () {
+                            Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
+                          },
+                        child: Container(
+                          width: 325 * scaleFactor,
+                          height: 250 * scaleFactor,
+                          decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                          child: Column(children: [
+                            FutureBuilder(
+                              future: getTeamName(AmongViewSharedState.clickedTeam),
+                              builder: (context,snapshot) {
+                                if (snapshot.connectionState != ConnectionState.done) {return Text("Loading...",style: comfortaaBold(18),);}
+                                return Column(
+                                  children: [
+                                    Text("Team ${AmongViewSharedState.clickedTeam}",style: comfortaaBold(25),),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                         width: 250 * scaleFactor,
+                                          child: AutoSizeText(snapshot.data.toString(),style: comfortaaBold(18),textAlign: TextAlign.center,)),
+                                        Image(image: getTeamPicture(AmongViewSharedState.clickedTeam),height:60 * scaleFactor,width: 60 * scaleFactor,
+                                        fit: BoxFit.fill,)
+                                      ],
+                                    ),
+                                  ],
+                                ); 
+                                //Text("Team ${AmongViewSharedState.clickedTeam} - ${snapshot.data}",style: comfortaaBold(18),);
+                              }
+                            )
+                          ],),
+                        ),
                       )
                       
                       ]
@@ -273,6 +300,10 @@ class AmongViewSharedState extends ChangeNotifier {
         }
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
+        }
+      case "viewAllTeams":
+        for (int team in teamsInEvent) {
+          chartData.addEntries([MapEntry(team, 1.0)]);
         }
       case "averageboolean":
         for (int team in teamsInEvent) {
@@ -426,6 +457,7 @@ class AmongViewSharedState extends ChangeNotifier {
 
 Map<String,dynamic> sortKeys = {
 "Atlas": {
+  "viewAllTeams":"viewAllTeams",
   "coralPickups": "average",
   "coralScoredTotal": "totalaverage",
   "coralScoredL1": "average",
@@ -477,3 +509,26 @@ class _AmongViewBarChartState extends State<AmongViewBarChart> {
   }
   
 }
+
+Future<String> getTeamName(int teamNumber) async {
+    dynamic teamPage;
+    try {
+      teamPage = jsonDecode(await rootBundle.loadString(
+          "assets/text/teams${(teamNumber ~/ 500) * 500}-${(teamNumber ~/ 500) * 500 + 500}.txt"));
+    } catch (e) {
+      return Future.value("");
+    }
+    bool foundTeam = false;
+    for (dynamic teamObject in teamPage) {
+      if (teamObject["key"] == "frc$teamNumber") {
+          return Future.value(teamObject["nickname"]);
+      }
+    }
+    if (!foundTeam) {
+      return Future.value("");
+    }
+  }
+
+  AssetImage getTeamPicture(int teamNumber){
+    return AssetImage("assets/images/unknown.png");
+  }
