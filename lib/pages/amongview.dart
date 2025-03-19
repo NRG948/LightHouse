@@ -123,7 +123,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                             items: state.getSortKeys().map((e) {
                             return DropdownMenuItem(
                             value:e,
-                            child: Text(e,style: comfortaaBold(12,color: Colors.black),));}).toList(),
+                            child: Text(e.toSentenceCase,style: comfortaaBold(12,color: Colors.black),));}).toList(),
                           onChanged: (newValue) {setState(() {
                             state.setActiveSortKey(newValue ?? "");
                           });
@@ -164,6 +164,8 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                         child: Scrollbar(
                           controller: scrollController,
                           thumbVisibility: true,
+                          interactive: true,
+                          thickness: 10 * scaleFactor,
                           child: ListView(
                             controller: scrollController,
                             scrollDirection: Axis.horizontal,
@@ -181,19 +183,16 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                       ),
                         
                       if (AmongViewSharedState.clickedTeam != 0)
-                      GestureDetector(
-                        onTap: () {
-                            Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
-                          },
-                        child: Container(
-                          width: 325 * scaleFactor,
-                          height: 250 * scaleFactor,
-                          decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
-                          child: Column(children: [
-                            FutureBuilder(
+                      Column(
+                        children: [
+                          Container(
+                            width: 325 * scaleFactor,
+                            height: 125 * scaleFactor,
+                            decoration: BoxDecoration(color: Constants.pastelRed,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+                            child: FutureBuilder(
                               future: getTeamName(AmongViewSharedState.clickedTeam),
                               builder: (context,snapshot) {
-                                if (snapshot.connectionState != ConnectionState.done) {return Text("Loading...",style: comfortaaBold(18),);}
+                                if (snapshot.connectionState != ConnectionState.done) {return Text("Loading...",style: comfortaaBold(25),);}
                                 return Column(
                                   children: [
                                     Text("Team ${AmongViewSharedState.clickedTeam}",style: comfortaaBold(25),),
@@ -206,7 +205,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                           future: getTeamPicture(AmongViewSharedState.clickedTeam),
                                           builder: (context,snapshot) {
                                             if (snapshot.connectionState != ConnectionState.done) {
-                                              return Image(image: AssetImage("assets/images/unknown.png"),height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
+                                              return Image(image: AssetImage("assets/images/loading.png"),height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
                                             }
                                             return Image(image: snapshot.data!,height:60 * scaleFactor,width: 60 * scaleFactor,
                                             fit: BoxFit.fill,);
@@ -216,11 +215,16 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                     ),
                                   ],
                                 ); 
-                                //Text("Team ${AmongViewSharedState.clickedTeam} - ${snapshot.data}",style: comfortaaBold(18),);
                               }
-                            )
-                          ],),
-                        ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                            Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
+                            },
+                            child: Container(),
+                          )
+                        ],
                       )
                       
                       ]
