@@ -26,10 +26,10 @@ class _MatchInfoState extends State<MatchInfo>
   bool get wantKeepAlive => true;
 
   void parseTBAMatchesFile() async {
-    String content = await loadTBAFile(eventKey,"matches");
+    String content = await loadTBAFile(eventKey, "matches");
     try {
       matchData = jsonDecode(content);
-    } catch(e) {
+    } catch (e) {
       print(e);
     }
   }
@@ -38,11 +38,13 @@ class _MatchInfoState extends State<MatchInfo>
     String eventInfo = await loadTBAFile(eventKey, "event_info");
     if (eventInfo != "") {
       dynamic eventInfoJson = jsonDecode(eventInfo);
-      displayEventKey.complete(Future.value("${eventInfoJson["year"]} ${eventInfoJson["name"]}"));
+      displayEventKey.complete(
+          Future.value("${eventInfoJson["year"]} ${eventInfoJson["name"]}"));
     } else {
       displayEventKey.complete(eventKey.toUpperCase());
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +64,22 @@ class _MatchInfoState extends State<MatchInfo>
     DataEntry.exportData["replay"] ??= false;
     DataEntry.exportData["matchType"] ??= "Qualifications";
     DataEntry.exportData["driverStation"] ??= "Red 1";
+
+    setInitialValue();
+  }
+
+  void setInitialValue() {
+    if (configData["autofillLastMatch"] == "true") {
+      int value = int.parse(configData["currentMatch"]!) + 1;
+
+      DataEntry.exportData["matchNumber"] = value;
+      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+          matchData != []) {
+        autofillTeamNumber();
+      }
+      
+      _initialValue = "$value";
+    }
   }
 
   @override
@@ -77,6 +95,8 @@ class _MatchInfoState extends State<MatchInfo>
   String matchType = "Qualifications";
   String driverStation = "Red 1";
   TextEditingController teamNumberController = TextEditingController();
+  String? _initialValue;
+
   @override
   Widget build(BuildContext context) {
     // Build the main container for the widget
@@ -112,23 +132,23 @@ class _MatchInfoState extends State<MatchInfo>
                       color: Constants.pastelWhite,
                     ),
                     FutureBuilder(
-                      future: displayEventKey.future,
-                      builder: (context,snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return Text("");
-                        }
-                        return SizedBox(
-                            width: 300 * scaleFactor,
-                            height: 35 * scaleFactor,
-                            child: Center(
-                                child: AutoSizeText(
-                              snapshot.data ?? "",
-                              style: comfortaaBold(18),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            )));
-                      }
-                    )
+                        future: displayEventKey.future,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text("");
+                          }
+                          return SizedBox(
+                              width: 300 * scaleFactor,
+                              height: 35 * scaleFactor,
+                              child: Center(
+                                  child: AutoSizeText(
+                                snapshot.data ?? "",
+                                style: comfortaaBold(18),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              )));
+                        })
                   ],
                 ),
                 // Display team name
@@ -259,9 +279,9 @@ class _MatchInfoState extends State<MatchInfo>
                       matchType = value ?? "Qualifications";
                       DataEntry.exportData["matchType"] = value;
                       if (configData["downloadTheBlueAllianceInfo"] == "true" &&
-                        matchData != []) {
-                      autofillTeamNumber();
-                    }
+                          matchData != []) {
+                        autofillTeamNumber();
+                      }
                     },
                     dropdownColor: Constants.pastelYellow,
                   ),
@@ -272,19 +292,7 @@ class _MatchInfoState extends State<MatchInfo>
                 width: 75 * scaleFactor,
                 child: TextFormField(
                   keyboardType: TextInputType.number,
-                  initialValue: () {
-                    if (configData["autofillLastMatch"] == "true") {
-                      int value = int.parse(configData["currentMatch"]!) + 1;
-
-                      DataEntry.exportData["matchNumber"] = value;
-                      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
-                          matchData != []) {
-                        autofillTeamNumber();
-                      }
-                      return "$value";
-                    }
-                    return null;
-                  } (),
+                  initialValue: _initialValue,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) {
                     HapticFeedback.mediumImpact();
@@ -315,7 +323,9 @@ class _MatchInfoState extends State<MatchInfo>
                 width: 110 * scaleFactor,
                 height: 65 * scaleFactor,
                 decoration: BoxDecoration(
-                    color: DataEntry.exportData["driverStation"].contains("Red") ? Constants.pastelRed : Constants.pastelBlue,
+                    color: DataEntry.exportData["driverStation"].contains("Red")
+                        ? Constants.pastelRed
+                        : Constants.pastelBlue,
                     borderRadius:
                         BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
@@ -346,7 +356,10 @@ class _MatchInfoState extends State<MatchInfo>
                         autofillTeamNumber();
                       }
                     },
-                    dropdownColor: DataEntry.exportData["driverStation"].contains("Red") ? Constants.pastelRed : Constants.pastelBlue,
+                    dropdownColor:
+                        DataEntry.exportData["driverStation"].contains("Red")
+                            ? Constants.pastelRed
+                            : Constants.pastelBlue,
                   ),
                 ),
               ),
@@ -398,8 +411,7 @@ class _MatchInfoState extends State<MatchInfo>
             : 2;
     for (dynamic match in matchData) {
       if (match["comp_level"] ==
-              tbaAPIMatchTypes[DataEntry.exportData["matchType"]]) {
-
+          tbaAPIMatchTypes[DataEntry.exportData["matchType"]]) {
         // Skips if match number in iterated match doesn't match
         // entered match number, (confusingly enough) using negation
         // and continue statements unlike the logic above
@@ -429,7 +441,6 @@ class _MatchInfoState extends State<MatchInfo>
     setState(() {
       teamNumberController.text = "";
     });
-    
   }
 }
 

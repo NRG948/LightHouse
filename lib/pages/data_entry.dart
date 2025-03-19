@@ -293,7 +293,8 @@ class DataEntryState extends State<DataEntry> {
             startGuidance: startGuidanceStopwatch,
           );
         case "comment-box":
-          return NRGCommentBox(title: title, jsonKey: jsonKey, height: height, width: width);
+          return NRGCommentBox(
+              title: title, jsonKey: jsonKey, height: height, width: width);
         case "scrollable-box":
           return ScrollableBox(
               width: width, height: height, title: title, comments: comments);
@@ -589,6 +590,7 @@ void saveJson(BuildContext context) async {
                     if (await saveExport() == 0) {
                       if (["Atlas", "Chronos", "Human Player"]
                           .contains(DataEntry.exportData["layout"])) {
+                        print(DataEntry.exportData["matchNumber"]);
                         configData["currentMatch"] =
                             "${DataEntry.exportData["matchNumber"]}";
                         saveConfig();
