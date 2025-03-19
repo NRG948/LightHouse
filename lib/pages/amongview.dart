@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/team_spritesheet.dart';
 import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
 
 class DataViewerAmongView extends StatefulWidget {
@@ -28,9 +29,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     state = AmongViewSharedState();
     scrollController = ScrollController();
     sortCheckbox = ValueNotifier<bool>(false);
-    spritesheet = TeamSpritesheet();
-    spritesheet.loadSpritesheet();
-
+    if (TeamSpritesheet.spritesheet == null) { TeamSpritesheet.loadSpritesheet();}
     state.setActiveEvent(configData["eventKey"]!);
     state.getEnabledLayouts();
     if (state.enabledLayouts.isNotEmpty) {
@@ -209,7 +208,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                          width: 250 * scaleFactor,
                                           child: AutoSizeText(snapshot.data.toString(),style: comfortaaBold(18),textAlign: TextAlign.center,)),
                                         FutureBuilder(
-                                          future: _DataViewerAmongViewState.spritesheet.getTeamPicture(AmongViewSharedState.clickedTeam),
+                                          future: TeamSpritesheet.getTeamPicture(AmongViewSharedState.clickedTeam),
                                           builder: (context,snapshot) {
                                             if (snapshot.connectionState != ConnectionState.done) {
                                               return SizedBox(height: 60 * scaleFactor,width: 60 * scaleFactor,);
@@ -578,37 +577,3 @@ Future<String> getTeamName(int teamNumber) async {
 
   
 
-class TeamSpritesheet {
-
-  int spriteWidth = 40;
-  int spriteHeight = 40;
-  late ui.Image spritesheet;
-  void loadSpritesheet() async {
-    final ByteData data = await rootBundle.load("assets/images/spritesheet.png");
-    final Uint8List bytes = data.buffer.asUint8List();
-    final ui.Codec codec = await ui.instantiateImageCodec(bytes);
-    final ui.FrameInfo frame = await codec.getNextFrame();
-    spritesheet = frame.image;
-
-  }
-  Future<Uint8List> getTeamPicture(int teamNumber) async {
-    int row = (teamNumber ~/ 104);
-    int column = (teamNumber % 104) - 1;
-    ui.PictureRecorder recorder = ui.PictureRecorder();
-    Canvas canvas = Canvas(recorder);
-    ui.Paint paint = Paint();
-
-    // Calculate the position of the sprite in the sheet
-    double x = column * spriteWidth.toDouble();
-    double y = row * spriteHeight.toDouble();
-    print("$x,$y");
-    Rect srcRect = Rect.fromLTWH(x, y, spriteWidth.toDouble(), spriteHeight.toDouble());
-    Rect dstRect = Rect.fromLTWH(0,0, spriteWidth.toDouble(), spriteHeight.toDouble());
-    // Draw only the desired sprite onto a new canvas
-    canvas.drawImageRect(spritesheet, srcRect, dstRect, paint);
-    // Convert the drawing to an image
-    ui.Image image = await recorder.endRecording().toImage(spriteWidth, spriteHeight);
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return byteData!.buffer.asUint8List();
-  }
-}

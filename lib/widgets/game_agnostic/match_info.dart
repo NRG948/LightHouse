@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/team_spritesheet.dart';
 
 class MatchInfo extends StatefulWidget {
   final double width;
@@ -48,6 +49,7 @@ class _MatchInfoState extends State<MatchInfo>
   @override
   void initState() {
     super.initState();
+    if (TeamSpritesheet.spritesheet == null) {TeamSpritesheet.loadSpritesheet();}
     scaleFactor = widget.width / 400;
     eventKey = configData["eventKey"]!;
     parseTBAMatchesFile();
@@ -120,82 +122,92 @@ class _MatchInfoState extends State<MatchInfo>
                 color: Constants.pastelGray,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Center(
-                child: Column(
-              children: [
-                // Display event key
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                child: Row(
                   children: [
-                    Icon(
-                      Icons.event,
-                      size: 30 * scaleFactor,
-                      color: Constants.pastelWhite,
+                    Column(
+                                  children: [
+                    // Display event key
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.event,
+                          size: 30 * scaleFactor,
+                          color: Constants.pastelWhite,
+                        ),
+                        FutureBuilder(
+                            future: displayEventKey.future,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Text("");
+                              }
+                              return SizedBox(
+                                  width: 275 * scaleFactor,
+                                  height: 35 * scaleFactor,
+                                  child: Center(
+                                      child: AutoSizeText(
+                                    snapshot.data ?? "",
+                                    style: comfortaaBold(18),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  )));
+                            })
+                      ],
                     ),
-                    FutureBuilder(
-                        future: displayEventKey.future,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Text("");
-                          }
-                          return SizedBox(
-                              width: 300 * scaleFactor,
-                              height: 35 * scaleFactor,
-                              child: Center(
-                                  child: AutoSizeText(
-                                snapshot.data ?? "",
-                                style: comfortaaBold(18),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              )));
-                        })
-                  ],
-                ),
-                // Display team name
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(
-                      Icons.person,
-                      size: 30 * scaleFactor,
-                      color: Constants.pastelWhite,
+                    // Display team name
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.person,
+                          size: 30 * scaleFactor,
+                          color: Constants.pastelWhite,
+                        ),
+                        SizedBox(
+                            width: 275 * scaleFactor,
+                            height: 35 * scaleFactor,
+                            child: Center(
+                                child: AutoSizeText(
+                              teamName ?? "No Team Selected",
+                              style: comfortaaBold(18),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            )))
+                      ],
                     ),
-                    SizedBox(
-                        width: 300 * scaleFactor,
-                        height: 35 * scaleFactor,
-                        child: Center(
-                            child: AutoSizeText(
-                          teamName ?? "No Team Selected",
-                          style: comfortaaBold(18),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        )))
+                    // Display team location
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.location_pin,
+                          size: 30 * scaleFactor,
+                          color: Constants.pastelWhite,
+                        ),
+                        SizedBox(
+                            width: 275 * scaleFactor,
+                            height: 35 * scaleFactor,
+                            child: Center(
+                                child: AutoSizeText(
+                              teamLocation ?? "",
+                              style: comfortaaBold(18),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.start,
+                            )))
+                      ],
+                    )
+                                  ],
+                                ),
+                  SizedBox(width: 10 * scaleFactor,),
+                  FutureBuilder(future: TeamSpritesheet.getTeamPicture(int.tryParse(teamNumberController.text) ?? 0), builder: 
+                  (context,snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {return Container();}
+                    return Image.memory(snapshot.data!,width: 50 * scaleFactor,height: 50 * scaleFactor,fit:BoxFit.fill);
+                  })
                   ],
-                ),
-                // Display team location
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(
-                      Icons.location_pin,
-                      size: 30 * scaleFactor,
-                      color: Constants.pastelWhite,
-                    ),
-                    SizedBox(
-                        width: 300 * scaleFactor,
-                        height: 35 * scaleFactor,
-                        child: Center(
-                            child: AutoSizeText(
-                          teamLocation ?? "",
-                          style: comfortaaBold(18),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.start,
-                        )))
-                  ],
-                )
-              ],
-            )),
+                )),
           ),
           // Input for team number and replay checkbox
           Row(

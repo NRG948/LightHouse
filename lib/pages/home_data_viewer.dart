@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/pages/sync.dart';
 
 
 
@@ -14,7 +15,6 @@ class DataViewerHome extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width; // gets screen width
     final screenHeight = MediaQuery.of(context).size.height; // gets screen height
 //calculate scaling factor based on height
-    loadConfig();
     
     return PopScope(
       canPop: false,
