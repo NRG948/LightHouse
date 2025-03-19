@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:ui' as ui;
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
@@ -17,6 +18,7 @@ class DataViewerAmongView extends StatefulWidget {
 }
 
 class _DataViewerAmongViewState extends State<DataViewerAmongView> {
+  static late TeamSpritesheet spritesheet;
   late AmongViewSharedState state;
   late ValueNotifier<bool> sortCheckbox;
   late ScrollController scrollController;
@@ -26,6 +28,8 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
     state = AmongViewSharedState();
     scrollController = ScrollController();
     sortCheckbox = ValueNotifier<bool>(false);
+    spritesheet = TeamSpritesheet();
+    spritesheet.loadSpritesheet();
 
     state.setActiveEvent(configData["eventKey"]!);
     state.getEnabledLayouts();
@@ -192,7 +196,10 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                             child: FutureBuilder(
                               future: getTeamName(AmongViewSharedState.clickedTeam),
                               builder: (context,snapshot) {
-                                if (snapshot.connectionState != ConnectionState.done) {return Text("Loading...",style: comfortaaBold(25),);}
+                                if (snapshot.connectionState != ConnectionState.done) {
+                                  return Container();
+                                  //return Text("Loading...",style: comfortaaBold(25),textAlign: TextAlign.center,);
+                                  }
                                 return Column(
                                   children: [
                                     Text("Team ${AmongViewSharedState.clickedTeam}",style: comfortaaBold(25),),
@@ -202,13 +209,13 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                          width: 250 * scaleFactor,
                                           child: AutoSizeText(snapshot.data.toString(),style: comfortaaBold(18),textAlign: TextAlign.center,)),
                                         FutureBuilder(
-                                          future: getTeamPicture(AmongViewSharedState.clickedTeam),
+                                          future: _DataViewerAmongViewState.spritesheet.getTeamPicture(AmongViewSharedState.clickedTeam),
                                           builder: (context,snapshot) {
                                             if (snapshot.connectionState != ConnectionState.done) {
-                                              return Image(image: AssetImage("assets/images/loading.png"),height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
+                                              return SizedBox(height: 60 * scaleFactor,width: 60 * scaleFactor,);
+                                              //return Image(image: AssetImage("assets/images/loading.png"),height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
                                             }
-                                            return Image(image: snapshot.data!,height:60 * scaleFactor,width: 60 * scaleFactor,
-                                            fit: BoxFit.fill,);
+                                            return Image.memory(snapshot.data!,height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
                                           }
                                         )
                                       ],
@@ -218,12 +225,40 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                               }
                             ),
                           ),
+                          SizedBox(height: 5 * scaleFactor),
                           GestureDetector(
                             onTap: () {
-                            Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: AmongViewSharedState.clickedTeam);
+                            Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: [AmongViewSharedState.clickedTeam,0]);
                             },
-                            child: Container(),
-                          )
+                            child: Container(
+                              width: 325 * scaleFactor,
+                              height: 50 * scaleFactor,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),color: Constants.pastelBlue),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                Text("View Match Data",style: comfortaaBold(18),),
+                                Icon(Icons.keyboard_arrow_right,color: Colors.white,size: 35 * scaleFactor,)
+                              ],),
+                            ),
+                          ),
+                          SizedBox(height: 5 * scaleFactor),
+                          GestureDetector(
+                            onTap: () {
+                            Navigator.pushReplacementNamed(context, "/amongview-individual",arguments: [AmongViewSharedState.clickedTeam,1]);
+                            },
+                            child: Container(
+                              width: 325 * scaleFactor,
+                              height: 50 * scaleFactor,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),color: Constants.pastelBlueDark),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                Text("View Pit Data",style: comfortaaBold(18),),
+                                Icon(Icons.keyboard_arrow_right,color: Colors.white,size: 35 * scaleFactor,)
+                              ],),
+                            ),
+                          ),
                         ],
                       )
                       
@@ -541,6 +576,39 @@ Future<String> getTeamName(int teamNumber) async {
     }
   }
 
-  Future<AssetImage> getTeamPicture(int teamNumber){
-    return Future.value(AssetImage("assets/images/unknown.png"));
+  
+
+class TeamSpritesheet {
+
+  int spriteWidth = 40;
+  int spriteHeight = 40;
+  late ui.Image spritesheet;
+  void loadSpritesheet() async {
+    final ByteData data = await rootBundle.load("assets/images/spritesheet.png");
+    final Uint8List bytes = data.buffer.asUint8List();
+    final ui.Codec codec = await ui.instantiateImageCodec(bytes);
+    final ui.FrameInfo frame = await codec.getNextFrame();
+    spritesheet = frame.image;
+
   }
+  Future<Uint8List> getTeamPicture(int teamNumber) async {
+    int row = (teamNumber ~/ 104);
+    int column = (teamNumber % 104) - 1;
+    ui.PictureRecorder recorder = ui.PictureRecorder();
+    Canvas canvas = Canvas(recorder);
+    ui.Paint paint = Paint();
+
+    // Calculate the position of the sprite in the sheet
+    double x = column * spriteWidth.toDouble();
+    double y = row * spriteHeight.toDouble();
+    print("$x,$y");
+    Rect srcRect = Rect.fromLTWH(x, y, spriteWidth.toDouble(), spriteHeight.toDouble());
+    Rect dstRect = Rect.fromLTWH(0,0, spriteWidth.toDouble(), spriteHeight.toDouble());
+    // Draw only the desired sprite onto a new canvas
+    canvas.drawImageRect(spritesheet, srcRect, dstRect, paint);
+    // Convert the drawing to an image
+    ui.Image image = await recorder.endRecording().toImage(spriteWidth, spriteHeight);
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return byteData!.buffer.asUint8List();
+  }
+}

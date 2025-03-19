@@ -30,7 +30,6 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
     super.initState();
     state = AVISharedState();
     scrollController = ScrollController();
-    matchPitController = TabController(length: 2, vsync: this);
     sortCheckbox = ValueNotifier<bool>(false);
     forceRunOnce = true;
   }
@@ -38,9 +37,9 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-
+    matchPitController = TabController(length: 2, vsync: this,initialIndex: (ModalRoute.of(context)?.settings.arguments as List<int>)[1]);
     if (forceRunOnce) {
-      state.activeTeam = ModalRoute.of(context)?.settings.arguments as int;
+      state.activeTeam = (ModalRoute.of(context)?.settings.arguments as List<int>)[0];
       state.setActiveEvent(configData["eventKey"]!);
       state.getEnabledLayouts();
       if (state.enabledLayouts.isNotEmpty) {
@@ -73,7 +72,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
               style: comfortaaBold(18, color: Constants.pastelBrown)));
     }
 
-    state.activeTeam = ModalRoute.of(context)?.settings.arguments as int;
+    state.activeTeam = (ModalRoute.of(context)?.settings.arguments as List<int>)[0];
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;

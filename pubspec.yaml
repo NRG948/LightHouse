@@ -41,6 +41,7 @@ dependencies:
   collection: ^1.19.0
   http: ^1.3.0
   flutter_launcher_icons: ^0.14.3
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +90,7 @@ flutter:
       - assets/images/tba_lamp.png
       - assets/images/unknown.png
       - assets/images/loading.png
+      - assets/images/spritesheet.png
       - assets/images/reef-chronos/AB.png
       - assets/images/reef-chronos/CD.png
       - assets/images/reef-chronos/EF.png
