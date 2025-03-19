@@ -29,7 +29,6 @@ Map<String, dynamic> atlascout = {
           "jsonKey": "startingPosition",
           "height": "30"
         },
-        {"title": "Preload", "type": "checkbox", "jsonKey": "preload","height":"10"}
       ]
     },
     {
