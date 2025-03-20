@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:http/http.dart' as http;
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 // Main widget for the Sync page
 class SyncPage extends StatefulWidget {
@@ -17,21 +18,6 @@ class SyncPageState extends State<SyncPage> {
   static late double sizeScaleFactor;
   late double screenWidth;
   late double screenHeight;
-
-  // Fetch data from the server
-  Future<void> fetchData(String requestedFileType) async {
-    response = await http.get(Uri.parse("http://169.254.9.48/81"));
-    if (response.statusCode == 200) {
-      // Handle successful response
-    } else {
-      debugPrint(response.statusCode.toString());
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +59,17 @@ class SyncPageState extends State<SyncPage> {
                       borderRadius:
                           BorderRadius.circular(Constants.borderRadius)),
                 ),
-                ServerConnectStatus(),
+                ServerTestWidget(width: 360),
                 SizedBox(
                   height: 10,
                 ),
                 UploadButton(),
                 SizedBox(height: 10),
-                DownloadButton()
+                DownloadButton(),
+                SizedBox(
+                  height: 10,
+                ),
+                StartSync()
               ],
             ),
           ),
@@ -205,9 +195,12 @@ class _UploadDialogState extends State<UploadDialog> {
         width: 300 * SyncPageState.sizeScaleFactor,
         height: 300 * SyncPageState.sizeScaleFactor,
         decoration: BoxDecoration(
-        color: Constants.pastelWhite,
-        borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: Text("Loading...",style: comfortaaBold(18,color: Colors.black),),
+            color: Constants.pastelWhite,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: Text(
+          "Loading...",
+          style: comfortaaBold(18, color: Colors.black),
+        ),
       );
     }
     return Center(
@@ -279,7 +272,7 @@ class _UploadDialogState extends State<UploadDialog> {
             SizedBox(
               height: 20 * SyncPageState.sizeScaleFactor,
               width: 20 * SyncPageState.sizeScaleFactor,
-              child: CircularProgressIndicator(color:Colors.black),
+              child: CircularProgressIndicator(color: Colors.black),
             )
           ],
         ),
@@ -315,7 +308,6 @@ class _UploadDialogState extends State<UploadDialog> {
       return Future.value(
           responseCodes[response.statusCode] ?? response.statusCode.toString());
     } catch (_) {
-      print("here");
       return Future.value("ERROR");
     }
   }
@@ -402,13 +394,14 @@ class _DownloadDialogState extends State<DownloadDialog> {
     for (String status in downloadStatuses.keys) {
       statuses.add(Text(
           "Database $status downloaded w/ code ${downloadStatuses[status]}",
-          style: comfortaaBold(10,color: Colors.black)));
+          style: comfortaaBold(10, color: Colors.black)));
     }
     statuses.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Text("Downloading $currentlyDownloading", style: comfortaaBold(10,color: Colors.black)),
-        CircularProgressIndicator(color:Colors.black)
+        Text("Downloading $currentlyDownloading",
+            style: comfortaaBold(10, color: Colors.black)),
+        CircularProgressIndicator(color: Colors.black)
       ],
     ));
     return statuses;
@@ -453,128 +446,220 @@ class _DownloadDialogState extends State<DownloadDialog> {
   }
 }
 
-// Widget to display the server connection status
-class ServerConnectStatus extends StatefulWidget {
-  const ServerConnectStatus({super.key});
+class ServerTestWidget extends StatefulWidget {
+  final double width;
+  const ServerTestWidget({super.key, required this.width});
 
   @override
-  State<ServerConnectStatus> createState() => _ServerConnectStatusState();
+  State<ServerTestWidget> createState() => _ServerTestWidgetState();
 }
 
-class _ServerConnectStatusState extends State<ServerConnectStatus> {
-  final controller = TextEditingController();
+class _ServerTestWidgetState extends State<ServerTestWidget> {
+  late double scaleFactor;
+  late TextEditingController controller;
   late Future<String> responseCode;
-
   @override
   void initState() {
+    controller = TextEditingController(text: configData["serverIP"]);
+    responseCode = testConnection();
     super.initState();
-    controller.text = configData["serverIP"] ?? "";
-    responseCode = testConnection(controller.text);
+    scaleFactor = widget.width / 400;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 350 * SyncPageState.sizeScaleFactor,
-      height: 150 * SyncPageState.sizeScaleFactor,
+      width: 400 * scaleFactor,
+      height: 150 * scaleFactor,
       decoration: BoxDecoration(
-          color: Constants.pastelWhite,
-          borderRadius: BorderRadius.circular(Constants.borderRadius)),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
+          borderRadius: BorderRadius.circular(Constants.borderRadius),
+          color: Constants.pastelWhite),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 5 * scaleFactor,
+          ),
+          SizedBox(
+            height: 25 * scaleFactor,
+            width: 250 * scaleFactor,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  Icons.language,
+                  color: Colors.black,
+                  size: 25 * scaleFactor,
+                ),
+                Text(
+                  "Server IP",
+                  style: comfortaaBold(18 * scaleFactor, color: Colors.black),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 5 * scaleFactor,
+          ),
+          SizedBox(
+            width: 400 * scaleFactor,
+            height: 50 * scaleFactor,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  width: 250 * SyncPageState.sizeScaleFactor,
-                  height: 50 * SyncPageState.sizeScaleFactor,
+                  width: 300 * scaleFactor,
+                  height: 200 * scaleFactor,
                   child: TextField(
-                    autocorrect: false,
                     controller: controller,
                     decoration: InputDecoration(
-                      fillColor: Constants.pastelRed,
-                      filled: true,
-                      labelText: "Server IP",
-                    ),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius)),
+                        filled: true,
+                        fillColor: Constants.pastelRed,
+                        contentPadding: EdgeInsets.only(
+                            left: 5 * scaleFactor, right: 5 * scaleFactor)),
+                    style: comfortaaBold(15 * scaleFactor),
+                    onChanged: (e) {
+                      configData["serverIP"] = e;
+                      saveConfig();
+                    },
                   ),
                 ),
                 Container(
-                    width: 50 * SyncPageState.sizeScaleFactor,
-                    height: 50 * SyncPageState.sizeScaleFactor,
-                    decoration: BoxDecoration(
-                        color: Constants.pastelRed,
-                        borderRadius:
-                            BorderRadius.circular(Constants.borderRadius)),
-                    child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            configData["serverIP"] = controller.text;
-                            saveConfig();
-                            responseCode = testConnection(controller.text);
-                          });
-                        },
-                        child: Text("GO", style: comfortaaBold(10)))),
+                  width: 50 * scaleFactor,
+                  height: 50 * scaleFactor,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
+                    color: Constants.pastelRed,
+                  ),
+                  child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          responseCode = testConnection();
+                        });
+                      },
+                      icon: Icon(
+                        Icons.network_ping,
+                        color: Colors.white,
+                      )),
+                )
               ],
             ),
-            FutureBuilder(
-                future: responseCode,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Row(
+          ),
+          SizedBox(
+            height: 10 * scaleFactor,
+          ),
+          FutureBuilder(
+              future: responseCode,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState != ConnectionState.done) {
+                  return Container(
+                    height: 40 * scaleFactor,
+                    width: 250 * scaleFactor,
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius),
+                        color: Constants.pastelGray),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        SizedBox(
+                            height: 20 * scaleFactor,
+                            width: 20 * scaleFactor,
+                            child: CircularProgressIndicator.adaptive(
+                              backgroundColor: Colors.white,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Constants.pastelBlue),
+                            )),
                         Text(
-                          "Attempting Connection...",
-                          style:
-                              comfortaaBold(18, color: Constants.pastelBrown),
-                        ),
-                        CircularProgressIndicator(color:Colors.black)
-                      ],
-                    );
-                  } else {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "Recieved code ${snapshot.data}",
-                          style:
-                              comfortaaBold(18, color: Constants.pastelBrown),
-                        ),
-                        Container(
-                          width: 30 * SyncPageState.sizeScaleFactor,
-                          height: 30 * SyncPageState.sizeScaleFactor,
-                          decoration: BoxDecoration(
-                              color: snapshot.data == "200"
-                                  ? Colors.lightGreen
-                                  : Colors.red,
-                              shape: BoxShape.circle),
+                          "Waiting for response...",
+                          style: comfortaaBold(15 * scaleFactor),
                         )
                       ],
-                    );
-                  }
-                })
-          ],
-        ),
+                    ),
+                  );
+                }
+                return Container(
+                  height: 40 * scaleFactor,
+                  width: 250 * scaleFactor,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(Constants.borderRadius),
+                      color: snapshot.data! == "Code 200 - OK"
+                          ? Constants.pastelGreen
+                          : Constants.pastelRedSuperDark),
+                  child: Center(
+                      child: AutoSizeText(
+                    snapshot.data!,
+                    style: comfortaaBold(18 * scaleFactor),
+                    textAlign: TextAlign.center,
+                    minFontSize: (12 * scaleFactor).truncate().toDouble(),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+                );
+              })
+        ],
       ),
     );
   }
 
-  // Test the connection to the server
-  Future<String> testConnection(String url) async {
-    final uri = Uri.tryParse(url);
+  Future<String> testConnection() async {
+    while (configData["serverIP"] == null) {
+      await Future.delayed(Duration(milliseconds: 200));
+    }
+    String serverIP = configData["serverIP"]!.removeTrailingSlashes;
+    controller.text = controller.text.removeTrailingSlashes;
+
+    final uri = Uri.tryParse(serverIP);
     if (uri == null) {
-      return "";
+      return "ERROR: Invalid URL";
     }
     late final dynamic response;
     try {
-      response = await http.get(uri);
-    } catch (_) {
-      print(_);
-      return "problem";
+      response = await http.get(Uri.parse("$uri/api/atlas"));
+    } catch (e) {
+      return "ERROR - $e";
     }
-    return response.statusCode.toString();
+    return "Code ${response.statusCode.toString()} - ${responseCodes[response.statusCode]}";
+  }
+}
+
+class StartSync extends StatefulWidget {
+  const StartSync({super.key});
+
+  @override
+  State<StartSync> createState() => _StartSyncState();
+}
+
+class _StartSyncState extends State<StartSync> {
+  late double scaleFactor;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    scaleFactor = MediaQuery.of(context).size.width / 400;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 100 * scaleFactor,
+        width: 350 * scaleFactor,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
+            color: Constants.pastelWhite),
+        child: Center(
+          child: Container(
+            height: 70 * scaleFactor,
+            width: 300 * scaleFactor,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Constants.borderRadius),
+              color: Constants.pastelBlue
+            ),
+            child: Text("hi"),
+          ),
+        ));
   }
 }
