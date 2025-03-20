@@ -78,9 +78,28 @@ TextStyle comfortaaBold(double fontSize,
 
 
 final Map<int,String> responseCodes = {
+  100: "Continue",
+  101: "Switch Protocols",
+  102: "Processing",
+  103: "Early Hints",
   200:"OK",
+  201:"Created",
+  202:"Accepted",
+  203:"Non-Authoritative Info (OK)",
+  204: "No Content",
+  205: "Reset Content",
+  206: "Partial Content",
+  207: "Multi-Status",
+  300: "Multiple Choices",
   301:"Permanantly Moved",
+  302: "Temporarily Moved",
+  303: "Send GET request",
+  307: "Temporary Redirect",
+  308: "Permanant Redirect",
   400: "Bad Request",
+  401: "Unauthorized",
+  402: "Payment Required",
+  403: "Forbidden",
   404:"File Not Found",
 };
 
@@ -93,6 +112,7 @@ extension StringExtensions on String {
     (Match m) => m[0]!.toUpperCase(),
   );
   String get removeAfterSpace => contains(" ") ? split(" ")[0] : this;
+  String get removeTrailingSlashes => replaceAll(RegExp(r'/+$'), "");
 }
 extension DoubleExtensions on double {
   double get fourDigits => double.parse(toStringAsFixed(4));

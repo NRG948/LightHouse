@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/sync.dart';
+import 'package:lighthouse/widgets/game_agnostic/sync_widgets.dart';
 
 
 
@@ -48,6 +49,7 @@ class DataViewerHome extends StatelessWidget {
               Navigator.pushReplacementNamed(context, "/data-viewer-amongview");
                      }, child: Text("Amongview",style: comfortaaBold(18))),
            ),
+           ServerTestWidget(width: 400)
         ],),
         ),
       
