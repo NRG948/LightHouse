@@ -4,8 +4,11 @@ import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
+import "package:lighthouse/device_id.dart";
 import "package:lighthouse/filemgr.dart";
 import 'package:http/http.dart' as http;
+import "package:lighthouse/pages/sync.dart";
+import "package:material_symbols_icons/material_symbols_icons.dart";
 
 // a stateful widget that allows users to modify application settings.
 class SettingsPage extends StatefulWidget {
@@ -28,6 +31,8 @@ class _SettingsPageState extends State<SettingsPage> {
           return SettingsCheckbox(setting: setting);
         case "tba":
           return TBACheckbox();
+        case "serverIP":
+          return ServerTestWidget(width: 400,);
         default:
           return Placeholder();
       }
@@ -72,6 +77,9 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             centerTitle: true,
             actions: [
+              IconButton(onPressed: (){
+                showDialog(context: context, builder: (context) {return DeviceIDDialog();});
+              }, icon: Icon(Symbols.barcode)),
               if (configData["debugMode"] == "true")
               IconButton(
                   onPressed: () {

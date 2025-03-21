@@ -69,7 +69,6 @@ class SyncPageState extends State<SyncPage> {
                 SizedBox(
                   height: 10,
                 ),
-                StartSync()
               ],
             ),
           ),
@@ -483,13 +482,14 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
             height: 25 * scaleFactor,
             width: 250 * scaleFactor,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.language,
                   color: Colors.black,
                   size: 25 * scaleFactor,
                 ),
+                SizedBox(width: 10 * scaleFactor,),
                 Text(
                   "Server IP",
                   style: comfortaaBold(18 * scaleFactor, color: Colors.black),

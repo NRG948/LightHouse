@@ -324,7 +324,7 @@ final Map<String, String> defaultConfig = {
 final Map<String,String> settingsMap = {
   "eventKey" : "text",
   "scouterName": "text",
-  "serverIP": "text",
+  "serverIP": "serverIP",
   "downloadTheBlueAllianceInfo":"tba",
   "debugMode": "bool",
   "flipField": "bool",
