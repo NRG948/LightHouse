@@ -152,6 +152,7 @@ class DataEntryState extends State<DataEntry> {
           widgetData["multiChartData"] ?? SplayTreeMap();
       final List<List<String>> comments = widgetData["comments"] ?? [[]];
       final Sort sortType = widgetData["sortType"] ?? Sort.EARLIEST;
+      final bool clearable = widgetData["clearable"] ?? false;
 
       switch (type) {
         case "spacer":
@@ -270,6 +271,7 @@ class DataEntryState extends State<DataEntry> {
             height: height,
             width: width,
             jsonKey: jsonKey,
+            clearable: clearable,
           );
         case "startPos":
           return NRGStartPos(height: height, width: width);
