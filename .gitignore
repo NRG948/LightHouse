@@ -17,6 +17,7 @@ tba-stuff/*
 *.ipr
 *.iws
 .idea/
+.qodo/
 
 
 python/backups/*
