@@ -18,7 +18,7 @@ class RSAutoUntimed extends StatefulWidget {
 }
 
 class _RSAutoUntimedState extends State<RSAutoUntimed> {
-  final List<DropdownMenuItem> dropdownItems = [
+  List<DropdownMenuItem> dropdownItems = [
     DropdownMenuItem(
       value: 1,
       child: Text(
@@ -55,6 +55,30 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
       assert(DataEntry.exportData['auto'] != null);
       assert(DataEntry.exportData['auto'][0] != null);
     }
+
+    dropdownItems = [
+      DropdownMenuItem(
+        value: 1,
+        child: Text(
+          "      1",
+          style: comfortaaBold(20, color: Colors.black),
+        ),
+      ),
+      DropdownMenuItem(
+        value: 0,
+        child: Text(
+          "Add",
+          style: comfortaaBold(20, color: Colors.black),
+        ),
+      ),
+      DropdownMenuItem(
+        value: -1,
+        child: Text(
+          "Remove",
+          style: comfortaaBold(20, color: Colors.black),
+        ),
+      ),
+    ];
   }
 
   @override
@@ -475,7 +499,9 @@ class _RSAUReefButtonState extends State<RSAUReefButton> {
           width: (widget.algae ? 75 : 100) * widget.scaleFactor,
           decoration: BoxDecoration(
               color: active
-                  ? (widget.algae ? Constants.pastelGreenDark : Constants.pastelRed)
+                  ? (widget.algae
+                      ? Constants.pastelGreenDark
+                      : Constants.pastelRed)
                   : Constants.pastelGray),
           //coral icons for the corals that you can choose to click within the map within auto section within atlas section
           child: Center(
@@ -879,6 +905,7 @@ class RSAUSharedState extends ChangeNotifier {
     }
     activeTriangle = null;
     pitMode = pit;
+    currentAuto = 1;
     if (pitMode) {
       DataEntry.exportData['auto'] = [
         _createAutoEntry(),
