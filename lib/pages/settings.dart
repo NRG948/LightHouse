@@ -78,8 +78,8 @@ class _SettingsPageState extends State<SettingsPage> {
             centerTitle: true,
             actions: [
               IconButton(onPressed: (){
-                showDialog(context: context, builder: (context) {return DeviceIDDialog();});
-              }, icon: Icon(Symbols.barcode)),
+                showDialog(context: context, builder: (context) {return DeviceIDDialog();},);
+              }, icon: Icon(Symbols.qr_code)),
               if (configData["debugMode"] == "true")
               IconButton(
                   onPressed: () {

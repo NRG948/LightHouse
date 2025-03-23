@@ -271,7 +271,7 @@ Future<String> loadFileForUpload(String fileName) async {
 
 Future<int> saveDatabaseFile(String eventKey, String layout, String content) async {
   final databaseDirectory = Directory("$configFolder/$eventKey/database");
-  if (!(databaseDirectory.existsSync())) {await databaseDirectory.create();}
+  if (!(databaseDirectory.existsSync())) {await databaseDirectory.create(recursive: true);}
   final dbFile = File("$configFolder/$eventKey/database/$layout.json");
   await dbFile.writeAsString(content);
   return Future.value(0);

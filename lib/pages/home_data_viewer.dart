@@ -20,55 +20,37 @@ class DataViewerHome extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-          width: screenWidth,
-          height: screenHeight,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/background-hires.png"),
-                  fit: BoxFit.cover)),
-          child: Column(
-            spacing: 10,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    color: Constants.pastelGray,
-                    borderRadius:
-                        BorderRadius.circular(Constants.borderRadius)),
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context,
-                          "/data-viewer-tony"); // Navigates to Tony's Data Viewer Page.
-                    },
-                    child: Text("Tony's Data Viewer Page",
-                        style: comfortaaBold(18))),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Constants.pastelGray,
-                    borderRadius:
-                        BorderRadius.circular(Constants.borderRadius)),
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, "/data-viewer-amongview");
-                    },
-                    child: Text("Amongview", style: comfortaaBold(18))),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    color: Constants.pastelGray,
-                    borderRadius:
-                        BorderRadius.circular(Constants.borderRadius)),
-                child: TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, "/sync");
-                    },
-                    child: Text("Sync to Server", style: comfortaaBold(18))),
-              ),
-              ServerTestWidget(width: 400)
-            ],
+            width: screenWidth,
+            height: screenHeight,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/background-hires.png"),
+                    fit: BoxFit.cover)),
+            child: Column(
+              spacing: 10,
+              children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Constants.pastelGray,
+              borderRadius: BorderRadius.circular(Constants.borderRadius) 
+            ),
+            child: TextButton(onPressed: () {
+              Navigator.pushNamed(context, "/data-viewer-tony"); // Navigates to Tony's Data Viewer Page.
+            }, child: Text("Tony's Data Viewer Page",style: comfortaaBold(18))),
           ),
+           Container(
+              decoration: BoxDecoration(
+              color: Constants.pastelGray,
+              borderRadius: BorderRadius.circular(Constants.borderRadius) 
+            ),
+             child: TextButton(onPressed: () {
+              Navigator.pushReplacementNamed(context, "/data-viewer-amongview");
+                     }, child: Text("Amongview",style: comfortaaBold(18))),
+           ),
+           ServerTestWidget(width: 400),
+           UploadButton(width: 400,),
+           DownloadButton(width: 400,)
+        ],),
         ),
 
         appBar: AppBar(

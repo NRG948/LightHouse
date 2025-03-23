@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -14,14 +15,16 @@ class DeviceIDDialog extends StatefulWidget {
 class _DeviceIDDialogState extends State<DeviceIDDialog> {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Dialog(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(Constants.borderRadius),
         child: Container(
-      width: 350,
-      height: 500,
-      decoration: BoxDecoration(
+                width: 350,
+                height: 500,
+                decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.borderRadius),
           color: Constants.pastelWhite),
-      child: Material(
+                child: Material(
         child: FutureBuilder(
             future: getPersistentDeviceID(),
             builder: (context, snapshot) {
@@ -40,11 +43,14 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
                   ],
                 );
               }
+              if (snapshot.data == null) {
+                return Center(child: Text("Something went wrong. Device ID is null."),);
+              }
               return Column(
                 children: [
                   Text(
-                    "Your unique device ID is:",
-                    style: comfortaaBold(18, color: Colors.black),
+                    "DEVICE ID:",
+                    style: comfortaaBold(23, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
                   Text(
@@ -52,13 +58,65 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
                     style: comfortaaBold(18, color: Colors.black),
                     textAlign: TextAlign.center,
                   ),
-                  QrImageView(data: snapshot.data!,
-                  size: 325.0,)
+                  SizedBox(height: 20,),
+                  QrImageView(
+                    data: snapshot.data!,
+                    size: 225,
+                  ),
+                  SizedBox(height: 50,),
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(context: context, builder: (context) {
+                        return Container(
+                          height: 50,
+                          width: 325,
+                          decoration: BoxDecoration(
+                            color: Constants.pastelGrayDark
+                          ),
+                          child: Center(child: Text("Copied to Clipboard!",style: comfortaaBold(18),textAlign: TextAlign.center,)),
+                        );
+                      });
+                      Clipboard.setData(ClipboardData(text: snapshot.data!));},
+                    child: Container(
+                      height: 50,
+                      width: 325,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                        color: Constants.pastelBlue
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                        Icon(Icons.copy,color: Colors.white,),
+                        Text("COPY",style: comfortaaBold(25),)
+                      ],),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                   GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Container(
+                      height: 50,
+                      width: 325,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                        color: Constants.pastelRedDark
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                        Icon(Icons.close,color: Colors.white,),
+                        Text("CLOSE",style: comfortaaBold(25),)
+                      ],),
+                    ),
+                  )
                 ],
               );
             }),
+                ),
+              ),
       ),
-    ));
+    );
   }
 
   Future<String> getPersistentDeviceID() async {

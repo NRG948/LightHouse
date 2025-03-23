@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:http/http.dart' as http;
-import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 // Main widget for the Sync page
 class SyncPage extends StatefulWidget {
@@ -63,9 +62,9 @@ class SyncPageState extends State<SyncPage> {
                 SizedBox(
                   height: 10,
                 ),
-                UploadButton(),
+                UploadButton(width: 400,),
                 SizedBox(height: 10),
-                DownloadButton(),
+                DownloadButton(width: 400,),
                 SizedBox(
                   height: 10,
                 ),
@@ -78,7 +77,8 @@ class SyncPageState extends State<SyncPage> {
 
 // Widget for the upload button
 class UploadButton extends StatefulWidget {
-  const UploadButton({super.key});
+  final double width;
+  const UploadButton({super.key, required this.width});
 
   @override
   State<UploadButton> createState() => _UploadButtonState();
@@ -86,11 +86,14 @@ class UploadButton extends StatefulWidget {
 
 class _UploadButtonState extends State<UploadButton> {
   late Future<List<dynamic>> uploadQueue;
-
+  late double scaleFactor;
   @override
   void initState() {
     super.initState();
+    scaleFactor = widget.width / 400;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +103,8 @@ class _UploadButtonState extends State<UploadButton> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Container(
-              width: 350 * SyncPageState.sizeScaleFactor,
-              height: 100 * SyncPageState.sizeScaleFactor,
+              width: 350 * scaleFactor,
+              height: 100 * scaleFactor,
               decoration: BoxDecoration(
                   color: Constants.pastelWhite,
                   borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -112,8 +115,8 @@ class _UploadButtonState extends State<UploadButton> {
             );
           }
           return Container(
-            width: 350 * SyncPageState.sizeScaleFactor,
-            height: 100 * SyncPageState.sizeScaleFactor,
+            width: 350 * scaleFactor,
+            height: 100 * scaleFactor,
             decoration: BoxDecoration(
                 color: Constants.pastelWhite,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -125,7 +128,7 @@ class _UploadButtonState extends State<UploadButton> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                        width: 200 * SyncPageState.sizeScaleFactor,
+                        width: 200 * scaleFactor,
                         decoration: BoxDecoration(
                             borderRadius:
                                 BorderRadius.circular(Constants.borderRadius),
@@ -147,7 +150,7 @@ class _UploadButtonState extends State<UploadButton> {
     showDialog(
         context: context,
         builder: (context) {
-          return UploadDialog(queue: queue);
+          return UploadDialog(queue: queue,width: 400,);
         });
   }
 }
@@ -155,7 +158,8 @@ class _UploadButtonState extends State<UploadButton> {
 // Dialog for uploading files
 class UploadDialog extends StatefulWidget {
   final List<dynamic> queue;
-  const UploadDialog({super.key, required this.queue});
+  final double width;
+  const UploadDialog({super.key, required this.queue, required this.width});
 
   @override
   State<UploadDialog> createState() => _UploadDialogState();
@@ -163,12 +167,14 @@ class UploadDialog extends StatefulWidget {
 
 class _UploadDialogState extends State<UploadDialog> {
   late String currentFile;
+  late double scaleFactor;
   Map<String, String> uploadedFiles = {};
   final List<dynamic> filesToKeep = [];
 
   @override
   void initState() {
     super.initState();
+    scaleFactor = widget.width / 400;
     uploadFiles();
   }
 
@@ -191,8 +197,8 @@ class _UploadDialogState extends State<UploadDialog> {
         }
       });
       return Container(
-        width: 300 * SyncPageState.sizeScaleFactor,
-        height: 300 * SyncPageState.sizeScaleFactor,
+        width: 300 * scaleFactor,
+        height: 300 * scaleFactor,
         decoration: BoxDecoration(
             color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -204,8 +210,8 @@ class _UploadDialogState extends State<UploadDialog> {
     }
     return Center(
       child: Container(
-        width: 350 * SyncPageState.sizeScaleFactor,
-        height: 400 * SyncPageState.sizeScaleFactor,
+        width: 350 * scaleFactor,
+        height: 400 * scaleFactor,
         decoration: BoxDecoration(
             color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -253,7 +259,7 @@ class _UploadDialogState extends State<UploadDialog> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-              width: 350 * SyncPageState.sizeScaleFactor,
+              width: 350 * scaleFactor,
               color: uploadedFiles[key] == "OK" ? null : Colors.red,
               child: AutoSizeText(
                 "${key.split("/").last} uploaded, status ${uploadedFiles[key]}",
@@ -269,8 +275,8 @@ class _UploadDialogState extends State<UploadDialog> {
           children: [
             AutoSizeText("Uploading ${currentFile.split("/").last}"),
             SizedBox(
-              height: 20 * SyncPageState.sizeScaleFactor,
-              width: 20 * SyncPageState.sizeScaleFactor,
+              height: 20 * scaleFactor,
+              width: 20 * scaleFactor,
               child: CircularProgressIndicator(color: Colors.black),
             )
           ],
@@ -314,18 +320,28 @@ class _UploadDialogState extends State<UploadDialog> {
 
 // Widget for the download button
 class DownloadButton extends StatefulWidget {
-  const DownloadButton({super.key});
+  final double width;
+  const DownloadButton({super.key, required this.width});
 
   @override
   State<DownloadButton> createState() => _DownloadButtonState();
 }
 
 class _DownloadButtonState extends State<DownloadButton> {
+  late double scaleFactor;
+
+  @override
+  void initState() {
+    super.initState();
+    scaleFactor = widget.width / 400;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 350 * SyncPageState.sizeScaleFactor,
-      height: 100 * SyncPageState.sizeScaleFactor,
+      width: 350 * scaleFactor,
+      height: 100 * scaleFactor,
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -334,12 +350,12 @@ class _DownloadButtonState extends State<DownloadButton> {
           showDialog(
               context: context,
               builder: (context) {
-                return DownloadDialog();
+                return DownloadDialog(width: 400,);
               });
         },
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Container(
-              width: 200 * SyncPageState.sizeScaleFactor,
+              width: 200 * scaleFactor,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Constants.borderRadius),
                   color: Constants.pastelGray),
@@ -355,19 +371,22 @@ class _DownloadButtonState extends State<DownloadButton> {
 
 // Dialog for downloading files
 class DownloadDialog extends StatefulWidget {
-  const DownloadDialog({super.key});
+  final double width;
+  const DownloadDialog({super.key, required this.width});
 
   @override
   State<DownloadDialog> createState() => _DownloadDialogState();
 }
 
 class _DownloadDialogState extends State<DownloadDialog> {
+  late double scaleFactor;
   Map<String, String> downloadStatuses = {};
   String currentlyDownloading = "";
 
   @override
   void initState() {
     super.initState();
+    scaleFactor = widget.width / 400;
     downloadDatabases();
   }
 
@@ -375,8 +394,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 350 * SyncPageState.sizeScaleFactor,
-        height: 500 * SyncPageState.sizeScaleFactor,
+        width: 350 * scaleFactor,
+        height: 500 * scaleFactor,
         decoration: BoxDecoration(
             color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
