@@ -103,13 +103,19 @@ Map<String, dynamic> atlascout = {
             }
           ]
         },
-        {"title": "Data Quality", "type": "rating", "jsonKey": "dataQuality"},
+        {"title": "Data Quality", "type": "rating", "jsonKey": "dataQuality", "clearable": false},
         {"title": "Comments", "type": "comment-box", "jsonKey": "comments","height":"10"},
         {
           "title": "Team played defense?",
           "type": "checkbox",
           "jsonKey": "crossedMidline",
           "height": "10"
+        }, 
+        {
+          "title": "Defense Rating", 
+          "type": "rating", 
+          "jsonKey": "defenseRating", 
+          "clearable": true
         }
       ]
     }
