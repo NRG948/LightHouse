@@ -48,7 +48,7 @@ class DataViewerHome extends StatelessWidget {
                      }, child: Text("Amongview",style: comfortaaBold(18))),
            ),
            ServerTestWidget(width: 400),
-           UploadButton(width: 400,),
+           UploadButton(width: 400,route: "/home-data-viewer",),
            DownloadButton(width: 400,)
         ],),
         ),

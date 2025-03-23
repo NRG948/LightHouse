@@ -62,7 +62,7 @@ class SyncPageState extends State<SyncPage> {
                 SizedBox(
                   height: 10,
                 ),
-                UploadButton(width: 400,),
+                UploadButton(width: 400,route:"/sync"),
                 SizedBox(height: 10),
                 DownloadButton(width: 400,),
                 SizedBox(
@@ -78,7 +78,8 @@ class SyncPageState extends State<SyncPage> {
 // Widget for the upload button
 class UploadButton extends StatefulWidget {
   final double width;
-  const UploadButton({super.key, required this.width});
+  final String route;
+  const UploadButton({super.key, required this.width, required this.route});
 
   @override
   State<UploadButton> createState() => _UploadButtonState();
@@ -150,7 +151,7 @@ class _UploadButtonState extends State<UploadButton> {
     showDialog(
         context: context,
         builder: (context) {
-          return UploadDialog(queue: queue,width: 400,);
+          return UploadDialog(queue: queue,width: 400,route:widget.route);
         });
   }
 }
@@ -159,7 +160,8 @@ class _UploadButtonState extends State<UploadButton> {
 class UploadDialog extends StatefulWidget {
   final List<dynamic> queue;
   final double width;
-  const UploadDialog({super.key, required this.queue, required this.width});
+  final String route;
+  const UploadDialog({super.key, required this.queue, required this.width, required this.route});
 
   @override
   State<UploadDialog> createState() => _UploadDialogState();
@@ -248,7 +250,7 @@ class _UploadDialogState extends State<UploadDialog> {
     setUploadQueue(filesToKeep);
     if (mounted) {
       Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, "/sync");
+      Navigator.pushReplacementNamed(context, widget.route);
     }
   }
 
