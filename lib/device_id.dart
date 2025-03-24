@@ -38,7 +38,7 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
                     ),
                     Text(
                       "Loading Device ID",
-                      style: comfortaaBold(18),
+                      style: comfortaaBold(18,color: Colors.black),
                     )
                   ],
                 );
@@ -66,16 +66,17 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
                   SizedBox(height: 50,),
                   GestureDetector(
                     onTap: () {
-                      showModalBottomSheet(context: context, builder: (context) {
-                        return Container(
-                          height: 50,
-                          width: 325,
-                          decoration: BoxDecoration(
-                            color: Constants.pastelGrayDark
-                          ),
-                          child: Center(child: Text("Copied to Clipboard!",style: comfortaaBold(18),textAlign: TextAlign.center,)),
-                        );
-                      });
+                      // showModalBottomSheet(context: context, builder: (context) {
+                      //   return Container(
+                      //     height: 50,
+                      //     width: 325,
+                      //     decoration: BoxDecoration(
+                      //       color: Constants.pastelGrayDark
+                      //     ),
+                      //     child: Center(child: Text("Copied to Clipboard!",style: comfortaaBold(18),textAlign: TextAlign.center,)),
+                      //   );
+                      // });
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Copied to Clipboard!",style: comfortaaBold(18),textAlign: TextAlign.center,)));
                       Clipboard.setData(ClipboardData(text: snapshot.data!));},
                     child: Container(
                       height: 50,
@@ -119,7 +120,9 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
     );
   }
 
-  Future<String> getPersistentDeviceID() async {
+  
+}
+Future<String> getPersistentDeviceID() async {
     const storage = FlutterSecureStorage();
     const key = 'NRGLighthouseID';
 
@@ -134,4 +137,3 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
 
     return deviceID;
   }
-}

@@ -1,8 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/device_id.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 // Main widget for the Sync page
 class SyncPage extends StatefulWidget {
@@ -58,13 +60,15 @@ class SyncPageState extends State<SyncPage> {
                       borderRadius:
                           BorderRadius.circular(Constants.borderRadius)),
                 ),
-                ServerTestWidget(width: 360),
+                ServerTestWidget(width: 350),
                 SizedBox(
                   height: 10,
                 ),
-                UploadButton(width: 400,route:"/sync"),
+                UploadButton(width: 400, route: "/sync"),
                 SizedBox(height: 10),
-                DownloadButton(width: 400,),
+                DownloadButton(
+                  width: 400,
+                ),
                 SizedBox(
                   height: 10,
                 ),
@@ -93,8 +97,6 @@ class _UploadButtonState extends State<UploadButton> {
     super.initState();
     scaleFactor = widget.width / 400;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +153,7 @@ class _UploadButtonState extends State<UploadButton> {
     showDialog(
         context: context,
         builder: (context) {
-          return UploadDialog(queue: queue,width: 400,route:widget.route);
+          return UploadDialog(queue: queue, width: 400, route: widget.route);
         });
   }
 }
@@ -161,7 +163,11 @@ class UploadDialog extends StatefulWidget {
   final List<dynamic> queue;
   final double width;
   final String route;
-  const UploadDialog({super.key, required this.queue, required this.width, required this.route});
+  const UploadDialog(
+      {super.key,
+      required this.queue,
+      required this.width,
+      required this.route});
 
   @override
   State<UploadDialog> createState() => _UploadDialogState();
@@ -308,9 +314,10 @@ class _UploadDialogState extends State<UploadDialog> {
       api = "none";
     }
     try {
+      final uuid = await getPersistentDeviceID();
       final response = await http.post(
           (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
-          headers: {"Content-Type": "application/json"},
+          headers: {"Content-Type": "application/json", "uuid": uuid},
           body: fileContent);
       return Future.value(
           responseCodes[response.statusCode] ?? response.statusCode.toString());
@@ -338,7 +345,6 @@ class _DownloadButtonState extends State<DownloadButton> {
     scaleFactor = widget.width / 400;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -352,7 +358,9 @@ class _DownloadButtonState extends State<DownloadButton> {
           showDialog(
               context: context,
               builder: (context) {
-                return DownloadDialog(width: 400,);
+                return DownloadDialog(
+                  width: 400,
+                );
               });
         },
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -457,9 +465,10 @@ class _DownloadDialogState extends State<DownloadDialog> {
     } else {
       api = "none";
     }
+    final uuid = await getPersistentDeviceID();
     final response = await http.get(
       (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", "uuid": uuid},
     );
     saveDatabaseFile(configData["eventKey"] ?? "", layout, response.body);
     return Future.value(0);
@@ -510,7 +519,9 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                   color: Colors.black,
                   size: 25 * scaleFactor,
                 ),
-                SizedBox(width: 10 * scaleFactor,),
+                SizedBox(
+                  width: 10 * scaleFactor,
+                ),
                 Text(
                   "Server IP",
                   style: comfortaaBold(18 * scaleFactor, color: Colors.black),
@@ -528,7 +539,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  width: 300 * scaleFactor,
+                  width: 250 * scaleFactor,
                   height: 200 * scaleFactor,
                   child: TextField(
                     controller: controller,
@@ -639,7 +650,9 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
     }
     late final dynamic response;
     try {
-      response = await http.get(Uri.parse("$uri/api/atlas"));
+      final uuid = await getPersistentDeviceID();
+      response = await http.get(Uri.parse("$uri/api/atlas"),
+          headers: {"Content-Type": "application/json", "uuid": uuid});
     } catch (e) {
       return "ERROR - $e";
     }
@@ -676,9 +689,8 @@ class _StartSyncState extends State<StartSync> {
             height: 70 * scaleFactor,
             width: 300 * scaleFactor,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Constants.borderRadius),
-              color: Constants.pastelBlue
-            ),
+                borderRadius: BorderRadius.circular(Constants.borderRadius),
+                color: Constants.pastelBlue),
             child: Text("hi"),
           ),
         ));
