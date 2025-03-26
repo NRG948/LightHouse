@@ -109,6 +109,7 @@ class _UploadButtonState extends State<UploadButton> {
               width: 350 * scaleFactor,
               height: 100 * scaleFactor,
               decoration: BoxDecoration(
+                color: Constants.darkPurple,
                 image: DecorationImage(image: AssetImage("assets/images/upload_bg.png")),
                   borderRadius: BorderRadius.circular(Constants.borderRadius)),
               child: Text(
@@ -121,6 +122,7 @@ class _UploadButtonState extends State<UploadButton> {
             width: 350 * scaleFactor,
             height: 100 * scaleFactor,
             decoration: BoxDecoration(
+                color: Constants.darkPurple,
                 image: DecorationImage(image: AssetImage("assets/images/upload_bg.png"),fit: BoxFit.fitWidth),
               
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
@@ -346,6 +348,7 @@ class _DownloadButtonState extends State<DownloadButton> {
       width: 350 * scaleFactor,
       height: 100 * scaleFactor,
       decoration: BoxDecoration(
+          color: Constants.darkPurple,
           image: DecorationImage(image: AssetImage("assets/images/download_bg.png"),fit: BoxFit.fitWidth),
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: TextButton(
@@ -467,7 +470,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
 
 class ServerTestWidget extends StatefulWidget {
   final double width;
-  const ServerTestWidget({super.key, required this.width});
+  final bool darkMode;
+  const ServerTestWidget({super.key, required this.width, this.darkMode = false});
 
   @override
   State<ServerTestWidget> createState() => _ServerTestWidgetState();
@@ -492,7 +496,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
       height: 150 * scaleFactor,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.borderRadius),
-          color: Constants.pastelWhite),
+          color: widget.darkMode ? Constants.darkPurple : Constants.pastelWhite),
       child: Column(
         children: [
           SizedBox(
@@ -506,7 +510,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
               children: [
                 Icon(
                   Icons.language,
-                  color: Colors.black,
+                  color: widget.darkMode ? Constants.pastelWhite : Colors.black,
                   size: 25 * scaleFactor,
                 ),
                 SizedBox(
@@ -514,7 +518,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                 ),
                 Text(
                   "Server IP",
-                  style: comfortaaBold(18 * scaleFactor, color: Colors.black),
+                  style: comfortaaBold(18 * scaleFactor, color: widget.darkMode ? Constants.pastelWhite : Colors.black),
                 )
               ],
             ),

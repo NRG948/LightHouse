@@ -25,6 +25,7 @@ class DataViewerHome extends StatelessWidget {
             width: screenWidth,
             height: screenHeight,
             decoration: BoxDecoration(
+                color: Constants.darkPurple,
                 image: DecorationImage(
                     image: AssetImage("assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
@@ -36,13 +37,13 @@ class DataViewerHome extends StatelessWidget {
             height: screenHeight * 0.05,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Constants.borderRadius),
-              color: Constants.pastelWhite
+              color: Constants.darkPurple
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Icon(Icons.bar_chart,size: 30,),
-                Text("Data Viewer Home",style: comfortaaBold(25,color: Colors.black),)
+                Icon(Icons.bar_chart,size: 30,color: Constants.pastelWhite,),
+                Text("Data Viewer Home",style: comfortaaBold(25,color: Constants.pastelWhite),)
               ],
             ),
           ),
@@ -54,6 +55,7 @@ class DataViewerHome extends StatelessWidget {
               width: screenWidth * 0.85,
               height: screenHeight * 0.15,
               decoration: BoxDecoration(
+                color: Constants.darkPurple,
                 image: DecorationImage(image: AssetImage("assets/images/tdv_bg.jpg")),
                 borderRadius: BorderRadius.circular(Constants.borderRadius) 
               ),
@@ -92,7 +94,7 @@ class DataViewerHome extends StatelessWidget {
               ),
             ),
           ),
-           ServerTestWidget(width: 350),
+           ServerTestWidget(width: 350,darkMode: true,),
            UploadButton(width: 400,route: "/home-data-viewer",),
            DownloadButton(width: 400,)
         ],),

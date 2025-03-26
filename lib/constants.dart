@@ -35,6 +35,8 @@ class Constants {
 
   static const Color coolGray = Color.fromARGB(255, 63, 65, 68);
 
+  static const Color darkPurple = Color.fromARGB(255, 25, 20, 46);
+
   static const List<Color> reefColors = [
       Color.fromARGB(255, 195, 103, 191), // L1
       Color.fromARGB(255, 77, 110, 211), // L2
@@ -101,6 +103,7 @@ final Map<int,String> responseCodes = {
   402: "Payment Required",
   403: "Forbidden",
   404:"File Not Found",
+  500:"Internal Server Error"
 };
 
 extension StringExtensions on String {
