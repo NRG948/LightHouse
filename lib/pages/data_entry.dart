@@ -232,12 +232,14 @@ class DataEntryState extends State<DataEntry> {
                 "Widget $title doesn't have dropdown options specified.");
           }
           final options = widgetData["options"]!.split(",");
+          bool compactTitle = widgetData["compactTitle"] ?? false;
           return NRGDropdown(
               title: title,
               jsonKey: jsonKey,
               options: options,
               height: height,
-              width: width);
+              width: width,
+              compactTitle: compactTitle,);
         case "placeholder":
           return NRGPlaceholder(
               title: title, jsonKey: jsonKey, height: height, width: width);

@@ -12,6 +12,7 @@ class NRGDropdown extends StatefulWidget {
   final String jsonKey; // Key for storing selected value in exportData
   final double height; // Height of the dropdown container
   final double width; // Width of the dropdown container
+  final bool compactTitle;
 
   // Constructor for initializing the widget properties
   const NRGDropdown(
@@ -20,7 +21,8 @@ class NRGDropdown extends StatefulWidget {
       required this.jsonKey,
       required this.options,
       required this.height,
-      required this.width});
+      required this.width,
+      required this.compactTitle});
 
   @override
   State<NRGDropdown> createState() => _NRGDropdownState();
@@ -61,7 +63,7 @@ class _NRGDropdownState extends State<NRGDropdown> {
             // Container for the title
             Container(
                 height: _height / 2,
-                width: _width / 2,
+                width: _width / (widget.compactTitle ? 3 : 2),
                 decoration: BoxDecoration(
                     color: Constants.pastelGray,
                     borderRadius: BorderRadius.circular(Constants.borderRadius)),

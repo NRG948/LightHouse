@@ -113,9 +113,10 @@ Map<String, dynamic> atlascout = {
         }, 
         {
           "title": "Defense Rating", 
-          "type": "rating", 
+          "type": "dropdown", 
+          "options": "N/A,Not Effective,Somewhat Effective,Very Effective",
           "jsonKey": "defenseRating", 
-          "clearable": true
+          "compactTitle": true
         }
       ]
     }
