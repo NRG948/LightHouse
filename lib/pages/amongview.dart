@@ -19,7 +19,6 @@ class DataViewerAmongView extends StatefulWidget {
 }
 
 class _DataViewerAmongViewState extends State<DataViewerAmongView> {
-  static late TeamSpritesheet spritesheet;
   late AmongViewSharedState state;
   late ValueNotifier<bool> sortCheckbox;
   late ScrollController scrollController;

@@ -109,7 +109,7 @@ class _UploadButtonState extends State<UploadButton> {
               width: 350 * scaleFactor,
               height: 100 * scaleFactor,
               decoration: BoxDecoration(
-                  color: Constants.pastelWhite,
+                image: DecorationImage(image: AssetImage("assets/images/upload_bg.png")),
                   borderRadius: BorderRadius.circular(Constants.borderRadius)),
               child: Text(
                 "Loading...",
@@ -121,7 +121,8 @@ class _UploadButtonState extends State<UploadButton> {
             width: 350 * scaleFactor,
             height: 100 * scaleFactor,
             decoration: BoxDecoration(
-                color: Constants.pastelWhite,
+                image: DecorationImage(image: AssetImage("assets/images/upload_bg.png"),fit: BoxFit.fitWidth),
+              
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: TextButton(
                 onPressed: () {
@@ -130,18 +131,12 @@ class _UploadButtonState extends State<UploadButton> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                        width: 200 * scaleFactor,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(Constants.borderRadius),
-                            color: Constants.pastelGray),
-                        child: Center(
-                            child: Text("UPLOAD", style: comfortaaBold(25)))),
+                    Center(
+                        child: Text("UPLOAD", style: comfortaaBold(25))),
                     Text(
                         "Upload ${(snapshot.data ?? []).length} items to server",
                         style: comfortaaBold(18,
-                            color: Constants.pastelBrown, bold: false))
+                             bold: false))
                   ],
                 )),
           );
@@ -351,7 +346,7 @@ class _DownloadButtonState extends State<DownloadButton> {
       width: 350 * scaleFactor,
       height: 100 * scaleFactor,
       decoration: BoxDecoration(
-          color: Constants.pastelWhite,
+          image: DecorationImage(image: AssetImage("assets/images/download_bg.png"),fit: BoxFit.fitWidth),
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: TextButton(
         onPressed: () {
@@ -364,15 +359,10 @@ class _DownloadButtonState extends State<DownloadButton> {
               });
         },
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(
-              width: 200 * scaleFactor,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Constants.borderRadius),
-                  color: Constants.pastelGray),
-              child: Center(child: Text("DOWNLOAD", style: comfortaaBold(25)))),
+          Center(child: Text("DOWNLOAD", style: comfortaaBold(25))),
           Text("Download Items from server",
               style:
-                  comfortaaBold(18, color: Constants.pastelBrown, bold: false))
+                  comfortaaBold(18, bold: false))
         ]),
       ),
     );

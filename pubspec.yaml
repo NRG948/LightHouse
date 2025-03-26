@@ -82,15 +82,18 @@ flutter:
       - assets/shaders/stripes_shader.frag
 
   assets:
+      - assets/images/amongview_bg.png
       - assets/images/auto_field_map.png
       - assets/images/Background.png
       - assets/images/background-hires.png
+      - assets/images/download_bg.png
       - assets/images/startingLocationField.png
       - assets/images/startPos.png
       - assets/images/startPos_white.png
       - assets/images/startPosWhiteLabel.png
       - assets/images/startPosFSBlue.png
       - assets/images/startPosFSRed.png
+      - assets/images/upload_bg.png
       - assets/images/tba_lamp.png
       - assets/images/unknown.png
       - assets/images/loading.png
@@ -101,6 +104,7 @@ flutter:
       - assets/images/reef-chronos/GH.png
       - assets/images/reef-chronos/IJ.png
       - assets/images/reef-chronos/KL.png
+      - assets/images/tdv_bg.jpg
       - assets/text/teams0-500.txt
       - assets/text/teams500-1000.txt
       - assets/text/teams1000-1500.txt
