@@ -348,14 +348,16 @@ class AmongViewSharedState extends ChangeNotifier {
         }
       case "climbConsistency":
         for (int team in teamsInEvent) {
-          List<double> dataPoints = [];
+          List<String> dataPoints = [];
           for (dynamic match in data) {
             if (match["teamNumber"]! == team) {
-              dataPoints.add(match[activeSortKey]!.toDouble());
+              dataPoints.add(match["endLocation"]!);
             }
         }
-        final average = dataPoints.sum / dataPoints.length;
-        chartData.addEntries([MapEntry(team, average.fourDigits)]);
+        int deepClimbs = dataPoints.where((item) => item == "Deep Climb").length;
+        int shallowClimbs = dataPoints.where((item) => item == "Shallow Climb").length;
+        double consistency = (deepClimbs + shallowClimbs) / dataPoints.length;
+        chartData.addEntries([MapEntry(team, consistency.fourDigits)]);
         }
       case "viewAllTeams":
         for (int team in teamsInEvent) {
@@ -514,6 +516,7 @@ class AmongViewSharedState extends ChangeNotifier {
 Map<String,dynamic> sortKeys = {
 "Atlas": {
   "viewAllTeams":"viewAllTeams",
+  "climbConsistency (% of matches climbed)": "climbConsistency",
   "coralPickups": "average",
   "coralScoredTotal": "totalaverage",
   "coralScoredL1": "average",

@@ -37,9 +37,14 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    matchPitController = TabController(length: 2, vsync: this,initialIndex: (ModalRoute.of(context)?.settings.arguments as List<int>)[1]);
+    matchPitController = TabController(
+        length: 2,
+        vsync: this,
+        initialIndex:
+            (ModalRoute.of(context)?.settings.arguments as List<int>)[1]);
     if (forceRunOnce) {
-      state.activeTeam = (ModalRoute.of(context)?.settings.arguments as List<int>)[0];
+      state.activeTeam =
+          (ModalRoute.of(context)?.settings.arguments as List<int>)[0];
       state.setActiveEvent(configData["eventKey"]!);
       state.getEnabledLayouts();
       if (state.enabledLayouts.isNotEmpty) {
@@ -72,7 +77,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
               style: comfortaaBold(18, color: Constants.pastelBrown)));
     }
 
-    state.activeTeam = (ModalRoute.of(context)?.settings.arguments as List<int>)[0];
+    state.activeTeam =
+        (ModalRoute.of(context)?.settings.arguments as List<int>)[0];
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     scaleFactor = screenHeight / 914;
@@ -120,11 +126,18 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text("Layout:", style: comfortaaBold(10,color: Colors.black)),
+                        Text("Layout:",
+                            style: comfortaaBold(10, color: Colors.black)),
                         DropdownButton(
                             value: state.activeLayout,
                             items: state.enabledLayouts.map((e) {
-                              return DropdownMenuItem(value: e, child: Text(e.toSentenceCase,style: comfortaaBold(12,color: Colors.black),));
+                              return DropdownMenuItem(
+                                  value: e,
+                                  child: Text(
+                                    e.toSentenceCase,
+                                    style:
+                                        comfortaaBold(12, color: Colors.black),
+                                  ));
                             }).toList(),
                             onChanged: (newValue) {
                               setState(() {
@@ -137,12 +150,18 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text("Sort by:", style: comfortaaBold(10,color: Colors.black)),
+                          Text("Sort by:",
+                              style: comfortaaBold(10, color: Colors.black)),
                           DropdownButton(
                               value: state.activeSortKey,
                               items: state.getSortKeys().map((e) {
                                 return DropdownMenuItem(
-                                    value: e, child: Text(e.toSentenceCase,style: comfortaaBold(12,color: Colors.black),));
+                                    value: e,
+                                    child: Text(
+                                      e.toSentenceCase,
+                                      style: comfortaaBold(12,
+                                          color: Colors.black),
+                                    ));
                               }).toList(),
                               onChanged: (newValue) {
                                 setState(() {
@@ -395,6 +414,17 @@ class AVISharedState extends ChangeNotifier {
                 getParsedMatchNumber(match), match[activeSortKey]!.toDouble())
           ]);
         }
+      case "climb":
+        for (dynamic match in data) {
+          chartData.addEntries([
+            MapEntry(
+                getParsedMatchNumber(match),
+                (match["endLocation"] == "Deep Climb" ||
+                        match["endLocation"] == "Shallow Climb")
+                    ? 1
+                    : 0)
+          ]);
+        }
       case "viewAllMatches":
         for (dynamic match in data) {
           chartData.addEntries([MapEntry(getParsedMatchNumber(match), 1.0)]);
@@ -550,7 +580,7 @@ class AVISharedState extends ChangeNotifier {
 // These keys are used by the chart to determine how to parse data
 Map<String, dynamic> sortKeys = {
   "Atlas": {
-    "viewAllMatches" : "viewAllMatches",
+    "viewAllMatches": "viewAllMatches",
     "coralPickups": "raw",
     "coralScoredTotal": "totalraw",
     "coralScoredL1": "raw",
@@ -562,6 +592,7 @@ Map<String, dynamic> sortKeys = {
     "algaeScoreProcessor": "raw",
     "algaeScoreNet": "raw",
     "climbStartTime": "raw",
+    "climbedInMatch": "climb",
     "bargeCS Used in Auto": "rawboolean",
     "processorCS Used in Auto": "rawboolean",
     "hasNoAuto": "rawboolean",
