@@ -75,6 +75,7 @@ class _NRGDropdownState extends State<NRGDropdown> {
                 ))),
             // Dropdown button
             DropdownButton<String>(
+              borderRadius: BorderRadius.circular(Constants.borderRadius),
               items: _options.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

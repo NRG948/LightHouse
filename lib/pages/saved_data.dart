@@ -244,6 +244,7 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
             style: comfortaaBold(18, color: Colors.black),
           ),
           DropdownButton<String>(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
               items: getSavedEvents().map((item) {
                 return DropdownMenuItem<String>(
@@ -307,6 +308,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
             style: comfortaaBold(18, color: Colors.black),
           ),
           DropdownButton<String>(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
               items: layouts.map((item) {
                 return DropdownMenuItem<String>(

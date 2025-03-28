@@ -280,6 +280,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
                         BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
                   child: DropdownButton(
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
                     value: matchType,
                     items: ["Qualifications", "Playoffs", "Finals"].map((v) {
                       return DropdownMenuItem(

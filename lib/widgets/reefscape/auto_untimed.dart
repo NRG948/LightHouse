@@ -111,6 +111,7 @@ class _RSAutoUntimedState extends State<RSAutoUntimed> {
                         child: SizedBox(
                           height: 23,
                           child: DropdownButton(
+                              borderRadius: BorderRadius.circular(Constants.borderRadius),
                               value: sharedState.currentAuto,
                               items: dropdownItems,
                               onChanged: (selection) {

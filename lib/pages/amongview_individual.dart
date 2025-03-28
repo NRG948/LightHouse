@@ -129,6 +129,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                         Text("Layout:",
                             style: comfortaaBold(10, color: Colors.black)),
                         DropdownButton(
+                          borderRadius: BorderRadius.circular(Constants.borderRadius),
                             value: state.activeLayout,
                             items: state.enabledLayouts.map((e) {
                               return DropdownMenuItem(
@@ -153,6 +154,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                           Text("Sort by:",
                               style: comfortaaBold(10, color: Colors.black)),
                           DropdownButton(
+                            borderRadius: BorderRadius.circular(Constants.borderRadius),
                               value: state.activeSortKey,
                               items: state.getSortKeys().map((e) {
                                 return DropdownMenuItem(

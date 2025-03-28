@@ -294,6 +294,7 @@ class _MatchInfoState extends State<MatchInfo>
                         BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
                   child: DropdownButton(
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
                     value: matchType,
                     items: ["Qualifications", "Playoffs", "Finals"].map((v) {
                       return DropdownMenuItem(
@@ -360,6 +361,7 @@ class _MatchInfoState extends State<MatchInfo>
                         BorderRadius.circular(Constants.borderRadius)),
                 child: Center(
                   child: DropdownButton(
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
                     value: driverStation,
                     items: [
                       "Red 1",
