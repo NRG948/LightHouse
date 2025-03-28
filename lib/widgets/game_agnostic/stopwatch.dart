@@ -168,13 +168,13 @@ class HoriVert extends StatelessWidget {
       margin: EdgeInsets.only(left: height * 0.1),
       height: height * 0.8,
       width: width * 0.75,
-      decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: HoriVertText(stopwatchDisplay: stopwatchDisplay, height: height, width: width, horizontal: horizontal,),
     ) :Container(
       margin: EdgeInsets.only(left: height * 0.1),
       height: height * 0.8,
       width: width * 0.6,
-      decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(Constants.borderRadius)),
+      decoration: BoxDecoration(color: Constants.pastelWhite,borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Center(
         child: HoriVertText(stopwatchDisplay: stopwatchDisplay, height: height, horizontal: horizontal,),
       ),

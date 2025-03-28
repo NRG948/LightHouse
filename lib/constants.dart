@@ -26,7 +26,7 @@ class Constants {
   static const Color pastelBrown = Color.fromARGB(255, 50, 30, 26);
 
   // Neon
-  static const Color neonWhite = Colors.white;
+  static const Color neonWhite = Constants.pastelWhite;
   static const Color neonRed = Color.fromARGB(255, 248, 104, 133);
   static const Color neonYellow = Color.fromARGB(255, 255, 217, 101);
   static const Color neonGreen = Color.fromARGB(255, 149, 240, 104);

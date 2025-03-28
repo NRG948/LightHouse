@@ -73,7 +73,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Colors.white),
+                color: Constants.pastelWhite),
           ),
           centerTitle: true,
           leading: IconButton(onPressed: () {
@@ -236,7 +236,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                 Text("View Match Data",style: comfortaaBold(18),),
-                                Icon(Icons.keyboard_arrow_right,color: Colors.white,size: 35 * scaleFactor,)
+                                Icon(Icons.keyboard_arrow_right,color: Constants.pastelWhite,size: 35 * scaleFactor,)
                               ],),
                             ),
                           ),
@@ -253,7 +253,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
                                 Text("View Pit Data",style: comfortaaBold(18),),
-                                Icon(Icons.keyboard_arrow_right,color: Colors.white,size: 35 * scaleFactor,)
+                                Icon(Icons.keyboard_arrow_right,color: Constants.pastelWhite,size: 35 * scaleFactor,)
                               ],),
                             ),
                           ),

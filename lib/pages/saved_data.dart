@@ -58,7 +58,7 @@ class SavedData extends StatelessWidget {
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Colors.white),
+                color: Constants.pastelWhite),
           ),
           centerTitle: true,
           leading: IconButton(

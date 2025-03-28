@@ -561,7 +561,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           style: TextStyle(
               fontFamily: "Comfortaa",
               fontWeight: FontWeight.w900,
-              color: Colors.white),
+              color: Constants.pastelWhite),
         ),
         centerTitle: true,
         leading: IconButton(

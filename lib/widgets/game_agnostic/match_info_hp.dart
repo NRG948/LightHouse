@@ -89,7 +89,7 @@ class _MatchInfoHumanPlayerState extends State<MatchInfoHumanPlayer>
           //     color: Constants.pastelGray,
           //           borderRadius: BorderRadius.circular(Constants.borderRadius)
           //         ),
-          //     child: Center(child: AutoSizeText("Match - $eventKey".toUpperCase(),style: comfortaaBold(35,color:Colors.white),textAlign: TextAlign.center,)),
+          //     child: Center(child: AutoSizeText("Match - $eventKey".toUpperCase(),style: comfortaaBold(35,color:Constants.pastelWhite),textAlign: TextAlign.center,)),
 
           //   ),
           // ),

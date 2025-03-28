@@ -93,7 +93,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Colors.white),
+                color: Constants.pastelWhite),
           ),
           centerTitle: true,
           leading: IconButton(

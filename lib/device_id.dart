@@ -32,7 +32,7 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
                 return Row(
                   children: [
                     CircularProgressIndicator.adaptive(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Constants.pastelWhite,
                       valueColor:
                           AlwaysStoppedAnimation<Color>(Constants.pastelBlue),
                     ),
@@ -88,7 +88,7 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                        Icon(Icons.copy,color: Colors.white,),
+                        Icon(Icons.copy,color: Constants.pastelWhite,),
                         Text("COPY",style: comfortaaBold(25),)
                       ],),
                     ),
@@ -106,7 +106,7 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                        Icon(Icons.close,color: Colors.white,),
+                        Icon(Icons.close,color: Constants.pastelWhite,),
                         Text("CLOSE",style: comfortaaBold(25),)
                       ],),
                     ),

@@ -107,7 +107,7 @@ class DataViewerHome extends StatelessWidget {
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Colors.white),
+                color: Constants.pastelWhite),
           ),
           centerTitle: true, // Centers the title in the app bar.
           iconTheme: IconThemeData(color: Constants.pastelWhite),

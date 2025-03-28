@@ -202,7 +202,7 @@ class Launcher extends StatelessWidget {
                     child: Center(
                       child: AutoSizeText(
                         title.toUpperCase(),
-                        style: comfortaaBold(25,color: Colors.white)
+                        style: comfortaaBold(25,color: Constants.pastelWhite)
                       ),
                     ),  
                   ),

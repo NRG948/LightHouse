@@ -73,7 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   fontWeight: FontWeight.w900,
-                  color: Colors.white),
+                  color: Constants.pastelWhite),
             ),
             centerTitle: true,
             actions: [

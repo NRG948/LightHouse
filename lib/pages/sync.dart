@@ -35,7 +35,7 @@ class SyncPageState extends State<SyncPage> {
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Colors.white),
+                color: Constants.pastelWhite),
           ),
           centerTitle: true,
           leading: IconButton(
@@ -567,7 +567,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                       },
                       icon: Icon(
                         Icons.network_ping,
-                        color: Colors.white,
+                        color: Constants.pastelWhite,
                       )),
                 )
               ],
@@ -594,7 +594,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                             height: 20 * scaleFactor,
                             width: 20 * scaleFactor,
                             child: CircularProgressIndicator.adaptive(
-                              backgroundColor: Colors.white,
+                              backgroundColor: Constants.pastelWhite,
                               valueColor: AlwaysStoppedAnimation<Color>(
                                   Constants.pastelBlue),
                             )),
