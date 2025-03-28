@@ -1,5 +1,6 @@
 import "dart:collection";
 import "dart:convert";
+import "dart:math";
 
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
@@ -155,6 +156,86 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         style: comfortaaBold(10, color: Constants.pastelBrown));
   }
 
+  Widget getDefenseMatches() {
+    Map<String, List<int>> matches = {
+      "Not Effective": [],
+      "Somewhat Effective": [],
+      "Very Effective": [],
+    };
+
+    for (Map<String, dynamic> matchData in atlasData) {
+      if (matchData["teamNumber"] == currentTeamNumber &&
+          matchData["crossedMidline"]) {
+        if (matches.keys.contains(matchData["defenseRating"])) {
+          matches[matchData["defenseRating"]]!.add(matchData["matchNumber"]);
+        }
+      }
+    }
+
+    List<Widget> row = [];
+    for (String key in matches.keys) {
+      row.add(Expanded(
+        child: Column(
+          spacing: 8,
+          children: [
+            Center(
+              child: Text(key,
+                  textAlign: TextAlign.center,
+                  style: comfortaaBold(12, color: Constants.pastelBrown)),
+            ),
+            Expanded(
+              child: ListView.separated(
+                  itemCount: matches[key]!.length,
+                  separatorBuilder: (context, index) =>
+                      Divider(height: 12, color: Constants.pastelWhite),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                        decoration: BoxDecoration(
+                            color: Constants.pastelRed,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(50, 0, 0, 0),
+                                offset: Offset.fromDirection(pi / 2, 5),
+                                blurRadius: 2,
+                              )
+                            ],
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius)),
+                        padding: EdgeInsets.all(4),
+                        child: Center(
+                          child: Text("${matches[key]![index]}",
+                              style: comfortaaBold(24,
+                                  color: Constants.pastelWhite)),
+                        ));
+                  }),
+            ),
+          ],
+        ),
+      ));
+    }
+
+    return Container(
+        width: 240,
+        height: 200,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: Constants.pastelWhite,
+            borderRadius: BorderRadius.circular(Constants.borderRadius)),
+        child: Column(
+          spacing: 8,
+          children: [
+            Text("Defense Matches",
+                style: comfortaaBold(20, color: Constants.pastelBrown)),
+            Expanded(
+              child: Row(
+                spacing: 8,
+                children: row,
+              ),
+            ),
+          ],
+        ));
+  }
+
   Widget getDisableReasonCommentBox() {
     List<List<String>> comments = [];
 
@@ -270,7 +351,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           matchData["attemptedClimb"] &&
           ["Deep Climb", "Shallow Climb"].contains(matchData["endLocation"])) {
         matches++;
-        if (matchData["climbStartTime"] is num && matchData["climbStartTime"] != 0) {
+        if (matchData["climbStartTime"] is num &&
+            matchData["climbStartTime"] != 0) {
           totalTime += matchData["climbStartTime"];
         }
       }
@@ -471,9 +553,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   @override
   Widget build(BuildContext context) {
-    atlasData = getDataAsMapFromDatabase("Atlas");
+    atlasData = getDataAsMapFromSavedMatches("Atlas");
     //chronosData = getDataAsMapFromDatabase("Chronos");
-    humanPlayerData = getDataAsMapFromDatabase("Human Player");
+    humanPlayerData = getDataAsMapFromSavedMatches("Human Player");
     //pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
@@ -526,7 +608,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         spacing: marginSize,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          getDisableReasonCommentBox(),
+          getDefenseMatches(),
           Container(
             padding: EdgeInsets.all(marginSize),
             width: 140 * horizontalScaleFactor,
