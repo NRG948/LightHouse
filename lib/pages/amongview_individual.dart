@@ -87,7 +87,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
         backgroundColor: Constants.pastelRed,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
+          backgroundColor: themeColorPalettes[configData["theme"]]![0],
           title: Text(
             "Team ${state.activeTeam} - AmongView",
             style: TextStyle(
@@ -111,7 +111,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
             height: screenHeight,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
             child: Column(children: [
               Container(

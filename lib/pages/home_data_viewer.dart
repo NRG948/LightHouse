@@ -27,7 +27,7 @@ class DataViewerHome extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Constants.darkPurple,
                 image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
             child: Column(
               spacing: 10,
@@ -101,7 +101,7 @@ class DataViewerHome extends StatelessWidget {
         ),
 
         appBar: AppBar(
-          backgroundColor: Constants.pastelRed, // Sets the app bar color.
+          backgroundColor:themeColorPalettes[configData["theme"]]![0], // Sets the app bar color.
           title: const Text(
             "LightHouse",
             style: TextStyle(

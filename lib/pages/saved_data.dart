@@ -52,7 +52,7 @@ class SavedData extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
+          backgroundColor:themeColorPalettes[configData["theme"]]![0],
           title: const Text(
             "Saved Data",
             style: TextStyle(
@@ -177,7 +177,7 @@ class SavedData extends StatelessWidget {
             width: screenWidth,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                     fit: BoxFit.cover)), // set background image
             child: Column(
               children: [

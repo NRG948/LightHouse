@@ -86,6 +86,7 @@ flutter:
       - assets/images/auto_field_map.png
       - assets/images/Background.png
       - assets/images/background-hires.png
+      - assets/images/background-hires-dark.png
       - assets/images/download_bg.png
       - assets/images/startingLocationField.png
       - assets/images/startPos.png

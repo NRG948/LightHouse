@@ -67,7 +67,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
         backgroundColor: Constants.pastelRed,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
+          backgroundColor: themeColorPalettes[configData["theme"]]![0],
           title: const Text(
             "AmongView",
             style: TextStyle(
@@ -87,7 +87,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
       
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
             child: 
             Center(
