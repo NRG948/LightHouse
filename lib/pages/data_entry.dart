@@ -594,9 +594,16 @@ void saveJson(BuildContext context) async {
                     if (await saveExport() == 0) {
                       if (["Atlas", "Chronos", "Human Player"]
                           .contains(DataEntry.exportData["layout"])) {
-                        print(DataEntry.exportData["matchNumber"]);
                         configData["currentMatch"] =
                             "${DataEntry.exportData["matchNumber"]}";
+                        configData["currentMatchType"] =
+                            DataEntry.exportData["matchType"];
+                        saveConfig();
+                      }
+                      if (["Atlas", "Chronos"]
+                          .contains(DataEntry.exportData["layout"])) {
+                        configData["currentDriverStation"] =
+                            "${DataEntry.exportData["driverStation"]}";
                         saveConfig();
                       }
                       showDialog(

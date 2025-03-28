@@ -30,6 +30,12 @@ class _MatchInfoState extends State<MatchInfo>
     String content = await loadTBAFile(eventKey, "matches");
     try {
       matchData = jsonDecode(content);
+
+      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+          matchData != [] &&
+          configData["autofillLastMatch"] == "true") {
+        autofillTeamNumber();
+      }
     } catch (e) {
       print(e);
     }
@@ -49,7 +55,9 @@ class _MatchInfoState extends State<MatchInfo>
   @override
   void initState() {
     super.initState();
-    if (TeamSpritesheet.spritesheet == null) {TeamSpritesheet.loadSpritesheet();}
+    if (TeamSpritesheet.spritesheet == null) {
+      TeamSpritesheet.loadSpritesheet();
+    }
     scaleFactor = widget.width / 400;
     eventKey = configData["eventKey"]!;
     parseTBAMatchesFile();
@@ -75,12 +83,13 @@ class _MatchInfoState extends State<MatchInfo>
       int value = int.parse(configData["currentMatch"]!) + 1;
 
       DataEntry.exportData["matchNumber"] = value;
-      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
-          matchData != []) {
-        autofillTeamNumber();
-      }
-      
-      _initialValue = "$value";
+      _autofilledMatchNumber = "$value";
+
+      driverStation = configData["currentDriverStation"]!;
+      DataEntry.exportData["driverStation"] = driverStation;
+
+      matchType = configData["currentMatchType"]!;
+      DataEntry.exportData["matchType"] = matchType;
     }
   }
 
@@ -97,7 +106,7 @@ class _MatchInfoState extends State<MatchInfo>
   String matchType = "Qualifications";
   String driverStation = "Red 1";
   TextEditingController teamNumberController = TextEditingController();
-  String? _initialValue;
+  String? _autofilledMatchNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +132,9 @@ class _MatchInfoState extends State<MatchInfo>
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Center(
                 child: Row(
+              children: [
+                Column(
                   children: [
-                    Column(
-                                  children: [
                     // Display event key
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -198,16 +207,25 @@ class _MatchInfoState extends State<MatchInfo>
                             )))
                       ],
                     )
-                                  ],
-                                ),
-                  SizedBox(width: 10 * scaleFactor,),
-                  FutureBuilder(future: TeamSpritesheet.getTeamPicture(int.tryParse(teamNumberController.text) ?? 0), builder: 
-                  (context,snapshot) {
-                    if (snapshot.connectionState != ConnectionState.done) {return Container();}
-                    return Image.memory(snapshot.data!,width: 50 * scaleFactor,height: 50 * scaleFactor,fit:BoxFit.fill);
-                  })
                   ],
-                )),
+                ),
+                SizedBox(
+                  width: 10 * scaleFactor,
+                ),
+                FutureBuilder(
+                    future: TeamSpritesheet.getTeamPicture(
+                        int.tryParse(teamNumberController.text) ?? 0),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return Container();
+                      }
+                      return Image.memory(snapshot.data!,
+                          width: 50 * scaleFactor,
+                          height: 50 * scaleFactor,
+                          fit: BoxFit.fill);
+                    })
+              ],
+            )),
           ),
           // Input for team number and replay checkbox
           Row(
@@ -304,7 +322,7 @@ class _MatchInfoState extends State<MatchInfo>
                 width: 75 * scaleFactor,
                 child: TextFormField(
                   keyboardType: TextInputType.number,
-                  initialValue: _initialValue,
+                  initialValue: _autofilledMatchNumber,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   onChanged: (value) {
                     HapticFeedback.mediumImpact();

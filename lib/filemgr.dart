@@ -333,6 +333,7 @@ final Map<String, String> defaultConfig = {
   "flipField": "false",
   "currentMatch": "0",
   "currentDriverStation": "Red 1",
+  "currentMatchType": "Qualifications",
   "autofillLastMatch": "false"
 };
 
