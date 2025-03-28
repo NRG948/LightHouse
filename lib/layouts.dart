@@ -80,29 +80,29 @@ Map<String, dynamic> atlascout = {
           "type": "numberbox",
           "jsonKey": "climbStartTime"
         },
-        // {
-        //   "type": "row",
-        //   "children": [
-        //     {
-        //       "title": "Robot Disabled",
-        //       "type": "checkbox_vertical",
-        //       "jsonKey": "robotDisabled",
-        //       "width": "20"
-        //     },
-        //     {
-        //       "type": "spacer",
-        //       "width": "2",
-        //     },
-        //     {
-        //       "title": "Reason?",
-        //       "type": "textbox",
-        //       "jsonKey": "robotDisableReason",
-        //       "width": "48",
-        //       "maxLines": 2,
-        //       "fontSize": 15.0
-        //     }
-        //   ]
-        // },
+        {
+          "type": "row",
+          "children": [
+            {
+              "title": "Robot Disabled",
+              "type": "checkbox_vertical",
+              "jsonKey": "robotDisabled",
+              "width": "20"
+            },
+            {
+              "type": "spacer",
+              "width": "2",
+            },
+            {
+              "title": "Reason?",
+              "type": "textbox",
+              "jsonKey": "robotDisableReason",
+              "width": "48",
+              "maxLines": 2,
+              "fontSize": 15.0
+            }
+          ]
+        },
         {"title": "Data Quality", "type": "rating", "jsonKey": "dataQuality", "clearable": false},
         {"title": "Comments", "type": "comment-box", "jsonKey": "comments","height":"10"},
         {
