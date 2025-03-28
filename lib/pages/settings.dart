@@ -69,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // App bar with back navigation and title.
           appBar: AppBar(
             iconTheme: IconThemeData(color: Constants.pastelWhite),
-            backgroundColor: themeColorPalettes[configData["theme"]]![0],
+            backgroundColor: themeColorPalettes[configData["theme"] ?? "Light"]![0],
             title: const Text(
               "Settings",
               style: TextStyle(

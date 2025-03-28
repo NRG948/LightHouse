@@ -69,7 +69,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
           canPop: false,
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: themeColorPalettes[snapshot.data!["theme"]]![0],
+            backgroundColor: (themeColorPalettes[snapshot.data!["theme"] ?? "Light"]!)[0],
             // Drawer menu with navigation options
             drawer: Drawer(
               child: ListView(
@@ -96,7 +96,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
             // App bar with icons for settings and displaying config data
             appBar: AppBar(
               iconTheme: IconThemeData(color: Constants.pastelWhite),
-              backgroundColor: themeColorPalettes[snapshot.data!["theme"]]![0],
+              backgroundColor: (themeColorPalettes[snapshot.data!["theme"] ?? "Light"]!)[0],
               centerTitle: true,
               actions: [
                 // Buttons used for testing functionality

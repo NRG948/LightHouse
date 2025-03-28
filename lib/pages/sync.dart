@@ -29,7 +29,7 @@ class SyncPageState extends State<SyncPage> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: themeColorPalettes[configData["theme"]]![0],
+          backgroundColor: themeColorPalettes[configData["theme"] ?? "Light"]![0],
           title: const Text(
             "Sync",
             style: TextStyle(

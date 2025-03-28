@@ -101,7 +101,7 @@ class DataViewerHome extends StatelessWidget {
         ),
 
         appBar: AppBar(
-          backgroundColor:themeColorPalettes[configData["theme"]]![0], // Sets the app bar color.
+          backgroundColor:themeColorPalettes[configData["theme"] ?? "Light"]![0], // Sets the app bar color.
           title: const Text(
             "LightHouse",
             style: TextStyle(

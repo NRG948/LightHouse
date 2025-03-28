@@ -139,7 +139,7 @@ final Map<String,List<Color>> themeColorPalettes = {
   "Dark": [Constants.darkModeDarkGray,Constants.darkModeLightGray],
   "Pink": [Constants.pinkModeDarkPink,Constants.pinkModeLightPink],
   "Black": [Colors.black,Colors.black],
-  "Blue": [Constants.blueModeDarkBlue,Constants.blueModeLightBlue]
+  "Blue": [Constants.blueModeDarkBlue,Constants.blueModeLightBlue],
 };
 
 extension StringExtensions on String {

@@ -391,7 +391,7 @@ class DataEntryState extends State<DataEntry> {
             // Prevents background image from being resized when keyboard opens
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              backgroundColor:configData["theme"] != null ? themeColorPalettes[configData["theme"]]![0] : Constants.darkModeDarkGray,
+              backgroundColor:themeColorPalettes[configData["theme"] ?? "Light"]![0] ,
               title: FittedBox(
                 child: AutoSizeText(
                   "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
@@ -523,7 +523,7 @@ class DataEntryState extends State<DataEntry> {
           showUnselectedLabels: false,
           showSelectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          backgroundColor:configData["theme"] != null ? themeColorPalettes[configData["theme"]]![1] : Constants.darkModeDarkGray,
+          backgroundColor: themeColorPalettes[configData["theme"] ?? "Light"]![1],
           items: createNavBar(layoutJSON["pages"])),
     );
   }

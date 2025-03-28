@@ -67,7 +67,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
         backgroundColor: Constants.pastelRed,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: themeColorPalettes[configData["theme"]]![0],
+          backgroundColor: themeColorPalettes[configData["theme"] ?? "Light"]![0],
           title: const Text(
             "AmongView",
             style: TextStyle(
