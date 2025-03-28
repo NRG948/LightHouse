@@ -350,7 +350,7 @@ final Map<String, String> settingsMap = {
 };
 
 final Map<String,List<String>> settingsDropdownMap = {
-  "theme" : ["Light","Dark"]
+  "theme" : ["Light","Dark","Black","Pink","Blue"]
 };
 
 

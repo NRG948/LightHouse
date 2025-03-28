@@ -52,7 +52,7 @@ final List<String> splashTexts = [
         "I lowkey forgot miami was a city - our cad vp",
         "The new carti album is mid",
         "five guys is too expensive",
-        "Ampharos is the best pokemon"
+        "Ampharos is the best pokemon",
         "wish!"
 
 ];

@@ -58,8 +58,8 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
       future: asyncConfigData,
       builder: (context,snapshot) {
       if (snapshot.connectionState != ConnectionState.done) {
-        return Scaffold(backgroundColor: Constants.darkModeBlack2,
-        body: Center(child: Text("Loading...",style: comfortaaBold(40,color: Constants.darkModeBlack1),)),
+        return Scaffold(backgroundColor: Constants.darkModeDarkGray,
+        body: Center(child: Text("Loading...",style: comfortaaBold(40,color: Constants.darkModeLightGray),)),
         );
       }
         return PopScope(

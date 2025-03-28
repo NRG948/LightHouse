@@ -635,7 +635,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Constants.pastelRed,
+      backgroundColor: configData["theme"] != null ? themeColorPalettes[configData["theme"]]![0] : Constants.pastelRed,
       appBar: AppBar(
         backgroundColor:themeColorPalettes[configData["theme"]]![0],
         title: const Text(
