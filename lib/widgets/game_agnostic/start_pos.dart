@@ -149,6 +149,8 @@ void showStartPos(BuildContext context, double width, double height) {
                                         .clamp(0.0, 1.0);
                                     y = (y! + details.delta.dy / height)
                                         .clamp(0.0, 1.0);
+                                    DataEntry.exportData["startingPosition"] =
+                                        "${x!.toStringAsFixed(2)},${y!.toStringAsFixed(2)}";
                                   });
                                 },
                                 child: Container(

@@ -553,9 +553,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
   @override
   Widget build(BuildContext context) {
-    atlasData = getDataAsMapFromSavedMatches("Atlas");
+    atlasData = getDataAsMapFromDatabase("Atlas");
     //chronosData = getDataAsMapFromDatabase("Chronos");
-    humanPlayerData = getDataAsMapFromSavedMatches("Human Player");
+    humanPlayerData = getDataAsMapFromDatabase("Human Player");
     //pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
