@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,6 +55,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
     // Get screen dimensions and set scale factor
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    bool secretScreen = Random().nextInt(100) < 1;
     scaleFactor = screenHeight / 914;
     return PopScope(
       canPop: false,
@@ -123,12 +126,12 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
               children: [
                 SizedBox(
                   width: 0.75 * screenWidth,
-                  child: AutoSizeText("LightHouse",style: comfortaaBold(60,spacing: -6),maxLines: 1,textAlign: TextAlign.center,),
+                  child: AutoSizeText(secretScreen ? "LightHuose" : "LightHouse", style: comfortaaBold(60,spacing: -6),maxLines: 1,textAlign: TextAlign.center,),
                 ),
                SizedBox(
                 height: 0.05 * screenHeight,
                 width: 0.8 * screenWidth,
-                child: AutoSizeText(randomSplashText(),style: comfortaaBold(18,spacing: -1),maxLines: 2,textAlign: TextAlign.center,)),
+                child: AutoSizeText(secretScreen ? "Nobody will ever believe you" : randomSplashText(),style: comfortaaBold(18,spacing: -1),maxLines: 2,textAlign: TextAlign.center,)),
                 Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: getLaunchers()),
