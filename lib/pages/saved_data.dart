@@ -52,7 +52,7 @@ class SavedData extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
+          backgroundColor:themeColorPalettes[configData["theme"]]![0],
           title: const Text(
             "Saved Data",
             style: TextStyle(
@@ -177,7 +177,7 @@ class SavedData extends StatelessWidget {
             width: screenWidth,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                     fit: BoxFit.cover)), // set background image
             child: Column(
               children: [
@@ -244,6 +244,7 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
             style: comfortaaBold(18, color: Colors.black),
           ),
           DropdownButton<String>(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
               items: getSavedEvents().map((item) {
                 return DropdownMenuItem<String>(
@@ -307,6 +308,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
             style: comfortaaBold(18, color: Colors.black),
           ),
           DropdownButton<String>(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
               items: layouts.map((item) {
                 return DropdownMenuItem<String>(

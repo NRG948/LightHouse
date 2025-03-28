@@ -29,7 +29,7 @@ class SyncPageState extends State<SyncPage> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
+          backgroundColor: themeColorPalettes[configData["theme"]]![0],
           title: const Text(
             "Sync",
             style: TextStyle(
@@ -49,7 +49,7 @@ class SyncPageState extends State<SyncPage> {
           width: 400 * sizeScaleFactor,
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("assets/images/background-hires.png"),
+                  image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                   fit: BoxFit.cover)),
           child: Center(
             child: Column(

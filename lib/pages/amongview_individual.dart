@@ -87,7 +87,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
         backgroundColor: Constants.pastelRed,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
+          backgroundColor: themeColorPalettes[configData["theme"]]![0],
           title: Text(
             "Team ${state.activeTeam} - AmongView",
             style: TextStyle(
@@ -111,7 +111,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
             height: screenHeight,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                     fit: BoxFit.cover)),
             child: Column(children: [
               Container(
@@ -129,6 +129,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                         Text("Layout:",
                             style: comfortaaBold(10, color: Colors.black)),
                         DropdownButton(
+                          borderRadius: BorderRadius.circular(Constants.borderRadius),
                             value: state.activeLayout,
                             items: state.enabledLayouts.map((e) {
                               return DropdownMenuItem(
@@ -153,6 +154,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                           Text("Sort by:",
                               style: comfortaaBold(10, color: Colors.black)),
                           DropdownButton(
+                            borderRadius: BorderRadius.circular(Constants.borderRadius),
                               value: state.activeSortKey,
                               items: state.getSortKeys().map((e) {
                                 return DropdownMenuItem(

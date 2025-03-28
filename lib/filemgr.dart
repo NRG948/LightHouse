@@ -334,7 +334,8 @@ final Map<String, String> defaultConfig = {
   "currentMatch": "0",
   "currentDriverStation": "Red 1",
   "currentMatchType": "Qualifications",
-  "autofillLastMatch": "false"
+  "autofillLastMatch": "false",
+  "theme": "Light"
 };
 
 final Map<String, String> settingsMap = {
@@ -344,8 +345,14 @@ final Map<String, String> settingsMap = {
   "downloadTheBlueAllianceInfo": "tba",
   "debugMode": "bool",
   "flipField": "bool",
-  "autofillLastMatch": "bool"
+  "autofillLastMatch": "bool",
+  "theme" : "dropdown"
 };
+
+final Map<String,List<String>> settingsDropdownMap = {
+  "theme" : ["Light","Dark","Black","Pink","Blue"]
+};
+
 
 final Map<String, IconData> settingsIconMap = {
   "eventKey": Icons.calendar_today,
@@ -353,5 +360,6 @@ final Map<String, IconData> settingsIconMap = {
   "serverIP": Icons.language,
   "debugMode": Icons.bug_report,
   "flipField": Icons.cached_rounded,
-  "autofillLastMatch": Icons.password_rounded
+  "autofillLastMatch": Icons.password_rounded,
+  "theme": Icons.color_lens
 };

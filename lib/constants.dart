@@ -37,6 +37,17 @@ class Constants {
 
   static const Color darkPurple = Color.fromARGB(255, 25, 20, 46);
 
+  static const Color black = Colors.black;
+
+  static const Color darkModeLightGray = Color.fromARGB(255, 89 , 89, 89);
+  static const Color darkModeDarkGray = Color.fromARGB(255, 39 , 39, 39);
+
+  static const Color pinkModeLightPink = Color.fromARGB(255, 255 , 163, 250);
+  static const Color pinkModeDarkPink = Color.fromARGB(255, 236 , 94, 238);
+
+  static const Color blueModeDarkBlue = Color.fromARGB(255, 50, 95, 147);
+  static const Color blueModeLightBlue = Color.fromARGB(255, 67, 133, 209);
+
   static const List<Color> reefColors = [
       Color.fromARGB(255, 195, 103, 191), // L1
       Color.fromARGB(255, 77, 110, 211), // L2
@@ -45,8 +56,8 @@ class Constants {
       Color.fromARGB(255, 90, 216, 179) // Algae
   ];
 
-  static final double neonBorder = 2;
-  static final double borderRadius = 8;
+  static const double neonBorder = 2;
+  static const double borderRadius = 8;
   /// There is always a delay between the end of, for example, 
   /// auto and the start of teleop. Thus, this is simply for
   /// adding a bit of delay before the next section. :)
@@ -59,7 +70,16 @@ class Constants {
 
   static const bool chronosEnabled = false;
 
+  static BoxDecoration roundBorder({Color color = pastelWhite}) {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(Constants.borderRadius),
+      color: color
+    );
+  }
+  
 }
+
+
 
 TextStyle comfortaaBold(double fontSize,
     {bool bold = true,
@@ -104,6 +124,22 @@ final Map<int,String> responseCodes = {
   403: "Forbidden",
   404:"File Not Found",
   500:"Internal Server Error"
+};
+
+final Map<String, String> backgrounds = {
+  "Light" : "assets/images/background-hires.png",
+  "Dark" : "assets/images/background-hires-dark.png",
+  "Black" : "assets/images/background-hires-black.png",
+  "Pink" : "assets/images/background-hires-pink.png",
+  "Blue" : "assets/images/background-hires-blue.png"
+};
+
+final Map<String,List<Color>> themeColorPalettes = {
+  "Light": [Constants.pastelRed,Constants.pastelYellow],
+  "Dark": [Constants.darkModeDarkGray,Constants.darkModeLightGray],
+  "Pink": [Constants.pinkModeDarkPink,Constants.pinkModeLightPink],
+  "Black": [Colors.black,Colors.black],
+  "Blue": [Constants.blueModeDarkBlue,Constants.blueModeLightBlue]
 };
 
 extension StringExtensions on String {

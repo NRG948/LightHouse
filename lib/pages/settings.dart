@@ -31,6 +31,8 @@ class _SettingsPageState extends State<SettingsPage> {
           return SettingsCheckbox(setting: setting);
         case "tba":
           return TBACheckbox();
+        case "dropdown":
+          return SettingsDropdown(setting: setting,);
         case "serverIP":
           return ServerTestWidget(width: 400,);
         default:
@@ -67,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // App bar with back navigation and title.
           appBar: AppBar(
             iconTheme: IconThemeData(color: Constants.pastelWhite),
-            backgroundColor: Constants.pastelRed,
+            backgroundColor: themeColorPalettes[configData["theme"]]![0],
             title: const Text(
               "Settings",
               style: TextStyle(
@@ -115,7 +117,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           TextButton(
                               onPressed: () {
                                 HapticFeedback.mediumImpact();
-                                Navigator.pushNamed(context,
+                                Navigator.pushReplacementNamed(context,
                                     "/home-scouter"); //navigates back to home
                               },
                               child: Text("OK"))
@@ -132,7 +134,7 @@ class _SettingsPageState extends State<SettingsPage> {
             width: screenWidth,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
                     fit: BoxFit.cover)), // covers the entire background
             child: Center(
               child: Padding(
@@ -150,6 +152,70 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
             ),
           )),
+    );
+  }
+}
+
+class SettingsDropdown extends StatefulWidget {
+  final String setting;
+  const SettingsDropdown({
+    super.key,
+    required this.setting
+  });
+
+  @override
+  State<SettingsDropdown> createState() => _SettingsDropdownState();
+}
+
+class _SettingsDropdownState extends State<SettingsDropdown> {
+  late String selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = configData[widget.setting] ?? settingsDropdownMap[widget.setting]![0];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 400,
+      height: 100,
+      decoration: Constants.roundBorder(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            width: 150,
+            height: 50,
+            decoration: Constants.roundBorder(color: Constants.pastelGray),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              Icon(settingsIconMap[widget.setting] ?? Icons.data_object,color: Constants.pastelWhite,),
+              SizedBox(width: 10,),
+              Text(widget.setting.toSentenceCase,style: comfortaaBold(18),)
+            ],),
+          ),
+          Center(
+            child: DropdownButton<String>(
+              style: comfortaaBold(18,color: Colors.white),
+              
+              dropdownColor: Constants.pastelWhite,
+              value: selectedValue,
+              borderRadius: BorderRadius.circular(Constants.borderRadius),
+              items: (settingsDropdownMap[widget.setting] ?? []).map((e) {
+              return DropdownMenuItem(value: e,child: Text(e,style: comfortaaBold(18,color: Colors.black),),);
+            }).toList(), onChanged: (newvalue) {
+              if (newvalue == null) {return;}
+              setState(() {
+                selectedValue = newvalue;
+              configData[widget.setting] = newvalue;
+              });
+            }),
+          )
+        ],
+      ),
     );
   }
 }
@@ -185,9 +251,7 @@ class _TBACheckboxState extends State<TBACheckbox> {
       child: Container(
         height: 50,
         width: 400,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Constants.borderRadius),
-            color: Constants.pastelWhite),
+        decoration: Constants.roundBorder(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [

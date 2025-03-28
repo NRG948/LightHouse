@@ -57,99 +57,103 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
     final screenHeight = MediaQuery.of(context).size.height;
     bool secretScreen = Random().nextInt(100) < 1;
     scaleFactor = screenHeight / 914;
-    return PopScope(
-      canPop: false,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Constants.pastelRed,
-        // Drawer menu with navigation options
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              DrawerHeader(child: Text("Switch Mode",style: comfortaaBold(18,color: Constants.pastelBrown))),
-              ListTile(
-                  leading: Icon(Icons.home,color: Constants.pastelBrown,),
-                  title: Text("Scouter Home",style: comfortaaBold(18,color: Constants.pastelBrown)),
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
-                    Navigator.pop(context);
-                  }),
-              ListTile(
-                  leading: Icon(Icons.bar_chart,color: Constants.pastelBrown,),
-                  title: Text("Data Viewer Home",style: comfortaaBold(18,color: Constants.pastelBrown)),
-                  onTap: () async {
-                    HapticFeedback.mediumImpact();
-                    Navigator.pushNamed(context, "/home-data-viewer");
-                  })
-            ],
-          ),
-        ),
-        // App bar with icons for settings and displaying config data
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: Constants.pastelRed,
-          centerTitle: true,
-          actions: [
-            // Buttons used for testing functionality
-            // Leave them here but shouldn't be enabled in prod
-            // IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
-            // IconButton(
-            //   icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
-            //   onPressed: (() {
-            //     showDialog(
-            //         context: context,
-            //         builder: (BuildContext context) {
-            //           return AlertDialog(
-            //               content: Text(jsonEncode(configData).toString()));
-            //         });
-            //   }),
-            // ),
-            IconButton(
-                icon: Icon(Icons.settings,color: Constants.pastelWhite,),
-                onPressed: () {
-                  HapticFeedback.mediumImpact();
-                  Navigator.pushNamed(context, "/settings");
-                })
-          ],
-        ),
-        // Main body of the page with a background image
-        body: Container(
-            width: screenWidth,
-            height: screenHeight,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/background-hires.png"),
-                    fit: BoxFit.cover)),
-            // Column containing title, splash text, and launcher buttons
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 0.75 * screenWidth,
-                  child: AutoSizeText(secretScreen ? "LightHuose" : "LightHouse", style: comfortaaBold(60,spacing: -6),maxLines: 1,textAlign: TextAlign.center,),
-                ),
-               SizedBox(
-                height: 0.05 * screenHeight,
-                width: 0.8 * screenWidth,
-                child: AutoSizeText(secretScreen ? "Nobody will ever believe you" : randomSplashText(),style: comfortaaBold(18,spacing: -1),maxLines: 2,textAlign: TextAlign.center,)),
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: getLaunchers()),
-                SizedBox(
-                  height: 0.05 * screenHeight,
-                  width: 0.8 * screenWidth,
-                  child: FutureBuilder(
-                    future: asyncConfigData,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                      return  AutoSizeText("${Constants.versionName} | ${snapshot.data!["scouterName"]} | ${snapshot.data!["eventKey"]}",style: comfortaaBold(18),textAlign: TextAlign.center,);}
-                      else {
-                        return AutoSizeText("Loading...",style: comfortaaBold(18),textAlign: TextAlign.center,);
-                      }}),
-                )
+    return FutureBuilder(
+      future: asyncConfigData,
+      builder: (context,snapshot) {
+      if (snapshot.connectionState != ConnectionState.done) {
+        return Scaffold(backgroundColor: Constants.darkModeDarkGray,
+        body: Center(child: Text("Loading...",style: comfortaaBold(40,color: Constants.darkModeLightGray),)),
+        );
+      }
+        return PopScope(
+          canPop: false,
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: themeColorPalettes[snapshot.data!["theme"]]![0],
+            // Drawer menu with navigation options
+            drawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(child: Text("Switch Mode",style: comfortaaBold(18,color: Constants.pastelBrown))),
+                  ListTile(
+                      leading: Icon(Icons.home,color: Constants.pastelBrown,),
+                      title: Text("Scouter Home",style: comfortaaBold(18,color: Constants.pastelBrown)),
+                      onTap: () {
+                        HapticFeedback.mediumImpact();
+                        Navigator.pop(context);
+                      }),
+                  ListTile(
+                      leading: Icon(Icons.bar_chart,color: Constants.pastelBrown,),
+                      title: Text("Data Viewer Home",style: comfortaaBold(18,color: Constants.pastelBrown)),
+                      onTap: () async {
+                        HapticFeedback.mediumImpact();
+                        Navigator.pushNamed(context, "/home-data-viewer");
+                      })
+                ],
+              ),
+            ),
+            // App bar with icons for settings and displaying config data
+            appBar: AppBar(
+              iconTheme: IconThemeData(color: Constants.pastelWhite),
+              backgroundColor: themeColorPalettes[snapshot.data!["theme"]]![0],
+              centerTitle: true,
+              actions: [
+                // Buttons used for testing functionality
+                // Leave them here but shouldn't be enabled in prod
+                // IconButton(onPressed: () => Navigator.pushNamed(context, "/amongview-individual",arguments: 948), icon: Icon(Icons.extension)),
+                // IconButton(
+                //   icon: Icon(Icons.javascript_outlined,color: Constants.pastelWhite,),
+                //   onPressed: (() {
+                //     showDialog(
+                //         context: context,
+                //         builder: (BuildContext context) {
+                //           return AlertDialog(
+                //               content: Text(jsonEncode(configData).toString()));
+                //         });
+                //   }),
+                // ),
+                IconButton(
+                    icon: Icon(Icons.settings,color: Constants.pastelWhite,),
+                    onPressed: () {
+                      HapticFeedback.mediumImpact();
+                      Navigator.pushNamed(context, "/settings");
+                    })
               ],
-            )),
-      ),
+            ),
+            // Main body of the page with a background image
+            body: Container(
+                width: screenWidth,
+                height: screenHeight,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(backgrounds[snapshot.data!["theme"]] ?? "assets/images/background-hires.png"),
+                        fit: BoxFit.cover)),
+                // Column containing title, splash text, and launcher buttons
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 0.75 * screenWidth,
+                      child: AutoSizeText(secretScreen ? "LightHuose" : "LightHouse", style: comfortaaBold(60,spacing: -6),maxLines: 1,textAlign: TextAlign.center,),
+                    ),
+                   SizedBox(
+                    height: 0.05 * screenHeight,
+                    width: 0.8 * screenWidth,
+                    child: AutoSizeText(secretScreen ? "Nobody will ever believe you" : randomSplashText(),style: comfortaaBold(18,spacing: -1),maxLines: 2,textAlign: TextAlign.center,)),
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: getLaunchers()),
+                    SizedBox(
+                      height: 0.05 * screenHeight,
+                      width: 0.8 * screenWidth,
+                      child: AutoSizeText("${Constants.versionName} | ${snapshot.data!["scouterName"]} | ${snapshot.data!["eventKey"]}",style: comfortaaBold(18),textAlign: TextAlign.center,)
+                         
+                    )
+                  ],
+                )),
+          ),
+        );
+      }
     );
   }
 }
