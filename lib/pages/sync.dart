@@ -29,7 +29,8 @@ class SyncPageState extends State<SyncPage> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: themeColorPalettes[configData["theme"] ?? "Light"]![0],
+          backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
+          actions: [AuthButton()],
           title: const Text(
             "Sync",
             style: TextStyle(
@@ -49,7 +50,7 @@ class SyncPageState extends State<SyncPage> {
           width: 400 * sizeScaleFactor,
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
+                  image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
                   fit: BoxFit.cover)),
           child: Center(
             child: Column(
@@ -314,7 +315,7 @@ class _UploadDialogState extends State<UploadDialog> {
       final uuid = await getPersistentDeviceID();
       final response = await http.post(
           (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
-          headers: {"Content-Type": "application/json", "uuid": uuid},
+          headers: {"Content-Type": "application/json", "X-API-KEY": uuid},
           body: fileContent);
       return Future.value(
           responseCodes[response.statusCode] ?? response.statusCode.toString());
@@ -461,7 +462,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
     final uuid = await getPersistentDeviceID();
     final response = await http.get(
       (Uri.tryParse("${configData["serverIP"]!}/api/$api") ?? Uri.base),
-      headers: {"Content-Type": "application/json", "uuid": uuid},
+      headers: {"Content-Type": "application/json", "X-API-KEY": uuid},
     );
     saveDatabaseFile(configData["eventKey"] ?? "", layout, response.body);
     return Future.value(0);
@@ -606,24 +607,31 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                     ),
                   );
                 }
-                return Container(
-                  height: 40 * scaleFactor,
-                  width: 250 * scaleFactor,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius),
-                      color: snapshot.data! == "Code 200 - OK"
-                          ? Constants.pastelGreen
-                          : Constants.pastelRedSuperDark),
-                  child: Center(
-                      child: AutoSizeText(
-                    snapshot.data!,
-                    style: comfortaaBold(18 * scaleFactor),
-                    textAlign: TextAlign.center,
-                    minFontSize: (12 * scaleFactor).truncate().toDouble(),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  )),
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 40 * scaleFactor,
+                      width: 250 * scaleFactor,
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(Constants.borderRadius),
+                          color: snapshot.data! == "Code 200 - OK"
+                              ? Constants.pastelGreen
+                              : Constants.pastelRedSuperDark),
+                      child: Center(
+                          child: AutoSizeText(
+                        snapshot.data!,
+                        style: comfortaaBold(18 * scaleFactor),
+                        textAlign: TextAlign.center,
+                        minFontSize: (12 * scaleFactor).truncate().toDouble(),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      )),
+                    ),
+                    if (snapshot.data! == "Code 400 - Bad Request" || snapshot.data! == "Code 403 - Forbidden")
+                    AuthButton(background: true,)
+                  ],
                 );
               })
         ],
@@ -646,7 +654,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
     try {
       final uuid = await getPersistentDeviceID();
       response = await http.get(Uri.parse("$uri/api/atlas"),
-          headers: {"Content-Type": "application/json", "uuid": uuid});
+          headers: {"Content-Type": "application/json", "X-API-KEY": uuid});
     } catch (e) {
       return "ERROR - $e";
     }

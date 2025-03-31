@@ -635,9 +635,9 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: configData["theme"] != null ? themeColorPalettes[configData["theme"] ?? "Light"]![0] : Constants.pastelRed,
+      backgroundColor: configData["theme"] != null ? themeColorPalettes[configData["theme"] ?? "Dark"]![0] : Constants.pastelRed,
       appBar: AppBar(
-        backgroundColor:themeColorPalettes[configData["theme"] ?? "Light"]![0],
+        backgroundColor:themeColorPalettes[configData["theme"] ?? "Dark"]![0],
         title: const Text(
           "Tony's Data Viewer",
           style: TextStyle(
@@ -661,7 +661,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           margin: EdgeInsets.all(marginSize),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
+                  image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
                   fit: BoxFit.cover)),
           child: ListView.separated(
             itemCount: scrollableDataColumn.length,

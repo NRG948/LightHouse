@@ -69,7 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
           // App bar with back navigation and title.
           appBar: AppBar(
             iconTheme: IconThemeData(color: Constants.pastelWhite),
-            backgroundColor: themeColorPalettes[configData["theme"] ?? "Light"]![0],
+            backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
             title: const Text(
               "Settings",
               style: TextStyle(
@@ -79,9 +79,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             centerTitle: true,
             actions: [
-              IconButton(onPressed: (){
-                showDialog(context: context, builder: (context) {return DeviceIDDialog();},);
-              }, icon: Icon(Symbols.qr_code)),
+              AuthButton(),
               if (configData["debugMode"] == "true")
               IconButton(
                   onPressed: () {
@@ -134,7 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
             width: screenWidth,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
                     fit: BoxFit.cover)), // covers the entire background
             child: Center(
               child: Padding(

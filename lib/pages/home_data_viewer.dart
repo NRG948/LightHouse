@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/device_id.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/sync.dart';
 
@@ -27,7 +28,7 @@ class DataViewerHome extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Constants.darkPurple,
                 image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
                     fit: BoxFit.cover)),
             child: Column(
               spacing: 10,
@@ -101,7 +102,7 @@ class DataViewerHome extends StatelessWidget {
         ),
 
         appBar: AppBar(
-          backgroundColor:themeColorPalettes[configData["theme"] ?? "Light"]![0], // Sets the app bar color.
+          backgroundColor:themeColorPalettes[configData["theme"] ?? "Dark"]![0], // Sets the app bar color.
           title: const Text(
             "LightHouse",
             style: TextStyle(
@@ -112,6 +113,8 @@ class DataViewerHome extends StatelessWidget {
           centerTitle: true, // Centers the title in the app bar.
           iconTheme: IconThemeData(color: Constants.pastelWhite),
           actions: [
+            AuthButton(),
+            if (configData["debugMode"] == "true")
             // Button to display JSON config data in a dialog.
             IconButton(
               icon: Icon(Icons.javascript_outlined),
@@ -139,8 +142,8 @@ class DataViewerHome extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                  child: Text("Switch Mode",
-                      style: comfortaaBold(18, color: Constants.pastelBrown))),
+                    decoration: BoxDecoration(color: themeColorPalettes[configData["theme"] ?? "Dark"]![0]),
+                    child: AutoSizeText("Hi, ${configData["scouterName"]}!",style: comfortaaBold(25),textAlign: TextAlign.start,)),
               ListTile(
                   leading: Icon(
                     Icons.home,

@@ -391,7 +391,7 @@ class DataEntryState extends State<DataEntry> {
             // Prevents background image from being resized when keyboard opens
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              backgroundColor:themeColorPalettes[configData["theme"] ?? "Light"]![0] ,
+              backgroundColor:themeColorPalettes[configData["theme"] ?? "Dark"]![0] ,
               title: FittedBox(
                 child: AutoSizeText(
                   "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
@@ -438,7 +438,7 @@ class DataEntryState extends State<DataEntry> {
               width: screenWidth,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires.png"),
+                      image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
                       fit: BoxFit.fill)),
               child: NotificationListener<OverscrollNotification>(
                 onNotification: (notification) {
@@ -523,7 +523,7 @@ class DataEntryState extends State<DataEntry> {
           showUnselectedLabels: false,
           showSelectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          backgroundColor: themeColorPalettes[configData["theme"] ?? "Light"]![1],
+          backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![1],
           items: createNavBar(layoutJSON["pages"])),
     );
   }

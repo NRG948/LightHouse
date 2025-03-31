@@ -69,13 +69,15 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
           canPop: false,
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor: (themeColorPalettes[snapshot.data!["theme"] ?? "Light"]!)[0],
+            backgroundColor: (themeColorPalettes[snapshot.data!["theme"] ?? "Dark"]!)[0],
             // Drawer menu with navigation options
             drawer: Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  DrawerHeader(child: Text("Switch Mode",style: comfortaaBold(18,color: Constants.pastelBrown))),
+                  DrawerHeader(
+                    decoration: BoxDecoration(color: themeColorPalettes[configData["theme"] ?? "Dark"]![0]),
+                    child: AutoSizeText("Hi, ${configData["scouterName"]}!",style: comfortaaBold(25),textAlign: TextAlign.start,)),
                   ListTile(
                       leading: Icon(Icons.home,color: Constants.pastelBrown,),
                       title: Text("Scouter Home",style: comfortaaBold(18,color: Constants.pastelBrown)),
@@ -96,7 +98,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
             // App bar with icons for settings and displaying config data
             appBar: AppBar(
               iconTheme: IconThemeData(color: Constants.pastelWhite),
-              backgroundColor: (themeColorPalettes[snapshot.data!["theme"] ?? "Light"]!)[0],
+              backgroundColor: (themeColorPalettes[snapshot.data!["theme"] ?? "Dark"]!)[0],
               centerTitle: true,
               actions: [
                 // Buttons used for testing functionality
@@ -127,7 +129,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                 height: screenHeight,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage(backgrounds[snapshot.data!["theme"]] ?? "assets/images/background-hires.png"),
+                        image: AssetImage(backgrounds[snapshot.data!["theme"]] ?? "assets/images/background-hires-dark.png"),
                         fit: BoxFit.cover)),
                 // Column containing title, splash text, and launcher buttons
                 child: Column(
