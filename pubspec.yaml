@@ -90,6 +90,7 @@ flutter:
       - assets/images/background-hires-pink.png
       - assets/images/background-hires-black.png
       - assets/images/background-hires-blue.png
+      - assets/images/background-tony.jpg
       - assets/images/download_bg.png
       - assets/images/startingLocationField.png
       - assets/images/startPos.png

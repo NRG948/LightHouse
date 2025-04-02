@@ -62,7 +62,7 @@ class _DeviceAuthSetupDialogState extends State<DeviceAuthSetupDialog> {
                 SizedBox(
                     width: 300,
                     child: AutoSizeText(
-                      "Not sure what this means? Talk to the strat team to get a one-time key to allow your phone to upload to/download from the server.",
+                      "Talk to the strat team to get a one-time key to allow your phone to upload to/download from the server.",
                       style: comfortaaBold(10, color: Colors.black),
                       textAlign: TextAlign.center,
                       minFontSize: 10,

@@ -332,6 +332,10 @@ class AmongViewSharedState extends ChangeNotifier {
         }
       }
     }
+    // Adds any teams that have pit data
+    teamsInEvent += getPitTeams();
+    // Removes any duplicate teams from pit data
+    teamsInEvent = teamsInEvent.toSet().toList();
     // Sorts from smallest to largets
     teamsInEvent.sort((a,b) => a.compareTo(b));
     switch (sortKeys[activeLayout][activeSortKey]) {
@@ -343,6 +347,7 @@ class AmongViewSharedState extends ChangeNotifier {
               dataPoints.add(match[activeSortKey]!.toDouble());
             }
         }
+        if (dataPoints.isEmpty) {dataPoints.add(0);}
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
@@ -354,13 +359,16 @@ class AmongViewSharedState extends ChangeNotifier {
               dataPoints.add(match["endLocation"]!);
             }
         }
+        if (dataPoints.isEmpty) {dataPoints.add("None");}
         int deepClimbs = dataPoints.where((item) => item == "Deep Climb").length;
         int shallowClimbs = dataPoints.where((item) => item == "Shallow Climb").length;
         double consistency = (deepClimbs + shallowClimbs) / dataPoints.length;
         chartData.addEntries([MapEntry(team, consistency.fourDigits)]);
         }
       case "viewAllTeams":
+        
         for (int team in teamsInEvent) {
+
           chartData.addEntries([MapEntry(team, 1.0)]);
         }
       case "averageboolean":
@@ -371,6 +379,7 @@ class AmongViewSharedState extends ChangeNotifier {
               dataPoints.add(match[activeSortKey.removeAfterSpace]! == true ? 1 : 0);
             }
         }
+        if (dataPoints.isEmpty) {dataPoints.add(0);}
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
@@ -386,6 +395,7 @@ class AmongViewSharedState extends ChangeNotifier {
             dataPoints.add(match[activeSortKey]!.toDouble());
           }
         }
+        if (dataPoints.isEmpty) {dataPoints.add(0);}
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
@@ -397,6 +407,7 @@ class AmongViewSharedState extends ChangeNotifier {
             dataPoints.add(match[activeSortKey]!.length.toDouble());
           }
         }
+        if (dataPoints.isEmpty) {dataPoints.add(0);}
         final average = dataPoints.sum / dataPoints.length;
         chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
@@ -413,6 +424,7 @@ class AmongViewSharedState extends ChangeNotifier {
             }
             dataPoints.add(sumOfItems);
           }
+          if (dataPoints.isEmpty) {dataPoints.add(0);}
           final average = dataPoints.sum / dataPoints.length;
           chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
@@ -472,6 +484,8 @@ class AmongViewSharedState extends ChangeNotifier {
           
           if (timeDiffs.isNotEmpty) {
           chartData.addEntries([MapEntry(team, (timeDiffs.sum / timeDiffs.length).fourDigits)]);
+          } else {
+            chartData.addEntries([MapEntry(team,0)]);
           }
         }
       case "coralIntakeAverage":
@@ -489,6 +503,7 @@ class AmongViewSharedState extends ChangeNotifier {
               dataPoints.add(totalIntakeCoral.toDouble());
             }
           }
+          if (dataPoints.isEmpty) {dataPoints.add(0);}
           final average = dataPoints.sum / dataPoints.length;
           chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
@@ -511,6 +526,20 @@ class AmongViewSharedState extends ChangeNotifier {
     data = jsonDecode(loadDatabaseFile(activeEvent, activeLayout));
   }
   
+  List<int> getPitTeams() {
+    String databaseFileString = loadDatabaseFile(activeEvent, "Pit");
+    if (databaseFileString == "") {return [];}
+    List<int> teams = [];
+    try {
+    for (dynamic i in jsonDecode(databaseFileString)) {
+      if (!teams.contains(int.parse(i["teamNumber"]))) {
+        teams.add(int.parse(i["teamNumber"]));
+      }
+    }}
+    catch (e) {debugPrint(e.toString());}
+    return teams;
+  }
+  
 }
 
 Map<String,dynamic> sortKeys = {
@@ -528,6 +557,7 @@ Map<String,dynamic> sortKeys = {
   "algaeScoreProcessor": "average",
   "algaeScoreNet": "average",
   "climbStartTime": "average",
+  "robotDisabled (% of matches)":"averageboolean",
   "bargeCS used in auto (% of matches)" : "averageboolean",
   "processorCS used in auto (% of matches)": "averageboolean",
   "hasNoAuto (% of matches)" : "averageboolean",

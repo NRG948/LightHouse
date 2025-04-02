@@ -2,6 +2,7 @@ import "dart:convert";
 import "dart:io";
 import "dart:math";
 import "package:flutter/material.dart";
+import "package:lighthouse/constants.dart";
 import "package:lighthouse/layouts.dart";
 import "package:lighthouse/pages/data_entry.dart";
 import "package:path/path.dart";
@@ -350,7 +351,7 @@ final Map<String, String> settingsMap = {
 };
 
 final Map<String,List<String>> settingsDropdownMap = {
-  "theme" : ["Light","Dark","Black","Pink","Blue"]
+  "theme" : backgrounds.keys.toList()
 };
 
 

@@ -131,7 +131,8 @@ final Map<String, String> backgrounds = {
   "Dark" : "assets/images/background-hires-dark.png",
   "Black" : "assets/images/background-hires-black.png",
   "Pink" : "assets/images/background-hires-pink.png",
-  "Blue" : "assets/images/background-hires-blue.png"
+  "Blue" : "assets/images/background-hires-blue.png",
+  "Tony": "assets/images/background-tony.jpg"
 };
 
 final Map<String,List<Color>> themeColorPalettes = {
@@ -140,6 +141,7 @@ final Map<String,List<Color>> themeColorPalettes = {
   "Pink": [Constants.pinkModeDarkPink,Constants.pinkModeLightPink],
   "Black": [Colors.black,Colors.black],
   "Blue": [Constants.blueModeDarkBlue,Constants.blueModeLightBlue],
+  "Tony": [Constants.darkModeDarkGray,Constants.darkModeLightGray]
 };
 
 extension StringExtensions on String {
