@@ -417,7 +417,7 @@ class DataEntryState extends State<DataEntry> {
                           context: context,
                           builder: (BuildContext) {
                             return Dialog(
-                              child: Text(jsonEncode(DataEntry.exportData)),
+                              child: Text(jsonEncode(configData)),
                             );
                           });
                     },
@@ -600,7 +600,7 @@ void saveJson(BuildContext context) async {
                             DataEntry.exportData["matchType"];
                         saveConfig();
                       }
-                      if (["Atlas", "Chronos"]
+                      if (["Atlas", "Chronos"]  
                           .contains(DataEntry.exportData["layout"])) {
                         configData["currentDriverStation"] =
                             "${DataEntry.exportData["driverStation"]}";

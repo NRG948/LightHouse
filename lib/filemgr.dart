@@ -38,7 +38,7 @@ Future<Map<String, String>> loadConfig({bool reset = false}) async {
     configFile.writeAsString(jsonEncode(defaultConfig));
     configJson = defaultConfig;
   } else {
-    configJson = jsonDecode(await configFile.readAsString());
+    configJson = jsonDecode(ensureSingleCurlyBrace(await configFile.readAsString()));
   }
   configData.addEntries(configJson.entries
       .map((entry) => MapEntry(entry.key, entry.value.toString())));
@@ -232,9 +232,27 @@ void setUploadQueue(List<dynamic> queue) {
 }
 
 Future<int> saveConfig() async {
+  debugPrint(ensureSingleCurlyBrace(jsonEncode(configData)));
   final configFile = File("$configFolder/config.nrg");
-  configFile.writeAsString(jsonEncode(configData));
+  configFile.writeAsString(ensureSingleCurlyBrace(jsonEncode(configData)));
   return 0;
+}
+
+String ensureSingleCurlyBrace(String input) {
+  // Trim any trailing spaces first
+  input = input.trim();
+  
+  // If the string ends with two or more curly braces, trim it to just one
+  while (input.endsWith('}}')) {
+    input = input.substring(0, input.length - 1);
+  }
+  
+  // Ensure at least one curly brace at the end
+  if (!input.endsWith('}')) {
+    input += '}';
+  }
+  
+  return input;
 }
 
 List<String> getFiles() {
