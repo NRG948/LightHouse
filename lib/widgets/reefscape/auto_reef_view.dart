@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'dart:ui' as ui;
@@ -207,7 +208,16 @@ class _AutoReefViewState extends State<AutoReefView>
     List<int> scoreDistribution = [0, 0, 0]; // L2, L3, L4
 
     for (String coral in _autoReef!.scores) {
+      try {
       scoreDistribution[int.parse(coral[1]) - 2] += 1;
+      } catch (_) {
+        try {
+          List<String> coralList = jsonDecode(coral);
+          for (String innerCoral in coralList) {
+            scoreDistribution[int.parse(innerCoral[1]) - 2] += 1;
+          }
+        } catch (_) {}
+      }
     }
 
     return [

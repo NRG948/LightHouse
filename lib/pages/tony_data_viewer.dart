@@ -489,8 +489,19 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       if (matchData["teamNumber"] == currentTeamNumber) {
         // Get coral scored for each level in auto and teleop.
         List<double> scoreDistribution = [0, 0, 0, 0];
-        for (String reefBranch in matchData["autoCoralScored"]) {
+        
+        for (String reefBranch in fixAutoCoralScoredData(matchData["autoCoralScored"].toString())) {
+          try {
           scoreDistribution[int.parse(reefBranch[1]) - 1] += 1;
+          } catch (_) {
+            // Check if string is list
+            try {
+              List<String> reefBranchList = jsonDecode(reefBranch);
+              for (String innerReefBranch in reefBranchList) {
+                scoreDistribution[int.parse(innerReefBranch[1]) - 1] += 1;
+              }
+            } catch (_) {}
+          }
         }
         for (int i = 1; i <= 4; i++) {
           scoreDistribution[i - 1] += matchData["coralScoredL$i"];
@@ -531,7 +542,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               .toList()),
           reef: AutoReef(
               algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
-              scores: List<String>.from(matchData["autoCoralScored"]),
+              scores: fixAutoCoralScoredData(matchData["autoCoralScored"].toString()),
               troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
               groundIntake: matchData["groundIntake"],
               processorCS: matchData["processorCS"],
@@ -673,4 +684,15 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           )),
     );
   }
+}
+
+List<String> fixAutoCoralScoredData(String string) {
+  debugPrint(string);
+ // Remove outer square brackets (single or double)
+  String cleaned = string.replaceAllMapped(
+      RegExp(r'^\[\[?|\]\]?$'), (match) => '');
+  
+  // Split items by comma and trim spaces
+  List<String> items = cleaned.split(',').map((e) => e.trim()).toList();
+  return items;
 }
