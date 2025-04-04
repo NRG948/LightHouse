@@ -274,6 +274,7 @@ class AutoReefPainter extends CustomPainter {
       coralDistrbution[branch] = [];
     }
     for (String scoreInstance in autoReef!.scores) {
+      if (scoreInstance == "") {continue;}
       coralDistrbution[scoreInstance[0]]!.add(int.parse(scoreInstance[1]));
     }
 
