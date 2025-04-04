@@ -63,7 +63,7 @@ class Constants {
   /// adding a bit of delay before the next section. :)
   static final double startDelay = 3;
   
-  static const String versionName = "DCMP RC3";
+  static const String versionName = "DCMP RC4";
   // Should this key be exposed to the internet? no
   // do i care? also no
   static const String tbaAPIKey = "ayLg4jZVBMJ4BFKqDzt8Sn7nGTYqDgB4VEB0ZxbMXH3MVJVnhAChBZZSyuSEuEVH";
