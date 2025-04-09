@@ -351,7 +351,7 @@ class _MatchInfoState extends State<MatchInfo>
                 ),
               ),
               Container(
-                width: 110 * scaleFactor,
+                width: 109 * scaleFactor,
                 height: 65 * scaleFactor,
                 decoration: BoxDecoration(
                     color: DataEntry.exportData["driverStation"].contains("Red")

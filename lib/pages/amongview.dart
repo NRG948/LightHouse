@@ -125,7 +125,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                             items: state.getSortKeys().map((e) {
                             return DropdownMenuItem(
                             value:e,
-                            child: Text(e.toSentenceCase,style: comfortaaBold(12,color: Colors.black),));}).toList(),
+                            child: Text(e.toSentenceCase,style: comfortaaBold(11,color: Colors.black),));}).toList(),
                           onChanged: (newValue) {setState(() {
                             state.setActiveSortKey(newValue ?? "");
                           });
