@@ -20,7 +20,7 @@ class DataViewerAmongView extends StatefulWidget {
 
 class _DataViewerAmongViewState extends State<DataViewerAmongView> {
   late AmongViewSharedState state;
-  late ValueNotifier<bool> sortCheckbox;
+  static late ValueNotifier<bool> sortCheckbox;
   late ScrollController scrollController;
   @override
   void initState() {
@@ -311,7 +311,7 @@ class AmongViewSharedState extends ChangeNotifier {
   }
   void setActiveSortKey(String key) {
     activeSortKey = key;
-    updateChartData();
+    updateChartData(sort:_DataViewerAmongViewState.sortCheckbox.value);
     notifyListeners();
   }
 
