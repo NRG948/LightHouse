@@ -418,14 +418,18 @@ class AmongViewSharedState extends ChangeNotifier {
         for (int team in teamsInEvent) {
           List<double> dataPoints = [];
           for (dynamic match in data) {
+            if (match["teamNumber"]! == team) {
             double sumOfItems = 0;
             for (String term in searchTerms[activeSortKey]!) {
               sumOfItems += match[term]!;
             }
             dataPoints.add(sumOfItems);
+            }
           }
+          
           if (dataPoints.isEmpty) {dataPoints.add(0);}
-          final average = dataPoints.sum / dataPoints.length;
+          double average = dataPoints.sum / dataPoints.length;
+          
           chartData.addEntries([MapEntry(team, average.fourDigits)]);
         }
       case "cycleTime":
