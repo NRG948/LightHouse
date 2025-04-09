@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/widgets/game_agnostic/star_display.dart';
 
 // CommentBox widget which is a stateful widget
 class TDVCommentBox extends StatefulWidget {
@@ -9,10 +10,11 @@ class TDVCommentBox extends StatefulWidget {
   final String text; // Comment text
   final String time; // Time of the comment
   final String type; // Where the comment comes from (atlas, chronos, pit)
+  final double quality; // Data quality (1-5 star rating)
 
   // Constructor for CommentBox
   const TDVCommentBox(
-      {super.key, required this.name, required this.text, required this.time, required this.type});
+      {super.key, required this.name, required this.text, required this.time, required this.type, required this.quality});
 
   @override
   State<TDVCommentBox> createState() => _TDVCommentBoxState(); // Creating state for CommentBox
@@ -25,6 +27,7 @@ class _TDVCommentBoxState extends State<TDVCommentBox> {
   String get _name => widget.name;
   String get _time => widget.time;
   String get _type => widget.type;
+  double get _quality => widget.quality;
 
   Color getBoxColor() {
     switch (_type) {
@@ -64,11 +67,17 @@ class _TDVCommentBoxState extends State<TDVCommentBox> {
         crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
         children: [
           // Displaying name and time
-          Text("$_name  $_time",
-              textAlign: TextAlign.left,
-              style: comfortaaBold(18,
-                  customFontWeight: FontWeight.w900,
-                  color: Constants.pastelWhite)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text("$_name  $_time",
+                  textAlign: TextAlign.left,
+                  style: comfortaaBold(18,
+                      customFontWeight: FontWeight.w900,
+                      color: Constants.pastelWhite)),
+              StarDisplay(starRating: _quality)
+            ],
+          ),
           // Displaying comment text
           Text(_text,
               textAlign: TextAlign.left,

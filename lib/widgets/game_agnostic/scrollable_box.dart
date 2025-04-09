@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/widgets/game_agnostic/star_display.dart';
 import 'package:lighthouse/widgets/game_agnostic/tdv_comment_box.dart';
 
 // Enum to define different sorting options
@@ -108,8 +109,10 @@ class _ScrollableBoxState extends State<ScrollableBox> {
                       return TDVCommentBox(
                           name: _comments[index][0], // Scouter name
                           text: _comments[index][1], // Comment text
-                          time: _comments[index][2],
-                          type: _comments[index][3]); // Match number
+                          time: _comments[index][2], // Match number
+                          type: _comments[index][3], // Layout (Atlas, Chronos, Pit)
+                          quality: double.tryParse(_comments[index][4]) ?? 0.0 // Data quality (null-safety included)
+                          ); 
                     }),
               ),
             ],

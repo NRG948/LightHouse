@@ -247,6 +247,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
             matchData["robotDisableReason"],
             matchData["matchNumber"].toString(),
             "atlas",
+            matchData["dataQuality"].toString()
           ]);
         }
       }
@@ -269,6 +270,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           matchData["comments"],
           matchData["matchNumber"].toString(),
           "atlas",
+          matchData["dataQuality"].toString()
         ]);
       }
     }
@@ -284,6 +286,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           matchData["comments"],
           matchData["matchNumber"].toString(),
           "pit",
+          matchData["dataQuality"].toString()
         ]);
       }
     }
