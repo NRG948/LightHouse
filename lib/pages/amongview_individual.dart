@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
+import 'package:lighthouse/widgets/game_agnostic/star_display.dart';
 
 class AmongViewIndividual extends StatefulWidget {
   const AmongViewIndividual({super.key});
@@ -319,6 +320,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
             style:
                 comfortaaBold(14 * scaleFactor, color: Constants.pastelBrown),
           ));
+        case "dataQuality":
+          listViewChildren.add(StarDisplay(starRating: match[i].toDouble()));
         case "autoPit":
           for (int auto = 0; auto < match[i].length; auto++) {
             listViewChildren.add(AutoSizeText(
@@ -623,6 +626,7 @@ Map<String, dynamic> sortKeys = {
 // Necessary for more complex data types like event lists
 Map<String, dynamic> displayKeys = {
   "Atlas": {
+    "dataQuality": "dataQuality",
     "scouterName": "raw",
     "replay": "raw",
     "driverStation": "raw",
@@ -657,7 +661,6 @@ Map<String, dynamic> displayKeys = {
 
     "robotDisabled": "raw",
     "robotDisableReason": "raw",
-    "dataQuality": "raw",
     "comments": "raw",
     "crossedMidline": "raw",
     "timestamp": "raw"
@@ -754,5 +757,68 @@ List<dynamic> getParsedMatchInfo(int parsedMatch, {bool? truncated}) {
     return ["${infoList[0].toString().substring(0, 1)}${infoList[1]}"];
   } else {
     return infoList;
+  }
+}
+class AVIDQFilterDropdown extends StatefulWidget {
+  
+  const AVIDQFilterDropdown({super.key,});
+
+  @override
+  State<AVIDQFilterDropdown> createState() => _AVIDQFilterDropdownState();
+}
+
+class _AVIDQFilterDropdownState extends State<AVIDQFilterDropdown> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => showDialog(context: context, builder: (context) {
+        return dqFilterDialog();
+      }),
+      child: Container(
+        width: 50,
+        height: 30,
+        decoration: Constants.roundBorder(),
+        child: Row(children: [
+          Icon(
+            Icons.star,
+            color: Constants.black,
+          ),
+          Icon(Icons.arrow_drop_down,color: Constants.black,)
+        ]),
+      ),
+    );
+  }
+
+  Widget dqFilterDialog() {
+    return Center(
+      child: Container(
+        width: 250,
+        height: 500,
+        decoration: Constants.roundBorder(),
+        child: Column(children: [
+          Text("Filter By:",style: comfortaaBold(25,color: Colors.black),),
+          Column(children: List.generate(11, (i) {
+            double starRating = (i * 0.5);
+            bool selected = false;//starRating == AmongViewSharedState.dataQualityThreshold; // Checks if this star rating threshold is currently active
+            return GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                color: selected ? Constants.pastelGray : Colors.transparent,
+                child: Row(
+                  mainAxisAlignment: selected ? MainAxisAlignment.start : MainAxisAlignment.center,
+                  children: [
+                  if (selected)
+                  Icon(Icons.check),
+                  StarDisplay(starRating: starRating,iconSize: 40,)
+                  
+                ],),
+              ),
+            );
+          }))
+        ],),
+      ),
+    );
   }
 }
