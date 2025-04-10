@@ -6,14 +6,17 @@ import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/widgets/game_agnostic/star_display.dart';
 
 // This widget animates an object along a predefined path with auto-replay functionality.
 class AutoReefView extends StatefulWidget {
   double height;
   double width;
   List<String> scouterNames;
+  double dataQuality;
   int matchNumber;
   AutoReef reef;
+  bool pit;
   List<double> startingPosition;
   bool flipStartingPosition;
   bool hasNoAuto;
@@ -24,10 +27,13 @@ class AutoReefView extends StatefulWidget {
       required this.width,
       required this.scouterNames,
       required this.matchNumber,
+      required this.dataQuality,
       required this.reef,
       required this.startingPosition,
       required this.flipStartingPosition,
-      required this.hasNoAuto});
+      required this.hasNoAuto,
+      this.pit = false,
+});
 
   @override
   State<AutoReefView> createState() => _AutoReefViewState();
@@ -99,7 +105,9 @@ class _AutoReefViewState extends State<AutoReefView>
             Text(_scouterNames.join(", "),
                 style: comfortaaBold(22, color: Constants.pastelBrown)),
             Text(_matchNumber.toString(),
-                style: comfortaaBold(22, color: Constants.pastelRedSuperDark))
+                style: comfortaaBold(22, color: Constants.pastelRedSuperDark)),
+            if (!widget.pit)
+            StarDisplay(starRating: widget.dataQuality,iconSize: 25,)
           ]),
           Row(
             spacing: _width / 16,
@@ -154,6 +162,7 @@ class _AutoReefViewState extends State<AutoReefView>
                       size: Size(_width / 2 * sqrt(3) / 2, _width / 2),
                       painter: AutoReefPainter(
                           program: program, autoReef: _autoReef)),
+            if (!widget.pit)
               (_startingPosition[0] == 0 && _startingPosition[1] == 0)
                   ? Container(
                       width: _width / 2 * (320 / 552),
@@ -274,8 +283,8 @@ class AutoReefPainter extends CustomPainter {
       coralDistrbution[branch] = [];
     }
     for (String scoreInstance in autoReef!.scores) {
-      // Fix bug where 0-score autos don't render correctly
-      if (scoreInstance == "") {continue;}
+      // Fixes bug where 0-score autos don't render correctly
+      if (scoreInstance == "" || scoreInstance == "[]") {continue;}
       coralDistrbution[scoreInstance[0]]!.add(int.parse(scoreInstance[1]));
     }
 

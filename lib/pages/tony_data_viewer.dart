@@ -40,16 +40,15 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       teams.add(matchData["teamNumber"]);
     }
     */
-    /*
-    for (Map<String, dynamic> matchData in pitData) {
-      teams.add(matchData["teamNumber"]);
-    }
-    */
+
+    // for (Map<String, dynamic> matchData in pitData) {
+    //   teams.add(int.tryParse(matchData["teamNumber"]) ?? 0);
+    // }
+
     for (Map<String, dynamic> matchData in humanPlayerData) {
       teams.add(matchData["redHPTeam"]);
       teams.add(matchData["blueHPTeam"]);
     }
-    // Include pit data?
 
     return teams.toSet();
   }
@@ -492,10 +491,11 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
       if (matchData["teamNumber"] == currentTeamNumber) {
         // Get coral scored for each level in auto and teleop.
         List<double> scoreDistribution = [0, 0, 0, 0];
-        
-        for (String reefBranch in fixAutoCoralScoredData(matchData["autoCoralScored"].toString())) {
+
+        for (String reefBranch in fixAutoCoralScoredData(
+            matchData["autoCoralScored"].toString())) {
           try {
-          scoreDistribution[int.parse(reefBranch[1]) - 1] += 1;
+            scoreDistribution[int.parse(reefBranch[1]) - 1] += 1;
           } catch (_) {
             // Check if string is list
             try {
@@ -538,6 +538,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           width: 360 * horizontalScaleFactor,
           scouterNames: [matchData["scouterName"]],
           matchNumber: matchData["matchNumber"],
+          dataQuality: matchData["dataQuality"].toDouble(),
           flipStartingPosition: matchData["driverStation"][0] == "R",
           startingPosition: List<double>.from(matchData["startingPosition"]
               .split(",")
@@ -545,7 +546,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               .toList()),
           reef: AutoReef(
               algaeRemoved: List<String>.from(matchData["autoAlgaeRemoved"]),
-              scores: fixAutoCoralScoredData(matchData["autoCoralScored"].toString()),
+              scores: fixAutoCoralScoredData(
+                  matchData["autoCoralScored"].toString()),
               troughCount: int.parse(matchData["autoCoralScoredL1"] ?? "0"),
               groundIntake: matchData["groundIntake"],
               processorCS: matchData["processorCS"],
@@ -561,7 +563,49 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     return ScrollableAutoPaths(
         height: 300 * verticalScaleFactor,
         width: 400 * horizontalScaleFactor,
-        title: "Autos",
+        title: "Match Autos",
+        autos: autos.values.toList());
+  }
+
+  Widget getPitAutoPreviews() {
+    Map<int, AutoReefView> autos = {};
+    for (Map<String, dynamic> teamPitData in pitData) {
+      if (teamPitData["teamNumber"] == currentTeamNumber.toString()) {
+        for (dynamic auto in teamPitData["auto"]) {
+          autos[teamPitData["auto"].indexOf(auto) + 1] = AutoReefView(
+              height: 270 * horizontalScaleFactor,
+              width: 360 * horizontalScaleFactor,
+              pit: true,
+              scouterNames: [teamPitData["interviewerName"],teamPitData["intervieweeName"],],
+              matchNumber: teamPitData["auto"].indexOf(auto) + 1,
+              dataQuality: 5.0, // This value doesn't matter as rating is never rendered
+              reef: AutoReef(
+                  scores: fixAutoCoralScoredData(auto["autoCoralScored"].toString()),
+                  algaeRemoved: List<String>.from(auto["autoAlgaeRemoved"]),
+                  troughCount: int.parse(auto["autoCoralScoredL1"] ?? "0"),
+                  groundIntake: auto["groundIntake"],
+                  bargeCS: auto["bargeCS"],
+                  processorCS: auto["processorCS"]),
+              startingPosition: [0.0, 0.0],
+              flipStartingPosition: false,
+              hasNoAuto: false);
+        }
+      }
+    }
+
+
+    if (autos.values.toList().isEmpty) {
+      return Container(
+        width: 300 * verticalScaleFactor,
+        height: 00 * horizontalScaleFactor,
+        decoration: Constants.roundBorder(),
+        child: Center(child: Text("No pit autos")),
+      );
+    }
+    return ScrollableAutoPaths(
+        height: 300 * verticalScaleFactor,
+        width: 400 * horizontalScaleFactor,
+        title: "Pit Autos",
         autos: autos.values.toList());
   }
 
@@ -570,7 +614,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
     atlasData = getDataAsMapFromDatabase("Atlas");
     //chronosData = getDataAsMapFromDatabase("Chronos");
     humanPlayerData = getDataAsMapFromDatabase("Human Player");
-    //pitData = getDataAsMapFromDatabase("Pit");
+    pitData = getDataAsMapFromDatabase("Pit");
     teamsInDatabase = getTeamsInDatabase();
 
     if (teamsInDatabase.isEmpty) {
@@ -617,6 +661,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         ],
       ),
       getAutoPreviews(),
+      getPitAutoPreviews(),
       getCommentBox(),
       Row(
         spacing: marginSize,
@@ -649,9 +694,11 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: configData["theme"] != null ? themeColorPalettes[configData["theme"] ?? "Dark"]![0] : Constants.pastelRed,
+      backgroundColor: configData["theme"] != null
+          ? themeColorPalettes[configData["theme"] ?? "Dark"]![0]
+          : Constants.pastelRed,
       appBar: AppBar(
-        backgroundColor:themeColorPalettes[configData["theme"] ?? "Dark"]![0],
+        backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
         title: const Text(
           "Tony's Data Viewer",
           style: TextStyle(
@@ -675,7 +722,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           margin: EdgeInsets.all(marginSize),
           decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
+                  image: AssetImage(backgrounds[configData["theme"]] ??
+                      "assets/images/background-hires-dark.png"),
                   fit: BoxFit.cover)),
           child: ListView.separated(
             itemCount: scrollableDataColumn.length,
@@ -690,11 +738,11 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
 }
 
 List<String> fixAutoCoralScoredData(String string) {
-  debugPrint(string);
- // Remove outer square brackets (single or double)
-  String cleaned = string.replaceAllMapped(
-      RegExp(r'^\[\[?|\]\]?$'), (match) => '');
-  
+  //debugPrint(string);
+  // Remove outer square brackets (single or double)
+  String cleaned =
+      string.replaceAllMapped(RegExp(r'^\[\[?|\]\]?$'), (match) => '');
+
   // Split items by comma and trim spaces
   List<String> items = cleaned.split(',').map((e) => e.trim()).toList();
   return items;
