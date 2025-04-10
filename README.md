@@ -19,7 +19,7 @@ samples, guidance on mobile development, and a full API reference.
 Race Support SVG - CC-BY // Visualeat
 ## How to download
 
-## Skibidi Stuuf
+## General Attributes
 The Scouting app is designed for recording data related to various aspects of robot competitions. It covers several key areas of scouting, including robot performance, human player activities, match data, and pit scouting.
 
 Main Features:
@@ -57,8 +57,8 @@ Sections for rating the accuracy of data and adding comments.
 Options for detailed robot performance (height, weight, drive type) and human player preferences (coral cycles, ideal alliance qualities).
 This app enables scouts to efficiently track and upload detailed match data, providing useful insights into team performance and robot capabilities.
 
-## SIGMA dowloading requirments
-Android (version 4.1 or newer) or iOS (version 9.0 or newer).
+## Downloading Requirements
+Android (version 5.0 or newer) or iOS (version 12.0 or newer).
 Storage: 50 MB free space.
 Internet Connection: For app installation, updates, and cloud-based features.
 App Store Account:
