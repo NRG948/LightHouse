@@ -13,8 +13,8 @@ class AutoReefView extends StatefulWidget {
   double height;
   double width;
   List<String> scouterNames;
-  double dataQuality;
-  int matchNumber;
+  double? dataQuality;
+  int? matchNumber;
   AutoReef reef;
   bool pit;
   List<double> startingPosition;
@@ -44,7 +44,7 @@ class _AutoReefViewState extends State<AutoReefView>
   double get _height => widget.height;
   double get _width => widget.width;
   List<String> get _scouterNames => widget.scouterNames;
-  int get _matchNumber => widget.matchNumber;
+  int? get _matchNumber => widget.matchNumber;
   AutoReef get _autoReef => widget.reef;
   List<double> get _startingPosition => widget.startingPosition;
   bool get _flipStartingPosition => widget.flipStartingPosition;
@@ -104,10 +104,10 @@ class _AutoReefViewState extends State<AutoReefView>
           Row(spacing: 10, children: [
             Text(_scouterNames.join(", "),
                 style: comfortaaBold(22, color: Constants.pastelBrown)),
-            Text(_matchNumber.toString(),
+            Text((_matchNumber ?? "").toString(),
                 style: comfortaaBold(22, color: Constants.pastelRedSuperDark)),
-            if (!widget.pit)
-            StarDisplay(starRating: widget.dataQuality,iconSize: 25,)
+            if (!widget.pit && widget.dataQuality != null)
+            StarDisplay(starRating: widget.dataQuality!,iconSize: 25,)
           ]),
           Row(
             spacing: _width / 16,

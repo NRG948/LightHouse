@@ -8,6 +8,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/widgets/game_agnostic/barchart.dart';
 import 'package:lighthouse/widgets/game_agnostic/star_display.dart';
+import 'package:lighthouse/widgets/reefscape/auto_reef_view.dart';
 
 class AmongViewIndividual extends StatefulWidget {
   const AmongViewIndividual({super.key});
@@ -61,7 +62,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
         state.addListener(() {
           setState(() {});
         });
-        state.updateChartData(sort:_AmongViewIndividualState.sortCheckbox.value);
+        state.updateChartData(
+            sort: _AmongViewIndividualState.sortCheckbox.value);
       }
       forceRunOnce = false;
     }
@@ -93,7 +95,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
         backgroundColor: Constants.pastelRed,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
+          backgroundColor:
+              themeColorPalettes[configData["theme"] ?? "Dark"]![0],
           title: Text(
             "Team ${state.activeTeam} - AmongView",
             style: TextStyle(
@@ -111,16 +114,15 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                 );
               },
               icon: Icon(Icons.arrow_back_ios_new)),
-          actions: [
-            AVIDQFilterDropdown(state: state)
-          ],
+          actions: [AVIDQFilterDropdown(state: state)],
         ),
         body: Container(
             width: screenWidth,
             height: screenHeight,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ??
+                        "assets/images/background-hires-dark.png"),
                     fit: BoxFit.cover)),
             child: Column(children: [
               Container(
@@ -138,7 +140,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                         Text("Layout:",
                             style: comfortaaBold(10, color: Colors.black)),
                         DropdownButton(
-                          borderRadius: BorderRadius.circular(Constants.borderRadius),
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius),
                             value: state.activeLayout,
                             items: state.enabledLayouts.map((e) {
                               return DropdownMenuItem(
@@ -163,7 +166,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                           Text("Sort by:",
                               style: comfortaaBold(10, color: Colors.black)),
                           DropdownButton(
-                            borderRadius: BorderRadius.circular(Constants.borderRadius),
+                              borderRadius:
+                                  BorderRadius.circular(Constants.borderRadius),
                               value: state.activeSortKey,
                               items: state.getSortKeys().map((e) {
                                 return DropdownMenuItem(
@@ -228,7 +232,6 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                         thumbVisibility: true,
                         interactive: true,
                         controller: barScrollController,
-                        
                         child: ListView(
                             controller: barScrollController,
                             scrollDirection: Axis.horizontal,
@@ -333,32 +336,59 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
           ));
         case "dataQuality":
           listViewChildren.add(StarDisplay(starRating: match[i].toDouble()));
+        case "autoMatch":
+            listViewChildren.add(AutoReefView(
+                height: 170,
+                width: 150,
+                scouterNames: ["Auto"],
+                matchNumber: null,
+                dataQuality: null,
+                reef: AutoReef(
+                    scores: List<String>.from(match["autoCoralScored"]),
+                    algaeRemoved: List<String>.from(match["autoAlgaeRemoved"]),
+                    troughCount: int.tryParse("autoCoralScoredL1") ?? 0,
+                    groundIntake: match["groundIntake"],
+                    bargeCS: match["bargeCS"],
+                    processorCS: match["processorCS"]),
+                startingPosition: List<double>.from(match["startingPosition"].split(",").map((i) => double.tryParse(i) ?? 0.0).toList()),
+                flipStartingPosition: match["driverStation"][0] == "R",
+                hasNoAuto: false));
+
+
         case "autoPit":
-          for (int auto = 0; auto < match[i].length; auto++) {
-            listViewChildren.add(AutoSizeText(
-              "Auto ${auto + 1}",
-              style:
-                  comfortaaBold(14 * scaleFactor, color: Constants.pastelBrown),
-            ));
-            for (String autoKey in [
-              "bargeCS",
-              "processorCS",
-              "autoCoralScored",
-              "autoAlgaeRemoved",
-              "autoCoralScoredL1"
-            ]) {
-              listViewChildren.add(AutoSizeText(
-                "    ${autoKey.toSentenceCase}: ${match[i][auto][autoKey]}",
-                style: comfortaaBold(14 * scaleFactor,
-                    color: Constants.pastelBrown),
-              ));
-            }
+          for (dynamic auto in match["auto"]) {
+            listViewChildren.add(AutoReefView(
+                height: 170,
+                width: 150,
+                scouterNames: ["Auto"],
+                matchNumber: match["auto"].indexOf(auto) + 1,
+                dataQuality: null,
+                reef: AutoReef(
+                    scores: List<String>.from(auto["autoCoralScored"]),
+                    algaeRemoved: List<String>.from(auto["autoAlgaeRemoved"]),
+                    troughCount: int.tryParse("autoCoralScoredL1") ?? 0,
+                    groundIntake: auto["groundIntake"],
+                    bargeCS: auto["bargeCS"],
+                    processorCS: auto["processorCS"]),
+                pit: true,
+                startingPosition: [0.0, 0.0],
+                flipStartingPosition: false,
+                hasNoAuto: false));
+
+           
           }
       }
     }
 
     return Container(
-      decoration: Constants.roundBorder(color: pit ? Constants.pastelWhite : (match["dataQuality"] ?? 0.0) >= AVISharedState.dataQualityThreshold ? Constants.pastelWhite : Colors.red,),
+      decoration: Constants.roundBorder(
+        color: pit
+            ? Constants.pastelWhite
+            : (match["dataQuality"] ?? 0.0) >=
+                    AVISharedState.dataQualityThreshold
+                ? Constants.pastelWhite
+                : Colors.red,
+      ),
       child: Scrollbar(
         controller: pit ? pitScrollController : matchScrollController,
         interactive: true,
@@ -366,7 +396,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
         thickness: 10 * scaleFactor,
         child: ListView(
           controller: pit ? pitScrollController : matchScrollController,
-          children: listViewChildren,),
+          children: listViewChildren,
+        ),
       ),
     );
     //return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
@@ -413,7 +444,7 @@ class AVISharedState extends ChangeNotifier {
     setActiveSortKey(sortKeys[activeLayout]!.keys.toList()[0]);
     notifyListeners();
   }
-  
+
   void setDQThreshold(double threshold) {
     dataQualityThreshold = threshold;
     notifyListeners();
@@ -421,7 +452,7 @@ class AVISharedState extends ChangeNotifier {
 
   void setActiveSortKey(String key) {
     activeSortKey = key;
-    updateChartData(sort:_AmongViewIndividualState.sortCheckbox.value);
+    updateChartData(sort: _AmongViewIndividualState.sortCheckbox.value);
     notifyListeners();
   }
 
@@ -662,6 +693,7 @@ Map<String, dynamic> displayKeys = {
 
     "preload": "raw",
     "hasNoAuto": "raw",
+    "autoMatch": "autoMatch",
     "groundIntake": "raw",
     // TODO: Change these two
     "autoCoralScored": "raw",
@@ -727,13 +759,13 @@ Map<String, dynamic> displayKeys = {
     "teamName": "raw",
     "intervieweeName": "raw",
     "interviewerName": "raw",
+    "auto": "autoPit",
     "robotHeight": "raw",
     "robotLength": "raw",
     "robotWidth": "raw",
     "robotWeight": "raw",
     "robotDrivetrain": "raw",
     "robotMechanisms": "raw",
-    "auto": "autoPit",
     "coralScoringAbilityL1": "raw",
     "coralScoringAbilityL2": "raw",
     "coralScoringAbilityL3": "raw",
@@ -786,9 +818,10 @@ List<dynamic> getParsedMatchInfo(int parsedMatch, {bool? truncated}) {
     return infoList;
   }
 }
+
 class AVIDQFilterDropdown extends StatefulWidget {
   final AVISharedState state;
-  const AVIDQFilterDropdown({super.key,required this.state});
+  const AVIDQFilterDropdown({super.key, required this.state});
 
   @override
   State<AVIDQFilterDropdown> createState() => _AVIDQFilterDropdownState();
@@ -798,9 +831,11 @@ class _AVIDQFilterDropdownState extends State<AVIDQFilterDropdown> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showDialog(context: context, builder: (context) {
-        return dqFilterDialog();
-      }),
+      onTap: () => showDialog(
+          context: context,
+          builder: (context) {
+            return dqFilterDialog();
+          }),
       child: Container(
         width: 50,
         height: 30,
@@ -810,7 +845,10 @@ class _AVIDQFilterDropdownState extends State<AVIDQFilterDropdown> {
             Icons.star,
             color: Constants.black,
           ),
-          Icon(Icons.arrow_drop_down,color: Constants.black,)
+          Icon(
+            Icons.arrow_drop_down,
+            color: Constants.black,
+          )
         ]),
       ),
     );
@@ -822,31 +860,44 @@ class _AVIDQFilterDropdownState extends State<AVIDQFilterDropdown> {
         width: 250,
         height: 500,
         decoration: Constants.roundBorder(),
-        child: Column(children: [
-          Text("Filter By:",style: comfortaaBold(25,color: Colors.black),),
-          Column(children: List.generate(11, (i) {
-            double starRating = (i * 0.5);
-            bool selected = starRating == AVISharedState.dataQualityThreshold; // Checks if this star rating threshold is currently active
-            return GestureDetector(
-              onTap: () {
-                widget.state.setDQThreshold(starRating);
-                widget.state.updateChartData(sort: _AmongViewIndividualState.sortCheckbox.value);
-                Navigator.pop(context);
-              },
-              child: Container(
-                color: selected ? Constants.pastelGray : Colors.transparent,
-                child: Row(
-                  mainAxisAlignment: selected ? MainAxisAlignment.start : MainAxisAlignment.center,
-                  children: [
-                  if (selected)
-                  Icon(Icons.check),
-                  StarDisplay(starRating: starRating,iconSize: 40,)
-                  
-                ],),
-              ),
-            );
-          }))
-        ],),
+        child: Column(
+          children: [
+            Text(
+              "Filter By:",
+              style: comfortaaBold(25, color: Colors.black),
+            ),
+            Column(
+                children: List.generate(11, (i) {
+              double starRating = (i * 0.5);
+              bool selected = starRating ==
+                  AVISharedState
+                      .dataQualityThreshold; // Checks if this star rating threshold is currently active
+              return GestureDetector(
+                onTap: () {
+                  widget.state.setDQThreshold(starRating);
+                  widget.state.updateChartData(
+                      sort: _AmongViewIndividualState.sortCheckbox.value);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  color: selected ? Constants.pastelGray : Colors.transparent,
+                  child: Row(
+                    mainAxisAlignment: selected
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.center,
+                    children: [
+                      if (selected) Icon(Icons.check),
+                      StarDisplay(
+                        starRating: starRating,
+                        iconSize: 40,
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }))
+          ],
+        ),
       ),
     );
   }
