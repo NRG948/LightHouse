@@ -688,18 +688,10 @@ Map<String, dynamic> displayKeys = {
     "scouterName": "raw",
     "replay": "raw",
     "driverStation": "raw",
-    // TODO: CHANGE THIS
-    "startingPosition": "raw",
-
     "preload": "raw",
     "hasNoAuto": "raw",
     "autoMatch": "autoMatch",
     "groundIntake": "raw",
-    // TODO: Change these two
-    "autoCoralScored": "raw",
-    "autoCoralScoredL1": "raw",
-    "autoAlgaeRemoved": "raw",
-
     "bargeCS": "raw",
     "processorCS": "raw",
     "coralPickups": "raw",
