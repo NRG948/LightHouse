@@ -39,6 +39,8 @@ class Constants {
 
   static const Color black = Colors.black;
 
+  static const Color removedGray = Color.fromARGB(255, 200, 200, 200);
+
   static const Color darkModeLightGray = Color.fromARGB(255, 89 , 89, 89);
   static const Color darkModeDarkGray = Color.fromARGB(255, 39 , 39, 39);
 

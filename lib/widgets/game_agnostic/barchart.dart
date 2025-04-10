@@ -19,6 +19,7 @@ class NRGBarChart extends StatefulWidget {
   List<int> removedData;
   Color color;
   List<Color> multiColor;
+  List<Color> aviMultiColor;
   String dataLabel;
   List<String> dataLabels;
   List<int> amongviewTeams;
@@ -38,6 +39,7 @@ class NRGBarChart extends StatefulWidget {
       List<int>? removedData,
       SplayTreeMap<int, List<double>>? multiData,
       List<Color>? multiColor,
+      List<Color>? aviMultiColor,
       String? dataLabel,
       List<String>? dataLabels,
       LinkedHashMap? hashMap,
@@ -50,6 +52,7 @@ class NRGBarChart extends StatefulWidget {
         data = data ?? SplayTreeMap(),
         multiData = multiData ?? SplayTreeMap(),
         multiColor = multiColor ?? [],
+        aviMultiColor = aviMultiColor ?? [],
         dataLabel = dataLabel ?? "AVG",
         dataLabels = dataLabels ?? ["AVG"],
         amongviewTeams = amongviewTeams ?? [],
@@ -81,7 +84,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
         ? widget.hashMap.keys.map<BarChartGroupData>((key) => BarChartGroupData(x: key, barRods: [
             BarChartRodData(
                 toY: widget.hashMap[key]!,
-                color: !_removedData.contains(key) ? _color : Colors.grey,
+                color: !_removedData.contains(key) ? _color : Constants.removedGray,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(7), topRight: Radius.circular(7)),
                 width: (_width - 20) / widget.hashMap.length * 0.6),
@@ -93,7 +96,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
             .map((int key) => BarChartGroupData(x: key, barRods: [
                   BarChartRodData(
                       toY: _data![key]!,
-                      color: !_removedData.contains(key) ? _color : Colors.grey,
+                      color: !_removedData.contains(key) ? _color : Constants.removedGray,
                       borderRadius: BorderRadius.only(
 
                           topLeft: Radius.circular(7),

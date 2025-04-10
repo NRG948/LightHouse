@@ -17,11 +17,13 @@ class AmongViewIndividual extends StatefulWidget {
 }
 
 class _AmongViewIndividualState extends State<AmongViewIndividual>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   static late double scaleFactor;
   late AVISharedState state;
-  late ValueNotifier<bool> sortCheckbox;
-  late ScrollController scrollController;
+  static late ValueNotifier<bool> sortCheckbox;
+  late ScrollController barScrollController;
+  late ScrollController matchScrollController;
+  late ScrollController pitScrollController;
   late TabController matchPitController;
   late double chartWidth;
   late bool forceRunOnce;
@@ -30,7 +32,9 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
   void initState() {
     super.initState();
     state = AVISharedState();
-    scrollController = ScrollController();
+    barScrollController = ScrollController();
+    matchScrollController = ScrollController();
+    pitScrollController = ScrollController();
     sortCheckbox = ValueNotifier<bool>(false);
     forceRunOnce = true;
   }
@@ -50,13 +54,14 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
       state.getEnabledLayouts();
       if (state.enabledLayouts.isNotEmpty) {
         state.setActiveLayout(state.enabledLayouts[0]);
+        state.setDQThreshold(0.0);
         state.setActiveSortKey(
             sortKeys[state.enabledLayouts[0]]!.keys.toList()[0]);
         state.loadPitData();
         state.addListener(() {
           setState(() {});
         });
-        state.updateChartData();
+        state.updateChartData(sort:_AmongViewIndividualState.sortCheckbox.value);
       }
       forceRunOnce = false;
     }
@@ -106,6 +111,9 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                 );
               },
               icon: Icon(Icons.arrow_back_ios_new)),
+          actions: [
+            AVIDQFilterDropdown(state: state)
+          ],
         ),
         body: Container(
             width: screenWidth,
@@ -217,10 +225,12 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                       height: 0.3 * screenHeight,
                       width: 350 * scaleFactor,
                       child: Scrollbar(
-                        controller: scrollController,
                         thumbVisibility: true,
+                        interactive: true,
+                        controller: barScrollController,
+                        
                         child: ListView(
-                            controller: scrollController,
+                            controller: barScrollController,
                             scrollDirection: Axis.horizontal,
                             children: [
                               NRGBarChart(
@@ -228,6 +238,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                                 height: 0.3 * screenHeight,
                                 width: chartWidth * scaleFactor,
                                 data: state.chartData,
+                                removedData: state.removedData,
                                 color: Constants.pastelRed,
                                 hashMap: state.hashMap,
                                 amongviewMatches: state.matchesForTeam,
@@ -346,11 +357,17 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
       }
     }
 
-    return Scrollbar(
-      interactive: true,
-      thumbVisibility: true,
-      thickness: 10 * scaleFactor,
-      child: ListView(children: listViewChildren),
+    return Container(
+      decoration: Constants.roundBorder(color: pit ? Constants.pastelWhite : (match["dataQuality"] ?? 0.0) >= AVISharedState.dataQualityThreshold ? Constants.pastelWhite : Colors.red,),
+      child: Scrollbar(
+        controller: pit ? pitScrollController : matchScrollController,
+        interactive: true,
+        thumbVisibility: true,
+        thickness: 10 * scaleFactor,
+        child: ListView(
+          controller: pit ? pitScrollController : matchScrollController,
+          children: listViewChildren,),
+      ),
     );
     //return Text("Showing ${getParsedMatchInfo(state.clickedMatch ?? 0)[0]} ${getParsedMatchInfo(state.clickedMatch ?? 0)[1]} for team ${state.activeTeam}");
   }
@@ -360,10 +377,12 @@ class AVISharedState extends ChangeNotifier {
   late String activeEvent;
   late String activeLayout;
   late String activeSortKey;
+  static late double dataQualityThreshold;
   late int activeTeam;
   List<String> enabledLayouts = [];
   late List<int> matchesForTeam = [];
   late List<dynamic> data;
+  List<int> removedData = [];
   Map pitData = {};
   SplayTreeMap<int, double> chartData = SplayTreeMap();
   LinkedHashMap<int, double>? hashMap;
@@ -394,23 +413,31 @@ class AVISharedState extends ChangeNotifier {
     setActiveSortKey(sortKeys[activeLayout]!.keys.toList()[0]);
     notifyListeners();
   }
+  
+  void setDQThreshold(double threshold) {
+    dataQualityThreshold = threshold;
+    notifyListeners();
+  }
 
   void setActiveSortKey(String key) {
     activeSortKey = key;
-    updateChartData();
+    updateChartData(sort:_AmongViewIndividualState.sortCheckbox.value);
     notifyListeners();
   }
 
   void updateChartData({bool? sort}) {
     chartData.clear();
     matchesForTeam.clear();
-    for (dynamic i in data) {
-      if (!(matchesForTeam.contains(getParsedMatchNumber(i)))) {
-        matchesForTeam.add(getParsedMatchNumber(i));
+    removedData.clear();
+    for (dynamic match in data) {
+      if (!(matchesForTeam.contains(getParsedMatchNumber(match)))) {
+        matchesForTeam.add(getParsedMatchNumber(match));
+      }
+      if (match["dataQuality"] < dataQualityThreshold) {
+        removedData.add(getParsedMatchNumber(match));
       }
     }
     matchesForTeam.sort((a, b) => a.compareTo(b));
-
     switch (sortKeys[activeLayout][activeSortKey]) {
       case "raw":
         for (dynamic match in data) {
@@ -760,8 +787,8 @@ List<dynamic> getParsedMatchInfo(int parsedMatch, {bool? truncated}) {
   }
 }
 class AVIDQFilterDropdown extends StatefulWidget {
-  
-  const AVIDQFilterDropdown({super.key,});
+  final AVISharedState state;
+  const AVIDQFilterDropdown({super.key,required this.state});
 
   @override
   State<AVIDQFilterDropdown> createState() => _AVIDQFilterDropdownState();
@@ -799,9 +826,11 @@ class _AVIDQFilterDropdownState extends State<AVIDQFilterDropdown> {
           Text("Filter By:",style: comfortaaBold(25,color: Colors.black),),
           Column(children: List.generate(11, (i) {
             double starRating = (i * 0.5);
-            bool selected = false;//starRating == AmongViewSharedState.dataQualityThreshold; // Checks if this star rating threshold is currently active
+            bool selected = starRating == AVISharedState.dataQualityThreshold; // Checks if this star rating threshold is currently active
             return GestureDetector(
               onTap: () {
+                widget.state.setDQThreshold(starRating);
+                widget.state.updateChartData(sort: _AmongViewIndividualState.sortCheckbox.value);
                 Navigator.pop(context);
               },
               child: Container(
