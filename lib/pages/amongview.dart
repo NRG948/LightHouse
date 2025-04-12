@@ -92,9 +92,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                   );
                 },
                 icon: Icon(Icons.home)),
-            actions: [
-              AVDQFilterDropdown(state: state)
-            ],
+            actions: [AVDQFilterDropdown(state: state)],
           ),
           body: Container(
               width: screenWidth,
@@ -114,54 +112,83 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                           color: Constants.pastelWhite,
                           borderRadius:
                               BorderRadius.circular(Constants.borderRadius)),
-                      child: Column(children: [
-                        Text("Showing data for ${state.activeEvent}: ",
-                            style: comfortaaBold(10)),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text("Layout:"),
-                            DropdownButton(
-                                value: state.activeLayout,
-                                items: state.enabledLayouts.map((e) {
-                                  return DropdownMenuItem(
-                                      value: e,
-                                      child: Text(
-                                        e,
-                                        style: comfortaaBold(12,
-                                            color: Colors.black),
-                                      ));
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    state.setActiveLayout(newValue ?? "");
-                                  });
-                                }),
-                          ],
+                      child: Column(
+                        children: [
+                        SizedBox(height: 10,),
+                        Container(
+                          width: 325,
+                          height: 40,
+                          decoration: Constants.roundBorder(color: Constants.pastelRed),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.calendar_today,color: Constants.pastelWhite,),
+                              Text(trunc(configData["eventKey"]??"",25),style: comfortaaBold(18),),
+                              SizedBox(width: 15,),
+                              Icon(Icons.filter_alt,color: Constants.pastelWhite,),
+                              StarDisplay(starRating: AmongViewSharedState.dataQualityThreshold)
+                            ],
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text("Sort by:",
-                                style: comfortaaBold(12, color: Colors.black)),
-                            DropdownButton(
-                                value: state.activeSortKey,
-                                items: state.getSortKeys().map((e) {
-                                  return DropdownMenuItem(
-                                      value: e,
-                                      child: Text(
-                                        e.toSentenceCase,
-                                        style: comfortaaBold(11,
-                                            color: Colors.black),
-                                      ));
-                                }).toList(),
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    state.setActiveSortKey(newValue ?? "");
-                                  });
-                                }),
-                          ],
+                        SizedBox(height: 5,),
+                        Container(
+                          width: 325,
+                          height: 40,
+                          decoration: Constants.roundBorder(color: Constants.pastelRed),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Icon(Icons.dashboard,color: Constants.pastelWhite,),
+                              DropdownButton(
+                                  value: state.activeLayout,
+                                  dropdownColor: Constants.pastelRed,
+                                  items: state.enabledLayouts.map((e) {
+                                    return DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e,
+                                          style: comfortaaBold(18,
+                                              color: Constants.pastelWhite),
+                                        ));
+                                  }).toList(),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      state.setActiveLayout(newValue ?? "");
+                                    });
+                                  }),
+                            ],
+                          ),
                         ),
+                        SizedBox(height: 5,),
+                        Container(
+                          width: 325,
+                          height: 40,
+                          decoration: Constants.roundBorder(color: Constants.pastelRed),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.sort,color: Constants.pastelWhite,),
+                              DropdownButton(
+                                  value: state.activeSortKey,
+                                  dropdownColor: Constants.pastelRed,
+                                  items: state.getSortKeys().map((e) {
+                                    return DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e.toSentenceCase,
+                                          style: comfortaaBold(11,
+                                              color: Constants.pastelWhite),
+                                        ));
+                                  }).toList(),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      state.setActiveSortKey(newValue ?? "");
+                                    });
+                                  }),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 5,),
                         GestureDetector(
                           onTap: () {
                             sortCheckbox.value = !sortCheckbox.value;
@@ -173,17 +200,18 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                             width: 325 * scaleFactor,
                             height: 40 * scaleFactor,
                             decoration: BoxDecoration(
-                                color: Constants.pastelGray,
+                                color: Constants.pastelRed,
                                 borderRadius: BorderRadius.circular(
                                     Constants.borderRadius)),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 ValueListenableBuilder(
                                     valueListenable: sortCheckbox,
                                     builder: (a, b, c) {
                                       return Checkbox(
                                           value: b,
+                                          side: BorderSide(color: Constants.pastelWhite,width: 2),
                                           onChanged: (value) {
                                             sortCheckbox.value = value ?? false;
                                             setState(() =>
@@ -191,11 +219,13 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                                     sort: sortCheckbox.value));
                                           });
                                     }),
+                                Icon(Icons.bar_chart,color: Constants.pastelWhite,),
+                                SizedBox(width: 10,),
                                 SizedBox(
                                   height: 40 * scaleFactor,
                                   child: Center(
                                       child: AutoSizeText(
-                                    "Sort Data?",
+                                    "Sort by rankings",
                                     style: comfortaaBold(18 * scaleFactor),
                                   )),
                                 )
@@ -780,9 +810,11 @@ class _AVDQFilterDropdownState extends State<AVDQFilterDropdown> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => showDialog(context: context, builder: (context) {
-        return dqFilterDialog();
-      }),
+      onTap: () => showDialog(
+          context: context,
+          builder: (context) {
+            return dqFilterDialog();
+          }),
       child: Container(
         width: 50,
         height: 30,
@@ -792,7 +824,10 @@ class _AVDQFilterDropdownState extends State<AVDQFilterDropdown> {
             Icons.star,
             color: Constants.black,
           ),
-          Icon(Icons.arrow_drop_down,color: Constants.black,)
+          Icon(
+            Icons.arrow_drop_down,
+            color: Constants.black,
+          )
         ]),
       ),
     );
@@ -802,33 +837,51 @@ class _AVDQFilterDropdownState extends State<AVDQFilterDropdown> {
     return Center(
       child: Container(
         width: 250,
-        height: 500,
+        height: 530,
         decoration: Constants.roundBorder(),
-        child: Column(children: [
-          Text("Filter By:",style: comfortaaBold(25,color: Colors.black),),
-          Column(children: List.generate(11, (i) {
-            double starRating = (i * 0.5);
-            bool selected = starRating == AmongViewSharedState.dataQualityThreshold; // Checks if this star rating threshold is currently active
-            return GestureDetector(
-              onTap: () {
-                widget.state.setDQThreshold(starRating);
-                widget.state.updateChartData(sort:_DataViewerAmongViewState.sortCheckbox.value);
-                Navigator.pop(context);
-              },
-              child: Container(
-                color: selected ? Constants.pastelGray : Colors.transparent,
-                child: Row(
-                  mainAxisAlignment: selected ? MainAxisAlignment.start : MainAxisAlignment.center,
-                  children: [
-                  if (selected)
-                  Icon(Icons.check),
-                  StarDisplay(starRating: starRating,iconSize: 40,)
-                  
-                ],),
-              ),
-            );
-          }))
-        ],),
+        child: Column(
+          children: [
+            Text(
+              "Filter By:",
+              style: comfortaaBold(25, color: Colors.black),
+            ),
+            Text(
+              "Only data with selected rating and higher will be used",
+              style: comfortaaBold(12, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            Column(
+                children: List.generate(11, (i) {
+              double starRating = (i * 0.5);
+              bool selected = starRating ==
+                  AmongViewSharedState
+                      .dataQualityThreshold; // Checks if this star rating threshold is currently active
+              return GestureDetector(
+                onTap: () {
+                  widget.state.setDQThreshold(starRating);
+                  widget.state.updateChartData(
+                      sort: _DataViewerAmongViewState.sortCheckbox.value);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  color: selected ? Constants.pastelGray : Colors.transparent,
+                  child: Row(
+                    mainAxisAlignment: selected
+                        ? MainAxisAlignment.start
+                        : MainAxisAlignment.center,
+                    children: [
+                      if (selected) Icon(Icons.check),
+                      StarDisplay(
+                        starRating: starRating,
+                        iconSize: 40,
+                      )
+                    ],
+                  ),
+                ),
+              );
+            }))
+          ],
+        ),
       ),
     );
   }
