@@ -70,7 +70,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
       canPop: false,
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Constants.pastelRed,
+          backgroundColor: Constants.primaryColor(),
           appBar: AppBar(
             iconTheme: IconThemeData(color: Constants.pastelWhite),
             backgroundColor:
@@ -103,298 +103,302 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                           "assets/images/background-hires-dark.png"),
                       fit: BoxFit.cover)),
               child: Center(
-                child: Column(
-                  children: [
-                    Container(
-                      width: 350 * scaleFactor,
-                      height: 0.8 * screenHeight,
-                      decoration: BoxDecoration(
-                          color: Constants.pastelWhite,
-                          borderRadius:
-                              BorderRadius.circular(Constants.borderRadius)),
-                      child: Column(
-                        children: [
-                        SizedBox(height: 10,),
-                        Container(
-                          width: 325,
-                          height: 40,
-                          decoration: Constants.roundBorder(color: Constants.pastelRed),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.calendar_today,color: Constants.pastelWhite,),
-                              Text(trunc(configData["eventKey"]??"",25),style: comfortaaBold(18),),
-                              SizedBox(width: 15,),
-                              Icon(Icons.filter_alt,color: Constants.pastelWhite,),
-                              StarDisplay(starRating: AmongViewSharedState.dataQualityThreshold)
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 5,),
-                        Container(
-                          width: 325,
-                          height: 40,
-                          decoration: Constants.roundBorder(color: Constants.pastelRed),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Icon(Icons.dashboard,color: Constants.pastelWhite,),
-                              DropdownButton(
-                                  value: state.activeLayout,
-                                  dropdownColor: Constants.pastelRed,
-                                  items: state.enabledLayouts.map((e) {
-                                    return DropdownMenuItem(
-                                        value: e,
-                                        child: Text(
-                                          e,
-                                          style: comfortaaBold(18,
-                                              color: Constants.pastelWhite),
-                                        ));
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      state.setActiveLayout(newValue ?? "");
-                                    });
-                                  }),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 5,),
-                        Container(
-                          width: 325,
-                          height: 40,
-                          decoration: Constants.roundBorder(color: Constants.pastelRed),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(Icons.sort,color: Constants.pastelWhite,),
-                              DropdownButton(
-                                  value: state.activeSortKey,
-                                  dropdownColor: Constants.pastelRed,
-                                  items: state.getSortKeys().map((e) {
-                                    return DropdownMenuItem(
-                                        value: e,
-                                        child: Text(
-                                          e.toSentenceCase,
-                                          style: comfortaaBold(11,
-                                              color: Constants.pastelWhite),
-                                        ));
-                                  }).toList(),
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      state.setActiveSortKey(newValue ?? "");
-                                    });
-                                  }),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 5,),
-                        GestureDetector(
-                          onTap: () {
-                            sortCheckbox.value = !sortCheckbox.value;
-                            setState(() {
-                              state.updateChartData(sort: sortCheckbox.value);
-                            });
-                          },
-                          child: Container(
-                            width: 325 * scaleFactor,
-                            height: 40 * scaleFactor,
-                            decoration: BoxDecoration(
-                                color: Constants.pastelRed,
-                                borderRadius: BorderRadius.circular(
-                                    Constants.borderRadius)),
+                child: SizedBox(
+                  width: 375 * scaleFactor,
+                  child: ListView(
+                    children: [
+                      Container(
+                        height: 0.8 * screenHeight,
+                        decoration: BoxDecoration(
+                            color: Constants.pastelWhite,
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius)),
+                        child: Column(
+                          children: [
+                          SizedBox(height: 10,),
+                          Container(
+                            width: 325,
+                            height: 40,
+                            decoration: Constants.roundBorder(color: Constants.primaryColor()),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                ValueListenableBuilder(
-                                    valueListenable: sortCheckbox,
-                                    builder: (a, b, c) {
-                                      return Checkbox(
-                                          value: b,
-                                          side: BorderSide(color: Constants.pastelWhite,width: 2),
-                                          onChanged: (value) {
-                                            sortCheckbox.value = value ?? false;
-                                            setState(() =>
-                                                state.updateChartData(
-                                                    sort: sortCheckbox.value));
-                                          });
-                                    }),
-                                Icon(Icons.bar_chart,color: Constants.pastelWhite,),
-                                SizedBox(width: 10,),
-                                SizedBox(
-                                  height: 40 * scaleFactor,
-                                  child: Center(
-                                      child: AutoSizeText(
-                                    "Sort by rankings",
-                                    style: comfortaaBold(18 * scaleFactor),
-                                  )),
-                                )
+                                Icon(Icons.calendar_today,color: Constants.pastelWhite,),
+                                // Truncating to 12 characters should never be a problem
+                                // I checked, the longest-recorded FRC event key (2025sunshow) is 11 characters
+                                Text(trunc(configData["eventKey"]??"",12),style: comfortaaBold(18),),
+                                SizedBox(width: 15,),
+                                Icon(Icons.filter_alt,color: Constants.pastelWhite,),
+                                StarDisplay(starRating: AmongViewSharedState.dataQualityThreshold)
                               ],
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 300 * scaleFactor,
-                          width: 350 * scaleFactor,
-                          child: Scrollbar(
-                            controller: scrollController,
-                            thumbVisibility: true,
-                            interactive: true,
-                            thickness: 10 * scaleFactor,
-                            child: ListView(
-                                controller: scrollController,
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  NRGBarChart(
-                                    title: state.activeSortKey.toSentenceCase,
-                                    height: 300 * scaleFactor,
-                                    width: chartWidth * scaleFactor,
-                                    data: state.chartData,
-                                    color: Constants.pastelRed,
-                                    amongviewTeams: state.teamsInEvent,
-                                    hashMap: state.hashMap,
-                                    sharedState: state,
-                                    chartOnly: true,
-                                  ),
-                                ]),
-                          ),
-                        ),
-                        if (AmongViewSharedState.clickedTeam != 0)
-                          Column(
-                            children: [
-                              Container(
-                                width: 325 * scaleFactor,
-                                height: 125 * scaleFactor,
-                                decoration: BoxDecoration(
-                                    color: Constants.pastelRed,
-                                    borderRadius: BorderRadius.circular(
-                                        Constants.borderRadius)),
-                                child: FutureBuilder(
-                                    future: getTeamName(
-                                        AmongViewSharedState.clickedTeam),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState !=
-                                          ConnectionState.done) {
-                                        return Container();
-                                        //return Text("Loading...",style: comfortaaBold(25),textAlign: TextAlign.center,);
-                                      }
-                                      return Column(
-                                        children: [
-                                          Text(
-                                            "Team ${AmongViewSharedState.clickedTeam}",
-                                            style: comfortaaBold(25),
-                                          ),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                  width: 250 * scaleFactor,
-                                                  child: AutoSizeText(
-                                                    snapshot.data.toString(),
-                                                    style: comfortaaBold(18),
-                                                    textAlign: TextAlign.center,
-                                                  )),
-                                              FutureBuilder(
-                                                  future: TeamSpritesheet
-                                                      .getTeamPicture(
-                                                          AmongViewSharedState
-                                                              .clickedTeam),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot
-                                                            .connectionState !=
-                                                        ConnectionState.done) {
-                                                      return SizedBox(
-                                                        height:
-                                                            60 * scaleFactor,
-                                                        width: 60 * scaleFactor,
-                                                      );
-                                                      //return Image(image: AssetImage("assets/images/loading.png"),height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
-                                                    }
-                                                    return Image.memory(
-                                                      snapshot.data!,
-                                                      height: 60 * scaleFactor,
-                                                      width: 60 * scaleFactor,
-                                                      fit: BoxFit.fill,
-                                                    );
-                                                  })
-                                            ],
-                                          ),
-                                        ],
-                                      );
+                          SizedBox(height: 5,),
+                          Container(
+                            width: 325,
+                            height: 40,
+                            decoration: Constants.roundBorder(color: Constants.primaryColor()),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Icon(Icons.dashboard,color: Constants.pastelWhite,),
+                                DropdownButton(
+                                    value: state.activeLayout,
+                                    dropdownColor: Constants.primaryColor(),
+                                    items: state.enabledLayouts.map((e) {
+                                      return DropdownMenuItem(
+                                          value: e,
+                                          child: Text(
+                                            e,
+                                            style: comfortaaBold(18,
+                                                color: Constants.pastelWhite),
+                                          ));
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        state.setActiveLayout(newValue ?? "");
+                                      });
                                     }),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 5,),
+                          Container(
+                            width: 325,
+                            height: 40,
+                            decoration: Constants.roundBorder(color: Constants.primaryColor()),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.sort,color: Constants.pastelWhite,),
+                                DropdownButton(
+                                    value: state.activeSortKey,
+                                    dropdownColor: Constants.primaryColor(),
+                                    items: state.getSortKeys().map((e) {
+                                      return DropdownMenuItem(
+                                          value: e,
+                                          child: Text(
+                                            e.toSentenceCase,
+                                            style: comfortaaBold(12,
+                                                color: Constants.pastelWhite),
+                                          ));
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        state.setActiveSortKey(newValue ?? "");
+                                      });
+                                    }),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 5,),
+                          GestureDetector(
+                            onTap: () {
+                              sortCheckbox.value = !sortCheckbox.value;
+                              setState(() {
+                                state.updateChartData(sort: sortCheckbox.value);
+                              });
+                            },
+                            child: Container(
+                              width: 325 * scaleFactor,
+                              height: 40 * scaleFactor,
+                              decoration: BoxDecoration(
+                                  color: Constants.primaryColor(),
+                                  borderRadius: BorderRadius.circular(
+                                      Constants.borderRadius)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ValueListenableBuilder(
+                                      valueListenable: sortCheckbox,
+                                      builder: (a, b, c) {
+                                        return Checkbox(
+                                            value: b,
+                                            side: BorderSide(color: Constants.pastelWhite,width: 2),
+                                            onChanged: (value) {
+                                              sortCheckbox.value = value ?? false;
+                                              setState(() =>
+                                                  state.updateChartData(
+                                                      sort: sortCheckbox.value));
+                                            });
+                                      }),
+                                  Icon(Icons.bar_chart,color: Constants.pastelWhite,),
+                                  SizedBox(width: 10,),
+                                  SizedBox(
+                                    height: 40 * scaleFactor,
+                                    child: Center(
+                                        child: AutoSizeText(
+                                      "Sort by Rankings",
+                                      style: comfortaaBold(18 * scaleFactor),
+                                    )),
+                                  )
+                                ],
                               ),
-                              SizedBox(height: 5 * scaleFactor),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, "/amongview-individual",
-                                      arguments: [
-                                        AmongViewSharedState.clickedTeam,
-                                        0
-                                      ]);
-                                },
-                                child: Container(
+                            ),
+                          ),
+                          SizedBox(
+                            height: 300 * scaleFactor,
+                            width: 350 * scaleFactor,
+                            child: Scrollbar(
+                              controller: scrollController,
+                              thumbVisibility: true,
+                              interactive: true,
+                              thickness: 10 * scaleFactor,
+                              child: ListView(
+                                  controller: scrollController,
+                                  scrollDirection: Axis.horizontal,
+                                  children: [
+                                    NRGBarChart(
+                                      title: state.activeSortKey.toSentenceCase,
+                                      height: 300 * scaleFactor,
+                                      width: chartWidth * scaleFactor,
+                                      data: state.chartData,
+                                      color: Constants.primaryColor(),
+                                      amongviewTeams: state.teamsInEvent,
+                                      hashMap: state.hashMap,
+                                      sharedState: state,
+                                      chartOnly: true,
+                                    ),
+                                  ]),
+                            ),
+                          ),
+                          if (AmongViewSharedState.clickedTeam != 0)
+                            Column(
+                              children: [
+                                Container(
                                   width: 325 * scaleFactor,
-                                  height: 50 * scaleFactor,
+                                  height: 125 * scaleFactor,
                                   decoration: BoxDecoration(
+                                      color: Constants.primaryColor(),
                                       borderRadius: BorderRadius.circular(
-                                          Constants.borderRadius),
-                                      color: Constants.pastelBlue),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        "View Match Data",
-                                        style: comfortaaBold(18),
-                                      ),
-                                      Icon(
-                                        Icons.keyboard_arrow_right,
-                                        color: Constants.pastelWhite,
-                                        size: 35 * scaleFactor,
-                                      )
-                                    ],
+                                          Constants.borderRadius)),
+                                  child: FutureBuilder(
+                                      future: getTeamName(
+                                          AmongViewSharedState.clickedTeam),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                          return Container();
+                                          //return Text("Loading...",style: comfortaaBold(25),textAlign: TextAlign.center,);
+                                        }
+                                        return Column(
+                                          children: [
+                                            Text(
+                                              "Team ${AmongViewSharedState.clickedTeam}",
+                                              style: comfortaaBold(25),
+                                            ),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                    width: 250 * scaleFactor,
+                                                    child: AutoSizeText(
+                                                      snapshot.data.toString(),
+                                                      style: comfortaaBold(18),
+                                                      textAlign: TextAlign.center,
+                                                    )),
+                                                FutureBuilder(
+                                                    future: TeamSpritesheet
+                                                        .getTeamPicture(
+                                                            AmongViewSharedState
+                                                                .clickedTeam),
+                                                    builder: (context, snapshot) {
+                                                      if (snapshot
+                                                              .connectionState !=
+                                                          ConnectionState.done) {
+                                                        return SizedBox(
+                                                          height:
+                                                              60 * scaleFactor,
+                                                          width: 60 * scaleFactor,
+                                                        );
+                                                        //return Image(image: AssetImage("assets/images/loading.png"),height: 60 * scaleFactor,width: 60 * scaleFactor,fit: BoxFit.fill,);
+                                                      }
+                                                      return Image.memory(
+                                                        snapshot.data!,
+                                                        height: 60 * scaleFactor,
+                                                        width: 60 * scaleFactor,
+                                                        fit: BoxFit.fill,
+                                                      );
+                                                    })
+                                              ],
+                                            ),
+                                          ],
+                                        );
+                                      }),
+                                ),
+                                SizedBox(height: 5 * scaleFactor),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, "/amongview-individual",
+                                        arguments: [
+                                          AmongViewSharedState.clickedTeam,
+                                          0
+                                        ]);
+                                  },
+                                  child: Container(
+                                    width: 325 * scaleFactor,
+                                    height: 50 * scaleFactor,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Constants.borderRadius),
+                                        color: Constants.pastelBlue),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          "View Match Data",
+                                          style: comfortaaBold(18),
+                                        ),
+                                        Icon(
+                                          Icons.keyboard_arrow_right,
+                                          color: Constants.pastelWhite,
+                                          size: 35 * scaleFactor,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 5 * scaleFactor),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, "/amongview-individual",
-                                      arguments: [
-                                        AmongViewSharedState.clickedTeam,
-                                        1
-                                      ]);
-                                },
-                                child: Container(
-                                  width: 325 * scaleFactor,
-                                  height: 50 * scaleFactor,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          Constants.borderRadius),
-                                      color: Constants.pastelBlueDark),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        "View Pit Data",
-                                        style: comfortaaBold(18),
-                                      ),
-                                      Icon(
-                                        Icons.keyboard_arrow_right,
-                                        color: Constants.pastelWhite,
-                                        size: 35 * scaleFactor,
-                                      )
-                                    ],
+                                SizedBox(height: 5 * scaleFactor),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, "/amongview-individual",
+                                        arguments: [
+                                          AmongViewSharedState.clickedTeam,
+                                          1
+                                        ]);
+                                  },
+                                  child: Container(
+                                    width: 325 * scaleFactor,
+                                    height: 50 * scaleFactor,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Constants.borderRadius),
+                                        color: Constants.pastelBlueDark),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Text(
+                                          "View Pit Data",
+                                          style: comfortaaBold(18),
+                                        ),
+                                        Icon(
+                                          Icons.keyboard_arrow_right,
+                                          color: Constants.pastelWhite,
+                                          size: 35 * scaleFactor,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          )
-                      ]),
-                    ),
-                  ],
+                              ],
+                            )
+                        ]),
+                      ),
+                    ],
+                  ),
                 ),
               ))),
     );
@@ -822,11 +826,11 @@ class _AVDQFilterDropdownState extends State<AVDQFilterDropdown> {
         child: Row(children: [
           Icon(
             Icons.star,
-            color: Constants.black,
+            color: Constants.primaryColor(),
           ),
           Icon(
             Icons.arrow_drop_down,
-            color: Constants.black,
+            color: Constants.primaryColor(),
           )
         ]),
       ),

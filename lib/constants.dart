@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/filemgr.dart';
 
 class Constants {
   // Pastel
@@ -79,6 +80,14 @@ class Constants {
     );
   }
   
+  static Color primaryColor() {
+    try {
+      return (themeColorPalettes[configData["theme"] ?? "Light"] ?? [pastelRed])[0];
+    } catch (_) {
+      return pastelRed;
+    }
+  }
+
 }
 
 
@@ -157,6 +166,11 @@ extension StringExtensions on String {
   String get removeAfterSpace => contains(" ") ? split(" ")[0] : this;
   String get removeTrailingSlashes => replaceAll(RegExp(r'/+$'), "");
 }
+
+String trunc(String string,int length) {
+  return (string.length > length) ? string.substring(0,length) : string;
+}
+
 extension DoubleExtensions on double {
   double get fourDigits => double.parse(toStringAsFixed(4));
 }

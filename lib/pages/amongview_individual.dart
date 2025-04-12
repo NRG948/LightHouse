@@ -92,7 +92,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
     scaleFactor = screenHeight / 914;
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Constants.pastelRed,
+        backgroundColor: Constants.primaryColor(),
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
           backgroundColor:
@@ -124,179 +124,218 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                     image: AssetImage(backgrounds[configData["theme"]] ??
                         "assets/images/background-hires-dark.png"),
                     fit: BoxFit.cover)),
-            child: Column(children: [
-              Container(
-                  width: 350 * scaleFactor,
-                  height: 0.8 * screenHeight,
-                  decoration: BoxDecoration(
-                      color: Constants.pastelWhite,
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius)),
-                  child: Column(children: [
-                    Text("Showing data for ${state.activeEvent}: "),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text("Layout:",
-                            style: comfortaaBold(10, color: Colors.black)),
-                        DropdownButton(
-                            borderRadius:
-                                BorderRadius.circular(Constants.borderRadius),
-                            value: state.activeLayout,
-                            items: state.enabledLayouts.map((e) {
-                              return DropdownMenuItem(
-                                  value: e,
-                                  child: Text(
-                                    e.toSentenceCase,
-                                    style:
-                                        comfortaaBold(12, color: Colors.black),
-                                  ));
-                            }).toList(),
-                            onChanged: (newValue) {
-                              setState(() {
-                                state.setActiveLayout(newValue ?? "");
-                              });
-                            }),
-                      ],
-                    ),
-                    if (state.getSortKeys().contains(state.activeSortKey))
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text("Sort by:",
-                              style: comfortaaBold(10, color: Colors.black)),
-                          DropdownButton(
-                              borderRadius:
-                                  BorderRadius.circular(Constants.borderRadius),
-                              value: state.activeSortKey,
-                              items: state.getSortKeys().map((e) {
-                                return DropdownMenuItem(
-                                    value: e,
-                                    child: Text(
-                                      e.toSentenceCase,
-                                      style: comfortaaBold(12,
-                                          color: Colors.black),
-                                    ));
-                              }).toList(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  state.setActiveSortKey(newValue ?? "");
-                                });
-                              }),
-                        ],
-                      ),
-                    GestureDetector(
-                      onTap: () {
-                        sortCheckbox.value = !sortCheckbox.value;
-                        setState(() {
-                          state.updateChartData(sort: sortCheckbox.value);
-                        });
-                      },
-                      child: Container(
-                        width: 325 * scaleFactor,
-                        height: 40 * scaleFactor,
-                        decoration: BoxDecoration(
-                            color: Constants.pastelGray,
-                            borderRadius:
-                                BorderRadius.circular(Constants.borderRadius)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            ValueListenableBuilder(
-                                valueListenable: sortCheckbox,
-                                builder: (a, b, c) {
-                                  return Checkbox(
-                                      value: b,
-                                      onChanged: (value) {
-                                        sortCheckbox.value = value ?? false;
-                                        setState(() => state.updateChartData(
-                                            sort: sortCheckbox.value));
-                                      });
-                                }),
-                            SizedBox(
-                              height: 40 * scaleFactor,
-                              child: Center(
-                                  child: AutoSizeText(
-                                "Sort Data?",
-                                style: comfortaaBold(18 * scaleFactor),
-                              )),
-                            )
-                          ],
+            child: Center(
+              child: SizedBox(
+                width: 375 * scaleFactor,
+                child: ListView(
+                  children: [
+                  Container(
+                      height: 0.85 * screenHeight,
+                      decoration: BoxDecoration(
+                          color: Constants.pastelWhite,
+                          borderRadius:
+                              BorderRadius.circular(Constants.borderRadius)),
+                      child: Column(children: [
+                        SizedBox(height: 10,),
+                            Container(
+                              width: 325,
+                              height: 40,
+                              decoration: Constants.roundBorder(color: Constants.primaryColor()),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.calendar_today,color: Constants.pastelWhite,),
+                                  // Truncating to 12 characters should never be a problem
+                                  // I checked, the longest-recorded FRC event key (2025sunshow) is 11 characters
+                                  Text(trunc(configData["eventKey"]??"",12),style: comfortaaBold(18),),
+                                  SizedBox(width: 15,),
+                                  Icon(Icons.filter_alt,color: Constants.pastelWhite,),
+                                  StarDisplay(starRating: AVISharedState.dataQualityThreshold)
+                                ],
+                              ),
+                            ),
+                        SizedBox(height: 5,),
+                        Container(
+                          width: 325 * scaleFactor,
+                          height: 40 * scaleFactor,
+                          decoration: Constants.roundBorder(color: Constants.primaryColor()),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.dashboard,color: Constants.pastelWhite,),
+                              DropdownButton(
+                                  borderRadius:
+                                      BorderRadius.circular(Constants.borderRadius),
+                                  value: state.activeLayout,
+                                  dropdownColor: Constants.primaryColor(),
+                                  items: state.enabledLayouts.map((e) {
+                                    return DropdownMenuItem(
+                                        value: e,
+                                        child: Text(
+                                          e.toSentenceCase,
+                                          style:
+                                              comfortaaBold(18, color: Constants.pastelWhite),
+                                        ));
+                                  }).toList(),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      state.setActiveLayout(newValue ?? "");
+                                    });
+                                  }),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 0.3 * screenHeight,
-                      width: 350 * scaleFactor,
-                      child: Scrollbar(
-                        thumbVisibility: true,
-                        interactive: true,
-                        controller: barScrollController,
-                        child: ListView(
+                        SizedBox(height: 5,),
+                        if (state.getSortKeys().contains(state.activeSortKey))
+                          Container(
+                            width: 325 * scaleFactor,
+                            height: 40 * scaleFactor,
+                            decoration: Constants.roundBorder(color: Constants.primaryColor()),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.sort,color: Constants.pastelWhite,),
+                                DropdownButton(
+                                    borderRadius:
+                                        BorderRadius.circular(Constants.borderRadius),
+                                    value: state.activeSortKey,
+                                    dropdownColor: Constants.primaryColor(),
+                                    items: state.getSortKeys().map((e) {
+                                      return DropdownMenuItem(
+                                          value: e,
+                                          child: Text(
+                                            e.toSentenceCase,
+                                            style: comfortaaBold(12,
+                                                color: Constants.pastelWhite),
+                                          ));
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        state.setActiveSortKey(newValue ?? "");
+                                      });
+                                    }),
+                              ],
+                            ),
+                          ),
+                        SizedBox(height: 5,),
+                        GestureDetector(
+                          onTap: () {
+                            sortCheckbox.value = !sortCheckbox.value;
+                            setState(() {
+                              state.updateChartData(sort: sortCheckbox.value);
+                            });
+                          },
+                          child: Container(
+                            width: 325 * scaleFactor,
+                            height: 40 * scaleFactor,
+                            decoration: BoxDecoration(
+                                color: Constants.primaryColor(),
+                                borderRadius:
+                                    BorderRadius.circular(Constants.borderRadius)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ValueListenableBuilder(
+                                    valueListenable: sortCheckbox,
+                                    builder: (a, b, c) {
+                                      return Checkbox(
+                                          value: b,
+                                          onChanged: (value) {
+                                            sortCheckbox.value = value ?? false;
+                                            setState(() => state.updateChartData(
+                                                sort: sortCheckbox.value));
+                                          });
+                                    }),
+                                Icon(Icons.bar_chart,color: Constants.pastelWhite,),
+                                SizedBox(width: 10,),
+                                SizedBox(
+                                  height: 40 * scaleFactor,
+                                  child: Center(
+                                      child: AutoSizeText(
+                                    "Sort by Rankings",
+                                    style: comfortaaBold(18 * scaleFactor),
+                                  )),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 0.3 * screenHeight,
+                          width: 350 * scaleFactor,
+                          child: Scrollbar(
+                            thumbVisibility: true,
+                            interactive: true,
                             controller: barScrollController,
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              NRGBarChart(
-                                title: state.activeSortKey.toSentenceCase,
-                                height: 0.3 * screenHeight,
-                                width: chartWidth * scaleFactor,
-                                data: state.chartData,
-                                removedData: state.removedData,
-                                color: Constants.pastelRed,
-                                hashMap: state.hashMap,
-                                amongviewMatches: state.matchesForTeam,
-                                chartOnly: true,
-                                sharedState: state,
-                              ),
-                            ]),
-                      ),
-                    ),
-                    TabBar(controller: matchPitController, tabs: [
-                      Tab(
-                        text: "MATCH",
-                      ),
-                      Tab(
-                        text: "PIT",
-                      )
-                    ]),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 400 * scaleFactor,
-                        height: 0.25 * screenHeight,
-                        child: TabBarView(
-                            physics: NeverScrollableScrollPhysics(),
-                            controller: matchPitController,
-                            children: [
-                              Container(
-                                height: 0.3 * screenHeight,
-                                width: 350 * scaleFactor,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        Constants.borderRadius),
-                                    border: Border.all(width: scaleFactor * 2)),
-                                child: (state.clickedMatch == null)
-                                    ? Text("No match selected",
-                                        style: comfortaaBold(10))
-                                    : buildMatchData(context),
-                              ),
-                              Container(
-                                  height: 0.3 * screenHeight,
-                                  width: 350 * scaleFactor,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          Constants.borderRadius),
-                                      border:
-                                          Border.all(width: scaleFactor * 2)),
-                                  child: state.pitData.isEmpty
-                                      ? Text("No pit data",
-                                          style: comfortaaBold(10))
-                                      : buildMatchData(context, pit: true))
-                            ]),
-                      ),
-                    ),
-                  ])),
-            ])));
+                            child: ListView(
+                                controller: barScrollController,
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  NRGBarChart(
+                                    title: state.activeSortKey.toSentenceCase,
+                                    height: 0.3 * screenHeight,
+                                    width: chartWidth * scaleFactor,
+                                    data: state.chartData,
+                                    removedData: state.removedData,
+                                    color: Constants.primaryColor(),
+                                    hashMap: state.hashMap,
+                                    amongviewMatches: state.matchesForTeam,
+                                    chartOnly: true,
+                                    sharedState: state,
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        TabBar(controller: matchPitController, tabs: [
+                          Tab(
+                            text: "MATCH",
+                          ),
+                          Tab(
+                            text: "PIT",
+                          )
+                        ]),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 400 * scaleFactor,
+                            height: 0.25 * screenHeight,
+                            child: TabBarView(
+                                physics: NeverScrollableScrollPhysics(),
+                                controller: matchPitController,
+                                children: [
+                                  Container(
+                                    height: 0.3 * screenHeight,
+                                    width: 350 * scaleFactor,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Constants.borderRadius),
+                                        border: Border.all(width: scaleFactor * 2)),
+                                    child: (state.clickedMatch == null)
+                                        ? Center(
+                                          child: Text("No match selected",
+                                              style: comfortaaBold(30,color: Constants.pastelGray),textAlign: TextAlign.center,),
+                                        )
+                                        : buildMatchData(context),
+                                  ),
+                                  Container(
+                                      height: 0.3 * screenHeight,
+                                      width: 350 * scaleFactor,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              Constants.borderRadius),
+                                          border:
+                                              Border.all(width: scaleFactor * 2)),
+                                      child: state.pitData.isEmpty
+                                          ? Text("No pit data",
+                                              style: comfortaaBold(10))
+                                          : buildMatchData(context, pit: true))
+                                ]),
+                          ),
+                        ),
+                      ])),
+                ]),
+              ),
+            )));
   }
 
   Widget buildMatchData(BuildContext context, {bool pit = false}) {
@@ -334,10 +373,77 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
             style:
                 comfortaaBold(14 * scaleFactor, color: Constants.pastelBrown),
           ));
-        case "dataQuality":
-          listViewChildren.add(StarDisplay(starRating: match[i].toDouble()));
+        case "replay":
+          if (match["replay"] == true) {
+            listViewChildren.add(Container(
+              width: 300,
+              height: 50,
+              decoration: Constants.roundBorder(color: Colors.red),
+              child: Center(child: Text("REPLAY",style: comfortaaBold(18),textAlign: TextAlign.center,)),
+            ));
+          }
+        case "name_DS_DQ":
+          listViewChildren.add(Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+            Icon(Icons.person,color: Colors.black,),
+            SizedBox(
+              width: 100,
+              child: AutoSizeText(
+                match["scouterName"],
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: comfortaaBold(18,color: Colors.black),),
+            ),
+            Container(
+              width: 80,
+              height: 30,
+              decoration: Constants.roundBorder(color: match["driverStation"][0] == "R" ? Constants.pastelRed : Constants.pastelBlue),
+              child: Center(child: Text(match["driverStation"],style: comfortaaBold(18),textAlign: TextAlign.center,)),
+            ),
+            StarDisplay(starRating: match["dataQuality"].toDouble())
+          ],));
+        case "teleopScoring":
+          listViewChildren.add(Row(
+            children: [
+              SizedBox(width: 5,),
+              Text("Teleop",style: comfortaaBold(22,color: Colors.black),textAlign: TextAlign.start,),
+            ],
+          ),);
+          listViewChildren.add(Center(
+            child: Column(
+              children: [
+                Text("Coral Pickups: ${match["coralPickups"]}",style: comfortaaBold(18,color: Colors.black),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(4, (i) {
+                  return Text("L${i+1}: ${match["coralScoredL${i+1}"]}",style: comfortaaBold(22,color: Constants.reefColors[i]),);
+                }))
+              ],
+            ),
+          ));
+          listViewChildren.add(Center(
+            child: Column(
+              children: [
+                Text("Algae Removed: ${match["algaeRemove"]}",style: comfortaaBold(18,color: Colors.black),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: ["Processor","Net"].map((i) {
+                  return Text("$i: ${match["algaeScore$i"]}",style: comfortaaBold(22,color: Constants.reefColors[4]),);
+                }).toList())
+              ],
+            ),
+          ));       
         case "autoMatch":
-            listViewChildren.add(AutoReefView(
+          if (match["hasNoAuto"] == true) {
+            listViewChildren.add(Container(
+              width: 300,
+              height: 40,
+              decoration: Constants.roundBorder(color: Colors.red),
+              child: Center(child: Text("NO AUTO",style: comfortaaBold(18),textAlign: TextAlign.center,)),
+            ));
+          } else {
+          listViewChildren.add(AutoReefView(
                 height: 170,
                 width: 150,
                 scouterNames: ["Auto"],
@@ -353,7 +459,7 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                 startingPosition: List<double>.from(match["startingPosition"].split(",").map((i) => double.tryParse(i) ?? 0.0).toList()),
                 flipStartingPosition: match["driverStation"][0] == "R",
                 hasNoAuto: false));
-
+          }
 
         case "autoPit":
           for (dynamic auto in match["auto"]) {
@@ -684,24 +790,11 @@ Map<String, dynamic> sortKeys = {
 // Necessary for more complex data types like event lists
 Map<String, dynamic> displayKeys = {
   "Atlas": {
-    "dataQuality": "dataQuality",
-    "scouterName": "raw",
-    "replay": "raw",
-    "driverStation": "raw",
-    "preload": "raw",
-    "hasNoAuto": "raw",
+    // Name, driver station, data quality
+    "name_DS_DQ" : "name_DS_DQ",
+    "replay": "replay",
     "autoMatch": "autoMatch",
-    "groundIntake": "raw",
-    "bargeCS": "raw",
-    "processorCS": "raw",
-    "coralPickups": "raw",
-    "coralScoredL1": "raw",
-    "coralScoredL2": "raw",
-    "coralScoredL3": "raw",
-    "coralScoredL4": "raw",
-    "algaeRemove": "raw",
-    "algaeScoreProcessor": "raw",
-    "algaeScoreNet": "raw",
+    "teleopScoring" : "teleopScoring",
     "endLocation": "raw",
     "attemptedClimb": "raw",
 
@@ -835,11 +928,11 @@ class _AVIDQFilterDropdownState extends State<AVIDQFilterDropdown> {
         child: Row(children: [
           Icon(
             Icons.star,
-            color: Constants.black,
+            color: Constants.primaryColor(),
           ),
           Icon(
             Icons.arrow_drop_down,
-            color: Constants.black,
+            color: Constants.primaryColor(),
           )
         ]),
       ),
