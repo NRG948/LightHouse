@@ -104,7 +104,7 @@ class _AutoReefViewState extends State<AutoReefView>
           Row(spacing: 10, children: [
             Text(_scouterNames.join(", "),
                 style: comfortaaBold(22, color: Constants.pastelBrown)),
-            Text((_matchNumber ?? "").toString(),
+            Text((_matchNumber ?? 0) > 0 ? (_matchNumber ?? "").toString() : "PIT",
                 style: comfortaaBold(22, color: Constants.pastelRedSuperDark)),
             if (!widget.pit && widget.dataQuality != null)
             StarDisplay(starRating: widget.dataQuality!,iconSize: 25,)

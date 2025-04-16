@@ -529,7 +529,8 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
   }
 
   Widget getAutoPreviews() {
-    Map<int, AutoReefView> autos = {};
+    // Sorted so latest autos appear first to keep the list up-to-date.
+    SplayTreeMap<int, AutoReefView> autos = SplayTreeMap<int, AutoReefView>((a, b) => b.compareTo(a));;
 
     for (Map<String, dynamic> matchData in atlasData) {
       if (matchData["teamNumber"] == currentTeamNumber) {
@@ -553,7 +554,37 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               processorCS: matchData["processorCS"],
               bargeCS: matchData["bargeCS"]),
           hasNoAuto: matchData["hasNoAuto"],
+          pit: false,
         );
+      }
+    }
+
+    for (Map<String, dynamic> matchData in pitData) {
+      if (matchData["teamNumber"] == currentTeamNumber) {
+        for (int i = 0; i < matchData["auto"]!.length; i++) {
+          autos[-i - 1] = AutoReefView(
+            height: 270 * horizontalScaleFactor,
+            width: 360 * horizontalScaleFactor,
+            scouterNames: [matchData["interviewerName"]],
+            matchNumber: -i - 1,
+            dataQuality: 0,
+            flipStartingPosition: false,
+            startingPosition: [0, 0],
+            reef: AutoReef(
+              algaeRemoved:
+                  List<String>.from(matchData["auto"][i]["autoAlgaeRemoved"]),
+              scores: fixAutoCoralScoredData(
+                  matchData["auto"][i]["autoCoralScored"].toString()),
+              troughCount:
+                  int.parse(matchData["auto"][i]["autoCoralScoredL1"] ?? "0"),
+              groundIntake: matchData["auto"][i]["groundIntake"],
+              processorCS: matchData["auto"][i]["processorCS"],
+              bargeCS: matchData["auto"][i]["bargeCS"],
+            ),
+            hasNoAuto: matchData["auto"][i]["hasNoAuto"],
+            pit: true,
+          );
+        }
       }
     }
 
@@ -576,11 +607,16 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
               height: 270 * horizontalScaleFactor,
               width: 360 * horizontalScaleFactor,
               pit: true,
-              scouterNames: [teamPitData["interviewerName"],teamPitData["intervieweeName"],],
+              scouterNames: [
+                teamPitData["interviewerName"],
+                teamPitData["intervieweeName"],
+              ],
               matchNumber: teamPitData["auto"].indexOf(auto) + 1,
-              dataQuality: 5.0, // This value doesn't matter as rating is never rendered
+              dataQuality:
+                  5.0, // This value doesn't matter as rating is never rendered
               reef: AutoReef(
-                  scores: fixAutoCoralScoredData(auto["autoCoralScored"].toString()),
+                  scores: fixAutoCoralScoredData(
+                      auto["autoCoralScored"].toString()),
                   algaeRemoved: List<String>.from(auto["autoAlgaeRemoved"]),
                   troughCount: int.parse(auto["autoCoralScoredL1"] ?? "0"),
                   groundIntake: auto["groundIntake"],
@@ -592,7 +628,6 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
         }
       }
     }
-
 
     if (autos.values.toList().isEmpty) {
       return Container(
