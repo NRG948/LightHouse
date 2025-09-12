@@ -18,7 +18,7 @@ class Constants {
   static const Color pastelBlue = Color.fromARGB(255, 74, 188, 216);
   static const Color pastelBlueDark = Color.fromARGB(255, 23, 123, 154);
   static const Color pastelBlueSuperDark = Color.fromARGB(255, 3, 62, 125);
-  
+
   static const Color pastelGray = Color.fromARGB(255, 196, 201, 194);
   static const Color pastelGrayDark = Color.fromARGB(255, 153, 168, 153);
   static const Color pastelGraySuperDark = Color.fromARGB(255, 80, 102, 79);
@@ -42,55 +42,53 @@ class Constants {
 
   static const Color removedGray = Color.fromARGB(255, 200, 200, 200);
 
-  static const Color darkModeLightGray = Color.fromARGB(255, 89 , 89, 89);
-  static const Color darkModeDarkGray = Color.fromARGB(255, 39 , 39, 39);
+  static const Color darkModeLightGray = Color.fromARGB(255, 89, 89, 89);
+  static const Color darkModeDarkGray = Color.fromARGB(255, 39, 39, 39);
 
-  static const Color pinkModeLightPink = Color.fromARGB(255, 255 , 163, 250);
-  static const Color pinkModeDarkPink = Color.fromARGB(255, 236 , 94, 238);
+  static const Color pinkModeLightPink = Color.fromARGB(255, 255, 163, 250);
+  static const Color pinkModeDarkPink = Color.fromARGB(255, 236, 94, 238);
 
   static const Color blueModeDarkBlue = Color.fromARGB(255, 50, 95, 147);
   static const Color blueModeLightBlue = Color.fromARGB(255, 67, 133, 209);
 
   static const List<Color> reefColors = [
-      Color.fromARGB(255, 195, 103, 191), // L1
-      Color.fromARGB(255, 77, 110, 211), // L2
-      Color.fromARGB(255, 82, 197, 69), // L3
-      Color.fromARGB(255, 236, 87, 87), // L4
-      Color.fromARGB(255, 90, 216, 179) // Algae
+    Color.fromARGB(255, 195, 103, 191), // L1
+    Color.fromARGB(255, 77, 110, 211), // L2
+    Color.fromARGB(255, 82, 197, 69), // L3
+    Color.fromARGB(255, 236, 87, 87), // L4
+    Color.fromARGB(255, 90, 216, 179) // Algae
   ];
 
-  static const double neonBorder = 2;
   static const double borderRadius = 8;
-  /// There is always a delay between the end of, for example, 
+
+  /// There is always a delay between the end of, for example,
   /// auto and the start of teleop. Thus, this is simply for
   /// adding a bit of delay before the next section. :)
   static final double startDelay = 3;
-  
+
   static const String versionName = "DCMP RC4";
   // Should this key be exposed to the internet? no
   // do i care? also no
-  static const String tbaAPIKey = "ayLg4jZVBMJ4BFKqDzt8Sn7nGTYqDgB4VEB0ZxbMXH3MVJVnhAChBZZSyuSEuEVH";
+  static const String tbaAPIKey =
+      "ayLg4jZVBMJ4BFKqDzt8Sn7nGTYqDgB4VEB0ZxbMXH3MVJVnhAChBZZSyuSEuEVH";
 
   static const bool chronosEnabled = false;
 
   static BoxDecoration roundBorder({Color color = pastelWhite}) {
     return BoxDecoration(
-      borderRadius: BorderRadius.circular(Constants.borderRadius),
-      color: color
-    );
+        borderRadius: BorderRadius.circular(Constants.borderRadius),
+        color: color);
   }
-  
+
   static Color primaryColor() {
     try {
-      return (themeColorPalettes[configData["theme"] ?? "Light"] ?? [pastelRed])[0];
+      return (themeColorPalettes[configData["theme"] ?? "Light"] ??
+          [pastelRed])[0];
     } catch (_) {
       return pastelRed;
     }
   }
-
 }
-
-
 
 TextStyle comfortaaBold(double fontSize,
     {bool bold = true,
@@ -105,26 +103,24 @@ TextStyle comfortaaBold(double fontSize,
       color: color,
       fontSize: fontSize,
       fontStyle: italic ? FontStyle.italic : FontStyle.normal,
-      letterSpacing: spacing
-      );
+      letterSpacing: spacing);
 }
 
-
-final Map<int,String> responseCodes = {
+final Map<int, String> responseCodes = {
   100: "Continue",
   101: "Switch Protocols",
   102: "Processing",
   103: "Early Hints",
-  200:"OK",
-  201:"Created",
-  202:"Accepted",
-  203:"Non-Authoritative Info (OK)",
+  200: "OK",
+  201: "Created",
+  202: "Accepted",
+  203: "Non-Authoritative Info (OK)",
   204: "No Content",
   205: "Reset Content",
   206: "Partial Content",
   207: "Multi-Status",
   300: "Multiple Choices",
-  301:"Permanantly Moved",
+  301: "Permanantly Moved",
   302: "Temporarily Moved",
   303: "Send GET request",
   307: "Temporary Redirect",
@@ -133,42 +129,42 @@ final Map<int,String> responseCodes = {
   401: "Unauthorized",
   402: "Payment Required",
   403: "Forbidden",
-  404:"File Not Found",
-  500:"Internal Server Error"
+  404: "File Not Found",
+  500: "Internal Server Error"
 };
 
 final Map<String, String> backgrounds = {
-  "Light" : "assets/images/background-hires.png",
-  "Dark" : "assets/images/background-hires-dark.png",
-  "Black" : "assets/images/background-hires-black.png",
-  "Pink" : "assets/images/background-hires-pink.png",
-  "Blue" : "assets/images/background-hires-blue.png",
+  "Light": "assets/images/background-hires.png",
+  "Dark": "assets/images/background-hires-dark.png",
+  "Black": "assets/images/background-hires-black.png",
+  "Pink": "assets/images/background-hires-pink.png",
+  "Blue": "assets/images/background-hires-blue.png",
   "Tony": "assets/images/background-tony.jpg"
 };
 
-final Map<String,List<Color>> themeColorPalettes = {
-  "Light": [Constants.pastelRed,Constants.pastelYellow],
-  "Dark": [Constants.darkModeDarkGray,Constants.darkModeLightGray],
-  "Pink": [Constants.pinkModeDarkPink,Constants.pinkModeLightPink],
-  "Black": [Colors.black,Colors.black],
-  "Blue": [Constants.blueModeDarkBlue,Constants.blueModeLightBlue],
-  "Tony": [Constants.darkModeDarkGray,Constants.darkModeLightGray]
+final Map<String, List<Color>> themeColorPalettes = {
+  "Light": [Constants.pastelRed, Constants.pastelYellow],
+  "Dark": [Constants.darkModeDarkGray, Constants.darkModeLightGray],
+  "Pink": [Constants.pinkModeDarkPink, Constants.pinkModeLightPink],
+  "Black": [Colors.black, Colors.black],
+  "Blue": [Constants.blueModeDarkBlue, Constants.blueModeLightBlue],
+  "Tony": [Constants.darkModeDarkGray, Constants.darkModeLightGray]
 };
 
 extension StringExtensions on String {
   String get toSentenceCase => replaceAllMapped(
-    RegExp(r'([a-z])([A-Z])'),
-    (Match m) => '${m[1]} ${m[2]}',
-  ).replaceFirstMapped(
-    RegExp(r'^[a-z]'),
-    (Match m) => m[0]!.toUpperCase(),
-  );
+        RegExp(r'([a-z])([A-Z])'),
+        (Match m) => '${m[1]} ${m[2]}',
+      ).replaceFirstMapped(
+        RegExp(r'^[a-z]'),
+        (Match m) => m[0]!.toUpperCase(),
+      );
   String get removeAfterSpace => contains(" ") ? split(" ")[0] : this;
   String get removeTrailingSlashes => replaceAll(RegExp(r'/+$'), "");
 }
 
-String trunc(String string,int length) {
-  return (string.length > length) ? string.substring(0,length) : string;
+String trunc(String string, int length) {
+  return (string.length > length) ? string.substring(0, length) : string;
 }
 
 extension DoubleExtensions on double {
