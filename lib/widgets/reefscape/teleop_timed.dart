@@ -293,7 +293,7 @@ class RSTTHexagon extends StatefulWidget {
 class _RSTTHexagonState extends State<RSTTHexagon> {
   void toggleSection(int index) {
     setState(() {
-      print(_RSTeleopTimedState.widgetStates);
+      debugPrint(_RSTeleopTimedState.widgetStates.toString());
       if (!_RSTeleopTimedState.widgetStates.contains(true) ||
           _RSTeleopTimedState.widgetStates[index]) {
         HapticFeedback.heavyImpact();

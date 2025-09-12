@@ -121,7 +121,7 @@ class SavedData extends StatelessWidget {
                                                                   Text("No")),
                                                           TextButton(
                                                               onPressed: () {
-                                                                clearAllData();
+                                                                clearSavedData();
                                                                 Navigator.pop(
                                                                     context);
                                                                 Navigator.pop(
@@ -396,7 +396,7 @@ class _SavedFileState extends State<SavedFile> {
 
   @override
   Widget build(BuildContext context) {
-    print(
+    debugPrint(
         "${SavedData.sharedState.activeEvent}, ${SavedData.sharedState.activeLayout}, ${widget.fileName}");
     savedFileJson = loadFileIntoSavedData(SavedData.sharedState.activeEvent,
         SavedData.sharedState.activeLayout, widget.fileName);

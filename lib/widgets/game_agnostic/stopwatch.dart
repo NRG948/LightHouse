@@ -45,7 +45,7 @@ class _NRGStopwatchState extends State<NRGStopwatch> with AutomaticKeepAliveClie
 
   @override
   void initState() {
-    print("RUNNING!");
+    debugPrint("Stopwatch has started.");
     super.initState();
     DataEntry.stopwatchMap[widget.pageIndex] = Duration(seconds: 0);
     _stopwatch.reset();

@@ -445,7 +445,7 @@ class DataEntryState extends State<DataEntry> {
                   if (notification.metrics.axis == Axis.vertical) {
                     return true;
                   }
-                  print(notification.overscroll);
+                  debugPrint(notification.overscroll.toString());
                   if (notification.overscroll < -25) {
                     showReturnDialog(context);
                   }

@@ -16,8 +16,8 @@ class DataViewerHome extends StatelessWidget {
     final screenHeight =
         MediaQuery.of(context).size.height; // gets screen height
 //calculate scaling factor based on height
-    print(screenWidth * 0.85);
-    print(screenHeight * 0.15);
+    debugPrint((screenWidth * 0.85).toString());
+    debugPrint((screenHeight * 0.15).toString());
     return PopScope(
       canPop: false,
       child: Scaffold(

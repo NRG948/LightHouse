@@ -38,7 +38,8 @@ Future<Map<String, String>> loadConfig({bool reset = false}) async {
     configFile.writeAsString(jsonEncode(defaultConfig));
     configJson = defaultConfig;
   } else {
-    configJson = jsonDecode(ensureSingleCurlyBrace(await configFile.readAsString()));
+    configJson =
+        jsonDecode(ensureSingleCurlyBrace(await configFile.readAsString()));
   }
   configData.addEntries(configJson.entries
       .map((entry) => MapEntry(entry.key, entry.value.toString())));
@@ -47,9 +48,7 @@ Future<Map<String, String>> loadConfig({bool reset = false}) async {
 
 List<String> getSavedEvents() {
   final configDir = Directory(configFolder);
-  return configDir.listSync().whereType<Directory>().map((dir) {
-    return basename(dir.path);
-  }).toList();
+  return getDirectoryFileNames(configDir);
 }
 
 bool ensureSavedDataExists(String eventKey) {
@@ -64,27 +63,34 @@ bool ensureSavedDataExists(String eventKey) {
   return false;
 }
 
+/// Returns the file names in the directory [dir].
+///
+/// Calling this on the event key directory is observed to load saved layouts.
+List<String> getDirectoryFileNames(Directory dir) => dir
+    .listSync()
+    .whereType<Directory>()
+    .map((dir) => basename(dir.path))
+    .toList();
+
 List<String> getLayouts(String eventKey) {
   final eventKeyDir = Directory("$configFolder/$eventKey");
-  // DO NOT REMOVE THIS DEBUGPRINT STATEMENT!!!
-  // saved layouts won't load if you remove this print statement, idk why
-  // tf2 coconut core
-  // my best guess is that the listSync() method is broken and won't return files/folders
-  // unless you've already tried to list that directory
-  // essentially shrodinger's folder
-  debugPrint(eventKeyDir.listSync().whereType<Directory>().map((dir) {
-    return basename(dir.path);
-  }).toString());
-  final List<String> layoutList =
-      eventKeyDir.listSync().whereType<Directory>().map((dir) {
-    return basename(dir.path);
-  }).toList();
+  /*
+  Do not remove this debugPrint statement.
+
+  Saved layouts will not load if it is removed.
+  The exact reasons are unknown, but Colin's best guess is that listSync() is broken and will not
+  return files or folders unless the directory has already been listed.
+
+  Note: Colin's funnier message was replaced with this on 9/11/2025.
+  */
+  debugPrint(getDirectoryFileNames(eventKeyDir).toString());
+
+  final List<String> layoutList = getDirectoryFileNames(eventKeyDir);
   if (layoutList.isEmpty) {
     layoutList.add("No Data");
   }
 
-  // oops didn't think about database folder when designing this
-  // luckily this works as a band-aid
+  // This is a quick fix for the database folder. It should be redesigned to better accommodate for it.
   for (String i in ["database", ".Trash"]) {
     if (layoutList.contains(i)) {
       layoutList.remove(i);
@@ -99,53 +105,39 @@ List<String> getFilesInLayout(String eventKey, String layout) {
   if (!layoutDir.existsSync()) {
     return [];
   }
-  // DO NOT REMOVE THIS DEBUGPRINT STATEMENT!!!
-  // Refer to the comment in getLayouts()
+  // Do not remove debugPrint(); Refer to the comment in getLayouts().
   debugPrint(layoutDir.listSync().toString());
-  return layoutDir.listSync().map((file) {
-    return basename(file.path);
-  }).toList();
+
+  return layoutDir.listSync().map((file) => basename(file.path)).toList();
 }
 
-Future<bool> clearAllData() async {
+/// Deletes all saved data stored under the current event key.
+///
+/// Returns true if successful, and false otherwise.
+Future<bool> clearSavedData() async {
   await loadConfig();
   try {
     final directory = Directory("$configFolder/${configData["eventKey"]}");
     if (await directory.exists()) {
       await directory.delete(recursive: true);
       return true;
+    } else {
+      debugPrint('Error clearing data: Directory not found.');
+      return false;
     }
-
-    // if (await directory.exists()) {
-    //   // Delete all contents of the directory
-    //   await for (var entity in directory.list(recursive: true)) {
-    //     if (entity is File) {
-    //       await entity.delete();
-    //     } else if (entity is Directory) {
-    //       await entity.delete(recursive: true);
-    //     }
-    //   }
-
-    //   // Reset the config data
-    //   // configData.clear();
-
-    //   return true;
-    // }
-
-    return false;
   } catch (e) {
-    print('Error clearing data: $e');
+    debugPrint('Error clearing data: $e.');
     return false;
   }
 }
 
-Future<int> ensureEventKeyDirectoryExists() async {
+/// Creates the event key directory if one does not exist.
+Future<void> ensureEventKeyDirectoryExists() async {
   final eventKeyDirectory =
       Directory("$configFolder/${configData["eventKey"]}");
   if (!(await eventKeyDirectory.exists())) {
     await eventKeyDirectory.create(recursive: true);
   }
-  return Future.value(0);
 }
 
 Future<int> saveExport() async {
@@ -241,17 +233,17 @@ Future<int> saveConfig() async {
 String ensureSingleCurlyBrace(String input) {
   // Trim any trailing spaces first
   input = input.trim();
-  
+
   // If the string ends with two or more curly braces, trim it to just one
   while (input.endsWith('}}')) {
     input = input.substring(0, input.length - 1);
   }
-  
+
   // Ensure at least one curly brace at the end
   if (!input.endsWith('}')) {
     input += '}';
   }
-  
+
   return input;
 }
 
@@ -341,8 +333,6 @@ Future<String> loadTBAFile(String eventKey, String type) async {
   return await tbaMatchesFile.readAsString();
 }
 
-
-
 final Map<String, String> defaultConfig = {
   "eventKey": "2025nrg",
   "scouterName": "Scouter",
@@ -365,13 +355,12 @@ final Map<String, String> settingsMap = {
   "debugMode": "bool",
   "flipField": "bool",
   "autofillLastMatch": "bool",
-  "theme" : "dropdown"
+  "theme": "dropdown"
 };
 
-final Map<String,List<String>> settingsDropdownMap = {
-  "theme" : backgrounds.keys.toList()
+final Map<String, List<String>> settingsDropdownMap = {
+  "theme": backgrounds.keys.toList()
 };
-
 
 final Map<String, IconData> settingsIconMap = {
   "eventKey": Icons.calendar_today,

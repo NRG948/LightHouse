@@ -37,7 +37,7 @@ class _MatchInfoState extends State<MatchInfo>
         autofillTeamNumber();
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -418,7 +418,7 @@ class _MatchInfoState extends State<MatchInfo>
     for (dynamic teamObject in teamPage) {
       if (teamObject["key"] == "frc$teamNumber") {
         if (teamObject["city"] == null) {
-          print('found this team $teamNumber');
+          debugPrint('Found team: $teamNumber');
           break;
         }
         setState(() {
@@ -469,7 +469,7 @@ class _MatchInfoState extends State<MatchInfo>
         return;
       }
     }
-    print("no matches");
+    debugPrint("No matches found.");
     setState(() {
       teamNumberController.text = "";
     });
