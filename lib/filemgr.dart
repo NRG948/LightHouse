@@ -12,6 +12,9 @@ import "package:path_provider/path_provider.dart";
 late final Map<String, String> configData;
 late String configFolder;
 
+/// Ensures that the app is running on a phone (android or iOS), 
+/// as well as setting [configFolder] to wherever it should be 
+/// on the specific device and instantiating [configData]. 
 Future<void> initConfig() async {
   configData = {};
 
@@ -30,6 +33,12 @@ Future<void> initConfig() async {
   }
 }
 
+/// Retrieves the app configuration data (themes, event codes, etc) from
+/// the locally stored file on the device. 
+/// 
+/// Specifically, it clears the [configData] map, grabs the "config.nrg"
+/// file from the local file directory, writes it to a json object, and then
+/// adds every single entry into [configData] for reference by the rest of the app. 
 Future<Map<String, String>> loadConfig({bool reset = false}) async {
   configData.clear();
   late Map<String, dynamic> configJson;
@@ -46,11 +55,13 @@ Future<Map<String, String>> loadConfig({bool reset = false}) async {
   return configData;
 }
 
+/// Returns all the event (file) names stored locally. 
 List<String> getSavedEvents() {
   final configDir = Directory(configFolder);
   return getDirectoryFileNames(configDir);
 }
 
+/// If there is no data saved locally yet, return false. 
 bool ensureSavedDataExists(String eventKey) {
   if (Directory("$configFolder/$eventKey").existsSync()) {
     return Directory("$configFolder/$eventKey")
@@ -72,6 +83,8 @@ List<String> getDirectoryFileNames(Directory dir) => dir
     .map((dir) => basename(dir.path))
     .toList();
 
+/// Essentially gets the file directory structure for a given
+/// eventkey, which is effectively the layout. 
 List<String> getLayouts(String eventKey) {
   final eventKeyDir = Directory("$configFolder/$eventKey");
   /*
@@ -140,6 +153,9 @@ Future<void> ensureEventKeyDirectoryExists() async {
   }
 }
 
+/// Saves [activeConfig] (from DataEntry, the stuff the user is currently inputting)
+/// into a json-formatted file with a name containing team number, match type, etc 
+/// and ended with a random number. 
 Future<int> saveExport() async {
   final random = Random();
 
@@ -175,6 +191,8 @@ Future<int> saveExport() async {
   return 0;
 }
 
+/// Adds a file into the "uploadQueue.nrg" file, which tells Lighthouse
+/// which files need to be uploaded to the server. 
 void addToUploadQueue(String file) async {
   final queueFile = File("$configFolder/uploadQueue.nrg");
   if (!(await queueFile.exists()) || queueFile.readAsStringSync() == "") {
@@ -186,6 +204,10 @@ void addToUploadQueue(String file) async {
   }
 }
 
+/// Reads the contents of the "uploadQueue.nrg" file, which tells 
+/// Lighthouse which files still need to be uploaded to the server
+/// 
+/// Returns a list of all file names in the upload Queue
 Future<List<dynamic>> getUploadQueue() async {
   final queueFile = File("$configFolder/uploadQueue.nrg");
   if (!(await queueFile.exists())) {
@@ -196,13 +218,17 @@ Future<List<dynamic>> getUploadQueue() async {
   return queue;
 }
 
+/// Rather than simply adding something to "uploadQueue.nrg", this 
+/// method completely overwrites any content within to whatever
+/// the contents of the [queue] is. 
 void setUploadQueue(List<dynamic> queue) {
   final queueFile = File("$configFolder/uploadQueue.nrg");
   // This should never run, since this function is only called after
   // the queue is confirmed to not be empty, meaning that uploadQueue.nrg
   // *must* exist
   if (!(queueFile.existsSync())) {
-    throw UnimplementedError("what the fart -catie");
+    throw UnimplementedError("No upload queue");
+    // Previous, more humorous error message replaced for debuggability. 
   }
   String queueString = "";
   if (queue.isNotEmpty) {
@@ -223,6 +249,8 @@ void setUploadQueue(List<dynamic> queue) {
   queueFile.writeAsStringSync(queueString);
 }
 
+/// If [configData] is changed (e.g. changing a theme), this is run
+/// to save that data locally to the user's device. 
 Future<int> saveConfig() async {
   debugPrint(ensureSingleCurlyBrace(jsonEncode(configData)));
   final configFile = File("$configFolder/config.nrg");
@@ -230,6 +258,9 @@ Future<int> saveConfig() async {
   return 0;
 }
 
+/// Makes sure that the end of any given string has one backwards facing curly brace. 
+/// 
+/// If there is any number other than one, it changes to one curly brace. 
 String ensureSingleCurlyBrace(String input) {
   // Trim any trailing spaces first
   input = input.trim();
@@ -247,6 +278,7 @@ String ensureSingleCurlyBrace(String input) {
   return input;
 }
 
+/// Retrieves all the (names of) files in any given event key folder. 
 List<String> getFiles() {
   final eventKeyDirectory =
       Directory("$configFolder/${configData["eventKey"]}");
@@ -262,6 +294,7 @@ List<String> getFiles() {
       .toList();
 }
 
+/// Returns json-formatted data from any file on disk. 
 Map<String, dynamic> loadFileIntoSavedData(
   String eventKey,
   String layout,
@@ -271,6 +304,7 @@ Map<String, dynamic> loadFileIntoSavedData(
       File("$configFolder/$eventKey/$layout/$fileName").readAsStringSync());
 }
 
+/// Saves json-formatted data into a file. 
 int saveFileFromSavedData(String eventKey, String layout, String fileName,
     Map<String, dynamic> content) {
   try {
@@ -282,6 +316,7 @@ int saveFileFromSavedData(String eventKey, String layout, String fileName,
   }
 }
 
+/// Takes a file, returns the contents of the file as a string. 
 Future<String> loadFileForUpload(String fileName) async {
   final file = File(fileName);
   if (!(await file.exists())) {
@@ -290,6 +325,11 @@ Future<String> loadFileForUpload(String fileName) async {
   return await file.readAsString();
 }
 
+/// A database file serves to contain literally all data ever recorded for a
+/// specific event and layout. 
+/// It's taken from the server (usually) and is used for the data viewer
+/// 
+/// This method saves the contents of the file into an actual file. 
 Future<int> saveDatabaseFile(
     String eventKey, String layout, String content) async {
   final databaseDirectory = Directory("$configFolder/$eventKey/database");
@@ -301,6 +341,11 @@ Future<int> saveDatabaseFile(
   return Future.value(0);
 }
 
+/// A database file serves to contain literally all data ever recorded for a
+/// specific event and layout. 
+/// It's taken from the server (usually) and is used for the data viewer
+/// 
+/// This method loads the contents of a file on disk into a string object. 
 String loadDatabaseFile(String eventKey, String layout) {
   final dbFile = File("$configFolder/$eventKey/database/$layout.json");
   if (!(dbFile.existsSync())) {
@@ -318,12 +363,14 @@ int deleteFile(String eventKey, String layout, String fileName) {
   return 0;
 }
 
+/// Saves data from TBA into a file on disk. 
 void saveTBAFile(String eventKey, String content, String type) async {
   File tbaMatchesFile = File("$configFolder/$eventKey/tba_$type.nrg");
   await ensureEventKeyDirectoryExists();
   tbaMatchesFile.writeAsString(content);
 }
 
+/// Loads data originally from TBA from disk. 
 Future<String> loadTBAFile(String eventKey, String type) async {
   File tbaMatchesFile = File("$configFolder/$eventKey/tba_$type.nrg");
   await ensureEventKeyDirectoryExists();
@@ -346,6 +393,9 @@ final Map<String, String> defaultConfig = {
   "autofillLastMatch": "false",
   "theme": "Light"
 };
+
+// These maps tell Lighthouse what things to display for any
+// given keyword. 
 
 final Map<String, String> settingsMap = {
   "eventKey": "text",
