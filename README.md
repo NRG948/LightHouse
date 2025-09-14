@@ -1,66 +1,31 @@
-# lighthouse
+# Lighthouse
 
-A new Flutter project.
+Lighthouse is NRG 948's in-house scouting and data analysis mobile app.
 
-## Getting Started
+## Usage
+The app is divided into four main data-collection "layouts," each with different purposes. 
+There are also pages for viewing and editing saved data, viewing and analyzing saved data, 
+and uploading data to a server. 
 
-This project is a starting point for a Flutter application.
+### Atlas
+Designed for mapping where the robot went during a match, and what it did, but not when it did. 
+This is essentially to understand the robot's role. 
 
-A few resources to get you started if this is your first Flutter project:
+### Chronos
+Designed for mapping out where the robot went during what time, to gather data on cycle times, 
+paths, etc. Note that this is not currently used by NRG. 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Pit
+For the initial talking-to-teams and gathering data at the start of an event. 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Human Player
+For tracking human player performance. Also not really used by NRG. 
 
-## Attribution
-Race Support SVG - CC-BY // Visualeat
-## How to download
+### Data Viewer
+Allows you to see graphs, numbers, and other data from scouting. 
 
-## General Attributes
-The Scouting app is designed for recording data related to various aspects of robot competitions. It covers several key areas of scouting, including robot performance, human player activities, match data, and pit scouting.
+## Server / Database
+All data is uploaded to a server, which combines all the data and gives it to 
+any Lighthouse instances that request it (thus allowing the data viewer to work). 
 
-Main Features:
-Atlas – Focuses on mapping robot activities during matches.
-Chronos – Tracks timing-related data during matches.
-Pit – Gathers basic information about the robot (size, weight, capabilities).
-Human Player – Records performance data about human players during the match.
-View Saved Data – Allows users to view previously recorded scouting data.
-Sync to Server – Uploads and downloads data to/from a server.
-Atlas Scouting:
-Setup: Enter team number, match type, and robot position at the start.
-Auto Section: Track actions like scoring algae, processing, or moving corals.
-Teleop Section: Record robot actions such as coral pickups, scoring, and algae interactions.
-Endgame Section: Track the robot’s final position, climbing attempts, and robot status at match end.
-Chronos Scouting:
-Similar setup to Atlas.
-Auto Period: Record robot location and interactions with reefs and coral stations.
-Teleop Period: Monitor and record actions like climbing and scoring.
-Pit Scouting:
-Enter robot dimensions (height, length, weight).
-Gather information about the robot’s drivetrain and mechanisms.
-Ask team members about their robot's abilities during different periods (auto, teleop, endgame).
-Human Player Scouting:
-Record the performance of human players, including scoring, misses, and algae interactions.
-Enter data such as the number of successful scores and missed attempts.
-Data Viewer:
-View and edit previously saved data.
-Filter data by type (Atlas, Chronos, Pit, Human Player).
-Sync to Server:
-Allows syncing data to a chosen server, ensuring up-to-date access across devices.
-Options to upload and download match data to/from the server.
-General Data Entry Fields & Options:
-Input for scouter names, team numbers, match numbers, and game types (e.g., qualifications, playoffs, finals).
-Sections for rating the accuracy of data and adding comments.
-Options for detailed robot performance (height, weight, drive type) and human player preferences (coral cycles, ideal alliance qualities).
-This app enables scouts to efficiently track and upload detailed match data, providing useful insights into team performance and robot capabilities.
-
-## Downloading Requirements
-Android (version 5.0 or newer) or iOS (version 12.0 or newer).
-Storage: 50 MB free space.
-Internet Connection: For app installation, updates, and cloud-based features.
-App Store Account:
-Google Play or Apple App Store for mobile apps.
-Platform-specific download sites for desktop apps.
+Server was previously written in Java / Springboot, but a python-based rewrite is planned. 
