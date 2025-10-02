@@ -54,8 +54,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
       state.setActiveEvent(configData["eventKey"]!);
       state.getEnabledLayouts();
       if (state.enabledLayouts.isNotEmpty) {
-        state.setActiveLayout(state.enabledLayouts[0]);
         state.setDQThreshold(0.0);
+        state.setActiveLayout(state.enabledLayouts[0]);
         state.setActiveSortKey(
             sortKeys[state.enabledLayouts[0]]!.keys.toList()[0]);
         state.loadPitData();
@@ -138,8 +138,8 @@ class _AmongViewIndividualState extends State<AmongViewIndividual>
                       child: Column(children: [
                         SizedBox(height: 10,),
                             Container(
-                              width: 325,
-                              height: 40,
+                              width: 325 * scaleFactor,
+                              height: 40 * scaleFactor,
                               decoration: Constants.roundBorder(color: Constants.primaryColor()),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

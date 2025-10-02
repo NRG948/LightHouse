@@ -117,8 +117,8 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                           children: [
                           SizedBox(height: 10,),
                           Container(
-                            width: 325,
-                            height: 40,
+                            width: 325 * scaleFactor,
+                            height: 40 * scaleFactor,
                             decoration: Constants.roundBorder(color: Constants.primaryColor()),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -135,8 +135,8 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                           ),
                           SizedBox(height: 5,),
                           Container(
-                            width: 325,
-                            height: 40,
+                            width: 325 * scaleFactor,
+                            height: 40 * scaleFactor,
                             decoration: Constants.roundBorder(color: Constants.primaryColor()),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -164,8 +164,8 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                           ),
                           SizedBox(height: 5,),
                           Container(
-                            width: 325,
-                            height: 40,
+                            width: 325 * scaleFactor,
+                            height: 40 * scaleFactor,
                             decoration: Constants.roundBorder(color: Constants.primaryColor()),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -179,7 +179,7 @@ class _DataViewerAmongViewState extends State<DataViewerAmongView> {
                                           value: e,
                                           child: Text(
                                             e.toSentenceCase,
-                                            style: comfortaaBold(12,
+                                            style: comfortaaBold(12 * scaleFactor,
                                                 color: Constants.pastelWhite),
                                           ));
                                     }).toList(),

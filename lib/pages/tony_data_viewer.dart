@@ -705,7 +705,7 @@ class _TonyDataViewerPageState extends State<TonyDataViewerPage> {
           getDefenseMatches(),
           Container(
             padding: EdgeInsets.all(marginSize),
-            width: 140 * horizontalScaleFactor,
+            width: 135 * horizontalScaleFactor,
             height: 200 * verticalScaleFactor,
             decoration: BoxDecoration(
                 color: Constants.pastelWhite,

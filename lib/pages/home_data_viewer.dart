@@ -80,6 +80,7 @@ class DataViewerHome extends StatelessWidget {
               width: screenWidth * 0.85,
               height: screenHeight * 0.15,
               decoration: BoxDecoration(
+                color: Constants.darkPurple,
                 image: DecorationImage(image: AssetImage("assets/images/amongview_bg.png")),
                 borderRadius: BorderRadius.circular(Constants.borderRadius) 
               ),
@@ -95,7 +96,7 @@ class DataViewerHome extends StatelessWidget {
               ),
             ),
           ),
-           ServerTestWidget(width: 350,darkMode: true,),
+           ServerTestWidget(width: 345,darkMode: true,),
            UploadButton(width: 400,route: "/home-data-viewer",),
            DownloadButton(width: 400,)
         ],),

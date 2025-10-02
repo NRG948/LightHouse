@@ -7,6 +7,7 @@ final List<String> splashTexts = [
   "Red Alliance!",
   "Blue Alliance!",
   "RIP Dodo",
+  "RIP Komo",
   "No comms?",
   "MARGINS >:(",
   "Electric!",
@@ -36,6 +37,7 @@ final List<String> splashTexts = [
   "Accept cookies? \\(•ω•`)o",
   "error 1002: ; Expected",
   "Did we cook?",
+  "The new scouting update is MASSIVE",
   "I think political comments are the best thing to put on splash texts -Krish",
   "Now with 95% less consistent variable names!",
   "Can you hear the music?",
@@ -51,7 +53,17 @@ final List<String> splashTexts = [
   "The new carti album is mid",
   "five guys is too expensive",
   "Ampharos is the best pokemon",
-  "wish!"
+  "wish!",
+  "All the stars!",
+  "Bombardino Crocodilo",
+  "Tralalero Tralala",
+  "BOO! Did I scare ya?",
+  "Shoutout to 1778, they're pretty cool",
+  "The 2-year curse is real",
+  "#r4nd0m",
+  "WE LOVE DRIVE TEAM",
+  "colin was here :3",
+  "Gray screen of death (>_<)"
 ];
 
 String randomSplashText() {
