@@ -109,6 +109,7 @@ class _DeviceAuthSetupDialogState extends State<DeviceAuthSetupDialog> {
   }
 }
 
+/// Pop-up that appears when a device authorization request is made. It displays the status of the request.
 class DeviceAuthUploadDialog extends StatefulWidget {
   final String oneTimeKey;
   const DeviceAuthUploadDialog({super.key, required this.oneTimeKey});
@@ -117,8 +118,11 @@ class DeviceAuthUploadDialog extends StatefulWidget {
   State<DeviceAuthUploadDialog> createState() => _DeviceAuthUploadDialogState();
 }
 
+/// Steps in the device ID authentication process.
+enum Step { retrieveID, uploadToServer, showReturnCode }
+
 class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
-  List<String> stepsToShow = [];
+  Step? currentStep;
   String uuid = "";
   dynamic responseCode;
 
@@ -145,7 +149,7 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                   "AUTHORIZE DEVICE",
                   style: comfortaaBold(25, color: Constants.black),
                 ),
-                if (stepsToShow.contains("deviceIDFuture"))
+                if (currentStep == Step.retrieveID)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -163,7 +167,8 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                       Text("Loading Device ID...")
                     ],
                   ),
-                if (stepsToShow.contains("deviceID"))
+                if (currentStep == Step.uploadToServer ||
+                    currentStep == Step.showReturnCode)
                   Column(
                     children: [
                       Text("Device ID:"),
@@ -171,11 +176,13 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                         uuid,
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 10,)
+                      SizedBox(
+                        height: 10,
+                      )
                     ],
                   ),
-                if (stepsToShow.contains("uploadFuture"))
-                 Row(
+                if (currentStep == Step.uploadToServer)
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
@@ -192,34 +199,56 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                       Text("Uploading to server...")
                     ],
                   ),
-                if (stepsToShow.contains("upload"))
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Occurs if POST request completed
-                    if (responseCode.runtimeType == int)
-                    Container(
-                    width: 300,
-                    decoration: Constants.roundBorder(color: responseCode == 200 ? Constants.pastelGreen : Constants.pastelRed),
-                    child: AutoSizeText("Recieved Code $responseCode - ${responseCodes[responseCode]}",style: comfortaaBold(14,color: Constants.pastelWhite),textAlign: TextAlign.center ,)),
-                    // Occurs if POST statement encounters an error
-                    if (responseCode.runtimeType == String)
-                    Container(
-                    width: 300,
-                    decoration: Constants.roundBorder(color: Constants.pastelRed),  
-                    child: AutoSizeText(responseCode,maxLines: 3,textAlign: TextAlign.center,style: comfortaaBold(14),)),
-                    SizedBox(height: 10,),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        width: 300,
-                        height: 50,
-                        decoration: Constants.roundBorder(color: Constants.pastelGray),
-                        child: Center(child: Text("OK",style: comfortaaBold(30),textAlign: TextAlign.center,)),
+                if (currentStep == Step.showReturnCode)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Occurs if POST request completed
+                      if (responseCode.runtimeType == int)
+                        Container(
+                            width: 300,
+                            decoration: Constants.roundBorder(
+                                color: responseCode == 200
+                                    ? Constants.pastelGreen
+                                    : Constants.pastelRed),
+                            child: AutoSizeText(
+                              "Recieved Code $responseCode - ${responseCodes[responseCode]}",
+                              style: comfortaaBold(14,
+                                  color: Constants.pastelWhite),
+                              textAlign: TextAlign.center,
+                            )),
+                      // Occurs if POST statement encounters an error
+                      if (responseCode.runtimeType == String)
+                        Container(
+                            width: 300,
+                            decoration: Constants.roundBorder(
+                                color: Constants.pastelRed),
+                            child: AutoSizeText(
+                              responseCode,
+                              maxLines: 3,
+                              textAlign: TextAlign.center,
+                              style: comfortaaBold(14),
+                            )),
+                      SizedBox(
+                        height: 10,
                       ),
-                    )
-                  ],
-                )
+                      GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          width: 300,
+                          height: 50,
+                          decoration: Constants.roundBorder(
+                              color: Constants.pastelGray),
+                          child: Center(
+                              child: Text(
+                            "OK",
+                            style: comfortaaBold(30),
+                            textAlign: TextAlign.center,
+                          )),
+                        ),
+                      )
+                    ],
+                  )
               ],
             ),
           ),
@@ -228,27 +257,25 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
     );
   }
 
+  /// Uploads the authorization key to the server and sets the response code.
   void uploadAuthorizeKey() async {
     setState(() {
-      stepsToShow.add("deviceIDFuture");
+      currentStep = Step.retrieveID;
     });
     uuid = await getPersistentDeviceID();
     setState(() {
-      stepsToShow.remove("deviceIDFuture");
-      stepsToShow.add("deviceID");
-      stepsToShow.add("uploadFuture");
+      currentStep = Step.uploadToServer;
     });
     try {
-    http.Response response = await http.post(
-        Uri.parse("${configData["serverIP"]}/secure/create"),
-        headers: {"key": widget.oneTimeKey, "uuid": uuid});
-    responseCode = response.statusCode;
+      http.Response response = await http.post(
+          Uri.parse("${configData["serverIP"]}/secure/create"),
+          headers: {"key": widget.oneTimeKey, "uuid": uuid});
+      responseCode = response.statusCode;
     } catch (e) {
       responseCode = e.toString();
     }
     setState(() {
-      stepsToShow.remove("uploadFuture");
-      stepsToShow.add("upload");
+      currentStep = Step.showReturnCode;
     });
   }
 }
@@ -391,6 +418,7 @@ class _DeviceIDDialogState extends State<DeviceIDDialog> {
   }
 }
 
+/// Gets the device ID from an android or iOS device. Creates a new device ID if it is null.
 Future<String> getPersistentDeviceID() async {
   const storage = FlutterSecureStorage();
   const key = 'NRGLighthouseID';
@@ -409,19 +437,28 @@ Future<String> getPersistentDeviceID() async {
 
 class AuthButton extends StatelessWidget {
   final bool background;
-  const AuthButton({super.key, this.background = false });
+  const AuthButton({super.key, this.background = false});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        showDialog(context: context, builder: (context) {return DeviceAuthSetupDialog();});
+        showDialog(
+            context: context,
+            builder: (context) {
+              return DeviceAuthSetupDialog();
+            });
       },
       icon: Container(
         width: 30,
         height: 30,
-        decoration: background ? Constants.roundBorder(color: Constants.pastelRedSuperDark) : null,
-        child: Icon(Icons.lock_open,color: Constants.pastelWhite,),
+        decoration: background
+            ? Constants.roundBorder(color: Constants.pastelRedSuperDark)
+            : null,
+        child: Icon(
+          Icons.lock_open,
+          color: Constants.pastelWhite,
+        ),
       ),
     );
   }
