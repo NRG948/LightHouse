@@ -103,7 +103,7 @@ class _TeamInfoState extends State<TeamInfo>
       setState(() {
         teamName = null;
         DataEntry.exportData["teamName"] = "";
-        print(teamName);
+        debugPrint(teamName);
       });
       return;
     }
