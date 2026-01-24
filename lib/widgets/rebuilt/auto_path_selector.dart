@@ -24,44 +24,50 @@ class Node {
       required this.left,
       this.color});
 
-  Positioned generatePositionedWidget() {
+  Positioned generatePositionedWidget(double scaleFactor) {
     return Positioned(
-        top: top,
-        left: left,
+        top: top * scaleFactor,
+        left: left * scaleFactor,
         child: GestureDetector(
             onTap: () {
               print("$id pressed!");
             },
-            child: Container(width: width, height: height, color: Color.fromARGB(200, 255, 255, 255))));
+            child: Container(
+                width: width * scaleFactor,
+                height: height * scaleFactor,
+                color: Color.fromARGB(200, 255, 255, 255))));
   }
 }
 
 class _AutoPathSelectorState extends State<AutoPathSelector> {
-  String imageFilePath = "assets/images/rebuildFieldMap.png";
-  late AssetImage fieldImage;
-  double rawImageWidth = 464;
-  double rawImageHeight = 647;
   double margin = 10;
   double bottomOffset = 100;
+  String imageFilePath = "assets/images/rebuildFieldMap.png";
+  late final AssetImage fieldImage;
+  double rawImageWidth = 464;
+  double rawImageHeight = 647;
 
-  double width = 350; // The intended width of the widget
-  late double height;
+  double get width => 300; // The intended width of the widget
+  double get height => width * rawImageHeight / rawImageWidth + bottomOffset;
+
+  double get imageWidth => width - 2 * margin;
+  double get imageHeight => imageWidth * rawImageHeight / rawImageWidth;
+  double get nodeScaleFactor => imageWidth / rawImageWidth;
 
   List<Node> specialLocationNodes = [
-    Node(id: "depot", top: 105, left: 10, width: 61, height: 56),
-    Node(id: "outpost", top: 375, left: 0, width: 40, height: 50),
-    Node(id: "tower", top: 215, left: 10, width: 85, height: 62),
-    Node(id: "trench_depot", top: 24, left: 240, width: 65, height: 77),
-    Node(id: "bump_depot", top: 101, left: 240, width: 65, height: 97),
-    Node(id: "bump_outpost", top: 263, left: 240, width: 65, height: 97),
-    Node(id: "trench_outpost", top: 360, left: 240, width: 65, height: 77),
-
+    Node(id: "depot", top: 148, left: 14, width: 86, height: 78),
+    Node(id: "outpost", top: 527, left: 0, width: 56, height: 70),
+    Node(id: "tower", top: 302, left: 14, width: 120, height: 87),
+    Node(id: "trench_depot", top: 34, left: 337, width: 91, height: 108),
+    Node(id: "bump_depot", top: 142, left: 337, width: 91, height: 136),
+    Node(id: "bump_outpost", top: 369, left: 337, width: 91, height: 136),
+    Node(id: "trench_outpost", top: 506, left: 337, width: 91, height: 108),
   ];
 
-  List<Positioned> generateWidgetsFromNodes(List<Node> nodes) {
+  List<Positioned> generateWidgetsFromNodes(List<Node> nodes, double scaleFactor) {
     List<Positioned> widgets = [];
     for (Node node in nodes) {
-      widgets.add(node.generatePositionedWidget());
+      widgets.add(node.generatePositionedWidget(scaleFactor));
     }
     return widgets;
   }
@@ -69,6 +75,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   @override
   void initState() {
     super.initState();
+    print(nodeScaleFactor);
     fieldImage = AssetImage(imageFilePath);
   }
 
@@ -76,15 +83,15 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: width * rawImageHeight / rawImageWidth + bottomOffset,
+      height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Constants.borderRadius),
         color: Constants.pastelWhite,
       ),
       child: Center(
         child: Container(
-          width: width - 2 * margin,
-          height: (width - 2 * margin) * rawImageHeight / rawImageWidth,
+          width: imageWidth,
+          height: imageHeight,
           decoration: BoxDecoration(
               color: Constants.neonBlue,
               image: DecorationImage(
@@ -92,9 +99,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
                   fit: BoxFit.fill,
                   colorFilter: ColorFilter.mode(
                       Constants.pastelRed, BlendMode.modulate))),
-          child: Stack(
-            children: generateWidgetsFromNodes(specialLocationNodes)
-          ),
+          child:
+              Stack(children: generateWidgetsFromNodes(specialLocationNodes, nodeScaleFactor)),
         ),
       ),
     );
