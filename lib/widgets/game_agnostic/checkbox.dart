@@ -2,7 +2,7 @@ import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
-import "package:lighthouse/pages/data_entry.dart";
+import "package:lighthouse/data_entry.dart";
 
 // A custom checkbox widget that can be used in different parts of the app.
 class NRGCheckbox extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/data_entry.dart';
 
 class TeamInfo extends StatefulWidget {
   final double width;

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/data_entry.dart';
 
 // A custom checkbox widget that supports three states: unable, able, and preferred.
 class NRGThreeStageCheckbox extends StatefulWidget {

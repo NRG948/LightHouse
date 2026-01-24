@@ -4,7 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/pages/data_entry.dart";
+import "package:lighthouse/data_entry.dart";
 
 // Stateful widget for a custom text box
 class NRGTextbox extends StatefulWidget {

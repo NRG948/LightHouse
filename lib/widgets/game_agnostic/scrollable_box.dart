@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/widgets/game_agnostic/star_display.dart';
 import 'package:lighthouse/widgets/game_agnostic/tdv_comment_box.dart';
 
 // Enum to define different sorting options

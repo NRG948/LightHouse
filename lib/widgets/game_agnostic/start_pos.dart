@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/data_entry.dart';
 
 // Widget for displaying the starting position
 class NRGStartPos extends StatefulWidget {
@@ -32,8 +32,8 @@ class _NRGStartPosState extends State<NRGStartPos> {
       child: GestureDetector(
           // Show the starting position dialog when tapped
           onTap: () {
-            showStartPos(context, 0.3 * DataEntryState.deviceWidth,
-                0.55 * DataEntryState.deviceHeight);
+            showStartPos(context, 0.3 * MediaQuery.of(context).size.width,
+                0.55 * MediaQuery.of(context).size.height);
           },
           child: Column(
             children: [

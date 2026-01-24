@@ -1,7 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/pages/data_entry.dart';
+import 'package:lighthouse/data_entry.dart';
 
 class NRGCommentBox extends StatefulWidget {
   final String title; // Title of the comment box

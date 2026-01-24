@@ -8,8 +8,6 @@ import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/game_agnostic/barchart.dart";
 import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/rebuilt/auto_path_selector.dart";
-import "package:lighthouse/widgets/reefscape/auto_reef_view.dart";
-import "package:lighthouse/widgets/reefscape/scrollable_auto_reefs.dart";
 
 class TestingGroundPage extends StatefulWidget {
   const TestingGroundPage({super.key});

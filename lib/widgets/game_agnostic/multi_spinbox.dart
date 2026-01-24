@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/layouts.dart";
-import "package:lighthouse/pages/data_entry.dart";
+import "package:lighthouse/data_entry.dart";
 
 /// A horizontal group of spinboxes, which are manual counters that count integers between 0-999 inclusive.
 class NRGMultiSpinbox extends StatefulWidget {

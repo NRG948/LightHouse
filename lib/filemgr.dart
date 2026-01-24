@@ -3,8 +3,7 @@ import "dart:io";
 import "dart:math";
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
-import "package:lighthouse/layouts.dart";
-import "package:lighthouse/pages/data_entry.dart";
+import "package:lighthouse/data_entry.dart";
 import "package:path/path.dart";
 
 import "package:path_provider/path_provider.dart";
