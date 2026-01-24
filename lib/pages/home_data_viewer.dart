@@ -23,87 +23,116 @@ class DataViewerHome extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Container(
-            width: screenWidth,
-            height: screenHeight,
-            decoration: BoxDecoration(
-                color: Constants.darkPurple,
-                image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
-                    fit: BoxFit.cover)),
-            child: Column(
-              spacing: 10,
-              children: [
-          Container(
-            width: screenWidth * 0.85,
-            height: screenHeight * 0.05,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Constants.borderRadius),
-              color: Constants.darkPurple
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(Icons.bar_chart,size: 30,color: Constants.pastelWhite,),
-                Text("Data Viewer Home",style: comfortaaBold(25,color: Constants.pastelWhite),)
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-               Navigator.pushNamed(context, "/data-viewer-tony"); // Navigates to Tony's Data Viewer Page.
-            },
-            child: Container(
-              width: screenWidth * 0.85,
-              height: screenHeight * 0.15,
-              decoration: BoxDecoration(
-                color: Constants.darkPurple,
-                image: DecorationImage(image: AssetImage("assets/images/tdv_bg.jpg")),
-                borderRadius: BorderRadius.circular(Constants.borderRadius) 
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          width: screenWidth,
+          height: screenHeight,
+          decoration: BoxDecoration(
+              color: Constants.darkPurple,
+              image: DecorationImage(
+                  image: AssetImage(backgrounds[configData["theme"]] ??
+                      "assets/images/background-hires-dark.png"),
+                  fit: BoxFit.cover)),
+          child: Column(
+            spacing: 10,
+            children: [
+              Container(
+                width: screenWidth * 0.85,
+                height: screenHeight * 0.05,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
+                    color: Constants.darkPurple),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text("TONY'S DATA VIEWER",style: comfortaaBold(25)),
-                    AutoSizeText("A more specialized data viewer page made specifically for drive team, featuring detailed auto information and comments.",style: comfortaaBold(screenWidth * 0.03),textAlign: TextAlign.center,),
+                    Icon(
+                      Icons.bar_chart,
+                      size: 30,
+                      color: Constants.pastelWhite,
+                    ),
+                    Text(
+                      "Data Viewer Home",
+                      style: comfortaaBold(25, color: Constants.pastelWhite),
+                    )
                   ],
                 ),
               ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-               Navigator.pushNamed(context, "/data-viewer-amongview"); // Navigates to Tony's Data Viewer Page.
-            },
-            child: Container(
-              width: screenWidth * 0.85,
-              height: screenHeight * 0.15,
-              decoration: BoxDecoration(
-                color: Constants.darkPurple,
-                image: DecorationImage(image: AssetImage("assets/images/amongview_bg.png")),
-                borderRadius: BorderRadius.circular(Constants.borderRadius) 
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("AMONGVIEW",style: comfortaaBold(25)),
-                    AutoSizeText("A more comprehensive data viewer page geared more towards strat team, with a focus on direct data comparison between teams.",style: comfortaaBold(screenWidth * 0.03),textAlign: TextAlign.center,),
-                  ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context,
+                      "/data-viewer-tony"); // Navigates to Tony's Data Viewer Page.
+                },
+                child: Container(
+                  width: screenWidth * 0.85,
+                  height: screenHeight * 0.15,
+                  decoration: BoxDecoration(
+                      color: Constants.darkPurple,
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/tdv_bg.jpg")),
+                      borderRadius:
+                          BorderRadius.circular(Constants.borderRadius)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("TONY'S DATA VIEWER", style: comfortaaBold(25)),
+                        AutoSizeText(
+                          "A more specialized data viewer page made specifically for drive team, featuring detailed auto information and comments.",
+                          style: comfortaaBold(screenWidth * 0.03),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context,
+                      "/data-viewer-amongview"); // Navigates to Tony's Data Viewer Page.
+                },
+                child: Container(
+                  width: screenWidth * 0.85,
+                  height: screenHeight * 0.15,
+                  decoration: BoxDecoration(
+                      color: Constants.darkPurple,
+                      image: DecorationImage(
+                          image: AssetImage("assets/images/amongview_bg.png")),
+                      borderRadius:
+                          BorderRadius.circular(Constants.borderRadius)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("AMONGVIEW", style: comfortaaBold(25)),
+                        AutoSizeText(
+                          "A more comprehensive data viewer page geared more towards strat team, with a focus on direct data comparison between teams.",
+                          style: comfortaaBold(screenWidth * 0.03),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              ServerTestWidget(
+                width: 345,
+                darkMode: true,
+              ),
+              UploadButton(
+                width: 400,
+                route: "/home-data-viewer",
+              ),
+              DownloadButton(
+                width: 400,
+              )
+            ],
           ),
-           ServerTestWidget(width: 345,darkMode: true,),
-           UploadButton(width: 400,route: "/home-data-viewer",),
-           DownloadButton(width: 400,)
-        ],),
         ),
 
         appBar: AppBar(
-          backgroundColor:themeColorPalettes[configData["theme"] ?? "Dark"]![0], // Sets the app bar color.
+          backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![
+              0], // Sets the app bar color.
           title: const Text(
             "LightHouse",
             style: TextStyle(
@@ -116,18 +145,18 @@ class DataViewerHome extends StatelessWidget {
           actions: [
             AuthButton(),
             if (configData["debugMode"] == "true")
-            // Button to display JSON config data in a dialog.
-            IconButton(
-              icon: Icon(Icons.javascript_outlined),
-              onPressed: (() {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                          content: Text(jsonEncode(configData).toString()));
-                    });
-              }),
-            ),
+              // Button to display JSON config data in a dialog.
+              IconButton(
+                icon: Icon(Icons.javascript_outlined),
+                onPressed: (() {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            content: Text(jsonEncode(configData).toString()));
+                      });
+                }),
+              ),
             // Button to navigate to settings page.
             IconButton(
                 icon: Icon(Icons.settings),
@@ -143,8 +172,14 @@ class DataViewerHome extends StatelessWidget {
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                    decoration: BoxDecoration(color: themeColorPalettes[configData["theme"] ?? "Dark"]![0]),
-                    child: AutoSizeText("Hi, ${configData["scouterName"]}!",style: comfortaaBold(25),textAlign: TextAlign.start,)),
+                  decoration: BoxDecoration(
+                      color: themeColorPalettes[configData["theme"] ?? "Dark"]![
+                          0]),
+                  child: AutoSizeText(
+                    "Hi, ${configData["scouterName"]}!",
+                    style: comfortaaBold(25),
+                    textAlign: TextAlign.start,
+                  )),
               ListTile(
                   leading: Icon(
                     Icons.home,
@@ -165,6 +200,16 @@ class DataViewerHome extends StatelessWidget {
                   onTap: () {
                     Navigator.pop(
                         context); // Closes the drawer, since the user is already on this page.
+                  }),
+              ListTile(
+                  leading: Icon(
+                    Icons.grid_3x3,
+                    color: Constants.pastelBrown,
+                  ),
+                  title: Text("Testing Ground",
+                      style: comfortaaBold(18, color: Constants.pastelBrown)),
+                  onTap: () async {
+                    Navigator.pushNamed(context, "/testing-ground");
                   })
             ],
           ),

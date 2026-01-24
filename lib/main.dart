@@ -10,6 +10,7 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/pages/saved_data.dart";
 import "package:lighthouse/pages/settings.dart";
 import "package:lighthouse/pages/sync.dart";
+import "package:lighthouse/pages/testing_ground.dart";
 import "package:lighthouse/pages/tony_data_viewer.dart";
 
 /// The main method also known as the entry point into the application.
@@ -17,12 +18,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initConfig();
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: Constants.pastelYellow,
-    systemNavigationBarIconBrightness: Brightness.light
-  ));
+      systemNavigationBarColor: Constants.pastelYellow,
+      systemNavigationBarIconBrightness: Brightness.light));
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-  ]).then((_){
+  ]).then((_) {
     runApp(MainWidget());
   });
 }
@@ -33,16 +33,12 @@ class MainWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    
     return MaterialApp(
       theme: ThemeData(
-        textTheme: TextTheme(
-          bodyLarge: comfortaaBold(18,color: Colors.black),
-          bodyMedium: comfortaaBold(14,color: Colors.black),
-          bodySmall: comfortaaBold(10,color:Colors.black)
-        )
-      ),
+          textTheme: TextTheme(
+              bodyLarge: comfortaaBold(18, color: Colors.black),
+              bodyMedium: comfortaaBold(14, color: Colors.black),
+              bodySmall: comfortaaBold(10, color: Colors.black))),
       title: "LightHouse",
       home: ScouterHomePage(),
       debugShowCheckedModeBanner: false,
@@ -53,11 +49,11 @@ class MainWidget extends StatelessWidget {
         "/saved_data": (context) => SavedData(),
         "/home-data-viewer": (context) => DataViewerHome(),
         "/sync": (context) => SyncPage(),
-        "/data-viewer-tony" : (context) => TonyDataViewerPage(),
+        "/data-viewer-tony": (context) => TonyDataViewerPage(),
+        "/testing-ground": (context) => TestingGroundPage(),
         "/data-viewer-amongview": (context) => DataViewerAmongView(),
         "/amongview-individual": (context) => AmongViewIndividual()
       },
     );
   }
 }
-

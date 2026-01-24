@@ -8,9 +8,7 @@ import 'package:lighthouse/pages/amongview.dart';
 import 'package:lighthouse/pages/amongview_individual.dart';
 import 'package:lighthouse/pages/data_entry.dart';
 
-/// A horizontal bar chart widget that displays numbers, automatically sorting by key.
 class NRGBarChart extends StatefulWidget {
-  // Widget properties
   String title;
   double height;
   double width;
@@ -28,7 +26,6 @@ class NRGBarChart extends StatefulWidget {
   dynamic sharedState;
   bool? chartOnly;
 
-  // Constructor with named parameters and default values
   NRGBarChart(
       {super.key,
       required this.title,
@@ -65,7 +62,6 @@ class NRGBarChart extends StatefulWidget {
 }
 
 class _NRGBarChartState extends State<NRGBarChart> {
-  // Getters for widget properties
   String get _title => widget.title;
   double get _height => widget.height;
   double get _width => widget.width;
@@ -79,33 +75,35 @@ class _NRGBarChartState extends State<NRGBarChart> {
 
   /// Converts the [SplayTreeMap] dataset [_data] into a [BarChartGroupData] list to display.
   List<BarChartGroupData> getBarGroups(bool useHashMap) {
-    // If useHashMap is true, use hashMap keys to create BarChartGroupData
     return useHashMap
-        ? widget.hashMap.keys.map<BarChartGroupData>((key) => BarChartGroupData(x: key, barRods: [
-            BarChartRodData(
-                toY: widget.hashMap[key]!,
-                color: !_removedData.contains(key) ? _color : Constants.removedGray,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(7), topRight: Radius.circular(7)),
-                width: (_width - 20) / widget.hashMap.length * 0.6),
-          ]))
+        ? widget.hashMap.keys
+            .map<BarChartGroupData>(
+                (key) => BarChartGroupData(x: key, barRods: [
+                      BarChartRodData(
+                          toY: widget.hashMap[key]!,
+                          color: !_removedData.contains(key)
+                              ? _color
+                              : Constants.removedGray,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(7),
+                              topRight: Radius.circular(7)),
+                          width: (_width - 20) / widget.hashMap.length * 0.6),
+                    ]))
             .toList()
-        // Otherwise, use _data keys to create BarChartGroupData
-
         : _data!.keys
             .map((int key) => BarChartGroupData(x: key, barRods: [
                   BarChartRodData(
                       toY: _data![key]!,
-                      color: !_removedData.contains(key) ? _color : Constants.removedGray,
+                      color: !_removedData.contains(key)
+                          ? _color
+                          : Constants.removedGray,
                       borderRadius: BorderRadius.only(
-
                           topLeft: Radius.circular(7),
                           topRight: Radius.circular(7)),
                       width: (_width - 20) / _data!.length * 0.6),
                 ]))
             .toList();
   }
-
 
   /// Converts the [SplayTreeMap] dataset [_multiData] into a [BarChartGroupData] list to display.
   List<BarChartGroupData> getMultiBarGroups() => _multiData!.keys
@@ -135,9 +133,10 @@ class _NRGBarChartState extends State<NRGBarChart> {
       .toList();
 
   /// Returns the average of [_data] excluding specified data from [_removedData].
-  double getAverageData() =>
-      _data!.length - _removedData.length == 0 ? 0 : (sum(_data!.values) - sum(_removedData.map((x) => _data![x]))) /
-      (_data!.length - _removedData.length);
+  double getAverageData() => _data!.length - _removedData.length == 0
+      ? 0
+      : (sum(_data!.values) - sum(_removedData.map((x) => _data![x]))) /
+          (_data!.length - _removedData.length);
 
   /// Returns the averages of [_multiData].
   List<double> getMultiAverageData() {
@@ -150,7 +149,9 @@ class _NRGBarChartState extends State<NRGBarChart> {
         sums[i] += _multiData![key]![i];
       }
 
-      sums[i] = keys.length - _removedData.length == 0 ? 0 : sums[i] / (keys.length - _removedData.length);
+      sums[i] = keys.length - _removedData.length == 0
+          ? 0
+          : sums[i] / (keys.length - _removedData.length);
     }
     return sums;
   }
@@ -158,7 +159,6 @@ class _NRGBarChartState extends State<NRGBarChart> {
   /// Gets a column of texts or a single text depending on the type of graph.
   Widget getAverageText() {
     if (_multiData!.isEmpty) {
-
       // Return empty container. Single average moved to title.
       return Container();
     } else {
@@ -175,7 +175,10 @@ class _NRGBarChartState extends State<NRGBarChart> {
             _dataLabels.isNotEmpty ? _dataLabels[i % _dataLabels.length] : ""));
       }
 
-      return Row(spacing: 5, mainAxisAlignment: MainAxisAlignment.center, children: texts.reversed.toList());
+      return Row(
+          spacing: 5,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: texts.reversed.toList());
     }
   }
 
@@ -205,15 +208,15 @@ class _NRGBarChartState extends State<NRGBarChart> {
         children: [
           // Title Text.
           if (widget.chartOnly != true)
-            Text("$_title (${roundAtPlace(_multiData != null && _multiData!.isNotEmpty ? getMultiAverageData().sum : getAverageData(), 2)})",
-                style: comfortaaBold(_height / 10, color: Constants.pastelBrown)),
+            Text(
+                "$_title (${roundAtPlace(_multiData != null && _multiData!.isNotEmpty ? getMultiAverageData().sum : getAverageData(), 2)})",
+                style:
+                    comfortaaBold(_height / 10, color: Constants.pastelBrown)),
           // AspectRatio necessary to prevent BarChart from throwing a formatting error.
           Container(
             width: _width,
             height: _height *
-                (_multiData == null || _multiData!.values.isEmpty
-                    ? 0.7
-                    : 0.6),
+                (_multiData == null || _multiData!.values.isEmpty ? 0.7 : 0.6),
             margin: EdgeInsets.only(right: 20),
             child: BarChart(BarChartData(
                 titlesData: FlTitlesData(
@@ -237,8 +240,7 @@ class _NRGBarChartState extends State<NRGBarChart> {
                           child: Text(value.toStringAsFixed(1),
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Constants.pastelBrown,
-                                  fontSize: 12)));
+                                  color: Constants.pastelBrown, fontSize: 12)));
                     },
                   )),
                   bottomTitles: AxisTitles(
@@ -319,7 +321,10 @@ class _NRGBarChartState extends State<NRGBarChart> {
           ),
           // Average value text.
           if (widget.chartOnly != true) getAverageText(),
-          if (widget.chartOnly == true) SizedBox(height: 30,)
+          if (widget.chartOnly == true)
+            SizedBox(
+              height: 30,
+            )
         ],
       ),
     );

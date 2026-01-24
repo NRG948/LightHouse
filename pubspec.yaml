@@ -45,6 +45,8 @@ dependencies:
   material_symbols_icons: ^4.2810.1
   uuid: ^4.5.1
   qr_flutter: ^4.1.0
+  image_size_getter: ^2.3.0
+
 
 
 dev_dependencies:
@@ -103,6 +105,7 @@ flutter:
       - assets/images/unknown.png
       - assets/images/loading.png
       - assets/images/spritesheet.png
+      - assets/images/rebuildFieldMap.png
       - assets/images/reef-chronos/AB.png
       - assets/images/reef-chronos/CD.png
       - assets/images/reef-chronos/EF.png
