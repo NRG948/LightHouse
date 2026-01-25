@@ -29,6 +29,8 @@ final List<String> splashTexts = [
   "It's not a bug, it's a feature!",
   "Give us a better name",
   "W IT",
+  "Don't fall!", 
+  "build a turret", 
   "Well... As long as it works...",
   "Dart? Well, it builds quite slow in my opinion...",
   "Programmer? I'm glad you support proper English",

@@ -27,15 +27,10 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
 
   // This method generates a list of Launcher widgets based on layouts.
   List<Launcher> getLaunchers() {
-    final enabledLayouts = layoutMap.keys;
-    final enabledLaunchers = enabledLayouts.map((layout) {
-      return Launcher(
-        icon: iconMap[layout] ?? Icons.data_object,
-        title: layout,
-        color: colorMap[layout] ?? Colors.black,
-      );
-    }).toList();
+    final enabledLaunchers = List<Launcher>.empty(growable: true);
     // Adding extra launchers for viewing saved data and syncing to the server.
+    enabledLaunchers.add(Launcher(
+        icon: Icons.public, title: "Atlas", route: "/atlas", color: Constants.pastelRed));
     enabledLaunchers.add(Launcher(
       icon: Icons.folder,
       title: "View Saved Data",
