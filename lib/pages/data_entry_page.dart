@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/pages/data_entry_sub_page.dart';
 
 class DataEntryPage extends StatefulWidget {
   const DataEntryPage({super.key, required this.pages, required this.name});
   // TODO: Decide if this should be Container or Widget
-  final Map<String, Container> pages;
+  final Map<String, DataEntrySubPage> pages;
   final String name;
 
   @override
@@ -17,7 +19,7 @@ class DataEntryPage extends StatefulWidget {
 }
 
 class DataEntryPageState extends State<DataEntryPage> {
-  Map<String, Container> get _pages => widget.pages;
+  Map<String, DataEntrySubPage> get _pages => widget.pages;
   String get _name => widget.name;
   int currentPage = 0;
   static late double deviceWidth;
@@ -40,8 +42,6 @@ class DataEntryPageState extends State<DataEntryPage> {
     deviceWidth = MediaQuery.sizeOf(context).width;
     deviceHeight = MediaQuery.sizeOf(context).height;
   }
-
-  
 
   @override
   void dispose() {
@@ -86,7 +86,7 @@ class DataEntryPageState extends State<DataEntryPage> {
                   themeColorPalettes[configData["theme"] ?? "Dark"]![0],
               title: FittedBox(
                 child: AutoSizeText(
-                  "${DataEntry.activeConfig} - ${createNavBar(layoutJSON["pages"])[currentPage].label}",
+                  "$_name - ${createNavBar(_pages)[currentPage].label}",
                   style: TextStyle(
                       fontFamily: "Comfortaa",
                       fontWeight: FontWeight.w900,
@@ -168,6 +168,52 @@ class DataEntryPageState extends State<DataEntryPage> {
               ),
             )),
       ),
+    );
+  }
+
+  ///returns a list of the BottomNavigationBarItems that each of the pages gives it.
+  List<BottomNavigationBarItem> createNavBar(Map<String, DataEntrySubPage> pages) {
+    List<BottomNavigationBarItem> items = List<BottomNavigationBarItem>.empty(growable: true);
+    for (var entry in pages.entries) {
+      String title = entry.key;
+      Icon icon = Icon(entry.value.icon);
+      items.add(BottomNavigationBarItem(icon: icon, label: title));
+    }
+    return items;
+  }
+
+  Widget? buildBottomNavBar(Map<String, DataEntrySubPage> pages) {
+    if (pages.length < 2) {
+      return null;
+    }
+    return Theme(
+      data: ThemeData(splashFactory: NoSplash.splashFactory),
+      child: BottomNavigationBar(
+          onTap: (index) {
+            setState(() {
+              if (currentPage != index) {
+                HapticFeedback.mediumImpact();
+              }
+              currentPage = index;
+
+              controller.animateToPage(index,
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.decelerate);
+            });
+          },
+          unselectedIconTheme:
+              IconThemeData(color: Constants.pastelWhite, size: 25),
+          unselectedItemColor: Constants.pastelWhite,
+          selectedIconTheme:
+              IconThemeData(color: Constants.pastelWhite, size: 35),
+          selectedItemColor: Constants.pastelWhite,
+          currentIndex: currentPage,
+          showUnselectedLabels: false,
+          showSelectedLabels: false,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor:
+              themeColorPalettes[configData["theme"] ?? "Dark"]![1],
+          items: createNavBar(pages)),
     );
   }
 }
