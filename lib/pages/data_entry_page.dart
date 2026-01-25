@@ -10,7 +10,6 @@ import 'package:lighthouse/pages/data_entry_sub_page.dart';
 
 class DataEntryPage extends StatefulWidget {
   const DataEntryPage({super.key, required this.pages, required this.name});
-  // TODO: Decide if this should be Container or Widget
   final Map<String, DataEntrySubPage> pages;
   final String name;
 
@@ -107,7 +106,7 @@ class DataEntryPageState extends State<DataEntryPage> {
                     onPressed: () {
                       showDialog(
                           context: context,
-                          builder: (BuildContext) {
+                          builder: (builder) {
                             return Dialog(
                               child: Text(jsonEncode(configData)),
                             );
