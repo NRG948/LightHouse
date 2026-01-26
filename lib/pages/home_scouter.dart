@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/layouts.dart';
 import 'package:lighthouse/splash_texts.dart';
@@ -31,6 +32,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
     // Adding extra launchers for viewing saved data and syncing to the server.
     enabledLaunchers.add(Launcher(
         icon: Icons.public, title: "Atlas", route: "/atlas", color: Constants.pastelRed));
+    enabledLaunchers.add(Launcher(icon: Icons.analytics_rounded, title: "Pit", route: "/pit", color: Constants.pastelGreen));
     enabledLaunchers.add(Launcher(
       icon: Icons.folder,
       title: "View Saved Data",
@@ -218,7 +220,7 @@ class Launcher extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
-    this.route = "/entry",
+    required this.route,
     required this.color,
   });
   @override

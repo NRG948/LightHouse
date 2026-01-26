@@ -114,8 +114,7 @@ class _MatchInfoState extends State<MatchInfo>
     super.build(context);
 
     return Container(
-      width: 400 * scaleFactor,
-      height: 290 * scaleFactor,
+      margin: EdgeInsets.all(5),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
           color: Constants.pastelWhite,
@@ -124,8 +123,7 @@ class _MatchInfoState extends State<MatchInfo>
         spacing: 10,
         children: [
           Container(
-            height: 120 * scaleFactor,
-            width: 390 * scaleFactor,
+            margin: EdgeInsets.all(0), 
             padding: EdgeInsets.all(5),
             decoration: BoxDecoration(
                 color: Constants.pastelGray,
@@ -141,7 +139,6 @@ class _MatchInfoState extends State<MatchInfo>
                       children: [
                         Icon(
                           Icons.event,
-                          size: 30 * scaleFactor,
                           color: Constants.pastelWhite,
                         ),
                         FutureBuilder(

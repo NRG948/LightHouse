@@ -26,7 +26,17 @@ class AtlasState extends State<Atlas> {
           )
         )), 
         "Auto": DataEntrySubPage(icon: CustomIcons.autonomous,content: Container(
-          child: NRGPlaceholder(title: "placeholder", jsonKey: "none", height: 20, width: 20)
+          child: NRGPlaceholder(title: "auto", jsonKey: "auto", height: 20, width: 20)
+        ),), 
+        // TODO: get more sensible icons
+        "Onshift": DataEntrySubPage(icon: CustomIcons.racecar, content: Container(
+           child: NRGPlaceholder(title: "onshift", jsonKey: "onshift", height: 10, width: 20),
+        ),), 
+        "Offshift": DataEntrySubPage(icon: CustomIcons.timer, content: Container(
+           child: NRGPlaceholder(title: "offshift", jsonKey: "offshift", height: 10, width: 20),
+        ),),
+        "Endgame": DataEntrySubPage(icon: CustomIcons.flag, content: Container(
+           child: NRGPlaceholder(title: "endgame", jsonKey: "endgame", height: 10, width: 20),
         ),)
       }
     );
