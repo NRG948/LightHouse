@@ -27,7 +27,9 @@ class CircleLabelIcon extends StatelessWidget {
   static final double fontSizeToRadiusRatio = 1.3;
 
   final double radius;
+  final double borderWidth;
   final Color? color;
+  final Color borderColor;
   final String text;
   final Color? textColor;
 
@@ -35,6 +37,8 @@ class CircleLabelIcon extends StatelessWidget {
       {super.key,
       required this.radius,
       this.color,
+      this.borderWidth = 0,
+      this.borderColor = Colors.black,
       required this.text,
       this.textColor});
 
@@ -43,10 +47,16 @@ class CircleLabelIcon extends StatelessWidget {
     return Container(
         width: 2 * radius,
         height: 2 * radius,
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: borderWidth == 0
+                ? null
+                : Border.all(color: borderColor, width: borderWidth)),
         child: Center(
             child: DefaultTextStyle(
-                style: comfortaaBold(fontSizeToRadiusRatio * radius,
+                style: comfortaaBold(
+                    fontSizeToRadiusRatio * (radius - borderWidth),
                     color: textColor),
                 child: Text(
                   text,
@@ -55,16 +65,18 @@ class CircleLabelIcon extends StatelessWidget {
 }
 
 class Node extends StatefulWidget {
-  final String label;
+  final String? groupLabel;
   final int index;
   final double top;
   final double left;
   final double radius;
   final Color? color;
+  final Color borderColor;
+  final double borderWidth;
   final bool draggable;
-  final Function(Node self, DraggableDetails details, Offset localEndPosition,
+  final Function(int index, DraggableDetails details, Offset localEndPosition,
       Offset dragOffset) onDragEnd;
-  final Function(Node self, Offset position) onPositionUpdate;
+  final Function(int index, Offset position) onPositionUpdate;
   final int groupIndex;
   final int groupTotal;
   final double groupScaling;
@@ -84,7 +96,7 @@ class Node extends StatefulWidget {
 
   const Node(
       {super.key,
-      required this.label,
+      this.groupLabel,
       required this.index,
       required this.top,
       required this.left,
@@ -95,6 +107,8 @@ class Node extends StatefulWidget {
       this.groupTotal = 1,
       this.groupScaling = 0.25,
       this.color,
+      this.borderColor = Constants.pastelWhite,
+      this.borderWidth = 0,
       this.onDragEnd = _onDragEndNoop,
       this.onPositionUpdate = _onPositionUpdateNoop})
       : assert(
@@ -102,24 +116,27 @@ class Node extends StatefulWidget {
           'NodeIcon: color and iconBuilder are mutually exclusive.',
         );
 
-  static void _onDragEndNoop(Node self, DraggableDetails details,
+  static void _onDragEndNoop(int index, DraggableDetails details,
       Offset localEndPosition, Offset dragOffset) {}
 
-  static void _onPositionUpdateNoop(Node self, Offset position) {}
+  static void _onPositionUpdateNoop(int index, Offset position) {}
 
-  Node copyNodeWithNewLocalIndex(int newGroupIndex, int newGroupTotal) {
+  Node copyWithNewValues(
+      {int? newGroupIndex, int? newGroupTotal, int? newIndex}) {
     return Node(
       key: super.key,
-      label: label,
-      index: index,
+      groupLabel: groupLabel,
+      index: newIndex ?? index,
       top: top,
       left: left,
       radius: radius,
       color: color,
+      borderColor: borderColor,
+      borderWidth: borderWidth,
       iconBuilder: iconBuilder,
       draggable: draggable,
-      groupIndex: newGroupIndex,
-      groupTotal: newGroupTotal,
+      groupIndex: newGroupIndex ?? groupIndex,
+      groupTotal: newGroupTotal ?? groupTotal,
       groupScaling: groupScaling,
       onDragEnd: onDragEnd,
       onPositionUpdate: onPositionUpdate,
@@ -136,11 +153,13 @@ class Node extends StatefulWidget {
 class _NodeState extends State<Node> {
   int get _index => widget.index;
   Color? get _color => widget.color;
+  Color get _borderColor => widget.borderColor;
+  double get _borderWidth => widget.borderWidth;
   bool get _draggable => widget.draggable;
   double get _scaledRadius => widget.scaledRadius;
-  Function(Node self, DraggableDetails details, Offset localEndPosition,
+  Function(int index, DraggableDetails details, Offset localEndPosition,
       Offset dragOffset) get _onDragEnd => widget.onDragEnd;
-  Function(Node self, Offset position) get _onPositionUpdate =>
+  Function(int index, Offset position) get _onPositionUpdate =>
       widget.onPositionUpdate;
   NodeIconBuilder get _iconBuilder => widget.iconBuilder ?? _defaultIconBuilder;
 
@@ -150,7 +169,9 @@ class _NodeState extends State<Node> {
   Widget _defaultIconBuilder(BuildContext context, String text) {
     return CircleLabelIcon(
         color: _color,
-        textColor: Colors.white,
+        borderColor: _borderColor,
+        borderWidth: _borderWidth,
+        textColor: Constants.pastelWhite,
         text: text,
         radius: _scaledRadius);
   }
@@ -158,13 +179,13 @@ class _NodeState extends State<Node> {
   @override
   void initState() {
     super.initState();
-    _onPositionUpdate(widget, widget.visualCenter(_dragOffset));
+    _onPositionUpdate(_index, widget.visualCenter(_dragOffset));
   }
 
   @override
   void didUpdateWidget(Node oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _onPositionUpdate(widget, widget.visualCenter(_dragOffset));
+    _onPositionUpdate(_index, widget.visualCenter(_dragOffset));
   }
 
   @override
@@ -174,31 +195,34 @@ class _NodeState extends State<Node> {
         left: _center.dx - _scaledRadius,
         child: IgnorePointer(
           ignoring: !_draggable,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {},
-            child: Draggable(
-              maxSimultaneousDrags: _draggable ? 1 : 0,
-              feedback: Opacity(
-                  opacity: 0.5, child: _iconBuilder(context, "$_index")),
-              childWhenDragging: ColorFiltered(
-                  colorFilter:
-                      const ColorFilter.mode(Colors.grey, BlendMode.modulate),
-                  child: _iconBuilder(context, "$_index")),
-              child: _iconBuilder(context, "$_index"),
-              onDragEnd: (details) {
-                setState(() {
-                  final RenderBox renderBox =
-                      context.findRenderObject() as RenderBox;
-                  final Offset localOffsetDifference =
-                      renderBox.globalToLocal(details.offset);
-                  _dragOffset += localOffsetDifference;
+          child: Semantics(
+            button: true,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {},
+              child: Draggable(
+                maxSimultaneousDrags: _draggable ? 1 : 0,
+                feedback: Opacity(
+                    opacity: 0.5, child: _iconBuilder(context, "$_index")),
+                childWhenDragging: ColorFiltered(
+                    colorFilter:
+                        const ColorFilter.mode(Colors.grey, BlendMode.modulate),
+                    child: _iconBuilder(context, "$_index")),
+                child: _iconBuilder(context, "$_index"),
+                onDragEnd: (details) {
+                  setState(() {
+                    final RenderBox renderBox =
+                        context.findRenderObject() as RenderBox;
+                    final Offset localOffsetDifference =
+                        renderBox.globalToLocal(details.offset);
+                    _dragOffset += localOffsetDifference;
 
-                  _onDragEnd(widget, details, widget.visualCenter(_dragOffset),
-                      _dragOffset);
-                  _onPositionUpdate(widget, widget.visualCenter(_dragOffset));
-                });
-              },
+                    _onDragEnd(_index, details,
+                        widget.visualCenter(_dragOffset), _dragOffset);
+                    _onPositionUpdate(_index, widget.visualCenter(_dragOffset));
+                  });
+                },
+              ),
             ),
           ),
         ));
@@ -221,7 +245,7 @@ class BoxRegion extends StatefulWidget {
       required this.height,
       required this.top,
       required this.left,
-      this.color = const Color.fromARGB(100, 230, 159, 255),
+      this.color = const Color.fromARGB(1, 255, 255, 255),
       this.onTap = _noop});
 
   static void _noop(String _, Offset __) {}
@@ -249,11 +273,14 @@ class _BoxRegionState extends State<BoxRegion> {
     return Positioned(
         top: _top,
         left: _left,
-        child: GestureDetector(
-            onTap: () {
-              _onTap(_id, getCenter());
-            },
-            child: Container(width: _width, height: _height, color: _color)));
+        child: Semantics(
+          button: true,
+          child: GestureDetector(
+              onTap: () {
+                _onTap(_id, getCenter());
+              },
+              child: Container(width: _width, height: _height, color: _color)),
+        ));
   }
 }
 
@@ -265,8 +292,8 @@ class AutoPathSelector extends StatefulWidget {
 }
 
 class _AutoPathSelectorState extends State<AutoPathSelector> {
-  double margin = 10;
-  double bottomOffset = 100;
+  double get margin => width / 25;
+  double get bottomOffset => width * 0.2;
   String imageFilePath = "assets/images/rebuildFieldMap.png";
   late final AssetImage fieldImage;
   double rawImageWidth = 464;
@@ -275,14 +302,27 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   double get width => 300; // The intended width of the widget
   double get height => width * rawImageHeight / rawImageWidth + bottomOffset;
 
+  double get buttonSize =>
+      width /
+      10; // TODO: make in terms of height AND width, to make sure no overflow
+
+  double get nodeBorderWidth => width / 100;
   double get imageWidth => width - 2 * margin;
   double get imageHeight => imageWidth * rawImageHeight / rawImageWidth;
   double get scaleFactor => imageWidth / rawImageWidth;
 
-  double get nodeRadius => width / 20;
+  double get nodeRadius => width / 18;
+  int maximumGroupSize = 4;
   List<Node> nodeStack = [];
   Map<Node, Offset> nodePositions = {};
-  Map<Node, Offset> nodeDragOffsets = {};
+  Map<int, Offset> nodeDragOffsets = {};
+
+  Color mainColor = Constants.pastelRed;
+  Color backgroundColor = Constants.pastelWhite;
+
+  Color startNodeColor = Constants.pastelGreen;
+  Color allianceZoneNodeColor = Constants.pastelYellow;
+  Color regionNodeColor = Constants.pastelBlue;
 
   final List<Zone> zones = [
     Zone(id: "depot", top: 148, left: 14, width: 86, height: 78),
@@ -300,6 +340,32 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
     fieldImage = AssetImage(imageFilePath);
   }
 
+  void removeNode(Node target) {
+    if (!nodeStack.contains(target)) return;
+
+    List<Node> newNodeStack = [];
+    for (final Node node in nodeStack) {
+      if (node == target) continue;
+
+      Node replacementNode = node.copyWithNewValues(
+          newGroupIndex: node.groupLabel != null &&
+                  node.groupLabel == target.groupLabel &&
+                  node.groupIndex > target.groupIndex
+              ? node.groupIndex - 1
+              : node.groupIndex,
+          newGroupTotal:
+              node.groupLabel != null && node.groupLabel == target.groupLabel
+                  ? node.groupTotal - 1
+                  : node.groupTotal,
+          newIndex: node.index > target.index ? node.index - 1 : node.index);
+      newNodeStack.add(replacementNode);
+    }
+
+    nodeStack = newNodeStack;
+    _recalculateNodeOffsets();
+    nodeDragOffsets.remove(target.index);
+  }
+
   // ignore: unused_element
   List<Widget> _getNodeOffsetDebugOverlay() {
     List<Widget> overlays = [];
@@ -313,6 +379,64 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
     return overlays;
   }
 
+  Node addNodeFromRegion(
+      String groupLabel, Offset center, int sameIdNodeCount) {
+    List<Node> newNodeStack = [];
+    for (final Node node in nodeStack) {
+      if (node.groupLabel == groupLabel) {
+        Node replacementNode =
+            node.copyWithNewValues(newGroupTotal: node.groupTotal + 1);
+        newNodeStack.add(replacementNode);
+      } else {
+        newNodeStack.add(node);
+      }
+    }
+
+    Node newNode = Node(
+        groupLabel: groupLabel,
+        index: nodeStack.length + 1,
+        top: center.dy,
+        left: center.dx,
+        radius: nodeRadius,
+        draggable: false,
+        color: regionNodeColor,
+        borderWidth: nodeBorderWidth,
+        borderColor: backgroundColor,
+        groupIndex: sameIdNodeCount,
+        groupTotal: sameIdNodeCount + 1);
+    newNodeStack.add(newNode);
+    nodeStack = newNodeStack;
+    _recalculateNodeOffsets();
+
+    return newNode;
+  }
+
+  Node addNodeFromMap(TapUpDetails details) {
+    int index = nodeStack.length + 1;
+
+    Node newNode = Node(
+        index: index,
+        left: details.localPosition.dx,
+        top: details.localPosition.dy,
+        radius: nodeRadius,
+        draggable: true,
+        onDragEnd: (self, details, localEndPosition, dragOffset) {
+          setState(() {
+            nodeDragOffsets[index] = dragOffset;
+            _recalculateNodeOffsets();
+          });
+        },
+        borderWidth: nodeBorderWidth,
+        borderColor: backgroundColor,
+        color: nodeStack.isEmpty
+            ? startNodeColor
+            : allianceZoneNodeColor);
+    nodeStack.add(newNode);
+    _recalculateNodeOffsets();
+
+    return newNode;
+  }
+
   List<BoxRegion> _getRegions() {
     List<BoxRegion> regions = [];
     for (Zone zone in zones) {
@@ -322,35 +446,16 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
         left: zone.left * scaleFactor,
         width: zone.width * scaleFactor,
         height: zone.height * scaleFactor,
-        onTap: (id, center) {
+        onTap: (groupLabel, center) {
           if (nodeStack.isEmpty) return; // Starting position must be selected
+          int sameIdNodeCount = nodeStack
+              .where((final Node node) => node.groupLabel == groupLabel)
+              .length;
+
+          if (sameIdNodeCount >= maximumGroupSize) return;
 
           setState(() {
-            List<Node> newNodeStack = [];
-            int sameIdNodeCount = 0;
-            for (final Node node in nodeStack) {
-              if (id != "" && node.label == id) {
-                sameIdNodeCount++;
-                Node replacementNode = node.copyNodeWithNewLocalIndex(
-                    node.groupIndex, node.groupTotal + 1);
-                newNodeStack.add(replacementNode);
-              } else {
-                newNodeStack.add(node);
-              }
-            }
-            Node newNode = Node(
-                label: id,
-                index: nodeStack.length + 1,
-                top: center.dy,
-                left: center.dx,
-                radius: nodeRadius,
-                draggable: false,
-                color: Constants.pastelRedDark,
-                groupIndex: sameIdNodeCount,
-                groupTotal: sameIdNodeCount + 1);
-            newNodeStack.add(newNode);
-            nodeStack = newNodeStack;
-            _rebuildNodeOffsets();
+            addNodeFromRegion(groupLabel, center, sameIdNodeCount);
           });
         },
       ));
@@ -359,11 +464,11 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
     return regions;
   }
 
-  void _rebuildNodeOffsets() {
+  void _recalculateNodeOffsets() {
     nodePositions = {};
     for (final Node node in nodeStack) {
       nodePositions[node] =
-          node.visualCenter(nodeDragOffsets[node] ?? Offset.zero);
+          node.visualCenter(nodeDragOffsets[node.index] ?? Offset.zero);
     }
   }
 
@@ -373,7 +478,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
       vertices.add(nodePositions[node]!);
     }
 
-    return CustomPaint(painter: PathPainter(vertices: vertices));
+    return CustomPaint(painter: PathPainter(vertices: vertices, color: backgroundColor, strokeWidth: nodeBorderWidth));
   }
 
   @override
@@ -381,52 +486,65 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
     return Container(
       width: width,
       height: height,
+      padding: EdgeInsets.all(margin),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Constants.borderRadius),
-        color: Constants.pastelWhite,
+        color: backgroundColor,
       ),
-      child: Center(
-        child: Container(
-          width: imageWidth,
-          height: imageHeight,
-          decoration: BoxDecoration(
-              color: Constants.neonBlue,
-              image: DecorationImage(
-                  image: fieldImage,
-                  fit: BoxFit.fill,
-                  colorFilter: ColorFilter.mode(
-                      Constants.pastelRed, BlendMode.modulate))),
-          child: GestureDetector(
-              onTapUp: (TapUpDetails details) {
-                setState(() {
-                  Node newNode = Node(
-                      label: "alliance_zone",
-                      index: nodeStack.length + 1,
-                      left: details.localPosition.dx,
-                      top: details.localPosition.dy,
-                      radius: nodeRadius,
-                      draggable: true,
-                      onDragEnd: (self, details, localEndPosition, dragOffset) {
+      child: Column(
+        spacing: margin,
+        children: [
+          Center(
+            child: Container(
+              width: imageWidth,
+              height: imageHeight,
+              decoration: BoxDecoration(
+                  color: mainColor,
+                  borderRadius: BorderRadius.circular(margin),
+                  image: DecorationImage(
+                      image: fieldImage,
+                      fit: BoxFit.fill,
+                      colorFilter: ColorFilter.mode(
+                          backgroundColor, BlendMode.modulate))),
+              child: Semantics(
+                button: true,
+                child: GestureDetector(
+                    onTapUp: (TapUpDetails details) {
+                      setState(() {
+                        addNodeFromMap(details);
+                      });
+                    },
+                    child: Container(
+                        color: Color.fromARGB(1, 255, 255, 255),
+                        child: Stack(children: [
+                          ..._getRegions(),
+                          _getPathPainter(),
+                          ...nodeStack,
+                        ]))),
+              ),
+            ),
+          ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              spacing: margin,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: Constants.pastelRedDark,
+                      borderRadius: BorderRadius.circular(margin)),
+                  child: IconButton(
+                      onPressed: () {
                         setState(() {
-                          nodeDragOffsets[self] = dragOffset;
-                          _rebuildNodeOffsets();
+                          if (nodeStack.isNotEmpty) removeNode(nodeStack.last);
                         });
                       },
-                      color: nodeStack.isEmpty
-                          ? Constants.pastelGreenDark
-                          : Constants.pastelBlueDark);
-                  nodeStack.add(newNode);
-                  _rebuildNodeOffsets();
-                });
-              },
-              child: Container(
-                  color: Color.fromARGB(1, 255, 255, 255),
-                  child: Stack(children: [
-                    ..._getRegions(),
-                    _getPathPainter(),
-                    ...nodeStack,
-                  ]))),
-        ),
+                      iconSize: buttonSize,
+                      color: backgroundColor,
+                      highlightColor: Constants.pastelRedSuperDark,
+                      icon: const Icon(Icons.undo_rounded)),
+                )
+              ])
+        ],
       ),
     );
   }

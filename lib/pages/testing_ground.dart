@@ -44,6 +44,6 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
                 color: Constants.pastelWhite,
               )),
         ),
-        body: AutoPathSelector());
+        body: Center(child: AutoPathSelector()));
   }
 }
