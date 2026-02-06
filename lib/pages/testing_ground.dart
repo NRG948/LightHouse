@@ -43,7 +43,7 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
         body: Column(
           spacing: 20,
           children: [
-            Center(child: RebuiltAutoPathSelector(width: 350, debug: true)),
+            Center(child: RebuiltAutoPathSelector(width: 350)),
             Center(child: TowerLocationSelector(width: 350))
           ],
         ));

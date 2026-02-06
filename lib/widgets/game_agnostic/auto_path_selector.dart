@@ -551,7 +551,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
                           ..._getRegions(),
                           _getPathPainter(),
                           ..._nodeStack,
-                          ..._debug ? _getNodeOffsetDebugOverlay() : [const Placeholder()],
+                          ..._debug ? _getNodeOffsetDebugOverlay() : [Container()],
                         ]))),
               ),
             ),
