@@ -509,6 +509,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
               child: Semantics(
                 button: true,
                 child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onHorizontalDragStart: (details) {},
                     onTapUp: (TapUpDetails details) {
                       setState(() {
                         addNodeFromMap(details);
