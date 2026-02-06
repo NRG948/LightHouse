@@ -1,13 +1,8 @@
-import "dart:collection";
-import "dart:convert";
-import "dart:math";
-
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/widgets/game_agnostic/barchart.dart";
-import "package:lighthouse/widgets/game_agnostic/scrollable_box.dart";
 import "package:lighthouse/widgets/rebuilt/auto_path_selector.dart";
+import "package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart";
 
 class TestingGroundPage extends StatefulWidget {
   const TestingGroundPage({super.key});
@@ -44,6 +39,6 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
                 color: Constants.pastelWhite,
               )),
         ),
-        body: Center(child: AutoPathSelector()));
+        body: Center(child: RebuiltAutoPathSelector()));
   }
 }

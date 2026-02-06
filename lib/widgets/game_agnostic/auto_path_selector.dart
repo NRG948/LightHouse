@@ -285,54 +285,73 @@ class _BoxRegionState extends State<BoxRegion> {
 }
 
 class AutoPathSelector extends StatefulWidget {
-  const AutoPathSelector({super.key});
+  final String imageFilePath;
+  final double rawImageWidth;
+  final double rawImageHeight;
+  final double width;
+  final int maximumGroupSize;
+
+  final List<Zone> zones;
+
+  final Color mainColor;
+  final Color backgroundColor;
+  final Color startNodeColor;
+  final Color allianceZoneNodeColor;
+  final Color regionNodeColor;
+
+  const AutoPathSelector(
+      {super.key,
+      required this.imageFilePath,
+      required this.rawImageWidth,
+      required this.rawImageHeight,
+      required this.width,
+      required this.zones,
+      this.maximumGroupSize = 4,
+      this.mainColor = Constants.pastelRed,
+      this.backgroundColor = Constants.pastelWhite,
+      this.startNodeColor = Constants.pastelGreen,
+      this.allianceZoneNodeColor = Constants.pastelYellow,
+      this.regionNodeColor = Constants.pastelBlue});
 
   @override
   State<AutoPathSelector> createState() => _AutoPathSelectorState();
 }
 
 class _AutoPathSelectorState extends State<AutoPathSelector> {
+  late final AssetImage fieldImage;
+  String get imageFilePath => widget.imageFilePath ;
+  double get rawImageWidth => widget.rawImageWidth;
+  double get rawImageHeight => widget.rawImageHeight;
+
+  double get width => widget.width; // The intended width of the widget
+  double get height => width * rawImageHeight / rawImageWidth + bottomOffset;
+
+  double get imageWidth => width - 2 * margin;
+  double get imageHeight => imageWidth * rawImageHeight / rawImageWidth;
+  double get scaleFactor => imageWidth / rawImageWidth;
+
   double get margin => width / 25;
   double get bottomOffset => width * 0.2;
-  String imageFilePath = "assets/images/rebuildFieldMap.png";
-  late final AssetImage fieldImage;
-  double rawImageWidth = 464;
-  double rawImageHeight = 647;
 
-  double get width => 300; // The intended width of the widget
-  double get height => width * rawImageHeight / rawImageWidth + bottomOffset;
+  double get nodeRadius => width / 18;
+  double get nodeBorderWidth => width / 100;
+  int get maximumGroupSize => widget.maximumGroupSize;
 
   double get buttonSize =>
       width /
       10; // TODO: make in terms of height AND width, to make sure no overflow
 
-  double get nodeBorderWidth => width / 100;
-  double get imageWidth => width - 2 * margin;
-  double get imageHeight => imageWidth * rawImageHeight / rawImageWidth;
-  double get scaleFactor => imageWidth / rawImageWidth;
-
-  double get nodeRadius => width / 18;
-  int maximumGroupSize = 4;
   List<Node> nodeStack = [];
   Map<Node, Offset> nodePositions = {};
   Map<int, Offset> nodeDragOffsets = {};
 
-  Color mainColor = Constants.pastelRed;
-  Color backgroundColor = Constants.pastelWhite;
+  Color get mainColor => widget.mainColor;
+  Color get backgroundColor => widget.backgroundColor;
+  Color get startNodeColor => widget.startNodeColor;
+  Color get allianceZoneNodeColor => widget.allianceZoneNodeColor;
+  Color get regionNodeColor => widget.regionNodeColor;
 
-  Color startNodeColor = Constants.pastelGreen;
-  Color allianceZoneNodeColor = Constants.pastelYellow;
-  Color regionNodeColor = Constants.pastelBlue;
-
-  final List<Zone> zones = [
-    Zone(id: "depot", top: 148, left: 14, width: 86, height: 78),
-    Zone(id: "outpost", top: 527, left: 0, width: 56, height: 70),
-    Zone(id: "tower", top: 302, left: 14, width: 120, height: 87),
-    Zone(id: "trench_depot", top: 34, left: 337, width: 91, height: 108),
-    Zone(id: "bump_depot", top: 142, left: 337, width: 91, height: 136),
-    Zone(id: "bump_outpost", top: 369, left: 337, width: 91, height: 136),
-    Zone(id: "trench_outpost", top: 506, left: 337, width: 91, height: 108),
-  ];
+  List<Zone> get zones => widget.zones;
 
   @override
   void initState() {
@@ -428,9 +447,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
         },
         borderWidth: nodeBorderWidth,
         borderColor: backgroundColor,
-        color: nodeStack.isEmpty
-            ? startNodeColor
-            : allianceZoneNodeColor);
+        color: nodeStack.isEmpty ? startNodeColor : allianceZoneNodeColor);
     nodeStack.add(newNode);
     _recalculateNodeOffsets();
 
@@ -478,7 +495,11 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
       vertices.add(nodePositions[node]!);
     }
 
-    return CustomPaint(painter: PathPainter(vertices: vertices, color: backgroundColor, strokeWidth: nodeBorderWidth));
+    return CustomPaint(
+        painter: PathPainter(
+            vertices: vertices,
+            color: backgroundColor,
+            strokeWidth: nodeBorderWidth));
   }
 
   @override
