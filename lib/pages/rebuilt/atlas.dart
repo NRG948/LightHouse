@@ -27,7 +27,7 @@ class AtlasState extends State<Atlas> {
       "Auto": DataEntrySubPage(
         icon: CustomIcons.autonomous,
         content:
-            Container(margin: EdgeInsets.all(5), child: RebuiltAutoPathSelector()),
+            Container(margin: EdgeInsets.all(5), child: RebuiltAutoPathSelector(width: 300)),
       ),
       // TODO: get more sensible icons
       "Onshift": DataEntrySubPage(

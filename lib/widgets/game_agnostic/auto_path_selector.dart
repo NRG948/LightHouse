@@ -299,6 +299,9 @@ class AutoPathSelector extends StatefulWidget {
   final Color allianceZoneNodeColor;
   final Color regionNodeColor;
 
+  final bool debug;
+  final bool canStartInZone;
+
   const AutoPathSelector(
       {super.key,
       required this.imageFilePath,
@@ -306,6 +309,8 @@ class AutoPathSelector extends StatefulWidget {
       required this.rawImageHeight,
       required this.width,
       required this.zones,
+      this.debug = false,
+      this.canStartInZone = false,
       this.maximumGroupSize = 4,
       this.mainColor = Constants.pastelRed,
       this.backgroundColor = Constants.pastelWhite,
@@ -318,52 +323,54 @@ class AutoPathSelector extends StatefulWidget {
 }
 
 class _AutoPathSelectorState extends State<AutoPathSelector> {
-  late final AssetImage fieldImage;
-  String get imageFilePath => widget.imageFilePath ;
-  double get rawImageWidth => widget.rawImageWidth;
-  double get rawImageHeight => widget.rawImageHeight;
+  late final AssetImage _fieldImage;
+  String get _imageFieldPath => widget.imageFilePath ;
+  double get _rawImageWidth => widget.rawImageWidth;
+  double get _rawImageHeight => widget.rawImageHeight;
 
-  double get width => widget.width; // The intended width of the widget
-  double get height => width * rawImageHeight / rawImageWidth + bottomOffset;
+  double get _width => widget.width; // The intended width of the widget
+  double get _height => _width * _rawImageHeight / _rawImageWidth + _bottomOffset;
 
-  double get imageWidth => width - 2 * margin;
-  double get imageHeight => imageWidth * rawImageHeight / rawImageWidth;
-  double get scaleFactor => imageWidth / rawImageWidth;
+  double get _imageWidth => _width - 2 * _margin;
+  double get _imageHeight => _imageWidth * _rawImageHeight / _rawImageWidth;
+  double get _scaleFactor => _imageWidth / _rawImageWidth;
 
-  double get margin => width / 25;
-  double get bottomOffset => width * 0.2;
+  double get _margin => _width / 25;
+  double get _bottomOffset => _width * 0.2;
 
-  double get nodeRadius => width / 18;
-  double get nodeBorderWidth => width / 100;
-  int get maximumGroupSize => widget.maximumGroupSize;
+  double get _nodeRadius => _width / 18;
+  double get _nodeBorderWidth => _width / 100;
+  int get _maximumGroupSize => widget.maximumGroupSize;
 
-  double get buttonSize =>
-      width /
-      10; // TODO: make in terms of height AND width, to make sure no overflow
+  double get _buttonSize =>
+      _bottomOffset - _margin; // TODO: make in terms of height AND width, to make sure no overflow
 
-  List<Node> nodeStack = [];
-  Map<Node, Offset> nodePositions = {};
-  Map<int, Offset> nodeDragOffsets = {};
+  List<Node> _nodeStack = [];
+  Map<Node, Offset> _nodePositions = {};
+  Map<int, Offset> _nodeDragOffsets = {};
 
-  Color get mainColor => widget.mainColor;
-  Color get backgroundColor => widget.backgroundColor;
-  Color get startNodeColor => widget.startNodeColor;
-  Color get allianceZoneNodeColor => widget.allianceZoneNodeColor;
-  Color get regionNodeColor => widget.regionNodeColor;
+  Color get _mainColor => widget.mainColor;
+  Color get _backgroundColor => widget.backgroundColor;
+  Color get _startNodeColor => widget.startNodeColor;
+  Color get _allianceZoneNodeColor => widget.allianceZoneNodeColor;
+  Color get _regionNodeColor => widget.regionNodeColor;
 
-  List<Zone> get zones => widget.zones;
+  bool get _debug => widget.debug;
+  bool get _canStartInZone => widget.canStartInZone;
+
+  List<Zone> get _zones => widget.zones;
 
   @override
   void initState() {
     super.initState();
-    fieldImage = AssetImage(imageFilePath);
+    _fieldImage = AssetImage(_imageFieldPath);
   }
 
   void removeNode(Node target) {
-    if (!nodeStack.contains(target)) return;
+    if (!_nodeStack.contains(target)) return;
 
     List<Node> newNodeStack = [];
-    for (final Node node in nodeStack) {
+    for (final Node node in _nodeStack) {
       if (node == target) continue;
 
       Node replacementNode = node.copyWithNewValues(
@@ -380,19 +387,19 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
       newNodeStack.add(replacementNode);
     }
 
-    nodeStack = newNodeStack;
+    _nodeStack = newNodeStack;
     _recalculateNodeOffsets();
-    nodeDragOffsets.remove(target.index);
+    _nodeDragOffsets.remove(target.index);
   }
 
-  // ignore: unused_element
   List<Widget> _getNodeOffsetDebugOverlay() {
+    double markerWidth = _width / 50;
     List<Widget> overlays = [];
-    for (Node node in nodePositions.keys) {
+    for (Node node in _nodePositions.keys) {
       overlays.add(Positioned(
-          top: nodePositions[node]!.dy,
-          left: nodePositions[node]!.dx,
-          child: Container(width: 10, height: 10, color: Colors.red)));
+          top: _nodePositions[node]!.dy - markerWidth / 2,
+          left: _nodePositions[node]!.dx - markerWidth / 2,
+          child: Container(width: markerWidth, height: markerWidth, color: Colors.red)));
     }
 
     return overlays;
@@ -401,7 +408,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   Node addNodeFromRegion(
       String groupLabel, Offset center, int sameIdNodeCount) {
     List<Node> newNodeStack = [];
-    for (final Node node in nodeStack) {
+    for (final Node node in _nodeStack) {
       if (node.groupLabel == groupLabel) {
         Node replacementNode =
             node.copyWithNewValues(newGroupTotal: node.groupTotal + 1);
@@ -413,42 +420,42 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
 
     Node newNode = Node(
         groupLabel: groupLabel,
-        index: nodeStack.length + 1,
+        index: _nodeStack.length + 1,
         top: center.dy,
         left: center.dx,
-        radius: nodeRadius,
+        radius: _nodeRadius,
         draggable: false,
-        color: regionNodeColor,
-        borderWidth: nodeBorderWidth,
-        borderColor: backgroundColor,
+        color: _regionNodeColor,
+        borderWidth: _nodeBorderWidth,
+        borderColor: _backgroundColor,
         groupIndex: sameIdNodeCount,
         groupTotal: sameIdNodeCount + 1);
     newNodeStack.add(newNode);
-    nodeStack = newNodeStack;
+    _nodeStack = newNodeStack;
     _recalculateNodeOffsets();
 
     return newNode;
   }
 
   Node addNodeFromMap(TapUpDetails details) {
-    int index = nodeStack.length + 1;
+    int index = _nodeStack.length + 1;
 
     Node newNode = Node(
         index: index,
         left: details.localPosition.dx,
         top: details.localPosition.dy,
-        radius: nodeRadius,
+        radius: _nodeRadius,
         draggable: true,
         onDragEnd: (self, details, localEndPosition, dragOffset) {
           setState(() {
-            nodeDragOffsets[index] = dragOffset;
+            _nodeDragOffsets[index] = dragOffset;
             _recalculateNodeOffsets();
           });
         },
-        borderWidth: nodeBorderWidth,
-        borderColor: backgroundColor,
-        color: nodeStack.isEmpty ? startNodeColor : allianceZoneNodeColor);
-    nodeStack.add(newNode);
+        borderWidth: _nodeBorderWidth,
+        borderColor: _backgroundColor,
+        color: _nodeStack.isEmpty ? _startNodeColor : _allianceZoneNodeColor);
+    _nodeStack.add(newNode);
     _recalculateNodeOffsets();
 
     return newNode;
@@ -456,20 +463,21 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
 
   List<BoxRegion> _getRegions() {
     List<BoxRegion> regions = [];
-    for (Zone zone in zones) {
+    for (Zone zone in _zones) {
       regions.add(BoxRegion(
         id: zone.id,
-        top: zone.top * scaleFactor,
-        left: zone.left * scaleFactor,
-        width: zone.width * scaleFactor,
-        height: zone.height * scaleFactor,
+        top: zone.top * _scaleFactor,
+        left: zone.left * _scaleFactor,
+        width: zone.width * _scaleFactor,
+        height: zone.height * _scaleFactor,
+        color: _debug ? Color.fromARGB(99, 67, 189, 155) : Color.fromARGB(1, 255, 255, 255),
         onTap: (groupLabel, center) {
-          if (nodeStack.isEmpty) return; // Starting position must be selected
-          int sameIdNodeCount = nodeStack
+          if (!_canStartInZone && _nodeStack.isEmpty) return;
+          int sameIdNodeCount = _nodeStack
               .where((final Node node) => node.groupLabel == groupLabel)
               .length;
 
-          if (sameIdNodeCount >= maximumGroupSize) return;
+          if (sameIdNodeCount >= _maximumGroupSize) return;
 
           setState(() {
             addNodeFromRegion(groupLabel, center, sameIdNodeCount);
@@ -482,51 +490,51 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   }
 
   void _recalculateNodeOffsets() {
-    nodePositions = {};
-    for (final Node node in nodeStack) {
-      nodePositions[node] =
-          node.visualCenter(nodeDragOffsets[node.index] ?? Offset.zero);
+    _nodePositions = {};
+    for (final Node node in _nodeStack) {
+      _nodePositions[node] =
+          node.visualCenter(_nodeDragOffsets[node.index] ?? Offset.zero);
     }
   }
 
   CustomPaint _getPathPainter() {
     List<Offset> vertices = [];
-    for (final Node node in nodeStack) {
-      vertices.add(nodePositions[node]!);
+    for (final Node node in _nodeStack) {
+      vertices.add(_nodePositions[node]!);
     }
 
     return CustomPaint(
         painter: PathPainter(
             vertices: vertices,
-            color: backgroundColor,
-            strokeWidth: nodeBorderWidth));
+            color: _backgroundColor,
+            strokeWidth: _nodeBorderWidth));
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
-      padding: EdgeInsets.all(margin),
+      width: _width,
+      height: _height,
+      padding: EdgeInsets.all(_margin),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(Constants.borderRadius),
-        color: backgroundColor,
+        color: _backgroundColor,
       ),
       child: Column(
-        spacing: margin,
+        spacing: _margin,
         children: [
           Center(
             child: Container(
-              width: imageWidth,
-              height: imageHeight,
+              width: _imageWidth,
+              height: _imageHeight,
               decoration: BoxDecoration(
-                  color: mainColor,
-                  borderRadius: BorderRadius.circular(margin),
+                  color: _mainColor,
+                  borderRadius: BorderRadius.circular(_margin),
                   image: DecorationImage(
-                      image: fieldImage,
+                      image: _fieldImage,
                       fit: BoxFit.fill,
                       colorFilter: ColorFilter.mode(
-                          backgroundColor, BlendMode.modulate))),
+                          _backgroundColor, BlendMode.modulate))),
               child: Semantics(
                 button: true,
                 child: GestureDetector(
@@ -542,27 +550,31 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
                         child: Stack(children: [
                           ..._getRegions(),
                           _getPathPainter(),
-                          ...nodeStack,
+                          ..._nodeStack,
+                          ..._debug ? _getNodeOffsetDebugOverlay() : [const Placeholder()],
                         ]))),
               ),
             ),
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              spacing: margin,
+              spacing: _margin,
               children: [
                 Container(
+                  width: _buttonSize,
+                  height: _buttonSize,
                   decoration: BoxDecoration(
                       color: Constants.pastelRedDark,
-                      borderRadius: BorderRadius.circular(margin)),
+                      borderRadius: BorderRadius.circular(_margin)),
                   child: IconButton(
+                      padding: EdgeInsets.all(_margin / 2),
                       onPressed: () {
                         setState(() {
-                          if (nodeStack.isNotEmpty) removeNode(nodeStack.last);
+                          if (_nodeStack.isNotEmpty) removeNode(_nodeStack.last);
                         });
                       },
-                      iconSize: buttonSize,
-                      color: backgroundColor,
+                      iconSize: _buttonSize * 0.7,
+                      color: _backgroundColor,
                       highlightColor: Constants.pastelRedSuperDark,
                       icon: const Icon(Icons.undo_rounded)),
                 )
