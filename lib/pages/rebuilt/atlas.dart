@@ -6,6 +6,7 @@ import 'package:lighthouse/widgets/game_agnostic/match_info.dart';
 import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
+import 'package:lighthouse/widgets/rebuilt/rebuilt_endgame_tag_selector.dart';
 
 class Atlas extends StatefulWidget {
   const Atlas({super.key});
@@ -26,8 +27,9 @@ class AtlasState extends State<Atlas> {
           ))),
       "Auto": DataEntrySubPage(
         icon: CustomIcons.autonomous,
-        content:
-            Container(margin: EdgeInsets.all(5), child: RebuiltAutoPathSelector(width: 300)),
+        content: Container(
+            margin: EdgeInsets.all(5),
+            child: RebuiltAutoPathSelector(width: 300)),
       ),
       // TODO: get more sensible icons
       "Onshift": DataEntrySubPage(
@@ -47,8 +49,11 @@ class AtlasState extends State<Atlas> {
       "Endgame": DataEntrySubPage(
         icon: CustomIcons.flag,
         content: Container(
-          child: NRGPlaceholder(
-              title: "endgame", jsonKey: "endgame", height: 10, width: 20),
+          child: Column(
+            children: [
+              RebuiltEndgameTagSelector(),
+            ],
+          ),
         ),
       )
     });

@@ -108,7 +108,7 @@ class DataEntryPageState extends State<DataEntryPage> {
                           context: context,
                           builder: (builder) {
                             return Dialog(
-                              child: Text(jsonEncode(configData)),
+                              child: Text(jsonEncode(DataEntry.exportData)),
                             );
                           });
                     },
