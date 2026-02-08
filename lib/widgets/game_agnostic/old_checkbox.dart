@@ -14,6 +14,7 @@ class NRGCheckbox extends StatefulWidget {
   final double width; // The width of the checkbox widget.
   final bool
       vertical; // Determines if the checkbox and title are arranged vertically or horizontally.
+
   const NRGCheckbox(
       {super.key,
       required this.title,
@@ -22,7 +23,7 @@ class NRGCheckbox extends StatefulWidget {
       required this.height,
       required this.width,
       this.vertical = false});
-
+    
   @override
   State<NRGCheckbox> createState() => _NRGCheckboxState();
 }
