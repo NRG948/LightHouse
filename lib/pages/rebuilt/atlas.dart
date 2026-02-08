@@ -6,6 +6,7 @@ import 'package:lighthouse/widgets/game_agnostic/match_info.dart';
 import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
+import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';
 
 class Atlas extends StatefulWidget {
   const Atlas({super.key});
@@ -26,8 +27,24 @@ class AtlasState extends State<Atlas> {
           ))),
       "Auto": DataEntrySubPage(
         icon: CustomIcons.autonomous,
-        content:
-            Container(margin: EdgeInsets.all(5), child: RebuiltAutoPathSelector(width: 300)),
+        content: Container(
+            margin: EdgeInsets.all(20),
+            child: Column(
+              spacing: 10,
+              children: [
+                Row(spacing: 10, children: [
+                  Expanded(
+                      flex: 41, child: RebuiltAutoPathSelector(margin: 10)),
+                  Expanded(
+                      flex: 20,
+                      child: Column(spacing: 10, children: [
+                        RebuiltAutoPathSelector(margin: 10),
+                        RebuiltAutoPathSelector(margin: 10),
+                      ]))
+                ]),
+                TowerLocationSelector(margin: 10),
+              ],
+            )),
       ),
       // TODO: get more sensible icons
       "Onshift": DataEntrySubPage(

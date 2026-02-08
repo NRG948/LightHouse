@@ -48,29 +48,30 @@ extension ClimbLevelExtension on ClimbLevel {
 }
 
 class TowerLocationSelector extends StatefulWidget {
-  final double width;
   final Color backgroundColor;
   final Color mainColor;
   final Color textColor;
   final Color lockedColor;
+  final double? margin;
+
   const TowerLocationSelector(
       {super.key,
-      required this.width,
       this.backgroundColor = Constants.pastelWhite,
       this.mainColor = Constants.pastelRed,
       this.textColor = Constants.pastelBrown,
-      this.lockedColor = Constants.pastelGray});
+      this.lockedColor = Constants.pastelGray,
+      this.margin});
 
   @override
   State<TowerLocationSelector> createState() => _TowerLocationSelectorState();
 }
 
 class _TowerLocationSelectorState extends State<TowerLocationSelector> {
-  double get _width => widget.width;
+  late double _width;
   double get _height => _width * 0.35 + _bottomOffset + _topOffset;
   double get _bottomOffset => _width * 0.12;
   double get _topOffset => _width * 0.15;
-  double get _margin => _width / 25;
+  double get _margin => widget.margin ?? _width / 25;
 
   Color get _mainColor => widget.mainColor;
   Color get _backgroundColor => widget.backgroundColor;
@@ -121,119 +122,126 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _width,
-      height: _height,
-      padding: EdgeInsets.all(_margin),
-      decoration: BoxDecoration(
-          color: _backgroundColor,
-          borderRadius: BorderRadius.circular(_margin)),
-      child: Column(
-        spacing: _margin,
-        children: [
-          Row(
-            children: [
-              CustomCheckbox(
-                height: 0.8 * (_topOffset - _margin),
-                width: 0.55 * (_width - 2 * _margin),
-                title: "Attempted",
-                textColor: _textColor,
-                optionColor: _mainColor,
-                selectColor: _backgroundColor,
-                onToggle: (value) {
-                  setState(() {
-                    _isLocked = !value;
-                    if (_isLocked) _selectedId = "";
-                  });
-                },
-              ),
-              InputTextBox(
-                  isNumeric: true,
-                  hintText: "Start Time",
-                  height: _topOffset - _margin,
-                  width: 0.45 * (_width - 2 * _margin),
-                  maxLines: 1,
-                  isLocked: _isLocked,
-                  onChanged: (String text) {
-                    _startTime = text;
-                  }),
-            ],
-          ),
-          Container(
-            height: _height - _bottomOffset - _topOffset - 2 * _margin,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _width = constraints.maxWidth;
+        return Center(
+          child: Container(
+            width: _width,
+            height: _height,
+            padding: EdgeInsets.all(_margin),
             decoration: BoxDecoration(
-              color: _isLocked ? _lockedColor : _mainColor,
-              borderRadius: BorderRadius.circular(_margin),
-            ),
-            child: Stack(
+                color: _backgroundColor,
+                borderRadius: BorderRadius.circular(_margin)),
+            child: Column(
+              spacing: _margin,
               children: [
-                Align(
-                  alignment: Alignment(0, -1),
-                  child: Container(
-                    width: _rawImageWidth * _imageScaleFactor,
-                    height: _rawImageHeight * _imageScaleFactor,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: _towerImage,
-                        fit: BoxFit.fill,
-                        colorFilter: ColorFilter.mode(
-                            _backgroundColor, BlendMode.modulate),
-                      ),
+                Row(
+                  children: [
+                    CustomCheckbox(
+                      height: 0.8 * (_topOffset - _margin),
+                      width: 0.55 * (_width - 2 * _margin),
+                      title: "Attempted",
+                      textColor: _textColor,
+                      optionColor: _mainColor,
+                      selectColor: _backgroundColor,
+                      onToggle: (value) {
+                        setState(() {
+                          _isLocked = !value;
+                          if (_isLocked) _selectedId = "";
+                        });
+                      },
                     ),
+                    InputTextBox(
+                        isNumeric: true,
+                        hintText: "Start Time",
+                        height: _topOffset - _margin,
+                        width: 0.45 * (_width - 2 * _margin),
+                        maxLines: 1,
+                        isLocked: _isLocked,
+                        onChanged: (String text) {
+                          _startTime = text;
+                        }),
+                  ],
+                ),
+                Container(
+                  height: _height - _bottomOffset - _topOffset - 2.1 * _margin, // 2.1 to prevent overflow due to rounding error
+                  decoration: BoxDecoration(
+                    color: _isLocked ? _lockedColor : _mainColor,
+                    borderRadius: BorderRadius.circular(_margin),
+                  ),
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment(0, -1),
+                        child: Container(
+                          width: _rawImageWidth * _imageScaleFactor,
+                          height: _rawImageHeight * _imageScaleFactor,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: _towerImage,
+                              fit: BoxFit.fill,
+                              colorFilter: ColorFilter.mode(
+                                  _backgroundColor, BlendMode.modulate),
+                            ),
+                          ),
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(_margin),
+                        child: Row(
+                          children: [
+                            _getSelectRegion(flex: 20, id: "left"),
+                            Expanded(
+                              flex: 20,
+                              child: Column(children: [
+                                _getSelectRegion(flex: 50, id: "left_back"),
+                                _getSelectRegion(flex: 50, id: "left_front")
+                              ]),
+                            ),
+                            Expanded(
+                                flex: 20,
+                                child: Column(children: [
+                                  _getSelectRegion(flex: 50, id: "center_back"),
+                                  _getSelectRegion(flex: 50, id: "center_front")
+                                ])),
+                            Expanded(
+                                flex: 20,
+                                child: Column(children: [
+                                  _getSelectRegion(flex: 50, id: "right_back"),
+                                  _getSelectRegion(flex: 50, id: "right_front")
+                                ])),
+                            _getSelectRegion(flex: 20, id: "right")
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(_margin),
-                  child: Row(
-                    children: [
-                      _getSelectRegion(flex: 20, id: "left"),
-                      Expanded(
-                        flex: 20,
-                        child: Column(children: [
-                          _getSelectRegion(flex: 50, id: "left_back"),
-                          _getSelectRegion(flex: 50, id: "left_front")
-                        ]),
-                      ),
-                      Expanded(
-                          flex: 20,
-                          child: Column(children: [
-                            _getSelectRegion(flex: 50, id: "center_back"),
-                            _getSelectRegion(flex: 50, id: "center_front")
-                          ])),
-                      Expanded(
-                          flex: 20,
-                          child: Column(children: [
-                            _getSelectRegion(flex: 50, id: "right_back"),
-                            _getSelectRegion(flex: 50, id: "right_front")
-                          ])),
-                      _getSelectRegion(flex: 20, id: "right")
+                Center(
+                  child: SingleChoiceSelector(
+                    height: _bottomOffset - _margin,
+                    spacing: 4 * _margin,
+                    choices: [
+                      ClimbLevel.l1.name,
+                      ClimbLevel.l2.name,
+                      ClimbLevel.l3.name
                     ],
+                    selectColor: _backgroundColor,
+                    optionColor: _isLocked ? _lockedColor : _mainColor,
+                    textColor: _textColor,
+                    isLocked: _isLocked,
+                    retainSelectionOnLock: false,
+                    onSelect: (String choice) {
+                      _climbLevel = ClimbLevelExtension.getLevelFromName(choice);
+                    },
                   ),
                 )
               ],
             ),
           ),
-          Center(
-            child: SingleChoiceSelector(
-              height: _bottomOffset - _margin,
-              spacing: 4 * _margin,
-              choices: [
-                ClimbLevel.l1.name,
-                ClimbLevel.l2.name,
-                ClimbLevel.l3.name
-              ],
-              selectColor: _backgroundColor,
-              optionColor: _isLocked ? _lockedColor : _mainColor,
-              textColor: _textColor,
-              isLocked: _isLocked,
-              retainSelectionOnLock: false,
-              onSelect: (String choice) {
-                _climbLevel = ClimbLevelExtension.getLevelFromName(choice);
-              },
-            ),
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }
