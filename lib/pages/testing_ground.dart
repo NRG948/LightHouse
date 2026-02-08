@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/widgets/game_agnostic/auto_path_selector.dart";
 import "package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart";
 import "package:lighthouse/widgets/rebuilt/tower_location_selector.dart";
 
@@ -43,8 +42,9 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
         body: Column(
           spacing: 20,
           children: [
-            Center(child: RebuiltAutoPathSelector(width: 350)),
-            Center(child: TowerLocationSelector(width: 350))
+            Center(child: RebuiltAutoPathSelector(width: 20)),
+            Center(child: TowerLocationSelector(width: 400)),
+            Center(child: TowerLocationSelector(width: 400))
           ],
         ));
   }
