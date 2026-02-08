@@ -17,6 +17,11 @@ class InputTextBox extends StatefulWidget {
   /// If the input preview is hidden.
   final bool obscure;
 
+  /// Font of the text written.
+  /// 
+  /// Defaults to ```0.55``` of the height, divided by [maxLines] if it isn't null.
+  final double? fontSize;
+
   /// If the widget is allowing inputs.
   ///
   /// If ```true```, the color of the widget will become [lockedColor]. Inputs will be retained upon lock.
@@ -48,6 +53,7 @@ class InputTextBox extends StatefulWidget {
     this.isNumeric = false,
     this.obscure = false,
     this.isLocked = false,
+    this.fontSize,
     this.color = Constants.pastelRed,
     this.textColor = Constants.pastelBrown,
     this.hintColor = Constants.pastelRedDark,
@@ -70,6 +76,7 @@ class _InputTextBoxState extends State<InputTextBox> {
   bool get _isNumeric => widget.isNumeric;
   bool get _obscure => widget.obscure;
   bool get _isLocked => widget.isLocked;
+  double get _fontSize => widget.fontSize ?? _height * 0.55 / (_maxLines ?? 1);
   Color get _color => widget.color;
   Color get _textColor => widget.textColor;
   Color get _lockedColor => widget.lockedColor;
@@ -84,7 +91,7 @@ class _InputTextBoxState extends State<InputTextBox> {
         _width = constraints.maxWidth;
         _height = constraints.maxHeight;
         return TextFormField(
-            style: comfortaaBold(_height * 0.55,
+            style: comfortaaBold(_fontSize,
                 color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
             decoration: InputDecoration(
                 filled: true,
@@ -104,7 +111,7 @@ class _InputTextBoxState extends State<InputTextBox> {
                     borderRadius: BorderRadius.circular(_height * 0.2),
                     borderSide: BorderSide.none),
                 hintText: _hintText,
-                hintStyle: comfortaaBold(_height * 0.55,
+                hintStyle: comfortaaBold(_fontSize,
                     color:
                         _isLocked ? Colors.black.withAlpha(100) : _hintColor),
                 contentPadding: EdgeInsets.only(left: _height * 0.2, top: _height * 0.1, bottom: _height * 0.1, right: _height * 0.1)),
