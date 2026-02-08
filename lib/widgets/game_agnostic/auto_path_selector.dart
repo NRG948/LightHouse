@@ -324,12 +324,13 @@ class AutoPathSelector extends StatefulWidget {
 
 class _AutoPathSelectorState extends State<AutoPathSelector> {
   late final AssetImage _fieldImage;
-  String get _imageFieldPath => widget.imageFilePath ;
+  String get _imageFieldPath => widget.imageFilePath;
   double get _rawImageWidth => widget.rawImageWidth;
   double get _rawImageHeight => widget.rawImageHeight;
 
   double get _width => widget.width; // The intended width of the widget
-  double get _height => _width * _rawImageHeight / _rawImageWidth + _bottomOffset;
+  double get _height =>
+      _width * _rawImageHeight / _rawImageWidth + _bottomOffset;
 
   double get _imageWidth => _width - 2 * _margin;
   double get _imageHeight => _imageWidth * _rawImageHeight / _rawImageWidth;
@@ -343,7 +344,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   int get _maximumGroupSize => widget.maximumGroupSize;
 
   double get _buttonSize =>
-      _bottomOffset - _margin; // TODO: make in terms of height AND width, to make sure no overflow
+      _bottomOffset -
+      _margin; // TODO: make in terms of height AND width, to make sure no overflow
 
   List<Node> _nodeStack = [];
   Map<Node, Offset> _nodePositions = {};
@@ -399,7 +401,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
       overlays.add(Positioned(
           top: _nodePositions[node]!.dy - markerWidth / 2,
           left: _nodePositions[node]!.dx - markerWidth / 2,
-          child: Container(width: markerWidth, height: markerWidth, color: Colors.red)));
+          child: Container(
+              width: markerWidth, height: markerWidth, color: Colors.red)));
     }
 
     return overlays;
@@ -470,7 +473,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
         left: zone.left * _scaleFactor,
         width: zone.width * _scaleFactor,
         height: zone.height * _scaleFactor,
-        color: _debug ? Color.fromARGB(99, 67, 189, 155) : Color.fromARGB(1, 255, 255, 255),
+        color: _debug
+            ? Color.fromARGB(99, 67, 189, 155)
+            : Color.fromARGB(1, 255, 255, 255),
         onTap: (groupLabel, center) {
           if (!_canStartInZone && _nodeStack.isEmpty) return;
           int sameIdNodeCount = _nodeStack
@@ -517,7 +522,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
       height: _height,
       padding: EdgeInsets.all(_margin),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Constants.borderRadius),
+        borderRadius: BorderRadius.circular(_margin),
         color: _backgroundColor,
       ),
       child: Column(
@@ -551,7 +556,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
                           ..._getRegions(),
                           _getPathPainter(),
                           ..._nodeStack,
-                          ..._debug ? _getNodeOffsetDebugOverlay() : [Container()],
+                          ..._debug
+                              ? _getNodeOffsetDebugOverlay()
+                              : [Container()],
                         ]))),
               ),
             ),
@@ -570,7 +577,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
                       padding: EdgeInsets.all(_margin / 2),
                       onPressed: () {
                         setState(() {
-                          if (_nodeStack.isNotEmpty) removeNode(_nodeStack.last);
+                          if (_nodeStack.isNotEmpty)
+                            removeNode(_nodeStack.last);
                         });
                       },
                       iconSize: _buttonSize * 0.7,
