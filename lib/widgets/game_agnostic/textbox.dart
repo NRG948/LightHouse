@@ -3,9 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 
 class InputTextBox extends StatefulWidget {
-  final double width;
-  final double height;
-
   /// The maximum number of lines that can be input. Set to null for unbounded.
   final int? maxLines;
 
@@ -13,7 +10,7 @@ class InputTextBox extends StatefulWidget {
   final int? maxLength;
 
   /// If the input is constrained to unformatted nonegative integers.
-  /// 
+  ///
   /// For example, ```948``` is allowed, but not ```-948```, ```9.48```, or ```9,480```.
   final bool isNumeric;
 
@@ -21,7 +18,7 @@ class InputTextBox extends StatefulWidget {
   final bool obscure;
 
   /// If the widget is allowing inputs.
-  /// 
+  ///
   /// If ```true```, the color of the widget will become [lockedColor]. Inputs will be retained upon lock.
   final bool isLocked;
 
@@ -46,8 +43,6 @@ class InputTextBox extends StatefulWidget {
   /// Creates a text input field.
   const InputTextBox({
     super.key,
-    required this.width,
-    required this.height,
     this.maxLines,
     this.maxLength,
     this.isNumeric = false,
@@ -68,8 +63,8 @@ class InputTextBox extends StatefulWidget {
 }
 
 class _InputTextBoxState extends State<InputTextBox> {
-  double get _width => widget.width;
-  double get _height => widget.height;
+  late double _width;
+  late double _height;
   int? get _maxLines => widget.maxLines;
   int? get _maxLength => widget.maxLength;
   bool get _isNumeric => widget.isNumeric;
@@ -84,47 +79,51 @@ class _InputTextBoxState extends State<InputTextBox> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: _width,
-        height: _height,
-        child: TextFormField(
-          style: comfortaaBold(_height * 0.55,
-              color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
-          decoration: InputDecoration(
-              filled: true,
-              fillColor: _isLocked ? _lockedColor : _color,
-              enabled: !_isLocked,
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(_height * 0.2),
-                  borderSide: BorderSide.none),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(_height * 0.2),
-                  borderSide: BorderSide(
-                      color:
-                          _isLocked ? Colors.black.withAlpha(100) : _hintColor,
-                      width: _height * 0.05)),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(_height * 0.2),
-                  borderSide: BorderSide.none),
-              hintText: _hintText,
-              hintStyle: comfortaaBold(_height * 0.55,
-                  color: _isLocked ? Colors.black.withAlpha(100) : _hintColor),
-              contentPadding: EdgeInsets.only(left: _height * 0.2)),
-          scrollController: ScrollController(),
-          maxLength: _maxLength,
-          maxLines: _maxLines,
-          inputFormatters:
-              _isNumeric ? [FilteringTextInputFormatter.digitsOnly] : [],
-          obscureText: _obscure,
-          cursorColor: _isLocked ? Colors.black.withAlpha(100) : _textColor,
-          keyboardType: _isNumeric ? TextInputType.number : null,
-          onChanged: _onChanged,
-          onTapOutside: (event) {
-            FocusScope.of(context).unfocus();
-          },
-          onTap: () {
-            HapticFeedback.lightImpact();
-          }
-        ));
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _width = constraints.maxWidth;
+        _height = constraints.maxHeight;
+        return TextFormField(
+            style: comfortaaBold(_height * 0.55,
+                color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: _isLocked ? _lockedColor : _color,
+                enabled: !_isLocked,
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(_height * 0.2),
+                    borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(_height * 0.2),
+                    borderSide: BorderSide(
+                        color: _isLocked
+                            ? Colors.black.withAlpha(100)
+                            : _hintColor,
+                        width: _height * 0.05)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(_height * 0.2),
+                    borderSide: BorderSide.none),
+                hintText: _hintText,
+                hintStyle: comfortaaBold(_height * 0.55,
+                    color:
+                        _isLocked ? Colors.black.withAlpha(100) : _hintColor),
+                contentPadding: EdgeInsets.only(left: _height * 0.2, top: _height * 0.1, bottom: _height * 0.1, right: _height * 0.1)),
+            scrollController: ScrollController(),
+            maxLength: _maxLength,
+            maxLines: _maxLines,
+            inputFormatters:
+                _isNumeric ? [FilteringTextInputFormatter.digitsOnly] : [],
+            obscureText: _obscure,
+            cursorColor: _isLocked ? Colors.black.withAlpha(100) : _textColor,
+            keyboardType: _isNumeric ? TextInputType.number : null,
+            onChanged: _onChanged,
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
+            onTap: () {
+              HapticFeedback.lightImpact();
+            });
+      },
+    );
   }
 }

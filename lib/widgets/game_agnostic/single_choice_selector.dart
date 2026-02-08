@@ -5,16 +5,14 @@ import 'package:lighthouse/constants.dart';
 
 class SingleChoiceSelector extends StatefulWidget {
   /// The list of choices.
-  /// 
+  ///
   /// Each choice will be displayed as a screen to the left of their input.
   final List<String> choices;
 
   /// Called when an input is pressed.
-  /// 
+  ///
   /// The choice doesn't necessarily have to change for this function to be called.
   final Function(String choice) onSelect;
-
-  final double height;
 
   /// The spacing between each choice.
   final double spacing;
@@ -35,7 +33,7 @@ class SingleChoiceSelector extends StatefulWidget {
   final bool retainSelectionOnLock;
 
   /// Creates a single selection multiple choice widget.
-  /// 
+  ///
   /// Either one selection is made or none are made.
   /// Each label defined in [choices] appears to the right of each input.
   /// Clicks on the input and label will be registered as a selection.
@@ -43,7 +41,6 @@ class SingleChoiceSelector extends StatefulWidget {
   const SingleChoiceSelector({
     super.key,
     required this.choices,
-    required this.height,
     required this.spacing,
     this.onSelect = _noop,
     required this.selectColor,
@@ -62,7 +59,8 @@ class SingleChoiceSelector extends StatefulWidget {
 class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
   List<String> get _choices => widget.choices;
   Function(String choice) get _onSelect => widget.onSelect;
-  double get _height => widget.height;
+  late double _height;
+  late double _width;
   double get _choiceWidth => _height * 0.7;
   double get _spacing => widget.spacing;
   Color get _optionColor => widget.optionColor;
@@ -98,8 +96,8 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
               Container(
                   width: _choiceWidth,
                   height: _choiceWidth,
-                  decoration:
-                      BoxDecoration(shape: BoxShape.circle, color: _optionColor),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle, color: _optionColor),
                   child: FractionallySizedBox(
                     widthFactor: 0.5,
                     heightFactor: 0.5,
@@ -120,10 +118,15 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      spacing: _spacing,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _choices.map((choice) => getChoiceButtons(choice)).toList(),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      _width = constraints.maxWidth;
+      _height = constraints.maxHeight;
+
+      return Row(
+        spacing: _spacing,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: _choices.map((choice) => getChoiceButtons(choice)).toList(),
+      );
+    });
   }
 }

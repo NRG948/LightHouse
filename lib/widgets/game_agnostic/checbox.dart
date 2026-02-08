@@ -4,9 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 
 class CustomCheckbox extends StatefulWidget {
-  final double width;
-  final double height;
-
   /// The text displayed to the right of the checkbox.
   final String title;
 
@@ -14,7 +11,7 @@ class CustomCheckbox extends StatefulWidget {
   final Function(bool value) onToggle;
 
   /// The initial value of the checkbox.
-  /// 
+  ///
   /// The checkbox is checked if this value is ```true```, and not if this value is ```false```.
   final bool initialValue;
 
@@ -30,8 +27,6 @@ class CustomCheckbox extends StatefulWidget {
   /// Creates a checkbox that registers clicks on the checkbox and the title text.
   const CustomCheckbox(
       {super.key,
-      required this.height,
-      required this.width,
       this.title = "",
       this.onToggle = _noop,
       this.initialValue = false,
@@ -46,8 +41,8 @@ class CustomCheckbox extends StatefulWidget {
 }
 
 class _CustomCheckboxState extends State<CustomCheckbox> {
-  double get _width => widget.width;
-  double get _height => widget.height;
+  late double _width;
+  late double _height;
 
   String get _title => widget.title;
   Function(bool value) get _onToggle => widget.onToggle;
@@ -67,46 +62,57 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapUp: (details) {
-        setState(() {
-          currentValue = !currentValue;
-          HapticFeedback.mediumImpact();
-        });
-        _onToggle(currentValue);
-      },
-      child: Container(
-          width: _width,
-          height: _height,
-          color: Color.fromARGB(1, 255, 255, 255),
-          child: Row(
-            spacing: _height / 2,
-            children: [
-              Container(
-                width: _height * 0.8,
-                height: _height * 0.8,
-                decoration: BoxDecoration(
-                  color: _optionColor,
-                  borderRadius: BorderRadius.circular(_height * 0.2),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _width = constraints.maxWidth;
+        _height = constraints.maxHeight;
+        return GestureDetector(
+          onTapUp: (details) {
+            setState(() {
+              currentValue = !currentValue;
+              HapticFeedback.mediumImpact();
+            });
+            _onToggle(currentValue);
+          },
+          child: Container(
+            width: _width,
+            height: _height,
+            color: Color.fromARGB(1, 255, 255, 255),
+            child: Row(
+              spacing: _height * 0.3,
+              children: [
+                Container(
+                  width: _height * 0.6,
+                  height: _height * 0.6,
+                  decoration: BoxDecoration(
+                    color: _optionColor,
+                    borderRadius: BorderRadius.circular(_height * 0.2),
+                  ),
+                  child: FractionallySizedBox(
+                      widthFactor: 0.5,
+                      heightFactor: 0.5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color:
+                              currentValue ? _selectColor : Colors.transparent,
+                          borderRadius: BorderRadius.circular(_height * 0.12),
+                        ),
+                      )),
                 ),
-                child: FractionallySizedBox(
-                    widthFactor: 0.5,
-                    heightFactor: 0.5,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: currentValue ? _selectColor : Colors.transparent,
-                        borderRadius: BorderRadius.circular(_height * 0.12),
-                      ),
-                    )),
-              ),
-              AutoSizeText(
-                _title,
-                style: comfortaaBold(_height * 0.7, color: _textColor),
-                maxLines: 1,
-                minFontSize: 9,
-              )
-            ],
-          )),
+                SizedBox(
+                  width: _width - _height,
+                  child: AutoSizeText(
+                    _title,
+                    style: comfortaaBold(_height * 0.7, color: _textColor),
+                    maxLines: 1,
+                    minFontSize: 9,
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
