@@ -6,21 +6,44 @@ class InputTextBox extends StatefulWidget {
   final double width;
   final double height;
 
+  /// The maximum number of lines that can be input. Set to null for unbounded.
   final int? maxLines;
+
+  /// The maximum number of characters that can be input.
   final int? maxLength;
 
+  /// If the input is constrained to unformatted nonegative integers.
+  /// 
+  /// For example, ```948``` is allowed, but not ```-948```, ```9.48```, or ```9,480```.
   final bool isNumeric;
+
+  /// If the input preview is hidden.
   final bool obscure;
+
+  /// If the widget is allowing inputs.
+  /// 
+  /// If ```true```, the color of the widget will become [lockedColor]. Inputs will be retained upon lock.
   final bool isLocked;
 
+  /// The color of the input field if [isLocked] is ```false```.
   final Color color;
+
+  /// The color of the text.
   final Color textColor;
+
+  /// The color of the input field if [isLocked] is ```true```.
   final Color lockedColor;
+
+  /// The color of the hint text.
   final Color hintColor;
+
+  /// The text displayed when the input field is empty.
   final String hintText;
 
+  /// Called when the user changes the input field.
   final void Function(String text) onChanged;
 
+  /// Creates a text input field.
   const InputTextBox({
     super.key,
     required this.width,

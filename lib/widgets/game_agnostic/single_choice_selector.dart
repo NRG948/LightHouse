@@ -4,16 +4,42 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 
 class SingleChoiceSelector extends StatefulWidget {
+  /// The list of choices.
+  /// 
+  /// Each choice will be displayed as a screen to the left of their input.
   final List<String> choices;
+
+  /// Called when an input is pressed.
+  /// 
+  /// The choice doesn't necessarily have to change for this function to be called.
   final Function(String choice) onSelect;
+
   final double height;
+
+  /// The spacing between each choice.
   final double spacing;
+
+  /// The color of the input.
   final Color optionColor;
+
+  /// The color of the icon when an input is selected.
   final Color selectColor;
+
+  /// The color of the label next to the left of each input.
   final Color textColor;
+
+  /// If the selection can be changed.
   final bool isLocked;
+
+  /// If the selected choice does not reset to no selection when [isLocked] is ```true```.
   final bool retainSelectionOnLock;
 
+  /// Creates a single selection multiple choice widget.
+  /// 
+  /// Either one selection is made or none are made.
+  /// Each label defined in [choices] appears to the right of each input.
+  /// Clicks on the input and label will be registered as a selection.
+  /// Clicking a selected option will deselect that option.
   const SingleChoiceSelector({
     super.key,
     required this.choices,

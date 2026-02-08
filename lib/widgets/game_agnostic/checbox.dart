@@ -7,14 +7,27 @@ class CustomCheckbox extends StatefulWidget {
   final double width;
   final double height;
 
+  /// The text displayed to the right of the checkbox.
   final String title;
+
+  /// Called when the checkbox is toggled.
   final Function(bool value) onToggle;
+
+  /// The initial value of the checkbox.
+  /// 
+  /// The checkbox is checked if this value is ```true```, and not if this value is ```false```.
   final bool initialValue;
 
+  /// The color of the select icon when the checkbox is checked.
   final Color selectColor;
+
+  /// The color of the [title].
   final Color textColor;
+
+  /// The color of the checkbox.
   final Color optionColor;
 
+  /// Creates a checkbox that registers clicks on the checkbox and the title text.
   const CustomCheckbox(
       {super.key,
       required this.height,
