@@ -20,6 +20,7 @@ class CycleCounter extends StatefulWidget {
   final Color backgroundColor;
   final Color textColor;
   final Color lockedColor;
+  final bool isCompact;
 
   const CycleCounter({
     super.key,
@@ -28,6 +29,7 @@ class CycleCounter extends StatefulWidget {
     this.backgroundColor = Constants.pastelWhite,
     this.textColor = Constants.pastelBrown,
     this.lockedColor = Constants.pastelGray,
+    this.isCompact = false,
   });
 
   @override
@@ -36,13 +38,14 @@ class CycleCounter extends StatefulWidget {
 
 class _CycleCounterState extends State<CycleCounter> {
   late double _width;
-  double get _height => _width * 0.78;
+  double get _height => _width * (_isCompact ? 0.55 : 0.78);
   double get _buttonSize => _width * 0.25;
   double get _margin => widget.margin ?? _width / 25;
   Color get _color => widget.color;
   Color get _backgroundColor => widget.backgroundColor;
   Color get _textColor => widget.textColor;
   Color get _lockedColor => widget.lockedColor;
+  bool get _isCompact => widget.isCompact;
 
   final List<String> accuracyMetrics = [
     "1",
@@ -71,8 +74,40 @@ class _CycleCounterState extends State<CycleCounter> {
   void _loadCycle(int index) {
     if (index == -1) return;
 
-    selectedAccuracy = _cycles[index]!.accuracy;
-    selectedCapacity = _cycles[index]!.capacity;
+    selectedAccuracy = _cycles[index].accuracy;
+    selectedCapacity = _cycles[index].capacity;
+  }
+
+  Widget _getBorder({required Widget child}) {
+    if (_isCompact) {
+      return Container(child: child);
+    } else {
+      return Container(
+        padding: EdgeInsets.all(_margin / 2),
+        decoration: BoxDecoration(
+          color: lastIndex == -1 ? _lockedColor : _color,
+          borderRadius: BorderRadius.circular(_margin),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(_margin),
+          decoration: BoxDecoration(
+            color: _backgroundColor,
+            borderRadius: BorderRadius.circular(_margin / sqrt(2)),
+          ),
+          child: child,
+        ),
+      );
+    }
+  }
+
+  Widget _getLabel({required String text}) {
+    return Expanded(
+      flex: _isCompact ? 1 : 2,
+      child: AutoSizeText(
+        text,
+        style: comfortaaBold(_height / 13, color: _textColor),
+      ),
+    );
   }
 
   @override
@@ -94,7 +129,7 @@ class _CycleCounterState extends State<CycleCounter> {
                 Expanded(
                   flex: 1,
                   child: Row(
-                    spacing: _margin,
+                    spacing: _isCompact ? 0 : _margin,
                     children: [
                       Expanded(
                         flex: 1,
@@ -114,12 +149,14 @@ class _CycleCounterState extends State<CycleCounter> {
                                     reinitializeMultiselect = true;
                                     _cycles.removeAt(currentIndex);
                                     lastIndex--;
-                                    currentIndex = currentIndex == 0 ? lastIndex : currentIndex - 1;
+                                    currentIndex = currentIndex == 0
+                                        ? lastIndex
+                                        : currentIndex - 1;
                                     _loadCycle(lastIndex);
                                   });
                                 },
                                 padding: EdgeInsets.zero,
-                                iconSize: _buttonSize * 0.5,
+                                iconSize: _buttonSize * 0.45,
                                 color: _backgroundColor,
                                 icon: const Icon(Icons.delete_rounded)),
                           ),
@@ -173,7 +210,7 @@ class _CycleCounterState extends State<CycleCounter> {
                                   });
                                 },
                                 padding: EdgeInsets.zero,
-                                iconSize: _buttonSize * 0.6,
+                                iconSize: _buttonSize * 0.45,
                                 color: _backgroundColor,
                                 icon: const Icon(Icons.add_rounded)),
                           ),
@@ -183,37 +220,22 @@ class _CycleCounterState extends State<CycleCounter> {
                   ),
                 ),
                 Expanded(
-                  flex: 3,
-                  child: Container(
-                    padding: EdgeInsets.all(_margin / 2),
-                    decoration: BoxDecoration(
-                      color: lastIndex == -1 ? _lockedColor : _color,
-                      borderRadius: BorderRadius.circular(_margin),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(_margin),
-                      decoration: BoxDecoration(
-                        color: _backgroundColor,
-                        borderRadius: BorderRadius.circular(_margin / sqrt(2)),
-                      ),
+                    flex: _isCompact ? 2 : 3,
+                    child: _getBorder(
                       child: Column(
-                        spacing: _margin / 2,
+                        spacing: _isCompact ? 0 : _margin / 2,
                         children: [
+                          _getLabel(text: "Accuracy"),
                           Expanded(
-                            child: AutoSizeText(
-                              "Accuracy",
-                              style: comfortaaBold(_height / 13,
-                                  color: _textColor),
-                            ),
-                          ),
-                          Expanded(
+                            flex: 2,
                             child: SingleChoiceSelector(
                               choices: accuracyMetrics,
                               isLocked: lastIndex == -1,
                               spacing: _margin,
                               selectColor: _backgroundColor,
                               optionColor: _color,
-                              initialValue: lastIndex == -1 ? null : selectedAccuracy,
+                              initialValue:
+                                  lastIndex == -1 ? null : selectedAccuracy,
                               reinitializeOnBuild: reinitializeMultiselect,
                               lockedColor: _lockedColor,
                               onSelect: (choice) {
@@ -222,21 +244,17 @@ class _CycleCounterState extends State<CycleCounter> {
                               },
                             ),
                           ),
+                          _getLabel(text: "Capacity"),
                           Expanded(
-                            child: AutoSizeText(
-                              "Capacity",
-                              style: comfortaaBold(_height / 13,
-                                  color: _textColor),
-                            ),
-                          ),
-                          Expanded(
+                            flex: 2,
                             child: SingleChoiceSelector(
                               choices: capcityMetrics,
                               isLocked: lastIndex == -1,
                               spacing: _margin,
                               selectColor: _backgroundColor,
                               optionColor: _color,
-                              initialValue: lastIndex == -1 ? null : selectedCapacity,
+                              initialValue:
+                                  lastIndex == -1 ? null : selectedCapacity,
                               reinitializeOnBuild: reinitializeMultiselect,
                               lockedColor: _lockedColor,
                               onSelect: (choice) {
@@ -247,9 +265,7 @@ class _CycleCounterState extends State<CycleCounter> {
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ),
+                    )),
               ],
             ),
           ),
