@@ -1,131 +1,136 @@
-import "dart:convert";
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:lighthouse/constants.dart';
 
-import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:lighthouse/constants.dart";
-import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/data_entry.dart";
+class InputTextBox extends StatefulWidget {
+  /// The maximum number of lines that can be input. Set to null for unbounded.
+  final int? maxLines;
 
-// Stateful widget for a custom text box
-class NRGTextbox extends StatefulWidget {
-  final String title; // Title of the text box
-  final String jsonKey; // Key to store the text box data in JSON
-  final double height; // Height of the text box
-  final double width; // Width of the text box
-  final bool numeric; // Whether the text box accepts only numeric input
-  final String defaultText; // Default text to display in the text box
-  final double fontSize; // Font size of the text
-  final int maxLines; // Maximum number of lines for the text box
-  final String? autoFill; // Optional autofill value
-  final String? hintText; // Optional hint text
+  /// The maximum number of characters that can be input.
+  final int? maxLength;
 
-  const NRGTextbox(
-      {super.key,
-      required this.title,
-      required this.jsonKey,
-      required this.height,
-      required this.width,
-      this.autoFill,
-      this.numeric = false,
-      required this.fontSize,
-      required this.maxLines,
-      this.defaultText = "Enter Text",
-      this.hintText});
+  /// If the input is constrained to unformatted nonegative integers.
+  ///
+  /// For example, ```948``` is allowed, but not ```-948```, ```9.48```, or ```9,480```.
+  final bool isNumeric;
+
+  /// If the input preview is hidden.
+  final bool obscure;
+
+  /// Font of the text written.
+  /// 
+  /// Defaults to ```0.55``` of the height, divided by [maxLines] if it isn't null.
+  final double? fontSize;
+
+  /// If the widget is allowing inputs.
+  ///
+  /// If ```true```, the color of the widget will become [lockedColor]. Inputs will be retained upon lock.
+  final bool isLocked;
+
+  /// The color of the input field if [isLocked] is ```false```.
+  final Color color;
+
+  /// The color of the text.
+  final Color textColor;
+
+  /// The color of the input field if [isLocked] is ```true```.
+  final Color lockedColor;
+
+  /// The color of the hint text.
+  final Color hintColor;
+
+  /// The text displayed when the input field is empty.
+  final String hintText;
+
+  /// Called when the user changes the input field.
+  final void Function(String text) onChanged;
+
+  /// Creates a text input field.
+  const InputTextBox({
+    super.key,
+    this.maxLines,
+    this.maxLength,
+    this.isNumeric = false,
+    this.obscure = false,
+    this.isLocked = false,
+    this.fontSize,
+    this.color = Constants.pastelRed,
+    this.textColor = Constants.pastelBrown,
+    this.hintColor = Constants.pastelRedDark,
+    this.lockedColor = Constants.pastelGray,
+    this.hintText = "",
+    this.onChanged = _noop,
+  });
+
+  static void _noop(String text) {}
 
   @override
-  State<NRGTextbox> createState() => _NRGTextboxState();
+  State<InputTextBox> createState() => _InputTextBoxState();
 }
 
-class _NRGTextboxState extends State<NRGTextbox>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _InputTextBoxState extends State<InputTextBox> {
+  late double _width;
+  late double _height;
+  int? get _maxLines => widget.maxLines;
+  int? get _maxLength => widget.maxLength;
+  bool get _isNumeric => widget.isNumeric;
+  bool get _obscure => widget.obscure;
+  bool get _isLocked => widget.isLocked;
+  double get _fontSize => widget.fontSize ?? _height * 0.55 / (_maxLines ?? 1);
+  Color get _color => widget.color;
+  Color get _textColor => widget.textColor;
+  Color get _lockedColor => widget.lockedColor;
+  Color get _hintColor => widget.hintColor;
+  String get _hintText => widget.hintText;
+  void Function(String text) get _onChanged => widget.onChanged;
 
-  // Getters for widget properties
-  String get _title => widget.title;
-  String get _key => widget.jsonKey;
-  double get _height => widget.height;
-  double get _width => widget.width;
-  bool get _numeric => widget.numeric;
-  int get _maxLines => widget.maxLines;
-  double get _fontSize => widget.fontSize;
-
-  // Controller for the text field
-  final TextEditingController _controller = TextEditingController();
-
-  // Initialize the state
-  @override
-  void initState() {
-    super.initState();
-    // Add listener to update exportData when text changes
-    _controller.addListener(() {
-      setState(() {
-        if (widget.numeric) {
-          try {
-            // Try to parse the text as JSON
-            DataEntry.exportData[_key] = jsonDecode(_controller.text);
-          } catch (_) {
-            // If parsing fails, store number 0
-            DataEntry.exportData[_key] = 0;
-          }
-        } else {
-          DataEntry.exportData[_key] = _controller.text;
-        }
-      });
-    });
-    // Initialize exportData with an empty string
-    DataEntry.exportData[_key] = "";
-    // Handle autofill if provided
-    if (widget.autoFill != null) {
-      switch (widget.autoFill) {
-        case "scouterName":
-          _controller.text = configData["scouterName"] ?? "Scouter";
-      }
-    }
-  }
-
-  // Dispose the controller when the widget is disposed
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  // Build the widget
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return Container(
-        height: _height,
-        width: _width,
-        decoration: BoxDecoration(
-            color: Constants.pastelWhite,
-            borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: TextField(
-              keyboardType:
-                  _numeric ? TextInputType.number : TextInputType.text,
-              inputFormatters:
-                  _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
-              controller: _controller,
-              style:
-                  comfortaaBold(_fontSize, color: Constants.pastelBrown),
-              maxLines: _maxLines,
-              decoration: InputDecoration(
-                  labelText: _title,
-                  labelStyle: comfortaaBold(_fontSize,
-                      color: Constants.pastelBrown, italic: true),
-                  fillColor: Constants.pastelYellow,
-                  filled: true,
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius),
-                      borderSide: BorderSide.none)),
-            ),
-          ),
-        ));
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _width = constraints.maxWidth;
+        _height = constraints.maxHeight;
+        return TextFormField(
+            style: comfortaaBold(_fontSize,
+                color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: _isLocked ? _lockedColor : _color,
+                enabled: !_isLocked,
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(_height * 0.2),
+                    borderSide: BorderSide.none),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(_height * 0.2),
+                    borderSide: BorderSide(
+                        color: _isLocked
+                            ? Colors.black.withAlpha(100)
+                            : _hintColor,
+                        width: _height * 0.05)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(_height * 0.2),
+                    borderSide: BorderSide.none),
+                hintText: _hintText,
+                hintStyle: comfortaaBold(_fontSize,
+                    color:
+                        _isLocked ? Colors.black.withAlpha(100) : _hintColor),
+                contentPadding: EdgeInsets.only(left: _height * 0.2, top: _height * 0.1, bottom: _height * 0.1, right: _height * 0.1)),
+            scrollController: ScrollController(),
+            maxLength: _maxLength,
+            maxLines: _maxLines,
+            inputFormatters:
+                _isNumeric ? [FilteringTextInputFormatter.digitsOnly] : [],
+            obscureText: _obscure,
+            cursorColor: _isLocked ? Colors.black.withAlpha(100) : _textColor,
+            keyboardType: _isNumeric ? TextInputType.number : null,
+            onChanged: _onChanged,
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
+            onTap: () {
+              HapticFeedback.lightImpact();
+            });
+      },
+    );
   }
 }

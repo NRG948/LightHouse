@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 
 class RebuiltAutoPathSelector extends StatelessWidget {
-  final double width;
   final bool debug;
+  final double? margin;
 
-  const RebuiltAutoPathSelector({super.key, required this.width, this.debug = false});
+  const RebuiltAutoPathSelector({super.key, this.debug = false, this.margin});
 
   List<Zone> getZones() {
     return [
@@ -23,11 +23,11 @@ class RebuiltAutoPathSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return AutoPathSelector(
         imageFilePath: "assets/images/rebuildFieldMap.png",
-        width: width,
         rawImageWidth: 464,
         rawImageHeight: 647,
         maximumGroupSize: 4,
         debug: debug,
+        margin: margin,
         zones: getZones());
   }
 }

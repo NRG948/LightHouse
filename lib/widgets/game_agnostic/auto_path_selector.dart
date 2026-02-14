@@ -288,8 +288,9 @@ class AutoPathSelector extends StatefulWidget {
   final String imageFilePath;
   final double rawImageWidth;
   final double rawImageHeight;
-  final double width;
   final int maximumGroupSize;
+
+  final double? margin;
 
   final List<Zone> zones;
 
@@ -307,8 +308,8 @@ class AutoPathSelector extends StatefulWidget {
       required this.imageFilePath,
       required this.rawImageWidth,
       required this.rawImageHeight,
-      required this.width,
       required this.zones,
+      this.margin,
       this.debug = false,
       this.canStartInZone = false,
       this.maximumGroupSize = 4,
@@ -324,18 +325,19 @@ class AutoPathSelector extends StatefulWidget {
 
 class _AutoPathSelectorState extends State<AutoPathSelector> {
   late final AssetImage _fieldImage;
-  String get _imageFieldPath => widget.imageFilePath ;
+  String get _imageFieldPath => widget.imageFilePath;
   double get _rawImageWidth => widget.rawImageWidth;
   double get _rawImageHeight => widget.rawImageHeight;
 
-  double get _width => widget.width; // The intended width of the widget
-  double get _height => _width * _rawImageHeight / _rawImageWidth + _bottomOffset;
+  late double _width;
+  double get _height =>
+      _width * _rawImageHeight / _rawImageWidth + _bottomOffset;
 
   double get _imageWidth => _width - 2 * _margin;
   double get _imageHeight => _imageWidth * _rawImageHeight / _rawImageWidth;
   double get _scaleFactor => _imageWidth / _rawImageWidth;
 
-  double get _margin => _width / 25;
+  double get _margin => widget.margin ?? _width / 25;
   double get _bottomOffset => _width * 0.2;
 
   double get _nodeRadius => _width / 18;
@@ -343,7 +345,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   int get _maximumGroupSize => widget.maximumGroupSize;
 
   double get _buttonSize =>
-      _bottomOffset - _margin; // TODO: make in terms of height AND width, to make sure no overflow
+      _bottomOffset -
+      _margin; // TODO: make in terms of height AND width, to make sure no overflow
 
   List<Node> _nodeStack = [];
   Map<Node, Offset> _nodePositions = {};
@@ -399,7 +402,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
       overlays.add(Positioned(
           top: _nodePositions[node]!.dy - markerWidth / 2,
           left: _nodePositions[node]!.dx - markerWidth / 2,
-          child: Container(width: markerWidth, height: markerWidth, color: Colors.red)));
+          child: Container(
+              width: markerWidth, height: markerWidth, color: Colors.red)));
     }
 
     return overlays;
@@ -470,7 +474,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
         left: zone.left * _scaleFactor,
         width: zone.width * _scaleFactor,
         height: zone.height * _scaleFactor,
-        color: _debug ? Color.fromARGB(99, 67, 189, 155) : Color.fromARGB(1, 255, 255, 255),
+        color: _debug
+            ? Color.fromARGB(99, 67, 189, 155)
+            : Color.fromARGB(1, 255, 255, 255),
         onTap: (groupLabel, center) {
           if (!_canStartInZone && _nodeStack.isEmpty) return;
           int sameIdNodeCount = _nodeStack
@@ -512,75 +518,85 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: _width,
-      height: _height,
-      padding: EdgeInsets.all(_margin),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(Constants.borderRadius),
-        color: _backgroundColor,
-      ),
-      child: Column(
-        spacing: _margin,
-        children: [
-          Center(
-            child: Container(
-              width: _imageWidth,
-              height: _imageHeight,
-              decoration: BoxDecoration(
-                  color: _mainColor,
-                  borderRadius: BorderRadius.circular(_margin),
-                  image: DecorationImage(
-                      image: _fieldImage,
-                      fit: BoxFit.fill,
-                      colorFilter: ColorFilter.mode(
-                          _backgroundColor, BlendMode.modulate))),
-              child: Semantics(
-                button: true,
-                child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onHorizontalDragStart: (details) {},
-                    onTapUp: (TapUpDetails details) {
-                      setState(() {
-                        addNodeFromMap(details);
-                      });
-                    },
-                    child: Container(
-                        color: Color.fromARGB(1, 255, 255, 255),
-                        child: Stack(children: [
-                          ..._getRegions(),
-                          _getPathPainter(),
-                          ..._nodeStack,
-                          ..._debug ? _getNodeOffsetDebugOverlay() : [Container()],
-                        ]))),
-              ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _width = constraints.maxWidth;
+        return Center(
+          child: Container(
+          width: _width,
+          height: _height,
+            padding: EdgeInsets.all(_margin),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(_margin),
+              color: _backgroundColor,
             ),
-          ),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            child: Column(
               spacing: _margin,
               children: [
-                Container(
-                  width: _buttonSize,
-                  height: _buttonSize,
-                  decoration: BoxDecoration(
-                      color: Constants.pastelRedDark,
-                      borderRadius: BorderRadius.circular(_margin)),
-                  child: IconButton(
-                      padding: EdgeInsets.all(_margin / 2),
-                      onPressed: () {
-                        setState(() {
-                          if (_nodeStack.isNotEmpty) removeNode(_nodeStack.last);
-                        });
-                      },
-                      iconSize: _buttonSize * 0.7,
-                      color: _backgroundColor,
-                      highlightColor: Constants.pastelRedSuperDark,
-                      icon: const Icon(Icons.undo_rounded)),
-                )
-              ])
-        ],
-      ),
+                Center(
+                  child: Container(
+                    width: _imageWidth,
+                    height: _imageHeight,
+                    decoration: BoxDecoration(
+                        color: _mainColor,
+                        borderRadius: BorderRadius.circular(_margin),
+                        image: DecorationImage(
+                            image: _fieldImage,
+                            fit: BoxFit.fill,
+                            colorFilter: ColorFilter.mode(
+                                _backgroundColor, BlendMode.modulate))),
+                    child: Semantics(
+                      button: true,
+                      child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onHorizontalDragStart: (details) {},
+                          onTapUp: (TapUpDetails details) {
+                            setState(() {
+                              addNodeFromMap(details);
+                            });
+                          },
+                          child: Container(
+                              color: Color.fromARGB(1, 255, 255, 255),
+                              child: Stack(children: [
+                                ..._getRegions(),
+                                _getPathPainter(),
+                                ..._nodeStack,
+                                ..._debug
+                                    ? _getNodeOffsetDebugOverlay()
+                                    : [Container()],
+                              ]))),
+                    ),
+                  ),
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    spacing: _margin,
+                    children: [
+                      Container(
+                        width: _buttonSize,
+                        height: _buttonSize,
+                        decoration: BoxDecoration(
+                            color: Constants.pastelRedDark,
+                            borderRadius: BorderRadius.circular(_buttonSize / 4)),
+                        child: IconButton(
+                            padding: EdgeInsets.all(_buttonSize / 8),
+                            onPressed: () {
+                              setState(() {
+                                if (_nodeStack.isNotEmpty)
+                                  removeNode(_nodeStack.last);
+                              });
+                            },
+                            iconSize: _buttonSize * 0.7,
+                            color: _backgroundColor,
+                            highlightColor: Constants.pastelRedSuperDark,
+                            icon: const Icon(Icons.undo_rounded)),
+                      )
+                    ])
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
