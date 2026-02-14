@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/widgets/game_agnostic/checbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/match_info.dart';
 import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
+import 'package:lighthouse/widgets/rebuilt/cycle_counter.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';
 
@@ -16,6 +19,8 @@ class Atlas extends StatefulWidget {
 }
 
 class AtlasState extends State<Atlas> {
+  double margin = 10;
+
   @override
   Widget build(BuildContext context) {
     return DataEntryPage(name: "Atlas", pages: {
@@ -28,30 +33,37 @@ class AtlasState extends State<Atlas> {
       "Auto": DataEntrySubPage(
         icon: CustomIcons.autonomous,
         content: Container(
-            margin: EdgeInsets.all(20),
-            child: Column(
-              spacing: 10,
-              children: [
-                Row(spacing: 10, children: [
-                  Expanded(
-                      flex: 41, child: RebuiltAutoPathSelector(margin: 10)),
-                  Expanded(
-                      flex: 20,
-                      child: Column(spacing: 10, children: [
-                        RebuiltAutoPathSelector(margin: 10),
-                        RebuiltAutoPathSelector(margin: 10),
-                      ]))
-                ]),
-                TowerLocationSelector(margin: 10),
-              ],
-            )),
+          margin: EdgeInsets.all(15),
+          child: Column(
+            spacing: margin,
+            children: [
+              RebuiltAutoPathSelector(margin: margin),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Constants.pastelWhite,
+                    borderRadius: BorderRadius.circular(margin),
+                  ),
+                  child: CycleCounter(
+                    isCompact: true,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       // TODO: get more sensible icons
       "Onshift": DataEntrySubPage(
         icon: CustomIcons.racecar,
         content: Container(
-          child: NRGPlaceholder(
-              title: "onshift", jsonKey: "onshift", height: 10, width: 20),
+          margin: EdgeInsets.all(15),
+          child: Column(
+            spacing: margin,
+            children: [
+              CycleCounter(),
+            ],
+          ),
         ),
       ),
       "Offshift": DataEntrySubPage(

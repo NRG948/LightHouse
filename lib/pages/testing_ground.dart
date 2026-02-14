@@ -3,7 +3,6 @@ import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/rebuilt/cycle_counter.dart";
 
-
 class TestingGroundPage extends StatefulWidget {
   const TestingGroundPage({super.key});
 
@@ -40,9 +39,11 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
       ),
       body: Center(
           child: SizedBox(
-            width: 380,
-            child: CycleCounter(margin: 15)
-          )),
+              width: 380,
+              child: CycleCounter(
+                margin: 15,
+                isCompact: true,
+              ))),
     );
   }
 }

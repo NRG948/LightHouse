@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/widgets/game_agnostic/checbox.dart';
+import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
 
 class Zone {
   String id;
@@ -299,9 +301,14 @@ class AutoPathSelector extends StatefulWidget {
   final Color startNodeColor;
   final Color allianceZoneNodeColor;
   final Color regionNodeColor;
+  final Color lockedColor;
+  final Color textColor;
 
   final bool debug;
   final bool canStartInZone;
+
+  final bool showClimbOptions;
+  final List<String>? climbLevels;
 
   const AutoPathSelector(
       {super.key,
@@ -313,11 +320,15 @@ class AutoPathSelector extends StatefulWidget {
       this.debug = false,
       this.canStartInZone = false,
       this.maximumGroupSize = 4,
+      this.showClimbOptions = false,
+      this.climbLevels,
       this.mainColor = Constants.pastelRed,
       this.backgroundColor = Constants.pastelWhite,
       this.startNodeColor = Constants.pastelGreen,
       this.allianceZoneNodeColor = Constants.pastelYellow,
-      this.regionNodeColor = Constants.pastelBlue});
+      this.regionNodeColor = Constants.pastelBlue,
+      this.lockedColor = Constants.pastelGray,
+      this.textColor = Constants.pastelBrown,});
 
   @override
   State<AutoPathSelector> createState() => _AutoPathSelectorState();
@@ -338,7 +349,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   double get _scaleFactor => _imageWidth / _rawImageWidth;
 
   double get _margin => widget.margin ?? _width / 25;
-  double get _bottomOffset => _width * 0.2;
+  double get _bottomOffset => _width * 0.25;
 
   double get _nodeRadius => _width / 18;
   double get _nodeBorderWidth => _width / 100;
@@ -357,9 +368,14 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
   Color get _startNodeColor => widget.startNodeColor;
   Color get _allianceZoneNodeColor => widget.allianceZoneNodeColor;
   Color get _regionNodeColor => widget.regionNodeColor;
+  Color get _lockedColor => widget.lockedColor;
+  Color get _textColor => widget.textColor;
 
   bool get _debug => widget.debug;
   bool get _canStartInZone => widget.canStartInZone;
+  bool get _showClimbOptions => widget.showClimbOptions;
+  List<String>? get _climbLevels => widget.climbLevels;
+  bool _attemptedClimb = false;
 
   List<Zone> get _zones => widget.zones;
 
@@ -495,6 +511,55 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
     return regions;
   }
 
+  Widget _getClimbOptions() {
+    if (!_showClimbOptions) {
+      return Container();
+    }
+
+    Widget climbOutcome;
+    if (_climbLevels == null) {
+      climbOutcome = CustomCheckbox(
+        selectColor: _backgroundColor,
+        optionColor: _mainColor,
+        lockedColor: _lockedColor,
+        textColor: _textColor,
+        title: "Climb Successful",
+        isLocked: !_attemptedClimb,
+      );
+    } else {
+      climbOutcome = CustomDropdown(
+        color: _mainColor,
+        textColor: _textColor,
+        lockedColor: _lockedColor,
+        options: _climbLevels!,
+        isLocked: !_attemptedClimb,
+      );
+    }
+
+    return SizedBox(
+      width: _width - _buttonSize - _margin * 3,
+      height: _buttonSize,
+      child: Column(
+        children: [
+          Expanded(
+              child: CustomCheckbox(
+            selectColor: _backgroundColor,
+            optionColor: _mainColor,
+            lockedColor: _lockedColor,
+            textColor: _textColor,
+            title: "Attempted Climb",
+            onToggle: (value) {
+              setState(() {
+                _attemptedClimb = value;
+              });
+            },
+          )),
+          Expanded(child: climbOutcome),
+        ],
+      ),
+    );
+  }
+
   void _recalculateNodeOffsets() {
     _nodePositions = {};
     for (final Node node in _nodeStack) {
@@ -523,8 +588,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
         _width = constraints.maxWidth;
         return Center(
           child: Container(
-          width: _width,
-          height: _height,
+            width: _width,
+            height: _height,
             padding: EdgeInsets.all(_margin),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(_margin),
@@ -569,29 +634,32 @@ class _AutoPathSelectorState extends State<AutoPathSelector> {
                   ),
                 ),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    spacing: _margin,
-                    children: [
-                      Container(
-                        width: _buttonSize,
-                        height: _buttonSize,
-                        decoration: BoxDecoration(
-                            color: Constants.pastelRedDark,
-                            borderRadius: BorderRadius.circular(_buttonSize / 4)),
-                        child: IconButton(
-                            padding: EdgeInsets.all(_buttonSize / 8),
-                            onPressed: () {
-                              setState(() {
-                                if (_nodeStack.isNotEmpty)
-                                  removeNode(_nodeStack.last);
-                              });
-                            },
-                            iconSize: _buttonSize * 0.7,
-                            color: _backgroundColor,
-                            highlightColor: Constants.pastelRedSuperDark,
-                            icon: const Icon(Icons.undo_rounded)),
-                      )
-                    ])
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  spacing: _margin,
+                  children: [
+                    _getClimbOptions(),
+                    Container(
+                      width: _buttonSize,
+                      height: _buttonSize,
+                      decoration: BoxDecoration(
+                          color: Constants.pastelRedDark,
+                          borderRadius: BorderRadius.circular(_buttonSize / 4)),
+                      child: IconButton(
+                          padding: EdgeInsets.all(_buttonSize / 8),
+                          onPressed: () {
+                            setState(() {
+                              if (_nodeStack.isNotEmpty) {
+                                removeNode(_nodeStack.last);
+                              }
+                            });
+                          },
+                          iconSize: _buttonSize * 0.7,
+                          color: _backgroundColor,
+                          highlightColor: Constants.pastelRedSuperDark,
+                          icon: const Icon(Icons.undo_rounded)),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
