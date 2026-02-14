@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart";
-import "package:lighthouse/widgets/rebuilt/tower_location_selector.dart";
+import "package:lighthouse/widgets/rebuilt/cycle_counter.dart";
+
 
 class TestingGroundPage extends StatefulWidget {
   const TestingGroundPage({super.key});
@@ -38,7 +38,11 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
               color: Constants.pastelWhite,
             )),
       ),
-      body: RebuiltAutoPathSelector(),
+      body: Center(
+          child: SizedBox(
+            width: 380,
+            child: CycleCounter(margin: 15)
+          )),
     );
   }
 }

@@ -33,7 +33,7 @@ extension ClimbLevelExtension on ClimbLevel {
     }
   }
 
-  static ClimbLevel getLevelFromName(String name) {
+  static ClimbLevel getLevelFromName(String? name) {
     switch (name) {
       case "L1":
         return ClimbLevel.l1;
@@ -246,7 +246,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                       textColor: _textColor,
                       isLocked: _isLocked,
                       retainSelectionOnLock: false,
-                      onSelect: (String choice) {
+                      onSelect: (String? choice) {
                         _climbLevel =
                             ClimbLevelExtension.getLevelFromName(choice);
                       },
