@@ -10,19 +10,13 @@ class RebuiltEndgameTagSelector extends StatelessWidget {
     return [
       "defense",
       "climb",
-      "passed",
-      "stop reading this",
-      "testoih4wfw", 
-      "fiewhfoiewf", 
-      "ewoihfwoife", 
-      "woihfoewf", 
-      "nwoifowfoewfewof", 
-      "ewfioewfnefew", 
-      "weoihfewoifheoiheoi", 
-      "hewoifohoiehfoiqehfuef", 
-      "e8hfoqhfoqhfoieqhfinfwlkf", 
-      "eifhoeiqfoieqnfoiefoiefoienfoiew", 
-      "8eihfoeqfhoeqfoiqnfieqnfhoieqhfoeqieqifoqehfq", 
+      "passing",
+      "shoot while moving",  
+      "ground intake", 
+      "outpost intake", 
+      "shoot from anywhere", 
+      "shoot from hub", 
+      "beached on fuel"
     ];
   }
 

@@ -323,7 +323,10 @@ class AutoPathSelector extends StatefulWidget {
   State<AutoPathSelector> createState() => _AutoPathSelectorState();
 }
 
-class _AutoPathSelectorState extends State<AutoPathSelector> {
+class _AutoPathSelectorState extends State<AutoPathSelector>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   late final AssetImage _fieldImage;
   String get _imageFieldPath => widget.imageFilePath;
   double get _rawImageWidth => widget.rawImageWidth;
