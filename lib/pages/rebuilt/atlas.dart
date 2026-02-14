@@ -9,6 +9,7 @@ import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/cycle_counter.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
+import 'package:lighthouse/widgets/rebuilt/rebuilt_endgame_tag_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';
 
 class Atlas extends StatefulWidget {
@@ -76,8 +77,11 @@ class AtlasState extends State<Atlas> {
       "Endgame": DataEntrySubPage(
         icon: CustomIcons.flag,
         content: Container(
-          child: NRGPlaceholder(
-              title: "endgame", jsonKey: "endgame", height: 10, width: 20),
+          child: Column(
+            children: [
+              RebuiltEndgameTagSelector(),
+            ],
+          ),
         ),
       )
     });

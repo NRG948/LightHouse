@@ -108,7 +108,10 @@ class DataEntryPageState extends State<DataEntryPage> {
                           context: context,
                           builder: (builder) {
                             return Dialog(
-                              child: Text(jsonEncode(configData)),
+                              child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  child:
+                                      Text(jsonEncode(DataEntry.exportData))),
                             );
                           });
                     },
@@ -171,8 +174,10 @@ class DataEntryPageState extends State<DataEntryPage> {
   }
 
   ///returns a list of the BottomNavigationBarItems that each of the pages gives it.
-  List<BottomNavigationBarItem> createNavBar(Map<String, DataEntrySubPage> pages) {
-    List<BottomNavigationBarItem> items = List<BottomNavigationBarItem>.empty(growable: true);
+  List<BottomNavigationBarItem> createNavBar(
+      Map<String, DataEntrySubPage> pages) {
+    List<BottomNavigationBarItem> items =
+        List<BottomNavigationBarItem>.empty(growable: true);
     for (var entry in pages.entries) {
       String title = entry.key;
       Icon icon = Icon(entry.value.icon);
