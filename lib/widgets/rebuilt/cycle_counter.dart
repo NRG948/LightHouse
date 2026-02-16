@@ -38,6 +38,7 @@ class CycleCounter extends StatefulWidget {
 
 class _CycleCounterState extends State<CycleCounter> {
   late double _width;
+
   double get _height => _width * (_isCompact ? 0.55 : 0.78);
   double get _buttonSize => _width * 0.25;
   double get _margin => widget.margin ?? _width / 25;
@@ -46,46 +47,23 @@ class _CycleCounterState extends State<CycleCounter> {
   Color get _textColor => widget.textColor;
   Color get _lockedColor => widget.lockedColor;
   bool get _isCompact => widget.isCompact;
+  double get _fontSize => _height / 13;
 
-  final List<String> accuracyMetrics = [
-    "1",
-    "2",
-    "3",
-    "4",
-    "5"
-  ]; // <<50%, ~50%, ~70%, ~85%, >95%
-  final List<String> capcityMetrics = [
-    "Partial",
-    "Most",
-    "Full"
-  ]; // <50%, 50%-95%, >95%
+  final List<String> accuracyMetrics = ["1", "2", "3", "4", "5"];
+  final List<String> capcityMetrics = ["Partial", "Most", "Full"];
 
   final List<Cycle> _cycles = [];
 
-  int lastIndex = -1;
   int currentIndex = -1;
-
-  String? selectedAccuracy;
-  String? selectedCapacity;
-
-  bool reinitializeDropdown = false;
-  bool reinitializeMultiselect = false;
-
-  void _loadCycle(int index) {
-    if (index == -1) return;
-
-    selectedAccuracy = _cycles[index].accuracy;
-    selectedCapacity = _cycles[index].capacity;
-  }
 
   Widget _getBorder({required Widget child}) {
     if (_isCompact) {
-      return Container(child: child);
+      return child;
     } else {
       return Container(
         padding: EdgeInsets.all(_margin / 2),
         decoration: BoxDecoration(
-          color: lastIndex == -1 ? _lockedColor : _color,
+          color: _cycles.isEmpty ? _lockedColor : _color,
           borderRadius: BorderRadius.circular(_margin),
         ),
         child: Container(
@@ -100,29 +78,21 @@ class _CycleCounterState extends State<CycleCounter> {
     }
   }
 
-  Widget _getLabel({required String text}) {
-    return Expanded(
-      flex: _isCompact ? 1 : 2,
-      child: AutoSizeText(
-        text,
-        style: comfortaaBold(_height / 13, color: _textColor),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
         _width = constraints.maxWidth;
+
         return Center(
           child: Container(
             width: _width,
             height: _height,
             padding: EdgeInsets.all(_margin),
             decoration: BoxDecoration(
-                color: _backgroundColor,
-                borderRadius: BorderRadius.circular(_margin)),
+              color: _backgroundColor,
+              borderRadius: BorderRadius.circular(_margin),
+            ),
             child: Column(
               spacing: _margin,
               children: [
@@ -138,27 +108,28 @@ class _CycleCounterState extends State<CycleCounter> {
                             width: _buttonSize,
                             height: _buttonSize,
                             decoration: BoxDecoration(
-                              color: lastIndex == -1 ? _lockedColor : _color,
+                              color: _cycles.isEmpty ? _lockedColor : _color,
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                                onPressed: () {
-                                  if (lastIndex == -1) return;
-                                  setState(() {
-                                    reinitializeDropdown = true;
-                                    reinitializeMultiselect = true;
-                                    _cycles.removeAt(currentIndex);
-                                    lastIndex--;
-                                    currentIndex = currentIndex == 0
-                                        ? lastIndex
-                                        : currentIndex - 1;
-                                    _loadCycle(lastIndex);
-                                  });
-                                },
-                                padding: EdgeInsets.zero,
-                                iconSize: _buttonSize * 0.45,
-                                color: _backgroundColor,
-                                icon: const Icon(Icons.delete_rounded)),
+                              onPressed: () {
+                                if (_cycles.isEmpty) return;
+
+                                setState(() {
+                                  _cycles.removeAt(currentIndex);
+
+                                  if (_cycles.isEmpty) {
+                                    currentIndex = -1;
+                                  } else if (currentIndex >= _cycles.length) {
+                                    currentIndex = _cycles.length - 1;
+                                  }
+                                });
+                              },
+                              padding: EdgeInsets.zero,
+                              iconSize: _buttonSize * 0.45,
+                              color: _backgroundColor,
+                              icon: const Icon(Icons.delete_rounded),
+                            ),
                           ),
                         ),
                       ),
@@ -168,19 +139,18 @@ class _CycleCounterState extends State<CycleCounter> {
                           padding:
                               EdgeInsets.symmetric(vertical: _buttonSize / 10),
                           child: CustomDropdown(
-                            options: List.generate(_cycles.length, (i) => i)
-                                .map((int x) => x.toString())
-                                .toList(),
-                            reinitializeOnBuild: reinitializeDropdown,
-                            isLocked: lastIndex == -1,
-                            initialValue:
-                                lastIndex == -1 ? null : lastIndex.toString(),
+                            key: ValueKey("${_cycles.length}-$currentIndex"),
+                            options: List.generate(
+                              _cycles.length,
+                              (i) => i.toString(),
+                            ),
+                            isLocked: _cycles.isEmpty,
+                            initialValue: _cycles.isEmpty
+                                ? null
+                                : currentIndex.toString(),
                             onChanged: (value) {
                               setState(() {
-                                reinitializeDropdown = false;
-                                reinitializeMultiselect = true;
                                 currentIndex = int.parse(value ?? "0");
-                                _loadCycle(currentIndex);
                               });
                             },
                           ),
@@ -197,80 +167,190 @@ class _CycleCounterState extends State<CycleCounter> {
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    reinitializeDropdown = true;
-                                    reinitializeMultiselect = true;
-                                    lastIndex++;
-                                    currentIndex = lastIndex;
-                                    _cycles.add(Cycle(
-                                        index: lastIndex,
-                                        capacity: capcityMetrics.last));
-                                    _loadCycle(lastIndex);
-                                  });
-                                },
-                                padding: EdgeInsets.zero,
-                                iconSize: _buttonSize * 0.45,
-                                color: _backgroundColor,
-                                icon: const Icon(Icons.add_rounded)),
+                              onPressed: () {
+                                setState(() {
+                                  final newIndex = _cycles.length;
+
+                                  _cycles.add(
+                                    Cycle(
+                                      index: newIndex,
+                                      capacity: capcityMetrics.last,
+                                    ),
+                                  );
+
+                                  currentIndex = newIndex;
+                                });
+                              },
+                              padding: EdgeInsets.zero,
+                              iconSize: _buttonSize * 0.45,
+                              color: _backgroundColor,
+                              icon: const Icon(Icons.add_rounded),
+                            ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
                 Expanded(
-                    flex: _isCompact ? 2 : 3,
-                    child: _getBorder(
-                      child: Column(
-                        spacing: _isCompact ? 0 : _margin / 2,
-                        children: [
-                          _getLabel(text: "Accuracy"),
-                          Expanded(
-                            flex: 2,
-                            child: SingleChoiceSelector(
-                              choices: accuracyMetrics,
-                              isLocked: lastIndex == -1,
-                              spacing: _margin,
-                              selectColor: _backgroundColor,
-                              optionColor: _color,
-                              initialValue:
-                                  lastIndex == -1 ? null : selectedAccuracy,
-                              reinitializeOnBuild: reinitializeMultiselect,
-                              lockedColor: _lockedColor,
-                              onSelect: (choice) {
-                                if (currentIndex == -1) return;
-                                _cycles[currentIndex].accuracy = choice;
-                              },
-                            ),
-                          ),
-                          _getLabel(text: "Capacity"),
-                          Expanded(
-                            flex: 2,
-                            child: SingleChoiceSelector(
-                              choices: capcityMetrics,
-                              isLocked: lastIndex == -1,
-                              spacing: _margin,
-                              selectColor: _backgroundColor,
-                              optionColor: _color,
-                              initialValue:
-                                  lastIndex == -1 ? null : selectedCapacity,
-                              reinitializeOnBuild: reinitializeMultiselect,
-                              lockedColor: _lockedColor,
-                              onSelect: (choice) {
-                                if (currentIndex == -1) return;
-                                _cycles[currentIndex].capacity = choice;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    )),
+                  flex: _isCompact ? 2 : 3,
+                  child: _getBorder(
+                    child: IndexedStack(
+                      index: _cycles.isEmpty ? 0 : currentIndex,
+                      children: _cycles.isEmpty
+                          ? [
+                              CycleView(
+                                key: const ValueKey("locked"),
+                                cycle: Cycle(index: -1),
+                                isLocked: true,
+                                accuracyMetrics: accuracyMetrics,
+                                capacityMetrics: capcityMetrics,
+                                margin: _margin,
+                                color: _color,
+                                backgroundColor: _backgroundColor,
+                                textColor: _textColor,
+                                lockedColor: _lockedColor,
+                                isCompact: _isCompact,
+                                fontSize: _fontSize,
+                              )
+                            ]
+                          : _cycles.map((cycle) {
+                              return CycleView(
+                                key: ValueKey(cycle.index),
+                                cycle: cycle,
+                                isLocked: false,
+                                accuracyMetrics: accuracyMetrics,
+                                capacityMetrics: capcityMetrics,
+                                margin: _margin,
+                                color: _color,
+                                backgroundColor: _backgroundColor,
+                                textColor: _textColor,
+                                lockedColor: _lockedColor,
+                                isCompact: _isCompact,
+                                fontSize: _fontSize,
+                              );
+                            }).toList(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class CycleView extends StatefulWidget {
+  final Cycle cycle;
+  final bool isLocked;
+  final List<String> accuracyMetrics;
+  final List<String> capacityMetrics;
+  final double margin;
+  final Color color;
+  final Color backgroundColor;
+  final Color textColor;
+  final Color lockedColor;
+  final bool isCompact;
+  final double fontSize;
+
+  const CycleView({
+    super.key,
+    required this.cycle,
+    required this.isLocked,
+    required this.accuracyMetrics,
+    required this.capacityMetrics,
+    required this.margin,
+    required this.color,
+    required this.backgroundColor,
+    required this.textColor,
+    required this.lockedColor,
+    required this.isCompact,
+    required this.fontSize,
+  });
+
+  @override
+  State<CycleView> createState() => _CycleViewState();
+}
+
+class _CycleViewState extends State<CycleView> {
+  Cycle get _cycle => widget.cycle;
+  bool get _isLocked => widget.isLocked;
+  List<String> get _accuracyMetrics => widget.accuracyMetrics;
+  List<String> get _capacityMetrics => widget.capacityMetrics;
+  double get _margin => widget.margin;
+  Color get _color => widget.color;
+  Color get _backgroundColor => widget.backgroundColor;
+  Color get _textColor => widget.textColor;
+  Color get _lockedColor => widget.lockedColor;
+  bool get _isCompact => widget.isCompact;
+  double get _fontSize => widget.fontSize;
+
+  String? selectedAccuracy;
+  String? selectedCapacity;
+
+  Widget _getLabel({required String text}) {
+    return Expanded(
+      flex: _isCompact ? 1 : 2,
+      child: AutoSizeText(
+        text,
+        style: comfortaaBold(_fontSize, color: _textColor),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    selectedAccuracy = _cycle.accuracy;
+    selectedCapacity = _cycle.capacity;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: _isCompact ? 0 : _margin / 2,
+      children: [
+        _getLabel(text: "Accuracy"),
+        Expanded(
+          flex: 2,
+          child: SingleChoiceSelector(
+            choices: _accuracyMetrics,
+            initialValue: selectedAccuracy,
+            isLocked: _isLocked,
+            spacing: _margin,
+            selectColor: _backgroundColor,
+            optionColor: _color,
+            lockedColor: _lockedColor,
+            onSelect: (choice) {
+              setState(() {
+                selectedAccuracy = choice;
+                _cycle.accuracy = choice;
+              });
+            },
+          ),
+        ),
+        _getLabel(text: "Capacity"),
+        Expanded(
+          flex: 2,
+          child: SingleChoiceSelector(
+            choices: _capacityMetrics,
+            initialValue: selectedCapacity,
+            isLocked: _isLocked,
+            spacing: _margin,
+            selectColor: _backgroundColor,
+            optionColor: _color,
+            lockedColor: _lockedColor,
+            onSelect: (choice) {
+              setState(() {
+                selectedCapacity = choice;
+                _cycle.capacity = choice;
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 }
