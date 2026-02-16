@@ -273,7 +273,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       for (NodeData node in _nodeStack
           .where((final NodeData node) => node.groupLabel == zone.id)) {
         node.radius =
-            _nodeRadius / (numNodes - 1); // TODO: tweak based on testing
+            _nodeRadius / (numNodes); // TODO: tweak based on testing
 
         final scaledLeft = zone.left * _scaleFactor;
         final scaledTop = zone.top * _scaleFactor;
@@ -282,9 +282,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
         node.position = Offset(
           scaledLeft + (scaledWidth / 2),
-          scaledTop +
-              (scaledHeight / 2) +
-              (i + 0.5 - numNodes / 2) * 2 * node.radius,
+          scaledTop + (scaledHeight / 2) + (i + 0.5 - numNodes / 2) * 2 * node.radius,
         );
 
         i++;
