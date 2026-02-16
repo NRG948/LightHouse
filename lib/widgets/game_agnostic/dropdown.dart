@@ -17,24 +17,21 @@ class CustomDropdown extends StatefulWidget {
 
   final double fontSize;
 
-  /// If ```true```, the selected value will be set to the initial value when this widget is rebuilt externally.
-  final bool reinitializeOnBuild;
-
   final void Function(String? value) onChanged;
 
-  const CustomDropdown(
-      {super.key,
-      required this.options,
-      this.initialValue,
-      this.hintText = "",
-      this.color = Constants.pastelRed,
-      this.textColor = Constants.pastelBrown,
-      this.lockedColor = Constants.pastelGray,
-      this.hintColor = Constants.pastelRedDark,
-      this.onChanged = _noop,
-      this.isLocked = false,
-      this.fontSize = 17,
-      this.reinitializeOnBuild = false});
+  const CustomDropdown({
+    super.key,
+    required this.options,
+    this.initialValue,
+    this.hintText = "",
+    this.color = Constants.pastelRed,
+    this.textColor = Constants.pastelBrown,
+    this.lockedColor = Constants.pastelGray,
+    this.hintColor = Constants.pastelRedDark,
+    this.onChanged = _noop,
+    this.isLocked = false,
+    this.fontSize = 17,
+  });
 
   static void _noop(String? value) {}
 
@@ -55,7 +52,6 @@ class _CustomDropdownState extends State<CustomDropdown> {
   Color get _lockedColor => widget.lockedColor;
   bool get _isLocked => widget.isLocked;
   double get _fontSize => widget.fontSize;
-  bool get _reinitializeOnBuild => widget.reinitializeOnBuild;
   Function(String? value) get _onChanged => widget.onChanged;
 
   String? _currentValue;
@@ -64,12 +60,6 @@ class _CustomDropdownState extends State<CustomDropdown> {
   void initState() {
     super.initState();
     _currentValue = _initialValue;
-  }
-
-  @override
-  void didUpdateWidget(CustomDropdown oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (_reinitializeOnBuild) _currentValue = _initialValue;
   }
 
   @override
@@ -97,15 +87,22 @@ class _CustomDropdownState extends State<CustomDropdown> {
                   icon: Icon(Icons.arrow_drop_down_rounded,
                       color: Constants.pastelWhite),
                   iconSize: _height,
-                  style: comfortaaBold(_fontSize, color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
+                  style: comfortaaBold(_fontSize,
+                      color:
+                          _isLocked ? Colors.black.withAlpha(100) : _textColor),
                   hint: AutoSizeText(_hintText,
-                      style: comfortaaBold(_fontSize, color: _isLocked ? Colors.black.withAlpha(100) : _hintColor)),
+                      style: comfortaaBold(_fontSize,
+                          color: _isLocked
+                              ? Colors.black.withAlpha(100)
+                              : _hintColor)),
                   items: _options
                       .map((String value) => DropdownMenuItem<String>(
                             value: value,
                             child: AutoSizeText(value,
-                                style:
-                                    comfortaaBold(_fontSize, color: _isLocked ? Colors.black.withAlpha(100) : _textColor)),
+                                style: comfortaaBold(_fontSize,
+                                    color: _isLocked
+                                        ? Colors.black.withAlpha(100)
+                                        : _textColor)),
                           ))
                       .toList(),
                   onChanged: (String? value) {
