@@ -25,7 +25,7 @@ typedef NodeIconBuilder = Widget Function(
   String text,
 );
 
-class CircleLabelIcon extends StatelessWidget {
+class VisualNode extends StatelessWidget {
   static final double fontSizeToRadiusRatio = 1.3;
 
   final double radius;
@@ -35,7 +35,7 @@ class CircleLabelIcon extends StatelessWidget {
   final String text;
   final Color? textColor;
 
-  const CircleLabelIcon(
+  const VisualNode(
       {super.key,
       required this.radius,
       this.color,
@@ -46,189 +46,46 @@ class CircleLabelIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: 2 * radius,
-        height: 2 * radius,
-        decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-            border: borderWidth == 0
-                ? null
-                : Border.all(color: borderColor, width: borderWidth)),
-        child: Center(
-            child: DefaultTextStyle(
-                style: comfortaaBold(
-                    fontSizeToRadiusRatio * (radius - borderWidth),
-                    color: textColor),
-                child: Text(
-                  text,
-                ))));
-  }
-}
-
-class Node extends StatefulWidget {
-  final String? groupLabel;
-  final int index;
-  final double top;
-  final double left;
-  final double radius;
-  final Color? color;
-  final Color borderColor;
-  final double borderWidth;
-  final bool draggable;
-  final Function(int index, DraggableDetails details, Offset localEndPosition,
-      Offset dragOffset) onDragEnd;
-  final Function(int index, Offset position) onPositionUpdate;
-  final int groupIndex;
-  final int groupTotal;
-  final double groupScaling;
-  final NodeIconBuilder? iconBuilder;
-  double get scaledRadius =>
-      radius / ((groupTotal + 1 / groupScaling - 1) * groupScaling);
-
-  Offset baseCenter() => Offset(left, top);
-
-  Offset groupOffset() => Offset(
-        0,
-        (groupIndex + 0.5 - groupTotal / 2) * 2 * scaledRadius,
-      );
-
-  Offset visualCenter(Offset dragOffset) =>
-      baseCenter() + groupOffset() + dragOffset;
-
-  const Node(
-      {super.key,
-      this.groupLabel,
-      required this.index,
-      required this.top,
-      required this.left,
-      required this.radius,
-      required this.draggable,
-      this.iconBuilder,
-      this.groupIndex = 0,
-      this.groupTotal = 1,
-      this.groupScaling = 0.25,
-      this.color,
-      this.borderColor = Constants.pastelWhite,
-      this.borderWidth = 0,
-      this.onDragEnd = _onDragEndNoop,
-      this.onPositionUpdate = _onPositionUpdateNoop})
-      : assert(
-          color == null || iconBuilder == null,
-          'NodeIcon: color and iconBuilder are mutually exclusive.',
-        );
-
-  static void _onDragEndNoop(int index, DraggableDetails details,
-      Offset localEndPosition, Offset dragOffset) {}
-
-  static void _onPositionUpdateNoop(int index, Offset position) {}
-
-  Node copyWithNewValues(
-      {int? newGroupIndex, int? newGroupTotal, int? newIndex}) {
-    return Node(
-      key: super.key,
-      groupLabel: groupLabel,
-      index: newIndex ?? index,
-      top: top,
-      left: left,
-      radius: radius,
-      color: color,
-      borderColor: borderColor,
-      borderWidth: borderWidth,
-      iconBuilder: iconBuilder,
-      draggable: draggable,
-      groupIndex: newGroupIndex ?? groupIndex,
-      groupTotal: newGroupTotal ?? groupTotal,
-      groupScaling: groupScaling,
-      onDragEnd: onDragEnd,
-      onPositionUpdate: onPositionUpdate,
+    return Transform.translate(
+      offset: Offset(-radius, -radius),
+      child: Container(
+          width: 2 * radius,
+          height: 2 * radius,
+          decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+              border: borderWidth == 0
+                  ? null
+                  : Border.all(color: borderColor, width: borderWidth)),
+          child: Center(
+              child: DefaultTextStyle(
+                  style: comfortaaBold(
+                      fontSizeToRadiusRatio * (radius - borderWidth),
+                      color: textColor),
+                  child: Text(
+                    text,
+                  )))),
     );
   }
-
-  @override
-  String toStringShort() => "Node(index: $index)";
-
-  @override
-  State<Node> createState() => _NodeState();
 }
 
-class _NodeState extends State<Node> {
-  int get _index => widget.index;
-  Color? get _color => widget.color;
-  Color get _borderColor => widget.borderColor;
-  double get _borderWidth => widget.borderWidth;
-  bool get _draggable => widget.draggable;
-  double get _scaledRadius => widget.scaledRadius;
-  Function(int index, DraggableDetails details, Offset localEndPosition,
-      Offset dragOffset) get _onDragEnd => widget.onDragEnd;
-  Function(int index, Offset position) get _onPositionUpdate =>
-      widget.onPositionUpdate;
-  NodeIconBuilder get _iconBuilder => widget.iconBuilder ?? _defaultIconBuilder;
+class NodeData {
+  /// note that [groupLabel] *always* takes precedence over this.
+  /// if [groupLabel] exists, position **should not** be serialized.
+  /// (if it's part of a group, position is used for display position *inside* that zone,
+  /// meaning it's absolutely useless for export)
+  Offset? position;
+  Color color;
+  bool draggable;
+  double radius;
+  String? groupLabel;
 
-  Offset _dragOffset = Offset.zero;
-  Offset get _center => widget.visualCenter(_dragOffset);
-
-  Widget _defaultIconBuilder(BuildContext context, String text) {
-    return CircleLabelIcon(
-        color: _color,
-        borderColor: _borderColor,
-        borderWidth: _borderWidth,
-        textColor: Constants.pastelWhite,
-        text: text,
-        radius: _scaledRadius);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _onPositionUpdate(_index, widget.visualCenter(_dragOffset));
-  }
-
-  @override
-  void didUpdateWidget(Node oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _onPositionUpdate(_index, widget.visualCenter(_dragOffset));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        top: _center.dy - _scaledRadius,
-        left: _center.dx - _scaledRadius,
-        child: IgnorePointer(
-          ignoring: !_draggable,
-          child: Semantics(
-            button: true,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {},
-              child: Draggable(
-                maxSimultaneousDrags: _draggable ? 1 : 0,
-                feedback: Opacity(
-                    opacity: 0.5, child: _iconBuilder(context, "$_index")),
-                childWhenDragging: ColorFiltered(
-                    colorFilter:
-                        const ColorFilter.mode(Colors.grey, BlendMode.modulate),
-                    child: _iconBuilder(context, "$_index")),
-                child: _iconBuilder(context, "$_index"),
-                onDragEnd: (details) {
-                  setState(() {
-                    final RenderBox renderBox =
-                        context.findRenderObject() as RenderBox;
-                    final Offset localOffsetDifference =
-                        renderBox.globalToLocal(details.offset);
-                    _dragOffset += localOffsetDifference;
-
-                    _onDragEnd(_index, details,
-                        widget.visualCenter(_dragOffset), _dragOffset);
-                    _onPositionUpdate(_index, widget.visualCenter(_dragOffset));
-                  });
-                },
-              ),
-            ),
-          ),
-        ));
-  }
+  NodeData(
+      {this.position,
+      required this.color,
+      required this.radius,
+      required this.draggable,
+      this.groupLabel});
 }
 
 class BoxRegion extends StatefulWidget {
@@ -286,6 +143,25 @@ class _BoxRegionState extends State<BoxRegion> {
   }
 }
 
+class UserAction {
+  UserActionType actionType;
+  int nodeIndice;
+
+  /// deliberately vague name as this could be position or movement
+  Offset coordinates;
+
+  UserAction(
+      {required this.actionType,
+      required this.nodeIndice,
+      required this.coordinates});
+}
+
+// note that each type of action must be handled by the undo function
+enum UserActionType {
+  move,
+  place,
+}
+
 class AutoPathSelector extends StatefulWidget {
   final String imageFilePath;
   final double rawImageWidth;
@@ -310,25 +186,26 @@ class AutoPathSelector extends StatefulWidget {
   final bool showClimbOptions;
   final List<String>? climbLevels;
 
-  const AutoPathSelector(
-      {super.key,
-      required this.imageFilePath,
-      required this.rawImageWidth,
-      required this.rawImageHeight,
-      required this.zones,
-      this.margin,
-      this.debug = false,
-      this.canStartInZone = false,
-      this.maximumGroupSize = 4,
-      this.showClimbOptions = false,
-      this.climbLevels,
-      this.mainColor = Constants.pastelRed,
-      this.backgroundColor = Constants.pastelWhite,
-      this.startNodeColor = Constants.pastelGreen,
-      this.allianceZoneNodeColor = Constants.pastelYellow,
-      this.regionNodeColor = Constants.pastelBlue,
-      this.lockedColor = Constants.pastelGray,
-      this.textColor = Constants.pastelBrown,});
+  const AutoPathSelector({
+    super.key,
+    required this.imageFilePath,
+    required this.rawImageWidth,
+    required this.rawImageHeight,
+    required this.zones,
+    this.margin,
+    this.debug = false,
+    this.canStartInZone = false,
+    this.maximumGroupSize = 4,
+    this.showClimbOptions = false,
+    this.climbLevels,
+    this.mainColor = Constants.pastelRed,
+    this.backgroundColor = Constants.pastelWhite,
+    this.startNodeColor = Constants.pastelGreen,
+    this.allianceZoneNodeColor = Constants.pastelYellow,
+    this.regionNodeColor = Constants.pastelBlue,
+    this.lockedColor = Constants.pastelGray,
+    this.textColor = Constants.pastelBrown,
+  });
 
   @override
   State<AutoPathSelector> createState() => _AutoPathSelectorState();
@@ -362,9 +239,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       _bottomOffset -
       _margin; // TODO: make in terms of height AND width, to make sure no overflow
 
-  List<Node> _nodeStack = [];
-  Map<Node, Offset> _nodePositions = {};
-  Map<int, Offset> _nodeDragOffsets = {};
+  List<NodeData> _nodeStack = [];
+  List<UserAction> _history = [];
 
   Color get _mainColor => widget.mainColor;
   Color get _backgroundColor => widget.backgroundColor;
@@ -388,99 +264,139 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     _fieldImage = AssetImage(_imageFieldPath);
   }
 
-  void removeNode(Node target) {
-    if (!_nodeStack.contains(target)) return;
+  void setPositionsForGroupedNodes() {
+    for (Zone zone in _zones) {
+      int i = 0;
+      int numNodes = _nodeStack
+          .where((final NodeData node) => node.groupLabel == zone.id)
+          .length;
+      for (NodeData node in _nodeStack
+          .where((final NodeData node) => node.groupLabel == zone.id)) {
+        node.radius =
+            _nodeRadius / (numNodes - 1); // TODO: tweak based on testing
 
-    List<Node> newNodeStack = [];
-    for (final Node node in _nodeStack) {
-      if (node == target) continue;
+        final scaledLeft = zone.left * _scaleFactor;
+        final scaledTop = zone.top * _scaleFactor;
+        final scaledWidth = zone.width * _scaleFactor;
+        final scaledHeight = zone.height * _scaleFactor;
 
-      Node replacementNode = node.copyWithNewValues(
-          newGroupIndex: node.groupLabel != null &&
-                  node.groupLabel == target.groupLabel &&
-                  node.groupIndex > target.groupIndex
-              ? node.groupIndex - 1
-              : node.groupIndex,
-          newGroupTotal:
-              node.groupLabel != null && node.groupLabel == target.groupLabel
-                  ? node.groupTotal - 1
-                  : node.groupTotal,
-          newIndex: node.index > target.index ? node.index - 1 : node.index);
-      newNodeStack.add(replacementNode);
-    }
+        node.position = Offset(
+          scaledLeft + (scaledWidth / 2),
+          scaledTop +
+              (scaledHeight / 2) +
+              (i + 0.5 - numNodes / 2) * 2 * node.radius,
+        );
 
-    _nodeStack = newNodeStack;
-    _recalculateNodeOffsets();
-    _nodeDragOffsets.remove(target.index);
-  }
-
-  List<Widget> _getNodeOffsetDebugOverlay() {
-    double markerWidth = _width / 50;
-    List<Widget> overlays = [];
-    for (Node node in _nodePositions.keys) {
-      overlays.add(Positioned(
-          top: _nodePositions[node]!.dy - markerWidth / 2,
-          left: _nodePositions[node]!.dx - markerWidth / 2,
-          child: Container(
-              width: markerWidth, height: markerWidth, color: Colors.red)));
-    }
-
-    return overlays;
-  }
-
-  Node addNodeFromRegion(
-      String groupLabel, Offset center, int sameIdNodeCount) {
-    List<Node> newNodeStack = [];
-    for (final Node node in _nodeStack) {
-      if (node.groupLabel == groupLabel) {
-        Node replacementNode =
-            node.copyWithNewValues(newGroupTotal: node.groupTotal + 1);
-        newNodeStack.add(replacementNode);
-      } else {
-        newNodeStack.add(node);
+        i++;
       }
     }
+  }
 
-    Node newNode = Node(
-        groupLabel: groupLabel,
-        index: _nodeStack.length + 1,
-        top: center.dy,
-        left: center.dx,
-        radius: _nodeRadius,
-        draggable: false,
-        color: _regionNodeColor,
-        borderWidth: _nodeBorderWidth,
-        borderColor: _backgroundColor,
-        groupIndex: sameIdNodeCount,
-        groupTotal: sameIdNodeCount + 1);
-    newNodeStack.add(newNode);
-    _nodeStack = newNodeStack;
-    _recalculateNodeOffsets();
+  /// note that index is 0-based (adds one in the function itself)
+  VisualNode buildVisualNode(NodeData node, int index) {
+    return VisualNode(
+      radius: node.radius,
+      color: node.color,
+      borderColor: Constants.pastelWhite,
+      borderWidth: _nodeBorderWidth,
+      text: "${index + 1}",
+      textColor: Constants.pastelWhite,
+    );
+  }
 
+  /// Returns a list of widgets that are the (possibly) draggable nodes to be displayed
+  List<Widget> buildNodes() {
+    List<Widget> widgets = List.empty(growable: true);
+
+    for (int i = 0; i < _nodeStack.length; i++) {
+      NodeData node = _nodeStack[i];
+      widgets.add(Positioned(
+          top: node.position!.dy,
+          left: node.position!.dx,
+          child: Semantics(
+            button: true,
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {},
+              child: Draggable(
+                maxSimultaneousDrags: node.draggable ? 1 : 0,
+                feedback:
+                    Opacity(opacity: 0.5, child: buildVisualNode(node, i)),
+                childWhenDragging: ColorFiltered(
+                    colorFilter:
+                        const ColorFilter.mode(Colors.grey, BlendMode.modulate),
+                    child: buildVisualNode(node, i)),
+                child: buildVisualNode(node, i),
+                onDragEnd: (details) {
+                  setState(() {
+                    final RenderBox renderBox =
+                        context.findRenderObject() as RenderBox;
+                    final Offset localPosition =
+                        renderBox.globalToLocal(details.offset);
+
+                    _history.add(UserAction(
+                        actionType: UserActionType.move,
+                        nodeIndice: i,
+                        // I can use bang operator here b/c only non-grouped nodes can be dragged
+                        coordinates: localPosition - node.position!));
+
+                    node.position = localPosition;
+                  });
+                },
+              ),
+            ),
+          )));
+    }
+
+    return widgets;
+  }
+
+  void undo() {
+    UserAction action = _history[_history.length - 1];
+    UserActionType actionType = action.actionType;
+    setState(() {
+      if (actionType == UserActionType.place) {
+        _nodeStack.removeLast();
+      } else if (actionType == UserActionType.move) {
+        // use of bang operator is ok because only *non-grouped* nodes can be moved
+        _nodeStack[action.nodeIndice].position =
+            _nodeStack[action.nodeIndice].position! - action.coordinates;
+      }
+      _history.removeLast();
+    });
+  }
+
+  NodeData addNodeFromRegion(String groupLabel, Offset position) {
+    NodeData newNode = NodeData(
+      groupLabel: groupLabel,
+      radius: _nodeRadius,
+      draggable: false,
+      color: _regionNodeColor,
+    );
+    _nodeStack.add(newNode);
+    _history.add(UserAction(
+        actionType: UserActionType.place,
+        nodeIndice: _nodeStack.length - 1,
+        coordinates: Offset
+            .zero)); // Very hacky, I know, but it literally does not matter
+
+    setState(() {});
     return newNode;
   }
 
-  Node addNodeFromMap(TapUpDetails details) {
-    int index = _nodeStack.length + 1;
-
-    Node newNode = Node(
-        index: index,
-        left: details.localPosition.dx,
-        top: details.localPosition.dy,
+  NodeData addNodeFromMap(TapUpDetails details) {
+    NodeData newNode = NodeData(
+        position: details.localPosition,
         radius: _nodeRadius,
         draggable: true,
-        onDragEnd: (self, details, localEndPosition, dragOffset) {
-          setState(() {
-            _nodeDragOffsets[index] = dragOffset;
-            _recalculateNodeOffsets();
-          });
-        },
-        borderWidth: _nodeBorderWidth,
-        borderColor: _backgroundColor,
         color: _nodeStack.isEmpty ? _startNodeColor : _allianceZoneNodeColor);
     _nodeStack.add(newNode);
-    _recalculateNodeOffsets();
+    _history.add(UserAction(
+        actionType: UserActionType.place,
+        nodeIndice: _nodeStack.length - 1,
+        coordinates: Offset.zero)); // Refer to the comment about hackiness
 
+    setState(() {});
     return newNode;
   }
 
@@ -499,13 +415,13 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         onTap: (groupLabel, center) {
           if (!_canStartInZone && _nodeStack.isEmpty) return;
           int sameIdNodeCount = _nodeStack
-              .where((final Node node) => node.groupLabel == groupLabel)
+              .where((final NodeData node) => node.groupLabel == groupLabel)
               .length;
 
           if (sameIdNodeCount >= _maximumGroupSize) return;
 
           setState(() {
-            addNodeFromRegion(groupLabel, center, sameIdNodeCount);
+            addNodeFromRegion(groupLabel, center);
           });
         },
       ));
@@ -563,18 +479,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     );
   }
 
-  void _recalculateNodeOffsets() {
-    _nodePositions = {};
-    for (final Node node in _nodeStack) {
-      _nodePositions[node] =
-          node.visualCenter(_nodeDragOffsets[node.index] ?? Offset.zero);
-    }
-  }
-
   CustomPaint _getPathPainter() {
     List<Offset> vertices = [];
-    for (final Node node in _nodeStack) {
-      vertices.add(_nodePositions[node]!);
+    for (final NodeData node in _nodeStack) {
+      vertices.add(node.position!);
     }
 
     return CustomPaint(
@@ -586,9 +494,12 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         _width = constraints.maxWidth;
+        setPositionsForGroupedNodes();
+
         return Center(
           child: Container(
             width: _width,
@@ -628,10 +539,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                               child: Stack(children: [
                                 ..._getRegions(),
                                 _getPathPainter(),
-                                ..._nodeStack,
-                                ..._debug
-                                    ? _getNodeOffsetDebugOverlay()
-                                    : [Container()],
+                                ...buildNodes(),
                               ]))),
                     ),
                   ),
@@ -652,7 +560,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                           onPressed: () {
                             setState(() {
                               if (_nodeStack.isNotEmpty) {
-                                removeNode(_nodeStack.last);
+                                undo();
                               }
                             });
                           },
