@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/checbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
 
@@ -262,6 +263,25 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   void initState() {
     super.initState();
     _fieldImage = AssetImage(_imageFieldPath);
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    serializeData();
+  }
+
+  void serializeData() {
+    // each element can either be a string or another list for x-y coords
+    List<dynamic> positions = List.empty(growable: true);
+    for (NodeData node in _nodeStack) {
+      if (node.groupLabel != null) {
+        positions.add(node.groupLabel);
+      } else {
+        positions.add([node.position!.dx, node.position!.dy]);
+      }
+    }
+    DataEntry.exportData["path"] = positions;
   }
 
   void setPositionsForGroupedNodes() {
