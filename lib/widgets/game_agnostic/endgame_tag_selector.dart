@@ -26,6 +26,18 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
   String get _jsonKey => widget.jsonKey;
   List<String> get _possibleTags => widget.possibleTags;
 
+  List<String> selectedTags = List<String>.empty(growable: true);
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    serializeData();
+  }
+
+  void serializeData() {
+    DataEntry.exportData[_jsonKey] = selectedTags;
+  }
+
   void showTagSelector(BuildContext context) {
     showDialog(
         context: context,
@@ -63,10 +75,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
 
   List<Tag> getTagsFromData() {
     List<Tag> tags = List.empty(growable: true);
-    if (DataEntry.exportData.containsKey(_jsonKey) == false) {
-      return tags;
-    }
-    for (String name in DataEntry.exportData[_jsonKey]) {
+    for (String name in selectedTags) {
       tags.add(Tag(color: Constants.pastelGreenSuperDark, name: name));
     }
     return tags;
@@ -75,7 +84,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
   List<SelectableTag> getPossibleTags() {
     List<SelectableTag> tags = List.empty(growable: true);
     for (String name in _possibleTags) {
-      tags.add(SelectableTag(name: name, jsonKey: _jsonKey));
+      tags.add(SelectableTag(name: name, selectedTags: selectedTags,));
     }
     return tags;
   }
@@ -99,7 +108,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
             },
             child: Container(
                 width: double.infinity,
-                height: 200.0, // change this based on how many tags there are
+                height: 150.0, // change this based on how many tags there are
                 constraints: BoxConstraints(
                   minHeight: 100.0,
                 ),
@@ -150,9 +159,9 @@ class Tag extends StatelessWidget {
 
 class SelectableTag extends StatefulWidget {
   final String name;
-  final String jsonKey;
+  final List<String> selectedTags;
 
-  const SelectableTag({super.key, required this.name, required this.jsonKey});
+  const SelectableTag({super.key, required this.name, required this.selectedTags});
 
   @override
   State<StatefulWidget> createState() => SelectableTagState();
@@ -161,14 +170,11 @@ class SelectableTag extends StatefulWidget {
 class SelectableTagState extends State<SelectableTag> {
   Color color = Constants.darkModeDarkGray;
   String get _name => widget.name;
-  String get _jsonKey => widget.jsonKey;
+  List<String> get _selectedTags => widget.selectedTags;
 
   @override
   Widget build(BuildContext context) {
-    if (DataEntry.exportData.containsKey(_jsonKey) == false) {
-      DataEntry.exportData[_jsonKey] = List.empty(growable: true);
-    }
-    if (DataEntry.exportData[_jsonKey].contains(_name)) {
+    if (_selectedTags.contains(_name)) {
       color = Constants.pastelGreenSuperDark;
     } else {
       color = Constants.darkModeDarkGray;
@@ -176,10 +182,10 @@ class SelectableTagState extends State<SelectableTag> {
     return GestureDetector(
         onTap: () {
           setState(() {
-            if (DataEntry.exportData[_jsonKey].contains(_name)) {
-              DataEntry.exportData[_jsonKey].remove(_name);
+            if (_selectedTags.contains(_name)) {
+              _selectedTags.remove(_name);
             } else {
-              DataEntry.exportData[_jsonKey].add(_name);
+              _selectedTags.add(_name);
             }
           });
         },
