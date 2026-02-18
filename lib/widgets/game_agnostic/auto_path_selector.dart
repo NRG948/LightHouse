@@ -47,25 +47,24 @@ class VisualNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: Offset(-radius, -radius),
-      child: Container(
-          width: 2 * radius,
-          height: 2 * radius,
-          decoration: BoxDecoration(
-              color: color,
-              shape: BoxShape.circle,
-              border: borderWidth == 0
-                  ? null
-                  : Border.all(color: borderColor, width: borderWidth)),
-          child: Center(
-              child: DefaultTextStyle(
-                  style: comfortaaBold(
-                      fontSizeToRadiusRatio * (radius - borderWidth),
-                      color: textColor),
-                  child: Text(
-                    text,
-                  )))),
+    return Container(
+      width: 2 * radius,
+      height: 2 * radius,
+      decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+          border: borderWidth == 0
+              ? null
+              : Border.all(color: borderColor, width: borderWidth)),
+      child: Center(
+        child: DefaultTextStyle(
+          style: comfortaaBold(fontSizeToRadiusRatio * (radius - borderWidth),
+              color: textColor),
+          child: Text(
+            text,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -302,7 +301,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
         node.position = Offset(
           scaledLeft + (scaledWidth / 2),
-          scaledTop + (scaledHeight / 2) + (i + 0.5 - numNodes / 2) * 2 * node.radius,
+          scaledTop +
+              (scaledHeight / 2) +
+              (i + 0.5 - numNodes / 2) * 2 * node.radius,
         );
 
         i++;
@@ -322,6 +323,37 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     );
   }
 
+  List<Widget> buildNodeDebugCenters() {
+    double debugMarkerWidth = 10;
+    List<Widget> widgets = [];
+
+    if (!_debug) {
+      return widgets;
+    }
+
+    for (int i = 0; i < _nodeStack.length; i++) {
+      NodeData node = _nodeStack[i];
+      widgets.add(
+        Positioned(
+          top: node.position!.dy - debugMarkerWidth / 2,
+          left: node.position!.dx - debugMarkerWidth / 2,
+          child: IgnorePointer(
+            child: Container(
+              width: debugMarkerWidth,
+              height: debugMarkerWidth,
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return widgets;
+  }
+
   /// Returns a list of widgets that are the (possibly) draggable nodes to be displayed
   List<Widget> buildNodes() {
     List<Widget> widgets = List.empty(growable: true);
@@ -329,38 +361,44 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     for (int i = 0; i < _nodeStack.length; i++) {
       NodeData node = _nodeStack[i];
       widgets.add(Positioned(
-          top: node.position!.dy,
-          left: node.position!.dx,
-          child: Semantics(
-            button: true,
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {},
-              child: Draggable(
-                maxSimultaneousDrags: node.draggable ? 1 : 0,
-                feedback:
-                    Opacity(opacity: 0.5, child: buildVisualNode(node, i)),
-                childWhenDragging: ColorFiltered(
-                    colorFilter:
-                        const ColorFilter.mode(Colors.grey, BlendMode.modulate),
-                    child: buildVisualNode(node, i)),
-                child: buildVisualNode(node, i),
-                onDragEnd: (details) {
-                  setState(() {
-                    final RenderBox renderBox =
-                        context.findRenderObject() as RenderBox;
-                    final Offset localPosition =
-                        renderBox.globalToLocal(details.offset);
-
-                    _history.add(UserAction(
-                        actionType: UserActionType.move,
-                        nodeIndice: i,
-                        // I can use bang operator here b/c only non-grouped nodes can be dragged
-                        coordinates: localPosition - node.position!));
-
-                    node.position = localPosition;
-                  });
-                },
+          top: node.position!.dy - node.radius,
+          left: node.position!.dx - node.radius,
+          child: IgnorePointer(
+            ignoring: !node.draggable,
+            child: Semantics(
+              button: true,
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {},
+                child: Draggable(
+                  maxSimultaneousDrags: node.draggable ? 1 : 0,
+                  feedback:
+                      Opacity(opacity: 0.5, child: buildVisualNode(node, i)),
+                  childWhenDragging: ColorFiltered(
+                      colorFilter:
+                          const ColorFilter.mode(Colors.grey, BlendMode.modulate),
+                      child: buildVisualNode(node, i)),
+                  child: buildVisualNode(node, i),
+                  onDragEnd: (details) {
+                    setState(() {
+                      final RenderBox renderBox =
+                          context.findRenderObject() as RenderBox;
+                      final Offset localPosition =
+                          renderBox.globalToLocal(details.offset);
+            
+                      Offset newPosition =
+                          localPosition + Offset(node.radius, node.radius) / 2;
+            
+                      _history.add(UserAction(
+                          actionType: UserActionType.move,
+                          nodeIndice: i,
+                          // I can use bang operator here b/c only non-grouped nodes can be dragged
+                          coordinates: newPosition - node.position!));
+            
+                      node.position = newPosition;
+                    });
+                  },
+                ),
               ),
             ),
           )));
@@ -558,6 +596,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                                 ..._getRegions(),
                                 _getPathPainter(),
                                 ...buildNodes(),
+                                ...buildNodeDebugCenters(),
                               ]))),
                     ),
                   ),
