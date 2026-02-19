@@ -93,7 +93,6 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-      margin: EdgeInsets.all(15),
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Constants.pastelWhite,
