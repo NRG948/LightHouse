@@ -4,17 +4,20 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 
 class NRGCommentBox extends StatefulWidget {
-  final String title; // Title of the comment box
-  final String jsonKey; // Key to store the comment box data in JSON
-  final double height; // Height of the comment box
-  final double width; // Width of the comment box
+  final String title;
+  final String jsonKey;
+  final double height;
+  final double? width;
+  final double? margin;
 
-  const NRGCommentBox(
-      {super.key,
-      required this.title,
-      required this.jsonKey,
-      required this.height,
-      required this.width});
+  const NRGCommentBox({
+    super.key,
+    required this.title,
+    required this.jsonKey,
+    required this.height,
+    this.margin,
+    this.width,
+  });
 
   @override
   State<NRGCommentBox> createState() => _NRGCommentBoxState();
@@ -22,7 +25,17 @@ class NRGCommentBox extends StatefulWidget {
 
 class _NRGCommentBoxState extends State<NRGCommentBox>
     with AutomaticKeepAliveClientMixin {
-  CommentBoxSharedState state = CommentBoxSharedState();
+  String get _title => widget.title;
+  String get _jsonKey => widget.jsonKey;
+  double get _height => widget.height;
+  double? get _width => widget.width;
+  double get _margin => widget.margin ?? 10;
+
+  static const double _collapsedTitleFontSize = 35.0;
+  static const double _expandedTitleFontSize = 20.0;
+  static const double _minCommentFontSize = 12.0;
+
+  String _storedText = "";
 
   @override
   bool get wantKeepAlive => true;
@@ -30,49 +43,88 @@ class _NRGCommentBoxState extends State<NRGCommentBox>
   @override
   void initState() {
     super.initState();
-    DataEntry.exportData[widget.jsonKey] = "";
-    state.addListener(() => build(context));
+    DataEntry.exportData[_jsonKey] = "";
   }
+
+  bool get _hasText => DataEntry.exportData[_jsonKey]?.isNotEmpty ?? false;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return GestureDetector(
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return CommentBoxDialog(jsonKey: widget.jsonKey, state: state);
-            });
-      },
+      onTap: _openDialog,
       child: Container(
-        height: widget.height,
-        width: widget.width,
+        height: _height,
+        width: _width ?? double.infinity,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(Constants.borderRadius),
-            color: Constants.pastelWhite),
+          borderRadius: BorderRadius.circular(_margin),
+          color: Constants.pastelWhite,
+        ),
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: EdgeInsets.all(_margin),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Constants.borderRadius),
+              borderRadius: BorderRadius.circular(_margin),
               color: Constants.pastelYellow,
             ),
-            child: DataEntry.exportData[widget.jsonKey] == "" ? Center(
-                child: Text(
-              "Comments",
-              style: comfortaaBold(35, color: Colors.black),
-            )) : Column(
-              children: [
-                Text("Comments",style: comfortaaBold(20,color: Colors.black),),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5,right: 5),
-                  child: AutoSizeText(DataEntry.exportData[widget.jsonKey],maxLines: 2,minFontSize: 12,),
-                )
-              ],
+            child: _hasText ? _buildExpanded() : _buildCollapsed(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCollapsed() {
+    return Center(
+      child: Text(
+        _title,
+        style: comfortaaBold(
+          _collapsedTitleFontSize,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExpanded() {
+    return Column(
+      children: [
+        Text(
+          _title,
+          style: comfortaaBold(
+            _expandedTitleFontSize,
+            color: Colors.black,
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: _margin,
+            ),
+            child: SingleChildScrollView(
+              child: AutoSizeText(
+                _storedText,
+                minFontSize: _minCommentFontSize,
+              ),
             ),
           ),
         ),
+      ],
+    );
+  }
+
+  void _openDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => CommentBoxDialog(
+        margin: _margin,
+        jsonKey: _jsonKey,
+        onTextUpdate: (text) {
+          setState(() {
+            _storedText = text;
+          });
+        },
       ),
     );
   }
@@ -80,69 +132,98 @@ class _NRGCommentBoxState extends State<NRGCommentBox>
 
 class CommentBoxDialog extends StatefulWidget {
   final String jsonKey;
-  final CommentBoxSharedState state;
-  const CommentBoxDialog(
-      {super.key, required this.jsonKey, required this.state});
+  final Function(String text) onTextUpdate;
+  final double margin;
+
+  const CommentBoxDialog({
+    super.key,
+    required this.jsonKey,
+    this.onTextUpdate = _noop,
+    required this.margin,
+  });
+
+  static void _noop(String text) {}
 
   @override
   State<CommentBoxDialog> createState() => _CommentBoxDialogState();
 }
 
 class _CommentBoxDialogState extends State<CommentBoxDialog> {
-  late double screenHeight;
-  late double screenWidth;
-  TextEditingController controller = TextEditingController();
+  static const double _dialogWidthFactor = 0.9;
+  static const double _dialogHeightFactor = 0.5;
+  static const double _dialogTitleFontFactor = 0.1;
+  static const double _dialogLabelFontFactor = 0.03;
+  static const double _maxLinesHeightFactor = 0.014;
+
+  late final TextEditingController _controller;
+
+  String get _jsonKey => widget.jsonKey;
+  double get _margin => widget.margin;
+
   @override
   void initState() {
     super.initState();
 
-    controller.text = DataEntry.exportData[widget.jsonKey];
+    _controller = TextEditingController(
+      text: DataEntry.exportData[_jsonKey],
+    );
 
-    controller.addListener(() {
-      widget.state.update();
-      DataEntry.exportData[widget.jsonKey] = controller.text;
+    _controller.addListener(() {
+      final text = _controller.text;
+      widget.onTextUpdate(text);
+      DataEntry.exportData[_jsonKey] = text;
     });
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
+    final dialogWidth = screenSize.width * _dialogWidthFactor;
+    final dialogHeight = screenSize.height * _dialogHeightFactor;
+
     return Dialog(
-      backgroundColor: Constants.pastelWhite,
-      child: Center(
-        child: Container(
-          width: screenWidth * 0.9,
-          height: screenHeight * 0.5,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Constants.borderRadius),
-              color: Constants.pastelWhite),
-          child: Column(
-            children: [
-              Text(
-                "COMMENTS",
-                style: comfortaaBold(screenWidth * 0.1, color: Colors.black),
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.zero,
+      child: Container(
+        width: dialogWidth,
+        height: dialogHeight,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(_margin),
+          color: Constants.pastelWhite,
+        ),
+        child: Column(
+          children: [
+            Text(
+              "COMMENTS",
+              style: comfortaaBold(
+                screenSize.width * _dialogTitleFontFactor,
+                color: Colors.black,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    fillColor: Constants.pastelYellow,
-                    filled: true,
-                    labelStyle: comfortaaBold(screenWidth * 0.03),
+            ),
+            Padding(
+              padding: EdgeInsets.all(_margin),
+              child: TextField(
+                controller: _controller,
+                maxLines:
+                    (screenSize.height * _maxLinesHeightFactor).truncate(),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  fillColor: Constants.pastelYellow,
+                  filled: true,
+                  labelStyle: comfortaaBold(
+                    screenSize.width * _dialogLabelFontFactor,
                   ),
-                  maxLines: (screenHeight * 0.014).truncate(),
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );
