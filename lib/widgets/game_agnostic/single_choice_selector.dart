@@ -35,9 +35,6 @@ class SingleChoiceSelector extends StatefulWidget {
   /// If the selected choice does not reset to no selection when [isLocked] is ```true```.
   final bool retainSelectionOnLock;
 
-  /// If ```true```, the selected value will be set to the initial value when this widget is rebuilt externally.
-  final bool reinitializeOnBuild;
-
   /// The color of the input when [isLocked] is ```true```.
   final Color lockedColor;
 
@@ -59,7 +56,6 @@ class SingleChoiceSelector extends StatefulWidget {
     this.lockedColor = const Color.fromARGB(1, 255, 255, 255),
     this.isLocked = false,
     this.retainSelectionOnLock = true,
-    this.reinitializeOnBuild = false,
   });
 
   static void _noop(String? choice) {}
@@ -81,7 +77,6 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
   Color get _textColor => widget.textColor;
   bool get _isLocked => widget.isLocked;
   bool get _retainSelectionOnLock => widget.retainSelectionOnLock;
-  bool get _reinitializeOnBuild => widget.reinitializeOnBuild;
 
   String? _selectedChoice;
 
@@ -89,12 +84,6 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
   void initState() {
     super.initState();
     _selectedChoice = _initialValue;
-  }
-
-  @override
-  void didUpdateWidget(SingleChoiceSelector oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (_reinitializeOnBuild) _selectedChoice = _initialValue;
   }
 
   Widget getChoiceButtons(String choice) {
