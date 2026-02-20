@@ -50,7 +50,7 @@ class _CycleCounterState extends State<CycleCounter> {
   double get _fontSize => _height / 13;
 
   final List<String> accuracyMetrics = ["1", "2", "3", "4", "5"];
-  final List<String> capcityMetrics = ["Partial", "Most", "Full"];
+  final List<String> capcityMetrics = ["33%", "66%", "100%"];
 
   final List<Cycle> _cycles = [];
 
@@ -323,6 +323,7 @@ class _CycleViewState extends State<CycleView> {
             selectColor: _backgroundColor,
             optionColor: _color,
             lockedColor: _lockedColor,
+            textColor: _textColor,
             onSelect: (choice) {
               setState(() {
                 selectedAccuracy = choice;
@@ -342,6 +343,7 @@ class _CycleViewState extends State<CycleView> {
             selectColor: _backgroundColor,
             optionColor: _color,
             lockedColor: _lockedColor,
+            textColor: _textColor,
             onSelect: (choice) {
               setState(() {
                 selectedCapacity = choice;

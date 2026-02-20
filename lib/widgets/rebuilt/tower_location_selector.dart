@@ -244,6 +244,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                       selectColor: _backgroundColor,
                       optionColor: _isLocked ? _lockedColor : _mainColor,
                       textColor: _textColor,
+                      lockedColor: _lockedColor,
                       isLocked: _isLocked,
                       retainSelectionOnLock: false,
                       onSelect: (String? choice) {
