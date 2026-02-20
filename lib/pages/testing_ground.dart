@@ -42,7 +42,7 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
               width: 380,
               child: CycleCounter(
                 margin: 15,
-                isCompact: true,
+                isCompact: false,
               ))),
     );
   }
