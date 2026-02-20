@@ -104,7 +104,7 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
             spacing: _choiceWidth / 2,
             children: [
               AutoSizeText(choice,
-                  style: comfortaaBold(_height * 0.71, color: _textColor),
+                  style: comfortaaBold(_height * 0.71, color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
                   overflow: TextOverflow.visible,
                   maxLines: 1,
                   minFontSize: 5),

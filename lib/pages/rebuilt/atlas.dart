@@ -172,13 +172,13 @@ class AtlasState extends State<Atlas> {
             spacing: margin,
             children: [
               RebuiltEndgameTagSelector(),
+              TowerLocationSelector(margin: margin),
               NRGCommentBox(
                 title: "Comments",
                 jsonKey: "comments",
                 height: 150,
                 margin: margin,
               ),
-              TowerLocationSelector(margin: margin)
             ],
           ),
         ),
