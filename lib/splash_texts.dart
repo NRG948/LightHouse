@@ -8,6 +8,7 @@ final List<String> splashTexts = [
   "Blue Alliance!",
   "RIP Dodo",
   "RIP Komo",
+  "RIP Ampharos", 
   "No comms?",
   "MARGINS >:(",
   "Electric!",
