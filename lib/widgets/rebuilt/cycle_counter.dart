@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 
@@ -16,6 +17,7 @@ class Cycle {
 
 class CycleCounter extends StatefulWidget {
   final double? margin;
+  final String jsonKey;
   final Color color;
   final Color backgroundColor;
   final Color textColor;
@@ -24,6 +26,7 @@ class CycleCounter extends StatefulWidget {
 
   const CycleCounter({
     super.key,
+    required this.jsonKey,
     this.margin,
     this.color = Constants.pastelRed,
     this.backgroundColor = Constants.pastelWhite,
@@ -48,6 +51,7 @@ class _CycleCounterState extends State<CycleCounter> {
   Color get _lockedColor => widget.lockedColor;
   bool get _isCompact => widget.isCompact;
   double get _fontSize => _height / 13;
+  String get _jsonKey => widget.jsonKey;
 
   final List<String> accuracyMetrics = ["1", "2", "3", "4", "5"];
   final List<String> capcityMetrics = ["33%", "66%", "100%"];
@@ -55,6 +59,31 @@ class _CycleCounterState extends State<CycleCounter> {
   final List<Cycle> _cycles = [];
 
   int currentIndex = -1;
+
+  void serializeData() {
+    List<Map<String, dynamic>> data = List.empty(growable: true);
+    for (Cycle cycle in _cycles) {
+      Map<String, dynamic> cycleData = {};
+      if (cycle.accuracy != null) {
+        cycleData["accuracy"] = cycle.accuracy;
+      } else {
+        cycleData["accuracy"] = "none";
+      }
+      if (cycle.capacity != null) {
+        cycleData["capacity"] = cycle.capacity;
+      } else {
+        cycleData["capacity"] = "none";
+      }
+      data.add(cycleData);
+    }
+    DataEntry.exportData[_jsonKey] = data;
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    serializeData();
+  }
 
   Widget _getBorder({required Widget child}) {
     if (_isCompact) {
@@ -212,6 +241,7 @@ class _CycleCounterState extends State<CycleCounter> {
                                 lockedColor: _lockedColor,
                                 isCompact: _isCompact,
                                 fontSize: _fontSize,
+                                parentSetState: setState
                               )
                             ]
                           : _cycles.map((cycle) {
@@ -228,6 +258,7 @@ class _CycleCounterState extends State<CycleCounter> {
                                 lockedColor: _lockedColor,
                                 isCompact: _isCompact,
                                 fontSize: _fontSize,
+                                parentSetState: setState,
                               );
                             }).toList(),
                     ),
@@ -254,6 +285,9 @@ class CycleView extends StatefulWidget {
   final Color lockedColor;
   final bool isCompact;
   final double fontSize;
+  /// used to update [DataEntry.exportData], as the code to do that
+  /// is in the parent [setState()] function
+  final Function(VoidCallback fn) parentSetState;
 
   const CycleView({
     super.key,
@@ -268,6 +302,7 @@ class CycleView extends StatefulWidget {
     required this.lockedColor,
     required this.isCompact,
     required this.fontSize,
+    required this.parentSetState,
   });
 
   @override
@@ -286,6 +321,7 @@ class _CycleViewState extends State<CycleView> {
   Color get _lockedColor => widget.lockedColor;
   bool get _isCompact => widget.isCompact;
   double get _fontSize => widget.fontSize;
+  Function(VoidCallback fn) get _parentSetState => widget.parentSetState;
 
   String? selectedAccuracy;
   String? selectedCapacity;
@@ -305,6 +341,12 @@ class _CycleViewState extends State<CycleView> {
     super.initState();
     selectedAccuracy = _cycle.accuracy;
     selectedCapacity = _cycle.capacity;
+  }
+
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+    _parentSetState(fn);
   }
 
   @override

@@ -41,6 +41,7 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
           child: SizedBox(
               width: 380,
               child: CycleCounter(
+                jsonKey: "test",
                 margin: 15,
                 isCompact: false,
               ))),

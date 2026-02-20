@@ -49,6 +49,7 @@ class AtlasState extends State<Atlas> {
                     borderRadius: BorderRadius.circular(margin),
                   ),
                   child: CycleCounter(
+                    jsonKey: "autoCycles",
                     isCompact: true,
                   ),
                 ),
@@ -58,6 +59,8 @@ class AtlasState extends State<Atlas> {
         ),
       ),
       // TODO: get more sensible icons
+      // 
+      // oh yeah right I kinda just put whatever was in [CustomIcons] already lol
       "Onshift": DataEntrySubPage(
         icon: CustomIcons.racecar,
         content: Container(
@@ -66,48 +69,55 @@ class AtlasState extends State<Atlas> {
             height: 75,
             margin: margin,
             shifts: ["Transition", "1st Onshift", "2nd Onshift"],
-            childBuilder: (index) => Column(
-              spacing: margin,
-              children: [
-                CycleCounter(),
-                Container(
-                  height: 167,
-                  padding: EdgeInsets.all(margin),
-                  decoration: BoxDecoration(
-                      color: Constants.pastelWhite,
-                      borderRadius: BorderRadius.circular(margin)),
-                  child: Column(
-                    spacing: margin,
-                    children: [
-                      Expanded(
-                        child: CustomCheckbox(
-                          title: "Feeding",
-                          selectColor: Constants.pastelWhite,
-                          optionColor: Constants.pastelYellow,
-                          textColor: Constants.pastelBrown,
+            childBuilder: (index) {
+              final List<String> onshiftCycleKeys = [
+                'transitionOnshiftCycles',
+                'firstOnshiftCycles',
+                'secondOnshiftCycles',
+              ];
+              return Column(
+                spacing: margin,
+                children: [
+                  CycleCounter(jsonKey: onshiftCycleKeys[index]),
+                  Container(
+                    height: 167,
+                    padding: EdgeInsets.all(margin),
+                    decoration: BoxDecoration(
+                        color: Constants.pastelWhite,
+                        borderRadius: BorderRadius.circular(margin)),
+                    child: Column(
+                      spacing: margin,
+                      children: [
+                        Expanded(
+                          child: CustomCheckbox(
+                            title: "Feeding",
+                            selectColor: Constants.pastelWhite,
+                            optionColor: Constants.pastelYellow,
+                            textColor: Constants.pastelBrown,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: CustomCheckbox(
-                          title: "Disabled",
-                          selectColor: Constants.pastelWhite,
-                          optionColor: Constants.pastelRed,
-                          textColor: Constants.pastelBrown,
+                        Expanded(
+                          child: CustomCheckbox(
+                            title: "Disabled",
+                            selectColor: Constants.pastelWhite,
+                            optionColor: Constants.pastelRed,
+                            textColor: Constants.pastelBrown,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: CustomCheckbox(
-                          title: "Defending",
-                          selectColor: Constants.pastelWhite,
-                          optionColor: Constants.pastelYellow,
-                          textColor: Constants.pastelBrown,
+                        Expanded(
+                          child: CustomCheckbox(
+                            title: "Defending",
+                            selectColor: Constants.pastelWhite,
+                            optionColor: Constants.pastelYellow,
+                            textColor: Constants.pastelBrown,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              );
+            },
           ),
         ),
       ),
