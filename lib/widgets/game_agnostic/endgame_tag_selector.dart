@@ -31,10 +31,10 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
-    serializeData();
+    _serializeData();
   }
 
-  void serializeData() {
+  void _serializeData() {
     DataEntry.exportData[_jsonKey] = selectedTags;
   }
 

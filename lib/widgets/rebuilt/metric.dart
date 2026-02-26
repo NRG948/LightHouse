@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 
@@ -14,6 +15,8 @@ class Metric extends StatefulWidget {
   final Color textColor;
   final Color lockedColor;
 
+  final String? jsonKey;
+
   const Metric({
     super.key,
     required this.checkboxTitle,
@@ -24,6 +27,7 @@ class Metric extends StatefulWidget {
     this.selectColor = Constants.pastelWhite,
     this.textColor = Constants.pastelBrown,
     this.lockedColor = Constants.pastelGray,
+    this.jsonKey,
   });
 
   @override
@@ -41,7 +45,21 @@ class _MetricState extends State<Metric> {
   Color get _textColor => widget.textColor;
   Color get _lockedColor => widget.lockedColor;
 
-  bool _isLocked = true;
+  String? get _jsonKey => widget.jsonKey;
+
+  bool _isChecked = false;
+  String? _selection;
+
+  void _serializeData() {
+    if (_jsonKey == null) return;
+
+    Map<String, dynamic> data = {
+      "isChecked": _isChecked,
+      "selection": _selection,
+    };
+
+    DataEntry.exportData[_jsonKey!] = data;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +81,8 @@ class _MetricState extends State<Metric> {
               textColor: _textColor,
               onToggle: (value) {
                 setState(() {
-                  _isLocked = !value;
+                  _isChecked = value;
+                  _serializeData();
                 });
               },
             ),
@@ -77,8 +96,12 @@ class _MetricState extends State<Metric> {
               optionColor: _optionColor,
               textColor: _textColor,
               lockedColor: _lockedColor,
-              isLocked: _isLocked,
+              isLocked: !_isChecked,
               retainSelectionOnLock: false,
+              onSelect: (choice) {
+                _selection = choice;
+                _serializeData();
+              },
             ),
           ),
         ],

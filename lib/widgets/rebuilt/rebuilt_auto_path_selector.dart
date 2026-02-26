@@ -30,6 +30,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       margin: margin,
       zones: getZones(),
       showClimbOptions: true,
+      jsonKey: "autoPath",
     );
   }
 }

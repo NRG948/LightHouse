@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
 
 class CustomCheckbox extends StatefulWidget {
   /// The text displayed to the right of the checkbox.
@@ -30,17 +31,22 @@ class CustomCheckbox extends StatefulWidget {
   /// If the checkbox stops accepting inputs.
   final bool isLocked;
 
+  /// The key which stores the value of this widget in [DataEntry]
+  final String? jsonKey;
+
   /// Creates a checkbox that registers clicks on the checkbox and the title text.
-  const CustomCheckbox(
-      {super.key,
-      this.title = "",
-      this.onToggle = _noop,
-      this.initialValue = false,
-      this.selectColor = Colors.black,
-      this.textColor = Colors.black,
-      this.optionColor = Colors.white,
-      this.lockedColor = Colors.grey,
-      this.isLocked = false,});
+  const CustomCheckbox({
+    super.key,
+    this.title = "",
+    this.onToggle = _noop,
+    this.initialValue = false,
+    this.selectColor = Colors.black,
+    this.textColor = Colors.black,
+    this.optionColor = Colors.white,
+    this.lockedColor = Colors.grey,
+    this.isLocked = false,
+    this.jsonKey,
+  });
 
   static void _noop(bool value) {}
 
@@ -61,13 +67,23 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
   Color get _textColor => widget.textColor;
   Color get _lockedColor => widget.lockedColor;
 
+  String? get _jsonKey => widget.jsonKey;
+
   bool get _isLocked => widget.isLocked;
   bool currentValue = false;
+
 
   @override
   void initState() {
     super.initState();
     currentValue = _initialValue;
+    _serializeData();
+  }
+
+  void _serializeData() {
+    if (_jsonKey != null) {
+      DataEntry.exportData[_jsonKey!] = currentValue;
+    }
   }
 
   @override
@@ -84,6 +100,7 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
                 currentValue = !currentValue;
                 HapticFeedback.mediumImpact();
               });
+              _serializeData();
               _onToggle(currentValue);
             },
             child: Container(
@@ -105,8 +122,9 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
                         heightFactor: 0.5,
                         child: Container(
                           decoration: BoxDecoration(
-                            color:
-                                currentValue ? _selectColor : Colors.transparent,
+                            color: currentValue
+                                ? _selectColor
+                                : Colors.transparent,
                             borderRadius: BorderRadius.circular(_height * 0.12),
                           ),
                         )),
@@ -115,7 +133,10 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
                     width: _width - _height,
                     child: AutoSizeText(
                       _title,
-                      style: comfortaaBold(_height * 0.7, color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
+                      style: comfortaaBold(_height * 0.7,
+                          color: _isLocked
+                              ? Colors.black.withAlpha(100)
+                              : _textColor),
                       maxLines: 1,
                       minFontSize: 9,
                     ),

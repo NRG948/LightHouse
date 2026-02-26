@@ -168,6 +168,8 @@ class AutoPathSelector extends StatefulWidget {
   final double rawImageHeight;
   final int maximumGroupSize;
 
+  final String? jsonKey;
+
   final double? margin;
 
   final List<Zone> zones;
@@ -192,6 +194,8 @@ class AutoPathSelector extends StatefulWidget {
     required this.rawImageWidth,
     required this.rawImageHeight,
     required this.zones,
+    exportLocation,
+    this.jsonKey,
     this.margin,
     this.debug = false,
     this.canStartInZone = false,
@@ -219,6 +223,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   String get _imageFieldPath => widget.imageFilePath;
   double get _rawImageWidth => widget.rawImageWidth;
   double get _rawImageHeight => widget.rawImageHeight;
+
+  String? get _jsonKey => widget.jsonKey;
 
   late double _width;
   double get _height =>
@@ -255,6 +261,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   bool get _showClimbOptions => widget.showClimbOptions;
   List<String>? get _climbLevels => widget.climbLevels;
   bool _attemptedClimb = false;
+  bool? _climbSuccessful;
+  String? _climbLevel;
 
   List<Zone> get _zones => widget.zones;
 
@@ -262,15 +270,20 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   void initState() {
     super.initState();
     _fieldImage = AssetImage(_imageFieldPath);
+    if (_climbLevels == null) _climbSuccessful = false;
   }
 
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
-    serializeData();
+    _serializeData();
   }
 
-  void serializeData() {
+  void _serializeData() {
+    if (_jsonKey == null) return;
+
+    Map<String, dynamic> data ={};
+
     // each element can either be a string or another list for x-y coords
     List<dynamic> positions = List.empty(growable: true);
     for (NodeData node in _nodeStack) {
@@ -280,7 +293,13 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         positions.add([node.position!.dx, node.position!.dy]);
       }
     }
-    DataEntry.exportData["path"] = positions;
+
+    data["path"] = positions;
+    data["attemptedClimb"] = _attemptedClimb;
+    data["climbSuccessful"] = _climbSuccessful;
+    data["climbLevel"] = _climbLevel;
+
+    DataEntry.exportData[_jsonKey!] = data;
   }
 
   void setPositionsForGroupedNodes() {
@@ -375,8 +394,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                   feedback:
                       Opacity(opacity: 0.5, child: buildVisualNode(node, i)),
                   childWhenDragging: ColorFiltered(
-                      colorFilter:
-                          const ColorFilter.mode(Colors.grey, BlendMode.modulate),
+                      colorFilter: const ColorFilter.mode(
+                          Colors.grey, BlendMode.modulate),
                       child: buildVisualNode(node, i)),
                   child: buildVisualNode(node, i),
                   onDragEnd: (details) {
@@ -385,16 +404,16 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                           context.findRenderObject() as RenderBox;
                       final Offset localPosition =
                           renderBox.globalToLocal(details.offset);
-            
+
                       Offset newPosition =
                           localPosition + Offset(node.radius, node.radius) / 2;
-            
+
                       _history.add(UserAction(
                           actionType: UserActionType.move,
                           nodeIndice: i,
                           // I can use bang operator here b/c only non-grouped nodes can be dragged
                           coordinates: newPosition - node.position!));
-            
+
                       node.position = newPosition;
                     });
                   },
@@ -500,6 +519,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         textColor: _textColor,
         title: "Climb Successful",
         isLocked: !_attemptedClimb,
+        onToggle: (value) {
+          _climbSuccessful = value;
+          _serializeData();
+        },
       );
     } else {
       climbOutcome = CustomDropdown(
@@ -508,6 +531,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         lockedColor: _lockedColor,
         options: _climbLevels!,
         isLocked: !_attemptedClimb,
+        onChanged: (value) {
+          _climbLevel = value;
+          _serializeData();
+        },
       );
     }
 
@@ -526,6 +553,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
             onToggle: (value) {
               setState(() {
                 _attemptedClimb = value;
+                _serializeData();
               });
             },
           )),

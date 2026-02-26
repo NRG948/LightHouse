@@ -60,7 +60,7 @@ class _CycleCounterState extends State<CycleCounter> {
 
   int currentIndex = -1;
 
-  void serializeData() {
+  void _serializeData() {
     List<Map<String, dynamic>> data = List.empty(growable: true);
     for (Cycle cycle in _cycles) {
       Map<String, dynamic> cycleData = {};
@@ -82,7 +82,7 @@ class _CycleCounterState extends State<CycleCounter> {
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
-    serializeData();
+    _serializeData();
   }
 
   Widget _getBorder({required Widget child}) {

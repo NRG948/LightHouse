@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/textbox.dart';
@@ -53,14 +54,17 @@ class TowerLocationSelector extends StatefulWidget {
   final Color textColor;
   final Color lockedColor;
   final double? margin;
+  final String? jsonKey;
 
-  const TowerLocationSelector(
-      {super.key,
-      this.backgroundColor = Constants.pastelWhite,
-      this.mainColor = Constants.pastelRed,
-      this.textColor = Constants.pastelBrown,
-      this.lockedColor = Constants.pastelGray,
-      this.margin});
+  const TowerLocationSelector({
+    super.key,
+    this.backgroundColor = Constants.pastelWhite,
+    this.mainColor = Constants.pastelRed,
+    this.textColor = Constants.pastelBrown,
+    this.lockedColor = Constants.pastelGray,
+    this.margin,
+    this.jsonKey,
+  });
 
   @override
   State<TowerLocationSelector> createState() => _TowerLocationSelectorState();
@@ -83,6 +87,8 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
 
   double get _imageScaleFactor => (_width - 6 * _margin) / _rawImageWidth;
 
+  String? get _jsonKey => widget.jsonKey;
+
   late final AssetImage _towerImage;
   String get _towerImagePath => "assets/images/tower.png";
 
@@ -101,6 +107,19 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
     _towerImage = AssetImage(_towerImagePath);
   }
 
+  void _serializeData() {
+    if (_jsonKey == null) return;
+
+    Map<String, dynamic> data = {
+      "attempted": !_isLocked,
+      "startTime": _startTime,
+      "region": _selectedId,
+      "level": _climbLevel.name,
+    };
+
+    DataEntry.exportData[_jsonKey!] = data;
+  }
+
   Expanded _getSelectRegion({required int flex, required String id}) {
     return Expanded(
       flex: flex,
@@ -113,6 +132,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
           child: GestureDetector(onTapUp: (details) {
             setState(() {
               _selectedId = _selectedId == id ? "" : id;
+              _serializeData();
             });
           }),
         ),
@@ -152,6 +172,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                             setState(() {
                               _isLocked = !value;
                               if (_isLocked) _selectedId = "";
+                              _serializeData();
                             });
                           },
                         ),
@@ -165,6 +186,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                             isLocked: _isLocked,
                             onChanged: (String text) {
                               _startTime = text;
+                              _serializeData();
                             }),
                       ),
                     ],
@@ -250,6 +272,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                       onSelect: (String? choice) {
                         _climbLevel =
                             ClimbLevelExtension.getLevelFromName(choice);
+                        _serializeData();
                       },
                     ),
                   ),

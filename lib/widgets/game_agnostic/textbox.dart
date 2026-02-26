@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/filemgr.dart';
 
 class InputTextBox extends StatefulWidget {
   /// The maximum number of lines that can be input. Set to null for unbounded.
@@ -18,7 +20,7 @@ class InputTextBox extends StatefulWidget {
   final bool obscure;
 
   /// Font of the text written.
-  /// 
+  ///
   /// Defaults to ```0.55``` of the height, divided by [maxLines] if it isn't null.
   final double? fontSize;
 
@@ -45,6 +47,12 @@ class InputTextBox extends StatefulWidget {
   /// Called when the user changes the input field.
   final void Function(String text) onChanged;
 
+  /// The key which stores the value of this widget in [DataEntry]
+  final String? jsonKey;
+
+  /// The key from which the autofill value is taken from [configData]
+  final String? autofillKey;
+
   /// Creates a text input field.
   const InputTextBox({
     super.key,
@@ -60,6 +68,8 @@ class InputTextBox extends StatefulWidget {
     this.lockedColor = Constants.pastelGray,
     this.hintText = "",
     this.onChanged = _noop,
+    this.jsonKey,
+    this.autofillKey,
   });
 
   static void _noop(String text) {}
@@ -68,7 +78,10 @@ class InputTextBox extends StatefulWidget {
   State<InputTextBox> createState() => _InputTextBoxState();
 }
 
-class _InputTextBoxState extends State<InputTextBox> {
+class _InputTextBoxState extends State<InputTextBox>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   late double _width;
   late double _height;
   int? get _maxLines => widget.maxLines;
@@ -82,7 +95,25 @@ class _InputTextBoxState extends State<InputTextBox> {
   Color get _lockedColor => widget.lockedColor;
   Color get _hintColor => widget.hintColor;
   String get _hintText => widget.hintText;
+  String? get _jsonKey => widget.jsonKey;
+  String? get _autofillKey => widget.autofillKey;
+  String _value = "";
   void Function(String text) get _onChanged => widget.onChanged;
+
+  @override
+  void initState() {
+    super.initState();
+    if (_autofillKey != null && configData.containsKey(_autofillKey)) {
+      _value = configData[_autofillKey!]!;
+      _serializeData();
+    }
+  }
+
+  void _serializeData() {
+    if (_jsonKey != null) {
+      DataEntry.exportData[_jsonKey!] = _value;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,16 +145,26 @@ class _InputTextBoxState extends State<InputTextBox> {
                 hintStyle: comfortaaBold(_fontSize,
                     color:
                         _isLocked ? Colors.black.withAlpha(100) : _hintColor),
-                contentPadding: EdgeInsets.only(left: _height * 0.2, top: _height * 0.1, bottom: _height * 0.1, right: _height * 0.1)),
+                contentPadding: EdgeInsets.only(
+                    left: _height * 0.2,
+                    top: _height * 0.1,
+                    bottom: _height * 0.1,
+                    right: _height * 0.1)),
             scrollController: ScrollController(),
             maxLength: _maxLength,
             maxLines: _maxLines,
+            initialValue:
+                _autofillKey == null ? null : configData[_autofillKey],
             inputFormatters:
                 _isNumeric ? [FilteringTextInputFormatter.digitsOnly] : [],
             obscureText: _obscure,
             cursorColor: _isLocked ? Colors.black.withAlpha(100) : _textColor,
             keyboardType: _isNumeric ? TextInputType.number : null,
-            onChanged: _onChanged,
+            onChanged: (value) {
+              _value = value;
+              _serializeData();
+              _onChanged(value);
+            },
             onTapOutside: (event) {
               FocusScope.of(context).unfocus();
             },
