@@ -10,9 +10,10 @@ import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 class Cycle {
   String? accuracy;
   String? capacity;
+  int? duration;
   int index;
 
-  Cycle({this.accuracy, this.capacity, required this.index});
+  Cycle({this.accuracy, this.capacity, this.duration, required this.index});
 }
 
 class CycleCounter extends StatefulWidget {
@@ -57,23 +58,20 @@ class _CycleCounterState extends State<CycleCounter> {
   final List<String> capcityMetrics = ["33%", "66%", "100%"];
 
   final List<Cycle> _cycles = [];
+  final Stopwatch stopwatch = Stopwatch();
 
-  int currentIndex = -1;
+  int _currentIndex = -1;
+  bool _isTimerActive = false;
 
   void _serializeData() {
     List<Map<String, dynamic>> data = List.empty(growable: true);
     for (Cycle cycle in _cycles) {
-      Map<String, dynamic> cycleData = {};
-      if (cycle.accuracy != null) {
-        cycleData["accuracy"] = cycle.accuracy;
-      } else {
-        cycleData["accuracy"] = "none";
-      }
-      if (cycle.capacity != null) {
-        cycleData["capacity"] = cycle.capacity;
-      } else {
-        cycleData["capacity"] = "none";
-      }
+      Map<String, dynamic> cycleData = {
+        "accuacy": cycle.accuracy ?? "none",
+        "capacity": cycle.capacity ?? "none",
+        "duration": cycle.duration ?? 0,
+      };
+
       data.add(cycleData);
     }
     DataEntry.exportData[_jsonKey] = data;
@@ -137,20 +135,22 @@ class _CycleCounterState extends State<CycleCounter> {
                             width: _buttonSize,
                             height: _buttonSize,
                             decoration: BoxDecoration(
-                              color: _cycles.isEmpty ? _lockedColor : _color,
+                              color: _cycles.isEmpty || _isTimerActive
+                                  ? _lockedColor
+                                  : _color,
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
                               onPressed: () {
-                                if (_cycles.isEmpty) return;
+                                if (_cycles.isEmpty || _isTimerActive) return;
 
                                 setState(() {
-                                  _cycles.removeAt(currentIndex);
+                                  _cycles.removeAt(_currentIndex);
 
                                   if (_cycles.isEmpty) {
-                                    currentIndex = -1;
-                                  } else if (currentIndex >= _cycles.length) {
-                                    currentIndex = _cycles.length - 1;
+                                    _currentIndex = -1;
+                                  } else if (_currentIndex >= _cycles.length) {
+                                    _currentIndex = _cycles.length - 1;
                                   }
                                 });
                               },
@@ -168,18 +168,18 @@ class _CycleCounterState extends State<CycleCounter> {
                           padding:
                               EdgeInsets.symmetric(vertical: _buttonSize / 10),
                           child: CustomDropdown(
-                            key: ValueKey("${_cycles.length}-$currentIndex"),
+                            key: ValueKey("${_cycles.length}-$_currentIndex"),
                             options: List.generate(
                               _cycles.length,
                               (i) => i.toString(),
                             ),
-                            isLocked: _cycles.isEmpty,
+                            isLocked: _cycles.isEmpty || _isTimerActive,
                             initialValue: _cycles.isEmpty
                                 ? null
-                                : currentIndex.toString(),
+                                : _currentIndex.toString(),
                             onChanged: (value) {
                               setState(() {
-                                currentIndex = int.parse(value ?? "0");
+                                _currentIndex = int.parse(value ?? "0");
                               });
                             },
                           ),
@@ -194,26 +194,42 @@ class _CycleCounterState extends State<CycleCounter> {
                             decoration: BoxDecoration(
                               color: _color,
                               shape: BoxShape.circle,
+                              border: _isTimerActive
+                                  ? Border.all(
+                                      width: _buttonSize * 0.05,
+                                      color: Constants.pastelGreen)
+                                  : null,
                             ),
                             child: IconButton(
                               onPressed: () {
                                 setState(() {
-                                  final newIndex = _cycles.length;
+                                  if (_isTimerActive) {
+                                    stopwatch.stop();
+                                    _cycles.last.duration =
+                                        stopwatch.elapsedMilliseconds;
+                                    stopwatch.reset();
+                                  } else {
+                                    final newIndex = _cycles.length;
 
-                                  _cycles.add(
-                                    Cycle(
-                                      index: newIndex,
-                                      capacity: capcityMetrics.last,
-                                    ),
-                                  );
+                                    _cycles.add(
+                                      Cycle(
+                                        index: newIndex,
+                                        capacity: capcityMetrics.last,
+                                      ),
+                                    );
 
-                                  currentIndex = newIndex;
+                                    _currentIndex = newIndex;
+                                    stopwatch.start();
+                                  }
+                                  _isTimerActive = !_isTimerActive;
                                 });
                               },
                               padding: EdgeInsets.zero,
                               iconSize: _buttonSize * 0.45,
                               color: _backgroundColor,
-                              icon: const Icon(Icons.add_rounded),
+                              icon: _isTimerActive
+                                  ? const Icon(Icons.stop_rounded)
+                                  : const Icon(Icons.add_rounded),
                             ),
                           ),
                         ),
@@ -225,24 +241,23 @@ class _CycleCounterState extends State<CycleCounter> {
                   flex: _isCompact ? 2 : 3,
                   child: _getBorder(
                     child: IndexedStack(
-                      index: _cycles.isEmpty ? 0 : currentIndex,
+                      index: _cycles.isEmpty ? 0 : _currentIndex,
                       children: _cycles.isEmpty
                           ? [
                               CycleView(
-                                key: const ValueKey("locked"),
-                                cycle: Cycle(index: -1),
-                                isLocked: true,
-                                accuracyMetrics: accuracyMetrics,
-                                capacityMetrics: capcityMetrics,
-                                margin: _margin,
-                                color: _color,
-                                backgroundColor: _backgroundColor,
-                                textColor: _textColor,
-                                lockedColor: _lockedColor,
-                                isCompact: _isCompact,
-                                fontSize: _fontSize,
-                                parentSetState: setState
-                              )
+                                  key: const ValueKey("locked"),
+                                  cycle: Cycle(index: -1),
+                                  isLocked: true,
+                                  accuracyMetrics: accuracyMetrics,
+                                  capacityMetrics: capcityMetrics,
+                                  margin: _margin,
+                                  color: _color,
+                                  backgroundColor: _backgroundColor,
+                                  textColor: _textColor,
+                                  lockedColor: _lockedColor,
+                                  isCompact: _isCompact,
+                                  fontSize: _fontSize,
+                                  parentSetState: setState)
                             ]
                           : _cycles.map((cycle) {
                               return CycleView(
@@ -285,6 +300,7 @@ class CycleView extends StatefulWidget {
   final Color lockedColor;
   final bool isCompact;
   final double fontSize;
+
   /// used to update [DataEntry.exportData], as the code to do that
   /// is in the parent [setState()] function
   final Function(VoidCallback fn) parentSetState;
