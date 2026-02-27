@@ -222,13 +222,13 @@ class AtlasState extends State<Atlas> {
               NRGRating(
                   title: "Data Quality",
                   jsonKey: "dataQuality",
-                  height: 100,
+                  height: 90,
                   width: 400,
                   clearable: false),
               NRGCommentBox(
                 title: "Comments",
                 jsonKey: "comments",
-                height: 150,
+                height: 125,
                 margin: margin,
               ),
             ],

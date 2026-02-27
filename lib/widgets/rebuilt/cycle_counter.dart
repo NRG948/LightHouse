@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
@@ -143,7 +144,8 @@ class _CycleCounterState extends State<CycleCounter> {
                             child: IconButton(
                               onPressed: () {
                                 if (_cycles.isEmpty || _isTimerActive) return;
-
+                                HapticFeedback.mediumImpact();
+                                
                                 setState(() {
                                   _cycles.removeAt(_currentIndex);
 
@@ -203,6 +205,7 @@ class _CycleCounterState extends State<CycleCounter> {
                             child: IconButton(
                               onPressed: () {
                                 setState(() {
+                                  HapticFeedback.mediumImpact();
                                   if (_isTimerActive) {
                                     stopwatch.stop();
                                     _cycles.last.duration =

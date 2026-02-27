@@ -82,6 +82,7 @@ class _InputTextBoxState extends State<InputTextBox>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  // ignore: unused_field
   late double _width;
   late double _height;
   int? get _maxLines => widget.maxLines;
@@ -117,6 +118,7 @@ class _InputTextBoxState extends State<InputTextBox>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return LayoutBuilder(
       builder: (context, constraints) {
         _width = constraints.maxWidth;

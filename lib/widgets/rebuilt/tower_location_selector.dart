@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -131,6 +132,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
           absorbing: _isLocked,
           child: GestureDetector(onTapUp: (details) {
             setState(() {
+              HapticFeedback.mediumImpact();
               _selectedId = _selectedId == id ? "" : id;
               _serializeData();
             });

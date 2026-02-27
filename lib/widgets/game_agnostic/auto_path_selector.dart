@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -228,9 +229,11 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   late double _width;
   double get _height =>
-      _width * _rawImageHeight / _rawImageWidth + _bottomOffset;
+      _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth + _bottomOffset;
 
-  double get _imageWidth => _width - 2 * _margin;
+  final double _imageScaingFactor = 0.75;
+
+  double get _imageWidth => _imageScaingFactor * _width - 2 * _margin;
   double get _imageHeight => _imageWidth * _rawImageHeight / _rawImageWidth;
   double get _scaleFactor => _imageWidth / _rawImageWidth;
 
@@ -400,6 +403,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                   child: buildVisualNode(node, i),
                   onDragEnd: (details) {
                     setState(() {
+                      HapticFeedback.mediumImpact();
                       final RenderBox renderBox =
                           context.findRenderObject() as RenderBox;
                       final Offset localPosition =
@@ -430,6 +434,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     UserAction action = _history[_history.length - 1];
     UserActionType actionType = action.actionType;
     setState(() {
+      HapticFeedback.mediumImpact();
       if (actionType == UserActionType.place) {
         _nodeStack.removeLast();
       } else if (actionType == UserActionType.move) {
@@ -489,6 +494,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
             : Color.fromARGB(1, 255, 255, 255),
         onTap: (groupLabel, center) {
           if (!_canStartInZone && _nodeStack.isEmpty) return;
+          HapticFeedback.mediumImpact();
           int sameIdNodeCount = _nodeStack
               .where((final NodeData node) => node.groupLabel == groupLabel)
               .length;
@@ -615,6 +621,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                           onHorizontalDragStart: (details) {},
                           onTapUp: (TapUpDetails details) {
                             setState(() {
+                              HapticFeedback.mediumImpact();
                               addNodeFromMap(details);
                             });
                           },

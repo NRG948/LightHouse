@@ -107,7 +107,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
             },
             child: Container(
                 width: double.infinity,
-                height: 150.0, // change this based on how many tags there are
+                height: 125.0, // change this based on how many tags there are
                 constraints: BoxConstraints(
                   minHeight: 100.0,
                 ),
@@ -180,6 +180,7 @@ class SelectableTagState extends State<SelectableTag> {
     }
     return GestureDetector(
         onTap: () {
+          HapticFeedback.mediumImpact();
           setState(() {
             if (_selectedTags.contains(_name)) {
               _selectedTags.remove(_name);

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 
 class ShiftContainer extends StatefulWidget {
@@ -64,6 +65,7 @@ class _ShiftContainerState extends State<ShiftContainer>
           setState(() {
             currentIndex = index;
           });
+          HapticFeedback.mediumImpact();
         },
       ),
     );
@@ -71,6 +73,7 @@ class _ShiftContainerState extends State<ShiftContainer>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       spacing: _margin,
       children: [
