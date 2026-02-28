@@ -68,7 +68,7 @@ class _CycleCounterState extends State<CycleCounter> {
     List<Map<String, dynamic>> data = List.empty(growable: true);
     for (Cycle cycle in _cycles) {
       Map<String, dynamic> cycleData = {
-        "accuacy": cycle.accuracy ?? "none",
+        "accuracy": cycle.accuracy ?? "none",
         "capacity": cycle.capacity ?? "none",
         "duration": cycle.duration ?? 0,
       };
