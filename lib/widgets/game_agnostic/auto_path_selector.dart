@@ -240,7 +240,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _margin => widget.margin ?? _width / 25;
   double get _bottomOffset => _width * 0.25;
 
-  double get _nodeRadius => _width / 18;
+  double get _nodeRadius => _imageWidth/ 18;
   double get _nodeBorderWidth => _width / 100;
   int get _maximumGroupSize => widget.maximumGroupSize;
 
@@ -407,7 +407,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                       final RenderBox renderBox =
                           context.findRenderObject() as RenderBox;
                       final Offset localPosition =
-                          renderBox.globalToLocal(details.offset);
+                          renderBox.globalToLocal(details.offset) - Offset(0.5 * (1 - _imageScaingFactor) * _width, 0);
 
                       Offset newPosition =
                           localPosition + Offset(node.radius, node.radius) / 2;
