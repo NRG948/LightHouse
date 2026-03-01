@@ -6,9 +6,8 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 
 class TeamInfo extends StatefulWidget {
-  final double width;
 
-  const TeamInfo({super.key, this.width = 400});
+  const TeamInfo({super.key});
 
   @override
   State<TeamInfo> createState() => _TeamInfoState();
@@ -17,7 +16,6 @@ class TeamInfo extends StatefulWidget {
 class _TeamInfoState extends State<TeamInfo>
     with AutomaticKeepAliveClientMixin {
   TextEditingController teamNumberController = TextEditingController();
-  static late double scaleFactor;
   String? teamName;
 
   @override
@@ -26,7 +24,6 @@ class _TeamInfoState extends State<TeamInfo>
   @override
   void initState() {
     super.initState();
-    scaleFactor = widget.width / 400;
     teamNumberController.addListener(() {
       setState(() {
         DataEntry.exportData["teamNumber"] =
@@ -40,12 +37,13 @@ class _TeamInfoState extends State<TeamInfo>
   Widget build(BuildContext context) {
     super.build(context);
     return Container(
-        width: 360 * scaleFactor,
-        height: 200 * scaleFactor,
+        padding: EdgeInsets.all(5),
+        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: Constants.pastelWhite,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
