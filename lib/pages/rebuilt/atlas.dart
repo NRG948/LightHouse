@@ -33,29 +33,29 @@ class AtlasState extends State<Atlas> {
       "Setup": DataEntrySubPage(
           icon: CustomIcons.wrench,
           content: Container(
-            padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(15),
               child: Column(
                 spacing: margin,
-            children: [
-              Container(
-                height: 70,
-                padding: EdgeInsets.all(margin),
-                decoration: BoxDecoration(
-                  color: Constants.pastelWhite,
-                  borderRadius: BorderRadius.circular(margin),
-                ),
-                child: InputTextBox(
-                  maxLines: 1,
-                  hintText: "Scouter name",
-                  jsonKey: "scouterName",
-                  autofillKey: "scouterName",
-                ),
-              ),
-              MatchInfo(
-                margin: margin,
-              )
-            ],
-          ))),
+                children: [
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.all(margin),
+                    decoration: BoxDecoration(
+                      color: Constants.pastelWhite,
+                      borderRadius: BorderRadius.circular(margin),
+                    ),
+                    child: InputTextBox(
+                      maxLines: 1,
+                      hintText: "Scouter name",
+                      jsonKey: "scouterName",
+                      autofillKey: "scouterName",
+                    ),
+                  ),
+                  MatchInfo(
+                    margin: margin,
+                  )
+                ],
+              ))),
       "Auto": DataEntrySubPage(
         icon: CustomIcons.autonomous,
         content: Container(
@@ -65,7 +65,6 @@ class AtlasState extends State<Atlas> {
             children: [
               RebuiltAutoPathSelector(
                 margin: margin,
-                debug: true,
               ),
               Container(
                 height: 200,
