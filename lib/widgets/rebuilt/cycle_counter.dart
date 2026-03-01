@@ -173,15 +173,15 @@ class _CycleCounterState extends State<CycleCounter> {
                             key: ValueKey("${_cycles.length}-$_currentIndex"),
                             options: List.generate(
                               _cycles.length,
-                              (i) => i.toString(),
+                              (i) => (i + 1).toString(),
                             ),
                             isLocked: _cycles.isEmpty || _isTimerActive,
                             initialValue: _cycles.isEmpty
                                 ? null
-                                : _currentIndex.toString(),
+                                : (_currentIndex + 1).toString(),
                             onChanged: (value) {
                               setState(() {
-                                _currentIndex = int.parse(value ?? "0");
+                                _currentIndex = int.parse(value ?? "1") - 1;
                               });
                             },
                           ),
