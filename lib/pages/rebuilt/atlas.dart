@@ -33,7 +33,9 @@ class AtlasState extends State<Atlas> {
       "Setup": DataEntrySubPage(
           icon: CustomIcons.wrench,
           content: Container(
+            padding: EdgeInsets.all(15),
               child: Column(
+                spacing: margin,
             children: [
               Container(
                 height: 70,
@@ -49,7 +51,9 @@ class AtlasState extends State<Atlas> {
                   autofillKey: "scouterName",
                 ),
               ),
-              MatchInfo()
+              MatchInfo(
+                margin: margin,
+              )
             ],
           ))),
       "Auto": DataEntrySubPage(
@@ -59,17 +63,19 @@ class AtlasState extends State<Atlas> {
           child: Column(
             spacing: margin,
             children: [
-              RebuiltAutoPathSelector(margin: margin),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(margin),
-                  ),
-                  child: CycleCounter(
-                    jsonKey: "autoCycles",
-                    isCompact: true,
-                  ),
+              RebuiltAutoPathSelector(
+                margin: margin,
+                debug: true,
+              ),
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Constants.pastelWhite,
+                  borderRadius: BorderRadius.circular(margin),
+                ),
+                child: CycleCounter(
+                  jsonKey: "autoCycles",
+                  isCompact: true,
                 ),
               ),
             ],
@@ -228,7 +234,7 @@ class AtlasState extends State<Atlas> {
               NRGCommentBox(
                 title: "Comments",
                 jsonKey: "comments",
-                height: 125,
+                height: 90,
                 margin: margin,
               ),
             ],

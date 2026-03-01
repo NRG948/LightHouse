@@ -10,9 +10,9 @@ import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/team_spritesheet.dart';
 
 class MatchInfo extends StatefulWidget {
-  final double width;
+  final double? margin;
 
-  const MatchInfo({super.key, this.width = 400});
+  const MatchInfo({super.key, this.margin});
 
   @override
   State<MatchInfo> createState() => _MatchInfoState();
@@ -20,8 +20,11 @@ class MatchInfo extends StatefulWidget {
 
 class _MatchInfoState extends State<MatchInfo>
     with AutomaticKeepAliveClientMixin {
-  static late double scaleFactor;
   static dynamic matchData = [];
+
+  late double _width;
+  double get _margin => widget.margin ?? _width / 20;
+
   Completer<String> displayEventKey = Completer<String>();
   @override
   bool get wantKeepAlive => true;
@@ -58,7 +61,6 @@ class _MatchInfoState extends State<MatchInfo>
     if (TeamSpritesheet.spritesheet == null) {
       TeamSpritesheet.loadSpritesheet();
     }
-    scaleFactor = widget.width / 400;
     eventKey = configData["eventKey"]!;
     parseTBAMatchesFile();
     checkForTBAEventInfo();
@@ -113,289 +115,326 @@ class _MatchInfoState extends State<MatchInfo>
     // Build the main container for the widget
     super.build(context);
 
-    return Container(
-      margin: EdgeInsets.all(5),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: Constants.pastelWhite,
-          borderRadius: BorderRadius.circular(Constants.borderRadius)),
-      child: Column(
-        spacing: 10,
-        children: [
-          Container(
-            margin: EdgeInsets.all(0), 
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                color: Constants.pastelGray,
-                borderRadius: BorderRadius.circular(Constants.borderRadius)),
-            child: Center(
-                child: Row(
-              children: [
-                Column(
-                  children: [
-                    // Display event key
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.event,
-                          color: Constants.pastelWhite,
-                        ),
-                        FutureBuilder(
-                            future: displayEventKey.future,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Text("");
-                              }
-                              return SizedBox(
-                                  width: 275 * scaleFactor,
-                                  height: 35 * scaleFactor,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        _width = constraints.maxWidth;
+        return Container(
+          width: _width,
+          height: _width * 0.67,
+          padding: EdgeInsets.all(_margin),
+          decoration: BoxDecoration(
+              color: Constants.pastelWhite,
+              borderRadius: BorderRadius.circular(Constants.borderRadius)),
+          child: Column(
+            spacing: 10,
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  height: double.infinity,
+                  padding: EdgeInsets.all(_margin),
+                  decoration: BoxDecoration(
+                      color: Constants.pastelGray,
+                      borderRadius:
+                          BorderRadius.circular(Constants.borderRadius)),
+                  child: Center(
+                      child: Row(
+                    spacing: _margin,
+                    children: [
+                      Expanded(
+                        flex: 7,
+                        child: Column(
+                          children: [
+                            // Display event key
+                            Row(
+                              spacing: _margin,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  Icons.event,
+                                  size: _width / 20,
+                                  color: Constants.pastelWhite,
+                                ),
+                                Expanded(
+                                  child: FutureBuilder(
+                                      future: displayEventKey.future,
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Text("");
+                                        }
+                                        return Center(
+                                            child: AutoSizeText(
+                                          snapshot.data ?? "",
+                                          style: comfortaaBold(_width / 22),
+                                          minFontSize: 10,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ));
+                                      }),
+                                )
+                              ],
+                            ),
+                            // Display team name
+                            Row(
+                              spacing: _margin,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  Icons.person,
+                                  size: _width / 20,
+                                  color: Constants.pastelWhite,
+                                ),
+                                Expanded(
                                   child: Center(
                                       child: AutoSizeText(
-                                    snapshot.data ?? "",
-                                    style: comfortaaBold(18),
-                                    maxLines: 2,
+                                    teamName ?? "No Team Selected",
+                                    style: comfortaaBold(_width / 22),
+                                    minFontSize: 10,
+                                    maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
-                                  )));
-                            })
-                      ],
-                    ),
-                    // Display team name
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.person,
-                          size: 30 * scaleFactor,
-                          color: Constants.pastelWhite,
+                                  )),
+                                )
+                              ],
+                            ),
+                            // Display team location
+                            Row(
+                              spacing: _margin,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  Icons.location_pin,
+                                  size: _width / 20,
+                                  color: Constants.pastelWhite,
+                                ),
+                                Expanded(
+                                  child: Center(
+                                      child: AutoSizeText(
+                                    teamLocation ?? "",
+                                    style: comfortaaBold(_width / 22),
+                                    minFontSize: 10,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.start,
+                                  )),
+                                )
+                              ],
+                            )
+                          ],
                         ),
-                        SizedBox(
-                            width: 275 * scaleFactor,
-                            height: 35 * scaleFactor,
-                            child: Center(
-                                child: AutoSizeText(
-                              teamName ?? "No Team Selected",
-                              style: comfortaaBold(18),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            )))
-                      ],
+                      ),
+                      Expanded(
+                        child: FutureBuilder(
+                            future: TeamSpritesheet.getTeamPicture(
+                                int.tryParse(teamNumberController.text) ?? 0),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState !=
+                                  ConnectionState.done) {
+                                return Container();
+                              }
+                              return Image.memory(snapshot.data!,
+                                  fit: BoxFit.fill);
+                            }),
+                      )
+                    ],
+                  )),
+                ),
+              ),
+              // Input for team number and replay checkbox
+              Expanded(
+                flex: 2,
+                child: Row(
+                  spacing: _margin,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        controller: teamNumberController,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Constants.borderRadius),
+                                borderSide: BorderSide.none),
+                            floatingLabelBehavior:
+                                FloatingLabelBehavior.never,
+                            labelText: "Team Number",
+                            labelStyle: comfortaaBold(
+                              _width / 22,
+                              color: Constants.pastelRedDark,
+                            ),
+                            fillColor: Constants.pastelRed,
+                            filled: true),
+                      ),
                     ),
-                    // Display team location
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.location_pin,
-                          size: 30 * scaleFactor,
-                          color: Constants.pastelWhite,
+                    Expanded(
+                      child: Center(
+                          child: AutoSizeText(
+                        "Replay",
+                        style:
+                            comfortaaBold(_width / 18, color: Constants.pastelBrown),
+                        maxLines: 1,
+                        textAlign: TextAlign.start,
+                      )),
+                    ),
+                    Expanded(
+                      child: Transform.scale(
+                        scale: 1.5,
+                        child: Checkbox(
+                          value: replay,
+                          onChanged: (v) {
+                            setState(() {
+                              HapticFeedback.mediumImpact();
+                              replay = v ?? false;
+                              DataEntry.exportData["replay"] = replay;
+                            });
+                          },
+                          activeColor: Constants.pastelYellow,
                         ),
-                        SizedBox(
-                            width: 275 * scaleFactor,
-                            height: 35 * scaleFactor,
-                            child: Center(
-                                child: AutoSizeText(
-                              teamLocation ?? "",
-                              style: comfortaaBold(18),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.start,
-                            )))
-                      ],
+                      ),
                     )
                   ],
                 ),
-                SizedBox(
-                  width: 10 * scaleFactor,
-                ),
-                FutureBuilder(
-                    future: TeamSpritesheet.getTeamPicture(
-                        int.tryParse(teamNumberController.text) ?? 0),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState != ConnectionState.done) {
-                        return Container();
-                      }
-                      return Image.memory(snapshot.data!,
-                          width: 50 * scaleFactor,
-                          height: 50 * scaleFactor,
-                          fit: BoxFit.fill);
-                    })
-              ],
-            )),
-          ),
-          // Input for team number and replay checkbox
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 50 * scaleFactor,
-                width: 250 * scaleFactor,
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  controller: teamNumberController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Constants.borderRadius),
-                          borderSide: BorderSide.none),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: "Team Number",
-                      labelStyle: comfortaaBold(
-                        20 * scaleFactor,
-                        color: Constants.pastelRedDark,
+              ),
+              Expanded(
+                flex: 2,
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Constants.pastelYellow,
+                            borderRadius: BorderRadius.circular(
+                                Constants.borderRadius)),
+                        child: Center(
+                          child: DropdownButton(
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius),
+                            value: matchType,
+                            items: ["Qualifications", "Playoffs", "Finals"]
+                                .map((v) {
+                              return DropdownMenuItem(
+                                  value: v,
+                                  child: Text(
+                                    v,
+                                    style: comfortaaBold(_width / 25,
+                                        color: Constants.pastelBrown),
+                                  ));
+                            }).toList(),
+                            onChanged: (value) {
+                              HapticFeedback.mediumImpact();
+                              matchType = value ?? "Qualifications";
+                              DataEntry.exportData["matchType"] = value;
+                              if (configData["downloadTheBlueAllianceInfo"] ==
+                                      "true" &&
+                                  matchData != []) {
+                                autofillTeamNumber();
+                              }
+                            },
+                            dropdownColor: Constants.pastelYellow,
+                          ),
+                        ),
                       ),
-                      fillColor: Constants.pastelRed,
-                      filled: true),
-                ),
-              ),
-              SizedBox(
-                width: 70 * scaleFactor,
-                height: 50 * scaleFactor,
-                child: Center(
-                    child: AutoSizeText(
-                  "Replay",
-                  style: comfortaaBold(13 * scaleFactor,
-                      color: Constants.pastelBrown),
-                  maxLines: 1,
-                  textAlign: TextAlign.start,
-                )),
-              ),
-              Transform.scale(
-                scale: 1.5,
-                child: Checkbox(
-                  value: replay,
-                  onChanged: (v) {
-                    setState(() {
-                      HapticFeedback.mediumImpact();
-                      replay = v ?? false;
-                      DataEntry.exportData["replay"] = replay;
-                    });
-                  },
-                  activeColor: Constants.pastelYellow,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        initialValue: _autofilledMatchNumber,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        onChanged: (value) {
+                          HapticFeedback.mediumImpact();
+                          DataEntry.exportData["matchNumber"] =
+                              int.tryParse(value) ?? 0;
+                          if (configData["downloadTheBlueAllianceInfo"] ==
+                                  "true" &&
+                              matchData != []) {
+                            autofillTeamNumber();
+                          }
+                        },
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    Constants.borderRadius),
+                                borderSide: BorderSide.none),
+                            floatingLabelBehavior:
+                                FloatingLabelBehavior.never,
+                            labelText: "#",
+                            labelStyle: comfortaaBold(
+                              _width / 20,
+                              color: Constants.pastelYellowDark,
+                              italic: true,
+                            ),
+                            fillColor: Constants.pastelYellow,
+                            filled: true),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: DataEntry.exportData["driverStation"]
+                                    .contains("Red")
+                                ? Constants.pastelRed
+                                : Constants.pastelBlue,
+                            borderRadius: BorderRadius.circular(
+                                Constants.borderRadius)),
+                        child: Center(
+                          child: DropdownButton(
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius),
+                            value: driverStation,
+                            items: [
+                              "Red 1",
+                              "Red 2",
+                              "Red 3",
+                              "Blue 1",
+                              "Blue 2",
+                              "Blue 3"
+                            ].map((v) {
+                              return DropdownMenuItem(
+                                  value: v,
+                                  child: Text(
+                                    v,
+                                    style: comfortaaBold(_width / 22,
+                                        color: Constants.pastelBrown),
+                                  ));
+                            }).toList(),
+                            onChanged: (value) {
+                              HapticFeedback.mediumImpact();
+                              driverStation = value ?? "Red 1";
+                              DataEntry.exportData["driverStation"] = value;
+                              if (configData["downloadTheBlueAllianceInfo"] ==
+                                      "true" &&
+                                  matchData != []) {
+                                autofillTeamNumber();
+                              }
+                            },
+                            dropdownColor: DataEntry
+                                    .exportData["driverStation"]
+                                    .contains("Red")
+                                ? Constants.pastelRed
+                                : Constants.pastelBlue,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )
             ],
           ),
-          Row(
-            spacing: 10,
-            children: [
-              Container(
-                width: 170 * scaleFactor,
-                height: 65 * scaleFactor,
-                decoration: BoxDecoration(
-                    color: Constants.pastelYellow,
-                    borderRadius:
-                        BorderRadius.circular(Constants.borderRadius)),
-                child: Center(
-                  child: DropdownButton(
-                    borderRadius: BorderRadius.circular(Constants.borderRadius),
-                    value: matchType,
-                    items: ["Qualifications", "Playoffs", "Finals"].map((v) {
-                      return DropdownMenuItem(
-                          value: v,
-                          child: Text(
-                            v,
-                            style: comfortaaBold(15 * scaleFactor,
-                                color: Constants.pastelBrown),
-                          ));
-                    }).toList(),
-                    onChanged: (value) {
-                      HapticFeedback.mediumImpact();
-                      matchType = value ?? "Qualifications";
-                      DataEntry.exportData["matchType"] = value;
-                      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
-                          matchData != []) {
-                        autofillTeamNumber();
-                      }
-                    },
-                    dropdownColor: Constants.pastelYellow,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 65 * scaleFactor,
-                width: 75 * scaleFactor,
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  initialValue: _autofilledMatchNumber,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  onChanged: (value) {
-                    HapticFeedback.mediumImpact();
-                    DataEntry.exportData["matchNumber"] =
-                        int.tryParse(value) ?? 0;
-                    if (configData["downloadTheBlueAllianceInfo"] == "true" &&
-                        matchData != []) {
-                      autofillTeamNumber();
-                    }
-                  },
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Constants.borderRadius),
-                          borderSide: BorderSide.none),
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: "#",
-                      labelStyle: comfortaaBold(
-                        20 * scaleFactor,
-                        color: Constants.pastelYellowDark,
-                        italic: true,
-                      ),
-                      fillColor: Constants.pastelYellow,
-                      filled: true),
-                ),
-              ),
-              Container(
-                width: 109 * scaleFactor,
-                height: 65 * scaleFactor,
-                decoration: BoxDecoration(
-                    color: DataEntry.exportData["driverStation"].contains("Red")
-                        ? Constants.pastelRed
-                        : Constants.pastelBlue,
-                    borderRadius:
-                        BorderRadius.circular(Constants.borderRadius)),
-                child: Center(
-                  child: DropdownButton(
-                    borderRadius: BorderRadius.circular(Constants.borderRadius),
-                    value: driverStation,
-                    items: [
-                      "Red 1",
-                      "Red 2",
-                      "Red 3",
-                      "Blue 1",
-                      "Blue 2",
-                      "Blue 3"
-                    ].map((v) {
-                      return DropdownMenuItem(
-                          value: v,
-                          child: Text(
-                            v,
-                            style: comfortaaBold(15 * scaleFactor,
-                                color: Constants.pastelBrown),
-                          ));
-                    }).toList(),
-                    onChanged: (value) {
-                      HapticFeedback.mediumImpact();
-                      driverStation = value ?? "Red 1";
-                      DataEntry.exportData["driverStation"] = value;
-                      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
-                          matchData != []) {
-                        autofillTeamNumber();
-                      }
-                    },
-                    dropdownColor:
-                        DataEntry.exportData["driverStation"].contains("Red")
-                            ? Constants.pastelRed
-                            : Constants.pastelBlue,
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 

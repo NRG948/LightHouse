@@ -23,7 +23,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return AutoPathSelector(
       imageFilePath: "assets/images/rebuiltFullField.png",
-      rawImageWidth: 637,
+      rawImageWidth: 700,
       rawImageHeight: 647,
       maximumGroupSize: 4,
       debug: debug,

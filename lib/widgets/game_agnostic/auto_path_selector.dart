@@ -229,7 +229,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   late double _width;
   double get _height =>
-      _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth + _bottomOffset;
+      _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth + _bottomOffset + 5; // 5 extra pixels for safety
 
   final double _imageScaingFactor = 0.75;
 
