@@ -186,6 +186,8 @@ class AutoPathSelector extends StatefulWidget {
   final bool debug;
   final bool canStartInZone;
 
+  /// whether to show "climb successful" option
+  final bool pit;
   final bool showClimbOptions;
   final List<String>? climbLevels;
 
@@ -210,6 +212,7 @@ class AutoPathSelector extends StatefulWidget {
     this.regionNodeColor = Constants.pastelBlue,
     this.lockedColor = Constants.pastelGray,
     this.textColor = Constants.pastelBrown,
+    required this.pit,
   });
 
   @override
@@ -229,7 +232,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   late double _width;
   double get _height =>
-      _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth + _bottomOffset;
+      _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth +
+      _bottomOffset;
 
   final double _imageScaingFactor = 0.75;
 
@@ -238,9 +242,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _scaleFactor => _imageWidth / _rawImageWidth;
 
   double get _margin => widget.margin ?? _width / 25;
-  double get _bottomOffset => _width * 0.25;
+  double get _bottomOffset => _pit ? _width * 0.125 : _width * 0.25;
 
-  double get _nodeRadius => _imageWidth/ 18;
+  double get _nodeRadius => _imageWidth / 18;
   double get _nodeBorderWidth => _width / 100;
   int get _maximumGroupSize => widget.maximumGroupSize;
 
@@ -262,6 +266,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   bool get _debug => widget.debug;
   bool get _canStartInZone => widget.canStartInZone;
   bool get _showClimbOptions => widget.showClimbOptions;
+  bool get _pit => widget.pit;
   List<String>? get _climbLevels => widget.climbLevels;
   bool _attemptedClimb = false;
   bool? _climbSuccessful;
@@ -285,7 +290,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   void _serializeData() {
     if (_jsonKey == null) return;
 
-    Map<String, dynamic> data ={};
+    Map<String, dynamic> data = {};
 
     // each element can either be a string or another list for x-y coords
     List<dynamic> positions = List.empty(growable: true);
@@ -313,8 +318,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
           .length;
       for (NodeData node in _nodeStack
           .where((final NodeData node) => node.groupLabel == zone.id)) {
-        node.radius =
-            _nodeRadius - ((numNodes - 1) * 3); // TODO: tweak based on testing
+        node.radius = _nodeRadius -
+            ((numNodes - 1) * 1.5); // TODO: tweak based on testing
 
         final scaledLeft = zone.left * _scaleFactor;
         final scaledTop = zone.top * _scaleFactor;
@@ -406,8 +411,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                       HapticFeedback.mediumImpact();
                       final RenderBox renderBox =
                           context.findRenderObject() as RenderBox;
-                      final Offset localPosition =
-                          renderBox.globalToLocal(details.offset) - Offset(0.5 * (1 - _imageScaingFactor) * _width, 0);
+                      final Offset localPosition = renderBox
+                              .globalToLocal(details.offset) -
+                          Offset(0.5 * (1 - _imageScaingFactor) * _width, 0);
 
                       Offset newPosition =
                           localPosition + Offset(node.radius, node.radius) / 2;
@@ -555,7 +561,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
             optionColor: _mainColor,
             lockedColor: _lockedColor,
             textColor: _textColor,
-            title: "Attempted Climb",
+            title: _pit ? "Attempts Climb" : "Attempted Climb",
             onToggle: (value) {
               setState(() {
                 _attemptedClimb = value;
@@ -563,7 +569,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
               });
             },
           )),
-          Expanded(child: climbOutcome),
+          _pit ? Container() : Expanded(child: climbOutcome),
         ],
       ),
     );

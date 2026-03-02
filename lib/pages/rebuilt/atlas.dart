@@ -38,6 +38,7 @@ class AtlasState extends State<Atlas> {
               Container(
                 height: 70,
                 padding: EdgeInsets.all(margin),
+                margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: Constants.pastelWhite,
                   borderRadius: BorderRadius.circular(margin),
@@ -59,7 +60,10 @@ class AtlasState extends State<Atlas> {
           child: Column(
             spacing: margin,
             children: [
-              RebuiltAutoPathSelector(margin: margin),
+              RebuiltAutoPathSelector(
+                margin: margin,
+                pit: false,
+              ),
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(

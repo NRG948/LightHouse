@@ -4,8 +4,10 @@ import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 class RebuiltAutoPathSelector extends StatelessWidget {
   final bool debug;
   final double? margin;
+  final bool pit;
 
-  const RebuiltAutoPathSelector({super.key, this.debug = false, this.margin});
+  const RebuiltAutoPathSelector(
+      {super.key, this.debug = false, this.margin, required this.pit});
 
   List<Zone> getZones() {
     return [
@@ -30,6 +32,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       margin: margin,
       zones: getZones(),
       showClimbOptions: true,
+      pit: pit,
       jsonKey: "autoPath",
     );
   }
