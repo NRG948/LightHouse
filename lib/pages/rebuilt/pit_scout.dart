@@ -10,6 +10,7 @@ import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/team_info.dart';
 import 'package:lighthouse/widgets/rebuilt/metric.dart';
+import 'package:lighthouse/widgets/rebuilt/pit_auto_container.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
 
 class PitScout extends StatefulWidget {
@@ -56,30 +57,41 @@ class PitScoutState extends State<PitScout> {
           icon: CustomIcons.autonomous,
           content: Container(
             margin: EdgeInsets.all(10),
-            child: Column(spacing: 15, children: [
-              RebuiltAutoPathSelector(
-                margin: 7,
-                pit: true,
+              child: Column(spacing: 15, children: [
+              PitAutoContainer(
+                height: 50,
+                jsonKey: "autoPath",
+                childBuilder: (index) => Column(
+                  spacing: 10,
+                  children: [
+                    RebuiltAutoPathSelector(
+                      margin: 7,
+                      jsonKey: "autoPath${(index + 1)}",
+                      pit: true,
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      decoration: BoxDecoration(
+                        color: Constants.pastelWhite,
+                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                      ),
+                      child: Column(
+                        children: [
+                          Text("Fuel Scored", style: comfortaaBold(20, color: Constants.black),),
+                          NRGTextbox(
+                            numeric: true,
+                            title: "Fuel Scored",
+                            jsonKey: "autoFuelScored${(index + 1)}",
+                            height: 50,
+                            width: double.infinity,
+                            fontSize: 15,
+                            maxLines: 1),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              Container(
-                padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius),
-                  ),
-                  child: Column(
-                    children: [
-                      Text("Fuel Scored", style: comfortaaBold(20, color: Constants.black),), 
-                      NRGTextbox(
-                          numeric: true,
-                          title: "Fuel Scored",
-                          jsonKey: "autoFuelScored",
-                          height: 50,
-                          width: double.infinity,
-                          fontSize: 15,
-                          maxLines: 1),
-                    ],
-                  ))
             ]),
           ),
         )
