@@ -13,6 +13,7 @@ import 'package:lighthouse/widgets/game_agnostic/team_info.dart';
 import 'package:lighthouse/widgets/rebuilt/metric.dart';
 import 'package:lighthouse/widgets/rebuilt/pit_auto_container.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
+import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';
 
 class PitScout extends StatefulWidget {
   const PitScout({super.key});
@@ -44,13 +45,13 @@ class PitScoutState extends State<PitScout> {
                 MultiChoiceSelector(
                   title: "Shooter Type",
                   selectOptions: ["Fixed", "Turret"],
-                  height: 100,
+                  height: 90,
                   jsonKey: "shooterType",
                 ),
                 MultiChoiceSelector(
                     title: "Intake Type",
                     selectOptions: ["Ground", "Outpost"],
-                    height: 100,
+                    height: 90,
                     jsonKey: "intakeType"),
                 Container(
                   padding: EdgeInsets.all(10),
@@ -66,7 +67,6 @@ class PitScoutState extends State<PitScout> {
                       width: double.infinity,
                       fontSize: 20,
                       maxLines: 1),
-                      
                 ),
                 Container(
                   padding: EdgeInsets.all(10),
@@ -82,7 +82,21 @@ class PitScoutState extends State<PitScout> {
                       width: double.infinity,
                       fontSize: 20,
                       maxLines: 1),
-                      
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Constants.pastelWhite,
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
+                  ),
+                  child: NRGTextbox(
+                      numeric: true,
+                      title: "Weight (lbs) (w/ bump + batt)",
+                      jsonKey: "weight",
+                      height: 60,
+                      width: double.infinity,
+                      fontSize: 20,
+                      maxLines: 1),
                 ),
               ]),
             )),
@@ -165,17 +179,61 @@ class PitScoutState extends State<PitScout> {
                 ),
                 NRGMultiThreeStageCheckbox(
                   title: "Feeding",
-                  jsonKey: ["canPass", "canPushOverBump", "canPushThroughTrench"],
+                  jsonKey: [
+                    "canPass",
+                    "canPushOverBump",
+                    "canPushThroughTrench"
+                  ],
                   width: double.infinity,
                   height: 100,
                   boxNames: [
                     ["Pass", "Bump", "Trench"]
                   ],
                 ),
+                Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Constants.pastelWhite,
+                      borderRadius:
+                          BorderRadius.circular(Constants.borderRadius),
+                    ),
+                    child: NRGTextbox(
+                        numeric: true,
+                        title: "Cycle Time",
+                        jsonKey: "cycleTime",
+                        height: 60,
+                        width: double.infinity,
+                        fontSize: 20,
+                        maxLines: 1)),
               ],
             ),
           ),
         ),
+        "Endgame": DataEntrySubPage(
+          icon: CustomIcons.flag,
+          content: Container(
+            margin: EdgeInsets.all(10),
+            child: Column(spacing: 10,
+            children: [
+              TowerLocationSelector(
+                margin: 10,
+                jsonKey: "climb",
+              ),
+              NRGMultiThreeStageCheckbox(
+                  title: "Shooting",
+                  jsonKey: [
+                    "canShootEndgame",
+                  ],
+                  width: double.infinity,
+                  height: 100,
+                  boxNames: [
+                    ["Shoot during Endgame"]
+                  ],
+                ),
+
+            ],)
+          ),
+        )
       },
     );
   }

@@ -63,7 +63,7 @@ class _MultiChoiceSelectorState extends State<MultiChoiceSelector> {
           borderRadius: BorderRadius.circular(_margin)),
       child: Column(
         children: [
-          widget.title != null ? Text(widget.title!, style: comfortaaBold(30, color: Constants.black),) : Container(), 
+          widget.title != null ? Text(widget.title!, style: comfortaaBold(25, color: Constants.black),) : Container(), 
           Expanded(
             flex: 3,
             child: SingleChoiceSelector(
