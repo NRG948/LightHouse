@@ -36,33 +36,39 @@ class VisualNode extends StatelessWidget {
   final Color borderColor;
   final String text;
   final Color? textColor;
+  final bool flip;
 
-  const VisualNode(
-      {super.key,
-      required this.radius,
-      this.color,
-      this.borderWidth = 0,
-      this.borderColor = Colors.black,
-      required this.text,
-      this.textColor});
+  const VisualNode({
+    super.key,
+    required this.radius,
+    this.color,
+    this.borderWidth = 0,
+    this.borderColor = Colors.black,
+    required this.text,
+    this.textColor,
+    this.flip = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 2 * radius,
-      height: 2 * radius,
-      decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-          border: borderWidth == 0
-              ? null
-              : Border.all(color: borderColor, width: borderWidth)),
-      child: Center(
-        child: DefaultTextStyle(
-          style: comfortaaBold(fontSizeToRadiusRatio * (radius - borderWidth),
-              color: textColor),
-          child: Text(
-            text,
+    return Transform.flip(
+      flipX: flip,
+      child: Container(
+        width: 2 * radius,
+        height: 2 * radius,
+        decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: borderWidth == 0
+                ? null
+                : Border.all(color: borderColor, width: borderWidth)),
+        child: Center(
+          child: DefaultTextStyle(
+            style: comfortaaBold(fontSizeToRadiusRatio * (radius - borderWidth),
+                color: textColor),
+            child: Text(
+              text,
+            ),
           ),
         ),
       ),
@@ -185,9 +191,13 @@ class AutoPathSelector extends StatefulWidget {
 
   final bool debug;
   final bool canStartInZone;
+  final bool flipField;
 
   final bool showClimbOptions;
   final List<String>? climbLevels;
+
+  /// The output of [exportConverter] when the pixel offsets of the nodes are passed in is saved to [DataEntry].
+  final Offset Function(Offset pixelPosition)? exportConverter;
 
   const AutoPathSelector({
     super.key,
@@ -202,6 +212,7 @@ class AutoPathSelector extends StatefulWidget {
     this.canStartInZone = false,
     this.maximumGroupSize = 4,
     this.showClimbOptions = false,
+    this.flipField = false,
     this.climbLevels,
     this.mainColor = Constants.pastelRed,
     this.backgroundColor = Constants.pastelWhite,
@@ -210,6 +221,7 @@ class AutoPathSelector extends StatefulWidget {
     this.regionNodeColor = Constants.pastelBlue,
     this.lockedColor = Constants.pastelGray,
     this.textColor = Constants.pastelBrown,
+    this.exportConverter,
   });
 
   @override
@@ -229,7 +241,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   late double _width;
   double get _height =>
-      _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth + _bottomOffset + 5; // 5 extra pixels for safety
+      _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth +
+      _bottomOffset +
+      5; // 5 extra pixels for safety
 
   final double _imageScaingFactor = 0.75;
 
@@ -240,9 +254,12 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _margin => widget.margin ?? _width / 25;
   double get _bottomOffset => _width * 0.25;
 
-  double get _nodeRadius => _imageWidth/ 18;
+  double get _nodeRadius => _imageWidth / 16;
   double get _nodeBorderWidth => _width / 100;
   int get _maximumGroupSize => widget.maximumGroupSize;
+
+  Offset Function(Offset pixelPosition)? get _exportConverter =>
+      widget.exportConverter;
 
   double get _buttonSize =>
       _bottomOffset -
@@ -258,6 +275,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   Color get _regionNodeColor => widget.regionNodeColor;
   Color get _lockedColor => widget.lockedColor;
   Color get _textColor => widget.textColor;
+
+  bool get _flipField => widget.flipField;
 
   bool get _debug => widget.debug;
   bool get _canStartInZone => widget.canStartInZone;
@@ -285,7 +304,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   void _serializeData() {
     if (_jsonKey == null) return;
 
-    Map<String, dynamic> data ={};
+    Map<String, dynamic> data = {};
 
     // each element can either be a string or another list for x-y coords
     List<dynamic> positions = List.empty(growable: true);
@@ -293,7 +312,14 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       if (node.groupLabel != null) {
         positions.add(node.groupLabel);
       } else {
-        positions.add([node.position!.dx, node.position!.dy]);
+        if (_exportConverter == null) {
+          positions.add([node.position!.dx, node.position!.dy]);
+        } else {
+          positions.add([
+            _exportConverter!(node.position!).dx,
+            _exportConverter!(node.position!).dy
+          ]);
+        }
       }
     }
 
@@ -334,7 +360,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   }
 
   /// note that index is 0-based (adds one in the function itself)
-  VisualNode buildVisualNode(NodeData node, int index) {
+  VisualNode buildVisualNode(NodeData node, int index, bool flip) {
     return VisualNode(
       radius: node.radius,
       color: node.color,
@@ -342,6 +368,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       borderWidth: _nodeBorderWidth,
       text: "${index + 1}",
       textColor: Constants.pastelWhite,
+      flip: flip,
     );
   }
 
@@ -395,22 +422,27 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                 child: Draggable(
                   maxSimultaneousDrags: node.draggable ? 1 : 0,
                   feedback:
-                      Opacity(opacity: 0.5, child: buildVisualNode(node, i)),
+                      Opacity(opacity: 0.5, child: buildVisualNode(node, i, false)),
                   childWhenDragging: ColorFiltered(
                       colorFilter: const ColorFilter.mode(
                           Colors.grey, BlendMode.modulate),
-                      child: buildVisualNode(node, i)),
-                  child: buildVisualNode(node, i),
+                      child: buildVisualNode(node, i, _flipField)),
+                  child: buildVisualNode(node, i, _flipField),
                   onDragEnd: (details) {
                     setState(() {
                       HapticFeedback.mediumImpact();
                       final RenderBox renderBox =
                           context.findRenderObject() as RenderBox;
-                      final Offset localPosition =
-                          renderBox.globalToLocal(details.offset) - Offset(0.5 * (1 - _imageScaingFactor) * _width, 0);
+                      final Offset localPosition = renderBox
+                              .globalToLocal(details.offset) -
+                          Offset(0.5 * (1 - _imageScaingFactor) * _width, 0);
 
                       Offset newPosition =
                           localPosition + Offset(node.radius, node.radius) / 2;
+
+                      if (_flipField) {
+                        newPosition = Offset(_imageWidth - newPosition.dx, newPosition.dy);
+                      }
 
                       _history.add(UserAction(
                           actionType: UserActionType.move,
@@ -603,36 +635,39 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
               spacing: _margin,
               children: [
                 Center(
-                  child: Container(
-                    width: _imageWidth,
-                    height: _imageHeight,
-                    decoration: BoxDecoration(
-                        color: _mainColor,
-                        borderRadius: BorderRadius.circular(_margin),
-                        image: DecorationImage(
-                            image: _fieldImage,
-                            fit: BoxFit.fill,
-                            colorFilter: ColorFilter.mode(
-                                _backgroundColor, BlendMode.modulate))),
-                    child: Semantics(
-                      button: true,
-                      child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onHorizontalDragStart: (details) {},
-                          onTapUp: (TapUpDetails details) {
-                            setState(() {
-                              HapticFeedback.mediumImpact();
-                              addNodeFromMap(details);
-                            });
-                          },
-                          child: Container(
-                              color: Color.fromARGB(1, 255, 255, 255),
-                              child: Stack(children: [
-                                ..._getRegions(),
-                                _getPathPainter(),
-                                ...buildNodes(),
-                                ...buildNodeDebugCenters(),
-                              ]))),
+                  child: Transform.flip(
+                    flipX: _flipField,
+                    child: Container(
+                      width: _imageWidth,
+                      height: _imageHeight,
+                      decoration: BoxDecoration(
+                          color: _mainColor,
+                          borderRadius: BorderRadius.circular(_margin),
+                          image: DecorationImage(
+                              image: _fieldImage,
+                              fit: BoxFit.fill,
+                              colorFilter: ColorFilter.mode(
+                                  _backgroundColor, BlendMode.modulate))),
+                      child: Semantics(
+                        button: true,
+                        child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onHorizontalDragStart: (details) {},
+                            onTapUp: (TapUpDetails details) {
+                              setState(() {
+                                HapticFeedback.mediumImpact();
+                                addNodeFromMap(details);
+                              });
+                            },
+                            child: Container(
+                                color: Color.fromARGB(1, 255, 255, 255),
+                                child: Stack(children: [
+                                  ..._getRegions(),
+                                  _getPathPainter(),
+                                  ...buildNodes(),
+                                  ...buildNodeDebugCenters(),
+                                ]))),
+                      ),
                     ),
                   ),
                 ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
+import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -26,6 +28,13 @@ class Atlas extends StatefulWidget {
 
 class AtlasState extends State<Atlas> {
   double margin = 10;
+  String? driverStation;
+
+  @override
+  void initState() {
+    super.initState();
+    driverStation = configData["currentDriverStation"];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +62,11 @@ class AtlasState extends State<Atlas> {
                   ),
                   MatchInfo(
                     margin: margin,
+                    onDriverStationUpdate: (driverStation) {
+                      setState(() {
+                        this.driverStation = driverStation;
+                      });
+                    },
                   )
                 ],
               ))),
@@ -65,6 +79,7 @@ class AtlasState extends State<Atlas> {
             children: [
               RebuiltAutoPathSelector(
                 margin: margin,
+                flipField: driverStation != null && driverStation!.startsWith("B"),
               ),
               Container(
                 height: 200,

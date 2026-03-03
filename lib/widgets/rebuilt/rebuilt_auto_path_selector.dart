@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 
 class RebuiltAutoPathSelector extends StatelessWidget {
   final bool debug;
   final double? margin;
+  final bool flipField;
 
-  const RebuiltAutoPathSelector({super.key, this.debug = false, this.margin});
+  const RebuiltAutoPathSelector({super.key, this.debug = false, this.margin, this.flipField = false});
 
   List<Zone> getZones() {
     return [
@@ -31,6 +33,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       zones: getZones(),
       showClimbOptions: true,
       jsonKey: "autoPath",
+      flipField: flipField,
     );
   }
 }

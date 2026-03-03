@@ -11,8 +11,15 @@ import 'package:lighthouse/team_spritesheet.dart';
 
 class MatchInfo extends StatefulWidget {
   final double? margin;
+  final Function(String driverStation)? onDriverStationUpdate;
+  final Function(int teamNumber)? onTeamNumberUpdate;
 
-  const MatchInfo({super.key, this.margin});
+  const MatchInfo({
+    super.key,
+    this.margin,
+    this.onDriverStationUpdate,
+    this.onTeamNumberUpdate,
+  });
 
   @override
   State<MatchInfo> createState() => _MatchInfoState();
@@ -24,6 +31,10 @@ class _MatchInfoState extends State<MatchInfo>
 
   late double _width;
   double get _margin => widget.margin ?? _width / 20;
+  Function(String driverStation)? get _onDriverStationUpdate =>
+      widget.onDriverStationUpdate;
+  Function(int teamNumber)? get _onTeamNumberUpdate =>
+      widget.onTeamNumberUpdate;
 
   Completer<String> displayEventKey = Completer<String>();
   @override
@@ -65,11 +76,12 @@ class _MatchInfoState extends State<MatchInfo>
     parseTBAMatchesFile();
     checkForTBAEventInfo();
     teamNumberController.addListener(() {
+      int team = int.tryParse(teamNumberController.text) ?? 0;
       setState(() {
-        DataEntry.exportData["teamNumber"] =
-            int.tryParse(teamNumberController.text) ?? 0;
-        getTeamInfo(int.tryParse(teamNumberController.text) ?? 0);
+        DataEntry.exportData["teamNumber"] = team;
+        getTeamInfo(team);
       });
+      if (_onTeamNumberUpdate != null) _onTeamNumberUpdate!(team);
     });
     DataEntry.exportData["matchNumber"] ??= 0;
     DataEntry.exportData["teamNumber"] ??= 0;
@@ -261,8 +273,7 @@ class _MatchInfoState extends State<MatchInfo>
                                 borderRadius: BorderRadius.circular(
                                     Constants.borderRadius),
                                 borderSide: BorderSide.none),
-                            floatingLabelBehavior:
-                                FloatingLabelBehavior.never,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
                             labelText: "Team Number",
                             labelStyle: comfortaaBold(
                               _width / 22,
@@ -276,8 +287,8 @@ class _MatchInfoState extends State<MatchInfo>
                       child: Center(
                           child: AutoSizeText(
                         "Replay",
-                        style:
-                            comfortaaBold(_width / 18, color: Constants.pastelBrown),
+                        style: comfortaaBold(_width / 18,
+                            color: Constants.pastelBrown),
                         maxLines: 1,
                         textAlign: TextAlign.start,
                       )),
@@ -311,8 +322,8 @@ class _MatchInfoState extends State<MatchInfo>
                       child: Container(
                         decoration: BoxDecoration(
                             color: Constants.pastelYellow,
-                            borderRadius: BorderRadius.circular(
-                                Constants.borderRadius)),
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius)),
                         child: Center(
                           child: DropdownButton(
                             borderRadius:
@@ -366,8 +377,7 @@ class _MatchInfoState extends State<MatchInfo>
                                 borderRadius: BorderRadius.circular(
                                     Constants.borderRadius),
                                 borderSide: BorderSide.none),
-                            floatingLabelBehavior:
-                                FloatingLabelBehavior.never,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
                             labelText: "#",
                             labelStyle: comfortaaBold(
                               _width / 20,
@@ -386,8 +396,8 @@ class _MatchInfoState extends State<MatchInfo>
                                     .contains("Red")
                                 ? Constants.pastelRed
                                 : Constants.pastelBlue,
-                            borderRadius: BorderRadius.circular(
-                                Constants.borderRadius)),
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius)),
                         child: Center(
                           child: DropdownButton(
                             borderRadius:
@@ -418,9 +428,10 @@ class _MatchInfoState extends State<MatchInfo>
                                   matchData != []) {
                                 autofillTeamNumber();
                               }
+                              if (_onDriverStationUpdate != null)
+                                _onDriverStationUpdate!(driverStation);
                             },
-                            dropdownColor: DataEntry
-                                    .exportData["driverStation"]
+                            dropdownColor: DataEntry.exportData["driverStation"]
                                     .contains("Red")
                                 ? Constants.pastelRed
                                 : Constants.pastelBlue,
@@ -494,13 +505,14 @@ class _MatchInfoState extends State<MatchInfo>
             continue;
           }
         }
+        int team = int.tryParse(match["alliances"][
+                    DataEntry.exportData["driverStation"].contains("Red")
+                        ? "red"
+                        : "blue"]["team_keys"][stationIndex]
+                .substring(3)) ??
+            0;
         setState(() {
-          int.tryParse(teamNumberController.text = match["alliances"][
-                      DataEntry.exportData["driverStation"].contains("Red")
-                          ? "red"
-                          : "blue"]["team_keys"][stationIndex]
-                  .substring(3)) ??
-              0;
+          teamNumberController.text = team.toString();
         });
         return;
       }
