@@ -57,7 +57,7 @@ class PitScoutState extends State<PitScout> {
           icon: CustomIcons.autonomous,
           content: Container(
             margin: EdgeInsets.all(10),
-              child: Column(spacing: 15, children: [
+            child: Column(spacing: 15, children: [
               PitAutoContainer(
                 height: 50,
                 jsonKey: "autoPath",
@@ -70,31 +70,31 @@ class PitScoutState extends State<PitScout> {
                       pit: true,
                     ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
+                      padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Constants.pastelWhite,
-                        borderRadius: BorderRadius.circular(Constants.borderRadius),
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius),
                       ),
-                      child: Column(
-                        children: [
-                          Text("Fuel Scored", style: comfortaaBold(20, color: Constants.black),),
-                          NRGTextbox(
-                            numeric: true,
-                            title: "Fuel Scored",
-                            jsonKey: "autoFuelScored${(index + 1)}",
-                            height: 50,
-                            width: double.infinity,
-                            fontSize: 15,
-                            maxLines: 1),
-                        ],
-                      ),
+                      child: NRGTextbox(
+                          numeric: true,
+                          title: "Fuel Scored",
+                          jsonKey: "autoFuelScored${(index + 1)}",
+                          height: 50,
+                          width: double.infinity,
+                          fontSize: 15,
+                          maxLines: 1),
                     ),
                   ],
                 ),
               ),
             ]),
           ),
-        )
+        ),
+        "Teleop": DataEntrySubPage(
+          icon: CustomIcons.racecar,
+          content: Container(),
+        ),
       },
     );
   }
