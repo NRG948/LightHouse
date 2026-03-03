@@ -116,6 +116,15 @@ class PitScoutState extends State<PitScout> {
                   boxNames: [
                     ["Trench", "Hub", "Tower", "Anywhere"]
                   ],
+                ), 
+                NRGMultiThreeStageCheckbox(
+                  title: "Offshift Strat",
+                  jsonKey: ["canFeed", "canDefend", "canHoard"],
+                  width: double.infinity,
+                  height: 100,
+                  boxNames: [
+                    ["Feed", "Defend", "Hoard"]
+                  ],
                 )
               ],
             ),
