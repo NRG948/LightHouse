@@ -224,6 +224,36 @@ class AutoPathSelector extends StatefulWidget {
     this.exportConverter,
   });
 
+  /// Gets the conversion function from two corresponding pairs of one field coordinate and one pixel coordinate.
+  ///
+  /// A pixel coordinate is the raw output of this widget without a specified converter function.
+  /// A field coordinate is based on the coordinate system the converter will convert to, usually a meters based system like in PathPlanner.
+  ///
+  /// Choose [pixelPoint1] to be some pixel coordinate that corresponds to some field coordinate [fieldPoint1], and likewise with [pixelPoint2] and [fieldPoint2].
+  /// The resulting function should take any pixel coordinate and convert it to a field coordinate using a linear transformation.
+  /// 
+  /// Note that the two pixel coordinates cannot have the same dx value nor the same dy value, and the two field coordinates likewise cannot have
+  /// the same dx value nor the same dy value.
+  static Offset Function(Offset pixelPosition) getConverterFromPoints(
+    Offset pixelPoint1,
+    Offset fieldPoint1,
+    Offset pixelPoint2,
+    Offset fieldPoint2) {
+    
+  return (Offset pixelPosition) {
+    double dxDenominator = pixelPoint2.dx - pixelPoint1.dx;
+    double dyDenominator = pixelPoint2.dy - pixelPoint1.dy;
+
+    double slopeX = dxDenominator == 0 ? 0 : (fieldPoint2.dx - fieldPoint1.dx) / dxDenominator;
+    double slopeY = dyDenominator == 0 ? 0 : (fieldPoint2.dy - fieldPoint1.dy) / dyDenominator;
+
+    return Offset(
+      fieldPoint1.dx + (pixelPosition.dx - pixelPoint1.dx) * slopeX,
+      fieldPoint1.dy + (pixelPosition.dy - pixelPoint1.dy) * slopeY,
+    );
+  };
+}
+
   @override
   State<AutoPathSelector> createState() => _AutoPathSelectorState();
 }
@@ -312,13 +342,14 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       if (node.groupLabel != null) {
         positions.add(node.groupLabel);
       } else {
+        double pixelX = node.position!.dx / _scaleFactor;
+        double pixelY = node.position!.dy / _scaleFactor;
+
         if (_exportConverter == null) {
-          positions.add([node.position!.dx, node.position!.dy]);
+          positions.add([pixelX, pixelY]);
         } else {
-          positions.add([
-            _exportConverter!(node.position!).dx,
-            _exportConverter!(node.position!).dy
-          ]);
+          Offset convertedOffset = _exportConverter!(Offset(pixelX, pixelY));
+          positions.add([convertedOffset.dx, convertedOffset.dy]);
         }
       }
     }
@@ -421,8 +452,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                 onTap: () {},
                 child: Draggable(
                   maxSimultaneousDrags: node.draggable ? 1 : 0,
-                  feedback:
-                      Opacity(opacity: 0.5, child: buildVisualNode(node, i, false)),
+                  feedback: Opacity(
+                      opacity: 0.5, child: buildVisualNode(node, i, false)),
                   childWhenDragging: ColorFiltered(
                       colorFilter: const ColorFilter.mode(
                           Colors.grey, BlendMode.modulate),
@@ -441,7 +472,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                           localPosition + Offset(node.radius, node.radius) / 2;
 
                       if (_flipField) {
-                        newPosition = Offset(_imageWidth - newPosition.dx, newPosition.dy);
+                        newPosition = Offset(
+                            _imageWidth - newPosition.dx, newPosition.dy);
                       }
 
                       _history.add(UserAction(
