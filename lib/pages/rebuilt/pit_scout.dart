@@ -51,23 +51,39 @@ class PitScoutState extends State<PitScout> {
                     title: "Intake Type",
                     selectOptions: ["Ground", "Outpost"],
                     height: 100,
-                    jsonKey: "intakeType"), 
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Constants.pastelWhite,
-                        borderRadius:
-                            BorderRadius.circular(Constants.borderRadius),
-                      ),
-                      child: NRGTextbox(
-                          numeric: true,
-                          title: "Fuel Capacity",
-                          jsonKey: "fuelCapacity",
-                          height: 60,
-                          width: double.infinity,
-                          fontSize: 20,
-                          maxLines: 1),
-                    ),
+                    jsonKey: "intakeType"),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Constants.pastelWhite,
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
+                  ),
+                  child: NRGTextbox(
+                      numeric: true,
+                      title: "Fuel Capacity",
+                      jsonKey: "fuelCapacity",
+                      height: 60,
+                      width: double.infinity,
+                      fontSize: 20,
+                      maxLines: 1),
+                      
+                ),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Constants.pastelWhite,
+                    borderRadius: BorderRadius.circular(Constants.borderRadius),
+                  ),
+                  child: NRGTextbox(
+                      numeric: true,
+                      title: "Balls per Second",
+                      jsonKey: "bps",
+                      height: 60,
+                      width: double.infinity,
+                      fontSize: 20,
+                      maxLines: 1),
+                      
+                ),
               ]),
             )),
         "Auto": DataEntrySubPage(
@@ -113,7 +129,7 @@ class PitScoutState extends State<PitScout> {
           content: Container(
             margin: EdgeInsets.all(10),
             child: Column(
-              spacing: 10, 
+              spacing: 10,
               children: [
                 NRGMultiThreeStageCheckbox(
                   title: "Bump or Trench",
@@ -123,16 +139,21 @@ class PitScoutState extends State<PitScout> {
                   boxNames: [
                     ["Bump", "Trench"]
                   ],
-                ), 
+                ),
                 NRGMultiThreeStageCheckbox(
                   title: "Preferred Shooting Area",
-                  jsonKey: ["canShootTrench", "canShootHub", "canShootTower", "canShootAnywhere"],
+                  jsonKey: [
+                    "canShootTrench",
+                    "canShootHub",
+                    "canShootTower",
+                    "canShootAnywhere"
+                  ],
                   width: double.infinity,
                   height: 130,
                   boxNames: [
                     ["Trench", "Hub", "Tower", "Anywhere"]
                   ],
-                ), 
+                ),
                 NRGMultiThreeStageCheckbox(
                   title: "Offshift Strat",
                   jsonKey: ["canFeed", "canDefend", "canHoard"],
@@ -141,7 +162,16 @@ class PitScoutState extends State<PitScout> {
                   boxNames: [
                     ["Feed", "Defend", "Hoard"]
                   ],
-                )
+                ),
+                NRGMultiThreeStageCheckbox(
+                  title: "Feeding",
+                  jsonKey: ["canPass", "canPushOverBump", "canPushThroughTrench"],
+                  width: double.infinity,
+                  height: 100,
+                  boxNames: [
+                    ["Pass", "Bump", "Trench"]
+                  ],
+                ),
               ],
             ),
           ),
