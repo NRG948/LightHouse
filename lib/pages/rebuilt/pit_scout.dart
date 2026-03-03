@@ -4,6 +4,7 @@ import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/old_textbox.dart';
@@ -132,10 +133,18 @@ class PitScoutState extends State<PitScout> {
                     numeric: false,
                     title: "Drivetrain description",
                     jsonKey: "drivetrain",
-                    height: 80,
+                    height: 60,
                     width: double.infinity,
                     fontSize: 20,
                     maxLines: 1),
+                buildPitTextBox(
+                    numeric: false,
+                    title: "Describe Mechanisms",
+                    jsonKey: "mechanisms",
+                    height: 120,
+                    width: double.infinity,
+                    fontSize: 20,
+                    maxLines: 20),
               ]),
             )),
         "Auto": DataEntrySubPage(

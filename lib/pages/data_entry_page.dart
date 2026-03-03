@@ -151,15 +151,16 @@ class DataEntryPageState extends State<DataEntryPage> {
                 },
                 child: ScrollConfiguration(
                   behavior: ScrollBehavior().copyWith(overscroll: false),
-                  child: PageView(
+                child: PageView.builder(
                     controller: controller,
                     scrollDirection: Axis.horizontal,
-                    // Forces overscroll to trigger OverscrollNotification instead
-                    // of allowing overscroll itself
-                    // Forces overscroll to trigger OverscrollNotification instead
-                    // of allowing overscroll itself
+                    itemCount: _pages.values.toList().length,
                     physics: ClampingScrollPhysics(),
-                    children: _pages.values.toList(),
+                    itemBuilder: (context, index) {
+                      return SingleChildScrollView(
+                        child: _pages.values.toList()[index],
+                      );
+                    },
                     onPageChanged: (index) {
                       setState(() {
                         currentPage = index;
