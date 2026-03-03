@@ -5,9 +5,17 @@ class RebuiltAutoPathSelector extends StatelessWidget {
   final bool debug;
   final double? margin;
   final bool flipField;
+  final bool viewOnly;
+  final List<dynamic>? initialPath;
 
-  const RebuiltAutoPathSelector(
-      {super.key, this.debug = false, this.margin, this.flipField = false});
+  const RebuiltAutoPathSelector({
+    super.key,
+    this.debug = false,
+    this.margin,
+    this.flipField = false,
+    this.viewOnly = false,
+    this.initialPath,
+  });
 
   List<Zone> getZones() {
     return [
@@ -34,7 +42,10 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       showClimbOptions: true,
       jsonKey: "autoPath",
       flipField: flipField,
-      exportConverter: AutoPathSelector.getConverterFromPoints(
+      imageScalingFactor: viewOnly ? 1 : 0.75,
+      viewOnly: viewOnly,
+      initialPath: initialPath,
+      converter: AutoPathSelector.getConverterFromPoints(
           Offset(52, 617), // Bottom left corner
           Offset(0, 0),
           Offset(379, 325), // Center of hub

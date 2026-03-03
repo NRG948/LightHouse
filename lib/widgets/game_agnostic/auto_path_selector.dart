@@ -196,8 +196,14 @@ class AutoPathSelector extends StatefulWidget {
   final bool showClimbOptions;
   final List<String>? climbLevels;
 
-  /// The output of [exportConverter] when the pixel offsets of the nodes are passed in is saved to [DataEntry].
-  final Offset Function(Offset pixelPosition)? exportConverter;
+  final bool viewOnly;
+
+  final double imageScalingFactor;
+
+  /// The output of [converter] when the pixel offsets of the nodes are passed in is saved to [DataEntry].
+  final Offset Function(Offset position, {bool inverse})? converter;
+
+  final List<dynamic>? initialPath;
 
   const AutoPathSelector({
     super.key,
@@ -221,38 +227,40 @@ class AutoPathSelector extends StatefulWidget {
     this.regionNodeColor = Constants.pastelBlue,
     this.lockedColor = Constants.pastelGray,
     this.textColor = Constants.pastelBrown,
-    this.exportConverter,
+    this.converter,
+    this.viewOnly = false,
+    this.imageScalingFactor = 1,
+    this.initialPath,
   });
 
-  /// Gets the conversion function from two corresponding pairs of one field coordinate and one pixel coordinate.
+  /// Returns a conversion function that transforms coordinates between a Pixel system
+  /// and a Field system based on two anchor points.
   ///
-  /// A pixel coordinate is the raw output of this widget without a specified converter function.
-  /// A field coordinate is based on the coordinate system the converter will convert to, usually a meters based system like in PathPlanner.
+  /// * Set [inverse] to `false` (default) to convert Pixels to Field units.
+  /// * Set [inverse] to `true` to convert Field units back to Pixels.
   ///
-  /// Choose [pixelPoint1] to be some pixel coordinate that corresponds to some field coordinate [fieldPoint1], and likewise with [pixelPoint2] and [fieldPoint2].
-  /// The resulting function should take any pixel coordinate and convert it to a field coordinate using a linear transformation.
-  /// 
-  /// Note that the two pixel coordinates cannot have the same dx value nor the same dy value, and the two field coordinates likewise cannot have
-  /// the same dx value nor the same dy value.
-  static Offset Function(Offset pixelPosition) getConverterFromPoints(
-    Offset pixelPoint1,
-    Offset fieldPoint1,
-    Offset pixelPoint2,
-    Offset fieldPoint2) {
-    
-  return (Offset pixelPosition) {
-    double dxDenominator = pixelPoint2.dx - pixelPoint1.dx;
-    double dyDenominator = pixelPoint2.dy - pixelPoint1.dy;
+  /// Note: Anchor points must not share the same X or Y values in either system.
+  static Offset Function(Offset position, {bool inverse})
+      getConverterFromPoints(
+    Offset p1,
+    Offset f1,
+    Offset p2,
+    Offset f2,
+  ) {
+    final double scaleX = (f2.dx - f1.dx) / (p2.dx - p1.dx);
+    final double scaleY = (f2.dy - f1.dy) / (p2.dy - p1.dy);
 
-    double slopeX = dxDenominator == 0 ? 0 : (fieldPoint2.dx - fieldPoint1.dx) / dxDenominator;
-    double slopeY = dyDenominator == 0 ? 0 : (fieldPoint2.dy - fieldPoint1.dy) / dyDenominator;
+    final double invScaleX = 1.0 / scaleX;
+    final double invScaleY = 1.0 / scaleY;
 
-    return Offset(
-      fieldPoint1.dx + (pixelPosition.dx - pixelPoint1.dx) * slopeX,
-      fieldPoint1.dy + (pixelPosition.dy - pixelPoint1.dy) * slopeY,
-    );
-  };
-}
+    return (Offset pos, {bool inverse = false}) {
+      return inverse
+          ? Offset((pos.dx - f1.dx) * invScaleX + p1.dx,
+              (pos.dy - f1.dy) * invScaleY + p1.dy)
+          : Offset((pos.dx - p1.dx) * scaleX + f1.dx,
+              (pos.dy - p1.dy) * scaleY + f1.dy);
+    };
+  }
 
   @override
   State<AutoPathSelector> createState() => _AutoPathSelectorState();
@@ -272,10 +280,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   late double _width;
   double get _height =>
       _width * _imageScaingFactor * _rawImageHeight / _rawImageWidth +
-      _bottomOffset +
+      (_viewOnly ? 0 : _bottomOffset) +
       5; // 5 extra pixels for safety
 
-  final double _imageScaingFactor = 0.75;
+  double get _imageScaingFactor => widget.imageScalingFactor;
 
   double get _imageWidth => _imageScaingFactor * _width - 2 * _margin;
   double get _imageHeight => _imageWidth * _rawImageHeight / _rawImageWidth;
@@ -288,8 +296,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _nodeBorderWidth => _width / 100;
   int get _maximumGroupSize => widget.maximumGroupSize;
 
-  Offset Function(Offset pixelPosition)? get _exportConverter =>
-      widget.exportConverter;
+  Offset Function(Offset pixelPosition, {bool inverse})? get _converter =>
+      widget.converter;
+
+  List<dynamic>? get _initialPath => widget.initialPath;
 
   double get _buttonSize =>
       _bottomOffset -
@@ -316,6 +326,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   bool? _climbSuccessful;
   String? _climbLevel;
 
+  bool get _viewOnly => widget.viewOnly;
+
   List<Zone> get _zones => widget.zones;
 
   @override
@@ -323,6 +335,28 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     super.initState();
     _fieldImage = AssetImage(_imageFieldPath);
     if (_climbLevels == null) _climbSuccessful = false;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        if (_initialPath != null) {
+          for (dynamic node in _initialPath!) {
+            switch (node) {
+              case [num x, num y]:
+                Offset pixelPosition = Offset(x.toDouble(), y.toDouble());
+                addNodeFromMap((_converter == null
+                    ? pixelPosition
+                    : _converter!(pixelPosition, inverse: true)) * _scaleFactor);
+
+              case String region:
+                addNodeFromRegion(region);
+
+              default:
+                break;
+            }
+          }
+        }
+      });
+    });
   }
 
   @override
@@ -332,7 +366,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   }
 
   void _serializeData() {
-    if (_jsonKey == null) return;
+    if (_jsonKey == null || _viewOnly) return;
 
     Map<String, dynamic> data = {};
 
@@ -345,10 +379,11 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         double pixelX = node.position!.dx / _scaleFactor;
         double pixelY = node.position!.dy / _scaleFactor;
 
-        if (_exportConverter == null) {
+        if (_converter == null) {
           positions.add([pixelX, pixelY]);
         } else {
-          Offset convertedOffset = _exportConverter!(Offset(pixelX, pixelY));
+          Offset convertedOffset =
+              _converter!(Offset(pixelX, pixelY), inverse: false);
           positions.add([convertedOffset.dx, convertedOffset.dy]);
         }
       }
@@ -510,7 +545,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     });
   }
 
-  NodeData addNodeFromRegion(String groupLabel, Offset position) {
+  NodeData addNodeFromRegion(String groupLabel) {
     NodeData newNode = NodeData(
       groupLabel: groupLabel,
       radius: _nodeRadius,
@@ -528,9 +563,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     return newNode;
   }
 
-  NodeData addNodeFromMap(TapUpDetails details) {
+  NodeData addNodeFromMap(Offset position) {
     NodeData newNode = NodeData(
-        position: details.localPosition,
+        position: position,
         radius: _nodeRadius,
         draggable: true,
         color: _nodeStack.isEmpty ? _startNodeColor : _allianceZoneNodeColor);
@@ -566,7 +601,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
           if (sameIdNodeCount >= _maximumGroupSize) return;
 
           setState(() {
-            addNodeFromRegion(groupLabel, center);
+            addNodeFromRegion(groupLabel);
           });
         },
       ));
@@ -654,83 +689,88 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         _width = constraints.maxWidth;
         setPositionsForGroupedNodes();
 
-        return Center(
-          child: Container(
-            width: _width,
-            height: _height,
-            padding: EdgeInsets.all(_margin),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(_margin),
-              color: _backgroundColor,
-            ),
-            child: Column(
-              spacing: _margin,
-              children: [
-                Center(
-                  child: Transform.flip(
-                    flipX: _flipField,
-                    child: Container(
-                      width: _imageWidth,
-                      height: _imageHeight,
-                      decoration: BoxDecoration(
-                          color: _mainColor,
-                          borderRadius: BorderRadius.circular(_margin),
-                          image: DecorationImage(
-                              image: _fieldImage,
-                              fit: BoxFit.fill,
-                              colorFilter: ColorFilter.mode(
-                                  _backgroundColor, BlendMode.modulate))),
-                      child: Semantics(
-                        button: true,
-                        child: GestureDetector(
-                            behavior: HitTestBehavior.opaque,
-                            onHorizontalDragStart: (details) {},
-                            onTapUp: (TapUpDetails details) {
-                              setState(() {
-                                HapticFeedback.mediumImpact();
-                                addNodeFromMap(details);
-                              });
-                            },
-                            child: Container(
-                                color: Color.fromARGB(1, 255, 255, 255),
-                                child: Stack(children: [
-                                  ..._getRegions(),
-                                  _getPathPainter(),
-                                  ...buildNodes(),
-                                  ...buildNodeDebugCenters(),
-                                ]))),
+        return IgnorePointer(
+          ignoring: _viewOnly,
+          child: Center(
+            child: Container(
+              width: _width,
+              height: _height,
+              padding: EdgeInsets.all(_margin),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(_margin),
+                color: _backgroundColor,
+              ),
+              child: Column(
+                spacing: _margin,
+                children: [
+                  Center(
+                    child: Transform.flip(
+                      flipX: _flipField,
+                      child: Container(
+                        width: _imageWidth,
+                        height: _imageHeight,
+                        decoration: BoxDecoration(
+                            color: _mainColor,
+                            borderRadius: BorderRadius.circular(_margin),
+                            image: DecorationImage(
+                                image: _fieldImage,
+                                fit: BoxFit.fill,
+                                colorFilter: ColorFilter.mode(
+                                    _backgroundColor, BlendMode.modulate))),
+                        child: Semantics(
+                          button: true,
+                          child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onHorizontalDragStart: (details) {},
+                              onTapUp: (TapUpDetails details) {
+                                setState(() {
+                                  HapticFeedback.mediumImpact();
+                                  addNodeFromMap(details.localPosition);
+                                });
+                              },
+                              child: Container(
+                                  color: Color.fromARGB(1, 255, 255, 255),
+                                  child: Stack(children: [
+                                    ..._getRegions(),
+                                    _getPathPainter(),
+                                    ...buildNodes(),
+                                    ...buildNodeDebugCenters(),
+                                  ]))),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  spacing: _margin,
-                  children: [
-                    _getClimbOptions(),
-                    Container(
-                      width: _buttonSize,
-                      height: _buttonSize,
-                      decoration: BoxDecoration(
-                          color: Constants.pastelRedDark,
-                          borderRadius: BorderRadius.circular(_buttonSize / 4)),
-                      child: IconButton(
-                          padding: EdgeInsets.all(_buttonSize / 8),
-                          onPressed: () {
-                            setState(() {
-                              if (_nodeStack.isNotEmpty) {
-                                undo();
-                              }
-                            });
-                          },
-                          iconSize: _buttonSize * 0.7,
-                          color: _backgroundColor,
-                          highlightColor: Constants.pastelRedSuperDark,
-                          icon: const Icon(Icons.undo_rounded)),
-                    ),
-                  ],
-                )
-              ],
+                  if (!_viewOnly)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      spacing: _margin,
+                      children: [
+                        _getClimbOptions(),
+                        Container(
+                          width: _buttonSize,
+                          height: _buttonSize,
+                          decoration: BoxDecoration(
+                              color: Constants.pastelRedDark,
+                              borderRadius:
+                                  BorderRadius.circular(_buttonSize / 4)),
+                          child: IconButton(
+                              padding: EdgeInsets.all(_buttonSize / 8),
+                              onPressed: () {
+                                setState(() {
+                                  if (_nodeStack.isNotEmpty) {
+                                    undo();
+                                  }
+                                });
+                              },
+                              iconSize: _buttonSize * 0.7,
+                              color: _backgroundColor,
+                              highlightColor: Constants.pastelRedSuperDark,
+                              icon: const Icon(Icons.undo_rounded)),
+                        ),
+                      ],
+                    )
+                ],
+              ),
             ),
           ),
         );
