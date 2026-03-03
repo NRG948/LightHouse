@@ -51,7 +51,23 @@ class PitScoutState extends State<PitScout> {
                     title: "Intake Type",
                     selectOptions: ["Ground", "Outpost"],
                     height: 100,
-                    jsonKey: "intakeType")
+                    jsonKey: "intakeType"), 
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Constants.pastelWhite,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius),
+                      ),
+                      child: NRGTextbox(
+                          numeric: true,
+                          title: "Fuel Capacity",
+                          jsonKey: "fuelCapacity",
+                          height: 60,
+                          width: double.infinity,
+                          fontSize: 20,
+                          maxLines: 1),
+                    ),
               ]),
             )),
         "Auto": DataEntrySubPage(
