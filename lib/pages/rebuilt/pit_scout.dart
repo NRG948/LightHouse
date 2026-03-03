@@ -5,6 +5,7 @@ import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_choice_selector.dart';
+import 'package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/old_textbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
@@ -80,9 +81,9 @@ class PitScoutState extends State<PitScout> {
                           numeric: true,
                           title: "Fuel Scored",
                           jsonKey: "autoFuelScored${(index + 1)}",
-                          height: 50,
+                          height: 60,
                           width: double.infinity,
-                          fontSize: 15,
+                          fontSize: 20,
                           maxLines: 1),
                     ),
                   ],
@@ -93,7 +94,32 @@ class PitScoutState extends State<PitScout> {
         ),
         "Teleop": DataEntrySubPage(
           icon: CustomIcons.racecar,
-          content: Container(),
+          content: Container(
+            margin: EdgeInsets.all(10),
+            child: Column(
+              spacing: 10, 
+              children: [
+                NRGMultiThreeStageCheckbox(
+                  title: "Bump or Trench",
+                  jsonKey: ["canGoBump", "canGoTrench"],
+                  width: double.infinity,
+                  height: 100,
+                  boxNames: [
+                    ["Bump", "Trench"]
+                  ],
+                ), 
+                NRGMultiThreeStageCheckbox(
+                  title: "Preferred Shooting Area",
+                  jsonKey: ["canShootTrench", "canShootHub", "canShootTower", "canShootAnywhere"],
+                  width: double.infinity,
+                  height: 100,
+                  boxNames: [
+                    ["Trench", "Hub", "Tower", "Anywhere"]
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
       },
     );
