@@ -73,11 +73,9 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
           "${nameList.length}-count three-stage-checkbox has ${keyList.length} JSON keys associated with it");
     }
 
-    // Create rows of checkboxes.
-    final List<Widget> rowList = _boxNames.map((row) {
-      return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: row.map((title) {
+    // Create wrapping checkboxes.
+    final List<Widget> checkboxList = _boxNames.expand((row) {
+      return row.map((title) {
             // As much of this code is simply modified from MultiSpinbox, 
             // it has the same limitations--as in, do not give the same name
             // to multiple different ones. 
@@ -96,10 +94,13 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
             // Create an individual three-stage checkbox.
             return NRGThreeStageCheckbox(
                 title: title, jsonKey: keyList[nameList.indexOf(title)], height: 50, width: textwidth * 3.5,);
-          }).toList() as List<Widget>);
+          }).toList() as List<Widget>;
     }).toList();
 
-    // Return the column of checkbox rows.
-    return Column(children: rowList);
+    // Return the wrapping checkbox column.
+    return Wrap(
+      alignment: WrapAlignment.spaceEvenly,
+      children: checkboxList,
+    );
   }
 }
