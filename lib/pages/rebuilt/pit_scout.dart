@@ -112,7 +112,7 @@ class PitScoutState extends State<PitScout> {
                   title: "Preferred Shooting Area",
                   jsonKey: ["canShootTrench", "canShootHub", "canShootTower", "canShootAnywhere"],
                   width: double.infinity,
-                  height: 150,
+                  height: 130,
                   boxNames: [
                     ["Trench", "Hub", "Tower", "Anywhere"]
                   ],
@@ -121,7 +121,7 @@ class PitScoutState extends State<PitScout> {
                   title: "Offshift Strat",
                   jsonKey: ["canFeed", "canDefend", "canHoard"],
                   width: double.infinity,
-                  height: 100,
+                  height: 130,
                   boxNames: [
                     ["Feed", "Defend", "Hoard"]
                   ],
