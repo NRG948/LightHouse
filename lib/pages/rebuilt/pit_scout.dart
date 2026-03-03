@@ -22,6 +22,40 @@ class PitScout extends StatefulWidget {
   State<PitScout> createState() => PitScoutState();
 }
 
+// TODO: bad interim solution, fix this as soon as season ends if not sooner lol
+Widget buildPitTextBox({
+  required String title,
+  required String jsonKey,
+  required double height,
+  required double width,
+  bool numeric = false,
+  String defaultText = "Enter Text",
+  required double fontSize,
+  required int maxLines,
+  String? autoFill,
+  String? hintText,
+}) {
+  return Container(
+    padding: EdgeInsets.all(10),
+    decoration: BoxDecoration(
+      color: Constants.pastelWhite,
+      borderRadius: BorderRadius.circular(Constants.borderRadius),
+    ),
+    child: NRGTextbox(
+      title: title,
+      jsonKey: jsonKey,
+      height: height,
+      width: width,
+      numeric: numeric,
+      defaultText: defaultText,
+      fontSize: fontSize,
+      maxLines: maxLines,
+      autoFill: autoFill,
+      hintText: hintText,
+    ),
+  );
+}
+
 class PitScoutState extends State<PitScout> {
   @override
   Widget build(BuildContext context) {
@@ -53,51 +87,31 @@ class PitScoutState extends State<PitScout> {
                     selectOptions: ["Ground", "Outpost"],
                     height: 90,
                     jsonKey: "intakeType"),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius),
-                  ),
-                  child: NRGTextbox(
-                      numeric: true,
-                      title: "Fuel Capacity",
-                      jsonKey: "fuelCapacity",
-                      height: 60,
-                      width: double.infinity,
-                      fontSize: 20,
-                      maxLines: 1),
+                buildPitTextBox(
+                  numeric: true,
+                  title: "Fuel Capacity",
+                  jsonKey: "fuelCapacity",
+                  height: 60,
+                  width: double.infinity,
+                  fontSize: 20,
+                  maxLines: 1,
                 ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius),
-                  ),
-                  child: NRGTextbox(
-                      numeric: true,
-                      title: "Balls per Second",
-                      jsonKey: "bps",
-                      height: 60,
-                      width: double.infinity,
-                      fontSize: 20,
-                      maxLines: 1),
-                ),
-                Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(Constants.borderRadius),
-                  ),
-                  child: NRGTextbox(
-                      numeric: true,
-                      title: "Weight (lbs) (w/ bump + batt)",
-                      jsonKey: "weight",
-                      height: 60,
-                      width: double.infinity,
-                      fontSize: 20,
-                      maxLines: 1),
-                ),
+                buildPitTextBox(
+                    numeric: true,
+                    title: "Balls per Second",
+                    jsonKey: "bps",
+                    height: 60,
+                    width: double.infinity,
+                    fontSize: 20,
+                    maxLines: 1),
+                buildPitTextBox(
+                    numeric: true,
+                    title: "Weight (lbs) (w/ bump + batt)",
+                    jsonKey: "weight",
+                    height: 60,
+                    width: double.infinity,
+                    fontSize: 20,
+                    maxLines: 1),
               ]),
             )),
         "Auto": DataEntrySubPage(
@@ -116,22 +130,14 @@ class PitScoutState extends State<PitScout> {
                       jsonKey: "autoPath${(index + 1)}",
                       pit: true,
                     ),
-                    Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Constants.pastelWhite,
-                        borderRadius:
-                            BorderRadius.circular(Constants.borderRadius),
-                      ),
-                      child: NRGTextbox(
-                          numeric: true,
-                          title: "Fuel Scored",
-                          jsonKey: "autoFuelScored${(index + 1)}",
-                          height: 60,
-                          width: double.infinity,
-                          fontSize: 20,
-                          maxLines: 1),
-                    ),
+                    buildPitTextBox(
+                        numeric: true,
+                        title: "Fuel Scored",
+                        jsonKey: "autoFuelScored${(index + 1)}",
+                        height: 60,
+                        width: double.infinity,
+                        fontSize: 20,
+                        maxLines: 1),
                   ],
                 ),
               ),
@@ -190,21 +196,14 @@ class PitScoutState extends State<PitScout> {
                     ["Pass", "Bump", "Trench"]
                   ],
                 ),
-                Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Constants.pastelWhite,
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius),
-                    ),
-                    child: NRGTextbox(
-                        numeric: true,
-                        title: "Cycle Time",
-                        jsonKey: "cycleTime",
-                        height: 60,
-                        width: double.infinity,
-                        fontSize: 20,
-                        maxLines: 1)),
+                buildPitTextBox(
+                    numeric: true,
+                    title: "Cycle Time",
+                    jsonKey: "cycleTime",
+                    height: 60,
+                    width: double.infinity,
+                    fontSize: 20,
+                    maxLines: 1),
               ],
             ),
           ),
