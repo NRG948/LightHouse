@@ -107,9 +107,9 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
             },
             child: Container(
                 width: double.infinity,
-                height: 125.0, // change this based on how many tags there are
+                height: 90.0, // change this based on how many tags there are
                 constraints: BoxConstraints(
-                  minHeight: 100.0,
+                  minHeight: 90.0,
                 ),
                 margin: EdgeInsets.all(5),
                 padding: EdgeInsets.all(5),

@@ -58,7 +58,7 @@ class DataViewerHome extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context,
-                      "/data-viewer-tony"); // Navigates to Tony's Data Viewer Page.
+                      "/data-viewer-aryav"); // Navigates to Aryav's Data Viewer Page.
                 },
                 child: Container(
                   width: screenWidth * 0.85,
@@ -74,7 +74,7 @@ class DataViewerHome extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("TONY'S DATA VIEWER", style: comfortaaBold(25)),
+                        Text("ARYAV'S DATA VIEWER", style: comfortaaBold(25)),
                         AutoSizeText(
                           "A more specialized data viewer page made specifically for drive team, featuring detailed auto information and comments.",
                           style: comfortaaBold(screenWidth * 0.03),
@@ -88,7 +88,7 @@ class DataViewerHome extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context,
-                      "/data-viewer-amongview"); // Navigates to Tony's Data Viewer Page.
+                      "/data-viewer-amongview");
                 },
                 child: Container(
                   width: screenWidth * 0.85,

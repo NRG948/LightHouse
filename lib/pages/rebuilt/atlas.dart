@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
+import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -26,6 +28,13 @@ class Atlas extends StatefulWidget {
 
 class AtlasState extends State<Atlas> {
   double margin = 10;
+  String? driverStation;
+
+  @override
+  void initState() {
+    super.initState();
+    driverStation = configData["currentDriverStation"];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,26 +42,35 @@ class AtlasState extends State<Atlas> {
       "Setup": DataEntrySubPage(
           icon: CustomIcons.wrench,
           content: Container(
+              padding: EdgeInsets.all(15),
               child: Column(
-            children: [
-              Container(
-                height: 70,
-                padding: EdgeInsets.all(margin),
-                margin: EdgeInsets.all(5),
+                spacing: margin,
+                children: [
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.all(margin),
+                    margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: Constants.pastelWhite,
-                  borderRadius: BorderRadius.circular(margin),
-                ),
-                child: InputTextBox(
-                  maxLines: 1,
-                  hintText: "Scouter name",
-                  jsonKey: "scouterName",
-                  autofillKey: "scouterName",
-                ),
-              ),
-              MatchInfo()
-            ],
-          ))),
+                      color: Constants.pastelWhite,
+                      borderRadius: BorderRadius.circular(margin),
+                    ),
+                    child: InputTextBox(
+                      maxLines: 1,
+                      hintText: "Scouter name",
+                      jsonKey: "scouterName",
+                      autofillKey: "scouterName",
+                    ),
+                  ),
+                  MatchInfo(
+                    margin: margin,
+                    onDriverStationUpdate: (driverStation) {
+                      setState(() {
+                        this.driverStation = driverStation;
+                      });
+                    },
+                  )
+                ],
+              ))),
       "Auto": DataEntrySubPage(
         icon: CustomIcons.autonomous,
         content: Container(
@@ -61,19 +79,20 @@ class AtlasState extends State<Atlas> {
             spacing: margin,
             children: [
               RebuiltAutoPathSelector(
+                
                 margin: margin,
+                flipField: driverStation != null && driverStation!.startsWith("B"),
                 pit: false,
               ),
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Constants.pastelWhite,
-                    borderRadius: BorderRadius.circular(margin),
-                  ),
-                  child: CycleCounter(
-                    jsonKey: "autoCycles",
-                    isCompact: true,
-                  ),
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Constants.pastelWhite,
+                  borderRadius: BorderRadius.circular(margin),
+                ),
+                child: CycleCounter(
+                  jsonKey: "autoCycles",
+                  isCompact: true,
                 ),
               ),
             ],
@@ -232,7 +251,7 @@ class AtlasState extends State<Atlas> {
               NRGCommentBox(
                 title: "Comments",
                 jsonKey: "comments",
-                height: 125,
+                height: 90,
                 margin: margin,
               ),
             ],

@@ -3,6 +3,7 @@ import "package:flutter/services.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/pages/amongview.dart";
 import "package:lighthouse/pages/amongview_individual.dart";
+import "package:lighthouse/pages/aryav_data_viewer.dart";
 import "package:lighthouse/pages/home_data_viewer.dart";
 import "package:lighthouse/pages/home_scouter.dart";
 import "package:lighthouse/constants.dart";
@@ -52,6 +53,7 @@ class MainWidget extends StatelessWidget {
         "/home-data-viewer": (context) => DataViewerHome(),
         "/sync": (context) => SyncPage(),
         "/testing-ground": (context) => TestingGroundPage(),
+        "/data-viewer-aryav": (context) => AryavDataViewer(),
         // TODO: add these again: 
         // "/data-viewer-amongview": (context) => DataViewerAmongView(),
         // "/amongview-individual": (context) => AmongViewIndividual()

@@ -73,7 +73,7 @@ class TowerLocationSelector extends StatefulWidget {
 
 class _TowerLocationSelectorState extends State<TowerLocationSelector> {
   late double _width;
-  double get _height => _width * 0.35 + _bottomOffset + _topOffset;
+  double get _height => _width * 0.16 + _bottomOffset + _topOffset;
   double get _bottomOffset => _width * 0.12;
   double get _topOffset => _width * 0.15;
   double get _margin => widget.margin ?? _width / 25;
@@ -195,7 +195,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                   ),
                 ),
                 Expanded(
-                  flex: 35,
+                  flex: 20,
                   child: Container(
                     //height: _height - _bottomOffset - _topOffset - 2.1 * _margin, // 2.1 to prevent overflow due to rounding error
                     decoration: BoxDecoration(
