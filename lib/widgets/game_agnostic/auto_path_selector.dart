@@ -193,6 +193,8 @@ class AutoPathSelector extends StatefulWidget {
   final bool canStartInZone;
   final bool flipField;
 
+  /// whether to show "climb successful" option
+  final bool pit;
   final bool showClimbOptions;
   final List<String>? climbLevels;
 
@@ -227,6 +229,7 @@ class AutoPathSelector extends StatefulWidget {
     this.regionNodeColor = Constants.pastelBlue,
     this.lockedColor = Constants.pastelGray,
     this.textColor = Constants.pastelBrown,
+    required this.pit,
     this.converter,
     this.viewOnly = false,
     this.imageScalingFactor = 1,
@@ -290,7 +293,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _scaleFactor => _imageWidth / _rawImageWidth;
 
   double get _margin => widget.margin ?? _width / 25;
-  double get _bottomOffset => _width * 0.25;
+  double get _bottomOffset => _pit ? _width * 0.125 : _width * 0.25;
 
   double get _nodeRadius => _imageWidth / 16;
   double get _nodeBorderWidth => _width / 100;
@@ -321,6 +324,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   bool get _debug => widget.debug;
   bool get _canStartInZone => widget.canStartInZone;
   bool get _showClimbOptions => widget.showClimbOptions;
+  bool get _pit => widget.pit;
   List<String>? get _climbLevels => widget.climbLevels;
   bool _attemptedClimb = false;
   bool? _climbSuccessful;
@@ -405,8 +409,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
           .length;
       for (NodeData node in _nodeStack
           .where((final NodeData node) => node.groupLabel == zone.id)) {
-        node.radius =
-            _nodeRadius - ((numNodes - 1) * 3); // TODO: tweak based on testing
+        node.radius = _nodeRadius -
+            ((numNodes - 1) * 1.5); // TODO: tweak based on testing
 
         final scaledLeft = zone.left * _scaleFactor;
         final scaledTop = zone.top * _scaleFactor;
@@ -654,7 +658,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
             optionColor: _mainColor,
             lockedColor: _lockedColor,
             textColor: _textColor,
-            title: "Attempted Climb",
+            title: _pit ? "Attempts Climb" : "Attempted Climb",
             onToggle: (value) {
               setState(() {
                 _attemptedClimb = value;
@@ -662,7 +666,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
               });
             },
           )),
-          Expanded(child: climbOutcome),
+          _pit ? Container() : Expanded(child: climbOutcome),
         ],
       ),
     );

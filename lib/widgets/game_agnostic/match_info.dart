@@ -132,7 +132,7 @@ class _MatchInfoState extends State<MatchInfo>
         _width = constraints.maxWidth;
         return Container(
           width: _width,
-          height: _width * 0.67,
+          height: _width * 0.7,
           padding: EdgeInsets.all(_margin),
           decoration: BoxDecoration(
               color: Constants.pastelWhite,

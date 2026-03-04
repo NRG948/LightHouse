@@ -49,7 +49,7 @@ class AtlasState extends State<Atlas> {
                   Container(
                     height: 70,
                     padding: EdgeInsets.all(margin),
-                    decoration: BoxDecoration(
+                decoration: BoxDecoration(
                       color: Constants.pastelWhite,
                       borderRadius: BorderRadius.circular(margin),
                     ),
@@ -78,8 +78,10 @@ class AtlasState extends State<Atlas> {
             spacing: margin,
             children: [
               RebuiltAutoPathSelector(
+                
                 margin: margin,
                 flipField: driverStation != null && driverStation!.startsWith("B"),
+                pit: false,
               ),
               Container(
                 height: 200,
