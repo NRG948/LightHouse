@@ -20,7 +20,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
     this.flipField = false,
     this.viewOnly = false,
     this.initialPath,
-  , required this.pit, this.jsonKey});
+    required this.pit, this.jsonKey});
 
   List<Zone> getZones() {
     return [

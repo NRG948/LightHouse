@@ -373,7 +373,6 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     if (_jsonKey == null || _viewOnly) return;
 
     Map<String, dynamic> data = {};
-    Map<String, dynamic> data = {};
 
     // each element can either be a string or another list for x-y coords
     List<dynamic> positions = List.empty(growable: true);
@@ -504,9 +503,6 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                       HapticFeedback.mediumImpact();
                       final RenderBox renderBox =
                           context.findRenderObject() as RenderBox;
-                      final Offset localPosition = renderBox
-                              .globalToLocal(details.offset) -
-                          Offset(0.5 * (1 - _imageScaingFactor) * _width, 0);
                       final Offset localPosition = renderBox
                               .globalToLocal(details.offset) -
                           Offset(0.5 * (1 - _imageScaingFactor) * _width, 0);
