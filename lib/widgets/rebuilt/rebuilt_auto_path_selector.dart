@@ -5,7 +5,7 @@ import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 
 class RebuiltAutoPathSelector extends StatelessWidget {
   final bool debug;
-  final String? jsonKey; 
+  final String? jsonKey;
   final double? margin;
   final bool flipField;
   final bool viewOnly;
@@ -13,14 +13,14 @@ class RebuiltAutoPathSelector extends StatelessWidget {
   final bool pit;
 
   const RebuiltAutoPathSelector(
-      {
-    super.key,
-    this.debug = false,
-    this.margin,
-    this.flipField = false,
-    this.viewOnly = false,
-    this.initialPath,
-    required this.pit, this.jsonKey});
+      {super.key,
+      this.debug = false,
+      this.margin,
+      this.flipField = false,
+      this.viewOnly = false,
+      this.initialPath,
+      this.pit = false,
+      this.jsonKey});
 
   List<Zone> getZones() {
     return [

@@ -49,7 +49,6 @@ class AtlasState extends State<Atlas> {
                   Container(
                     height: 70,
                     padding: EdgeInsets.all(margin),
-                    margin: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                       color: Constants.pastelWhite,
                       borderRadius: BorderRadius.circular(margin),
