@@ -3,6 +3,7 @@ import "dart:convert";
 
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/game_agnostic/default_container.dart";
@@ -183,7 +184,7 @@ class AutoPreview extends StatefulWidget {
   /// ```dart
   /// {
   ///   "scouterName": String,
-  ///   "rating": int,
+  ///   "rating": float,
   ///   "match": String,
   ///   "attemptedClimb": bool,
   ///   "climbSuccessful": bool,
@@ -555,6 +556,48 @@ class ClimbInfoBox extends StatelessWidget {
   }
 }
 
+class MetricMatch {
+  final String match;
+  final String metric;
+
+  const MetricMatch({required this.match, required this.metric});
+}
+
+class RobotStatistics {
+  int teamNumber;
+
+  double totalAccuracy;
+  double accuracyCycles;
+
+  int capacity;
+
+  double totalTimeScoring;
+  double matches;
+
+  double totalCycles;
+  double totalActiveShifts;
+
+  double
+      fuelPerShift; // capacity * (capacityFactor / totalCycles) * totalCycles / totalActiveShifts
+  double totalCapacityFactor;
+
+  double totalAutoCapacityFactor;
+
+  RobotStatistics({
+    required this.teamNumber,
+    this.totalAccuracy = 0,
+    this.accuracyCycles = 0,
+    this.capacity = 0,
+    this.totalTimeScoring = 0,
+    this.matches = 0,
+    this.totalCycles = 0,
+    this.totalActiveShifts = 0,
+    this.fuelPerShift = 0,
+    this.totalCapacityFactor = 0,
+    this.totalAutoCapacityFactor = 0,
+  });
+}
+
 class AryavDataViewer extends StatefulWidget {
   const AryavDataViewer({super.key});
 
@@ -568,8 +611,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   List<Map<String, dynamic>> _atlasData = [];
   List<Map<String, dynamic>> _pitData = [];
 
-
-  String _teamName = "";
+  String? _teamName;
 
   Map<String, List<String>> _tags = {};
 
@@ -590,11 +632,11 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
   double _feedingPercentage = -1;
   String _feedingMetric = "";
-  List<String> _feedingMatches = [];
+  List<MetricMatch> _feedingMatches = [];
 
   double _defensePercentage = -1;
   String _defenseMetric = "";
-  List<String> _defenseMatches = [];
+  List<MetricMatch> _defenseMatches = [];
 
   List<Map<String, dynamic>> _autos = [];
 
@@ -603,11 +645,71 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   List<Comment> _comments = [];
 
   int? _toInt(dynamic value) {
-    return double.tryParse(value.toString())?.toInt();    
+    if (value == null) return null;
+
+    String cleanValue = value.toString().replaceAll(RegExp(r'\s+'), '');
+
+    if (cleanValue.isEmpty) return null;
+
+    return double.tryParse(cleanValue)?.toInt();
   }
 
   double? _toDouble(dynamic value) {
-    return double.tryParse(value.toString());
+    if (value == null) return null;
+
+    String cleanValue = value.toString().replaceAll(' ', '');
+
+    if (cleanValue.isEmpty) return null;
+
+    bool isPercent = cleanValue.endsWith('%');
+
+    if (isPercent) {
+      cleanValue = cleanValue.replaceAll('%', '');
+      double? parsed = double.tryParse(cleanValue);
+
+      return (parsed != null) ? parsed / 100 : null;
+    }
+
+    return double.tryParse(cleanValue);
+  }
+
+  List<dynamic>? _toList(dynamic value) {
+    if (value is List) return value;
+    if (value is Iterable) return value.toList();
+    if (value is String) {
+      try {
+        final decoded = jsonDecode(value);
+        if (decoded is List) return decoded;
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
+
+  String _toString(dynamic value) {
+    if (value == null) return "";
+
+    String result = value.toString();
+    if (result.toLowerCase() == "null") return "";
+
+    return result;
+  }
+
+  bool _isEmpty(dynamic value) {
+    if (value == null) return true;
+    if (value is String) return value.trim().isEmpty;
+    if (value is Iterable) return value.isEmpty;
+    if (value is Map) return value.isEmpty;
+
+    return false;
+  }
+
+  String _shortenMatch(String matchType, int matchNumber) {
+    if (matchType.isEmpty) {
+      return "$matchNumber";
+    }
+    return "${matchType[0]}$matchNumber";
   }
 
   Set<int> _getTeamsInDatabase() {
@@ -624,6 +726,15 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return teams.toSet();
   }
 
+  double _accuracyMetricConverter(double accuracy) {
+    return (accuracy + 1) / 6;
+  }
+
+  double zeroSafeDivision(double dividend, double divisor) {
+    return divisor == 0 ? 0 : dividend / divisor;
+  }
+
+  // ignore: unused_element
   List<Map<String, dynamic>> _getDataAsMapFromSavedMatches(String layout) {
     assert(configData["eventKey"] != null);
     List<String> dataFilePaths =
@@ -634,6 +745,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         .toList();
   }
 
+  // ignore: unused_element
   List<Map<String, dynamic>> _getDataAsMapFromDatabase(String layout) {
     assert(configData["eventKey"] != null);
     String file = loadDatabaseFile(configData["eventKey"]!, layout);
@@ -644,13 +756,265 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return data;
   }
 
+  Future<void> _setTeamNameWithNumber(int teamNumber) async {
+    dynamic teamPage;
+    try {
+      teamPage = jsonDecode(await rootBundle.loadString(
+          "assets/text/teams${(teamNumber ~/ 500) * 500}-${(teamNumber ~/ 500) * 500 + 500}.txt"));
+    } catch (e) {
+      debugPrint(e.toString());
+      return;
+    }
+
+    for (dynamic teamObject in teamPage) {
+      if (teamObject["key"] == "frc$teamNumber") {
+        setState(() {
+          _teamName = teamObject["nickname"];
+        });
+      }
+    }
+  }
+
   bool _loadData(int team) {
-    _atlasData = _getDataAsMapFromSavedMatches("Atlas");
-    _pitData = _getDataAsMapFromSavedMatches("Pit");
+    _atlasData = _getDataAsMapFromDatabase("Atlas");
+    _pitData = _getDataAsMapFromDatabase("Pit");
     _teams = _getTeamsInDatabase();
 
-    if (_teams.isEmpty) return false;
+    _tags = {};
 
+    _fuelPerShift = -1;
+    _fuelPerShiftRank = -1;
+
+    _averageAccuracy = -1;
+    _averageAccuracyRank = -1;
+
+    _capacity = -1;
+    _capacityRank = -1;
+
+    _timeScoring = -1;
+    _timeScoringRank = -1;
+
+    _cyclesPerShift = -1;
+    _cyclesPerShiftRank = -1;
+
+    _feedingPercentage = -1;
+    _feedingMetric = "";
+    _feedingMatches = [];
+
+    _defensePercentage = -1;
+    _defenseMetric = "";
+    _defenseMatches = [];
+
+    _autos = [];
+
+    _climbs = [];
+
+    _comments = [];
+
+    if (!_teams.contains(team)) return false;
+
+    debugPrint(_atlasData.toString(), wrapWidth: 100);
+    debugPrint(_pitData.toString());
+
+    _setTeamNameWithNumber(team);
+
+    Map<int, RobotStatistics> robotStats = {
+      for (int t in _teams) t: RobotStatistics(teamNumber: t)
+    };
+
+    for (Map<String, dynamic> entry in _pitData) {
+      int? curTeam = _toInt(entry["teamNumber"]);
+      if (curTeam == null) continue;
+      if (robotStats[curTeam] == null) continue;
+
+      RobotStatistics curStats = robotStats[curTeam]!;
+
+      curStats.capacity = _toInt(entry["fuelCapacity"]) ?? -1;
+    }
+
+    for (Map<String, dynamic> entry in _atlasData) {
+      int? curTeam = _toInt(entry["teamNumber"]);
+      if (curTeam == null) continue;
+      if (robotStats[curTeam] == null) continue;
+
+      RobotStatistics curStats = robotStats[curTeam]!;
+      String shortenedMatch = _shortenMatch(
+          _toString(entry["matchType"]), _toInt(entry["matchNumber"]) ?? 0);
+
+      curStats.matches++;
+
+      List<String> cycleShifts = [
+        "autoCycles",
+        "transitionOnshiftCycles",
+        "firstOnshiftCycles",
+        "secondOnshiftCycles",
+      ];
+      for (String cycleShift in cycleShifts) {
+        if (_toList(entry[cycleShift]) == null) continue;
+
+        List<dynamic> cycles = _toList(entry[cycleShift])!;
+
+        curStats.accuracyCycles += cycles.length;
+        curStats.totalAccuracy += cycles.fold(
+            0.0,
+            (sum, item) =>
+                sum +
+                (_accuracyMetricConverter(_toDouble(item['accuracy']) ?? -1)));
+        curStats.totalTimeScoring += cycles.fold(0.0,
+            (sum, item) => sum + (_toDouble(item['duration']) ?? 0) / 1000);
+
+        if (cycleShift == cycleShifts[2] || cycleShift == cycleShifts[3]) {
+          curStats.totalCapacityFactor += cycles.fold(
+              0.0,
+              (sum, item) =>
+                  sum +
+                  (_accuracyMetricConverter(_toDouble(item['accuracy']) ?? 3) *
+                      (_toDouble(item['capacity']) ?? 1)));
+
+          curStats.totalCycles += cycles.length;
+          curStats.totalActiveShifts += 1;
+        }
+
+        if (cycleShift == cycleShifts[0]) {
+          curStats.totalAutoCapacityFactor += cycles.fold(
+              0.0,
+              (sum, item) =>
+                  sum +
+                  (_accuracyMetricConverter(_toDouble(item['accuracy']) ?? 3) *
+                      (_toDouble(item['capacity']) ?? 1)));
+        }
+      }
+
+      if (team == curTeam) {
+        // Tags
+        if (entry["tags"] != null) {
+          List<dynamic> curTags = _toList(entry["tags"])!;
+          for (dynamic tag in curTags) {
+            if (tag is! String) continue;
+
+            if (!_tags.keys.contains(tag)) _tags[tag] = [];
+            _tags[tag]!.add(shortenedMatch);
+          }
+        }
+
+        List<String> defenseKeys = [
+          "firstOffshiftIsDefending",
+          "secondOffshiftIsDefending",
+          "transitionOffshiftIsDefending",
+          "firstOnshiftIsDefending",
+          "secondOnshiftIsDefending",
+          "transitionOnshiftIsDefending",
+        ];
+
+        for (String key in defenseKeys) {
+          if (entry[key] == null || entry[key] is! Map<String, dynamic>) {
+            debugPrint(":(");
+            continue;
+          }
+          Map<String, dynamic> metric = entry[key];
+          if (metric["isChecked"] == true) {
+            _defenseMatches.add(MetricMatch(
+                match: shortenedMatch, metric: metric["selection"]));
+            break;
+          }
+        }
+
+        List<String> feedingKeys = [
+          "firstOffshiftIsFeeding",
+          "secondOffshiftIsFeeding",
+          "transitionOffshiftIsFeeding",
+          "firstOnshiftIsFeeding",
+          "secondOnshiftIsFeeding",
+          "transitionOnshiftIsFeeding",
+        ];
+
+        for (String key in feedingKeys) {
+          if (entry[key] == null || entry[key] is! Map<String, dynamic>) {
+            continue;
+          }
+          Map<String, dynamic> metric = entry[key];
+          if (metric["isChecked"] == true) {
+            _feedingMatches.add(MetricMatch(
+                match: shortenedMatch, metric: metric["selection"]));
+            break;
+          }
+        }
+
+        if (!_isEmpty(entry["comments"])) {
+          _comments.add(Comment(
+            author: _toString(entry["scouterName"]),
+            rating: _toDouble(entry["dataQuality"]) ?? 0,
+            body: _toString(entry["comments"]),
+            match: shortenedMatch,
+          ));
+        }
+
+        if (!_isEmpty(entry["autoPath"]) &&
+            entry["autoPath"] is Map<String, dynamic>) {
+          _autos.add({
+            "scouterName": _toString(entry["scouterName"]),
+            "rating": _toDouble(entry["dataQuality"]) ?? 0,
+            "match": shortenedMatch,
+            "attemptedClimb": entry["autoPath"]!["attemptedClimb"],
+            "climbSuccessful": entry["autoPath"]!["climbSuccessful"],
+            "fuelScored": curStats.totalAutoCapacityFactor * curStats.capacity,
+            "path": _toList(entry["autoPath"]!["path"]),
+          });
+
+          if (entry["autoPath"]!["attemptedClimb"] == true) {
+            _climbs.add(Climb(
+                level: entry["autoPath"]!["climbSuccessful"] == true
+                    ? ClimbLevel.l1
+                    : ClimbLevel.none,
+                isAutoClimb: true));
+          }
+        }
+
+        if (!_isEmpty(entry["climb"]) &&
+            entry["climb"] is Map<String, dynamic> &&
+            entry["climb"]!["attempted"] == true) {
+          _climbs.add(Climb(
+              level: ClimbLevelExtension.getLevelFromName(
+                  entry["climb"]!["level"]),
+              time: _toDouble(entry["climb"]!["startTime"])));
+        }
+      }
+    }
+
+    RobotStatistics curStats = robotStats[team]!;
+
+    // Fuel / Shift
+    debugPrint(
+        "${curStats.totalCapacityFactor}, ${curStats.capacity}, ${curStats.totalActiveShifts}");
+    _fuelPerShift = curStats.totalCapacityFactor *
+        curStats.capacity /
+        curStats.totalActiveShifts;
+
+    // Capacity
+    _capacity = curStats.capacity;
+
+    // Average Accuracy
+    _averageAccuracy =
+        zeroSafeDivision(curStats.totalAccuracy, curStats.accuracyCycles);
+
+    // Time Scoring
+    _timeScoring =
+        zeroSafeDivision(curStats.totalTimeScoring, curStats.matches);
+
+    // Cycles / Shift
+    _cyclesPerShift =
+        zeroSafeDivision(curStats.totalCycles, curStats.totalActiveShifts);
+
+    // % Defense
+    _defensePercentage =
+        zeroSafeDivision(_defenseMatches.length.toDouble(), curStats.matches);
+
+    // % Feeding
+    _feedingPercentage =
+        zeroSafeDivision(_feedingMatches.length.toDouble(), curStats.matches);
+
+    // This won't run successfully on init
+    setState(() {});
 
     return true;
   }
@@ -658,7 +1022,13 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   @override
   void initState() {
     super.initState();
+    // Get the team number after the first frame because it doesn't work on init.
     _loadData(_teams.firstOrNull ?? -1);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _setTeamNameWithNumber(_teams.firstOrNull ?? -1);
+      }
+    });
   }
 
   @override
@@ -708,7 +1078,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                           color: Constants.pastelYellow,
                           initialValue: _teams.firstOrNull?.toString(),
                           onChanged: (value) {
-                            _loadData(_toInt(value) ?? _teams.firstOrNull ?? -1);
+                            _loadData(
+                                _toInt(value) ?? _teams.firstOrNull ?? -1);
                           },
                         ),
                       ),
@@ -720,7 +1091,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                         margin: _margin,
                         child: Center(
                           child: AutoSizeText(
-                            _teamName,
+                            _teamName ?? "No team found",
                             textAlign: TextAlign.left,
                             maxLines: 2,
                             style:
@@ -772,15 +1143,19 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                                                   Expanded(
                                                     child: InfoBox(
                                                       title: "Avg. Accuracy",
-                                                      info: _averageAccuracy.toStringAsFixed(2),
-                                                      subInfo: "#$_averageAccuracyRank",
+                                                      info: _averageAccuracy
+                                                          .toStringAsFixed(2),
+                                                      subInfo:
+                                                          "#$_averageAccuracyRank",
                                                     ),
                                                   ),
                                                   Expanded(
                                                     child: InfoBox(
                                                       title: "Capacity",
-                                                      info: _capacity.toString(),
-                                                      subInfo: "#$_capacityRank",
+                                                      info:
+                                                          _capacity.toString(),
+                                                      subInfo:
+                                                          "#$_capacityRank",
                                                     ),
                                                   ),
                                                 ],
@@ -792,16 +1167,20 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                                                 children: [
                                                   Expanded(
                                                     child: InfoBox(
-                                                      title: "% Time Scoring",
-                                                      info: _timeScoring.toStringAsFixed(2),
-                                                      subInfo: "#$_timeScoringRank",
+                                                      title: "Time Scoring (s)",
+                                                      info: _timeScoring
+                                                          .toStringAsFixed(2),
+                                                      subInfo:
+                                                          "#$_timeScoringRank",
                                                     ),
                                                   ),
                                                   Expanded(
                                                     child: InfoBox(
                                                       title: "Cycles / Shift",
-                                                      info: _cyclesPerShift.toStringAsFixed(2),
-                                                      subInfo: "#$_cyclesPerShiftRank",
+                                                      info: _cyclesPerShift
+                                                          .toStringAsFixed(2),
+                                                      subInfo:
+                                                          "#$_cyclesPerShiftRank",
                                                     ),
                                                   ),
                                                 ],
@@ -822,6 +1201,27 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                         title: "% Feeding",
                         info: _feedingPercentage.toStringAsFixed(2),
                         subInfo: _feedingMetric,
+                        onTap: (details) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return GestureDetector(
+                                onTapUp: (details) {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  child: Center(
+                                    child: Wrap(
+                                      spacing: _margin,
+                                      runSpacing: _margin,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
                     Expanded(
@@ -829,6 +1229,27 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                         title: "% Defending",
                         info: _defensePercentage.toStringAsFixed(2),
                         subInfo: _defenseMetric,
+                        onTap: (details) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return GestureDetector(
+                                onTapUp: (details) {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  child: Center(
+                                    child: Wrap(
+                                      spacing: _margin,
+                                      runSpacing: _margin,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                       ),
                     ),
                   ],
@@ -843,10 +1264,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
               ),
               SizedBox(
                 height: 90,
-                child: ClimbInfoBox(
-                  margin: _margin,
-                  climbs: _climbs
-                ),
+                child: ClimbInfoBox(margin: _margin, climbs: _climbs),
               ),
               SizedBox(
                 height: 200,
