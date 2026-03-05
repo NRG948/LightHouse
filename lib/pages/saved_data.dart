@@ -52,7 +52,8 @@ class SavedData extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor:themeColorPalettes[configData["theme"] ?? "Dark"]![0],
+          backgroundColor:
+              themeColorPalettes[configData["theme"] ?? "Dark"]![0],
           title: const Text(
             "Saved Data",
             style: TextStyle(
@@ -76,8 +77,8 @@ class SavedData extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        content:
-                            Text("Are you sure you want to delete EVERYTHING for this event?"),
+                        content: Text(
+                            "Are you sure you want to delete EVERYTHING for this event?"),
                         actions: [
                           TextButton(
                               onPressed: () {
@@ -90,7 +91,8 @@ class SavedData extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        content: Text("Are you REALLY sure? Your data will be lost forever (a long time)!"),
+                                        content: Text(
+                                            "Are you REALLY sure? Your data will be lost forever (a long time)!"),
                                         actions: [
                                           TextButton(
                                               onPressed: () {
@@ -177,7 +179,8 @@ class SavedData extends StatelessWidget {
             width: screenWidth,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ??
+                        "assets/images/background-hires-dark.png"),
                     fit: BoxFit.cover)), // set background image
             child: Column(
               children: [
@@ -207,6 +210,12 @@ class EventKeyDropdown extends StatefulWidget {
 class _EventKeyDropdownState extends State<EventKeyDropdown> {
   late String selectedValue;
 
+  void _handleStateChange() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -214,18 +223,12 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
         configData["eventKey"]!; // Set active event from config
     selectedValue = SavedData
         .sharedState.activeEvent; // Initialize selected value for dropdown
-    SavedData.sharedState.addListener(() {
-      setState(() {});
-    });
+    SavedData.sharedState.addListener(_handleStateChange);
   }
 
   @override
   void dispose() {
-    SavedData.sharedState.removeListener(() {
-      setState(() {
-        
-      });
-    });
+    SavedData.sharedState.removeListener(_handleStateChange);
     super.dispose();
   }
 
@@ -244,7 +247,7 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
             style: comfortaaBold(18, color: Colors.black),
           ),
           DropdownButton<String>(
-            borderRadius: BorderRadius.circular(Constants.borderRadius),
+              borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
               items: getSavedEvents().map((item) {
                 return DropdownMenuItem<String>(
@@ -308,7 +311,7 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
             style: comfortaaBold(18, color: Colors.black),
           ),
           DropdownButton<String>(
-            borderRadius: BorderRadius.circular(Constants.borderRadius),
+              borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
               items: layouts.map((item) {
                 return DropdownMenuItem<String>(
@@ -519,7 +522,7 @@ class _SavedFileState extends State<SavedFile> {
           ],
         ),
       );
-    } else if (["teamNumber", "teamName", "interviewerName", "interviewerName"]
+    } else if (["teamNumber", "teamName"]
         .every((value) => savedFileJson.containsKey(value))) {
       matchInfo = Padding(
         padding: EdgeInsets.all(8.0 * SavedData.scaleFactor),
@@ -546,204 +549,24 @@ class _SavedFileState extends State<SavedFile> {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 50 * SavedData.scaleFactor,
-                      width: 100 * SavedData.scaleFactor,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(Icons.data_object,
-                              size: 30 * SavedData.scaleFactor),
-                          SizedBox(
-                              width: 70 * SavedData.scaleFactor,
-                              child: AutoSizeText(
-                                savedFileJson["layout"],
-                                style: comfortaaBold(25 * SavedData.scaleFactor,
-                                    color: Colors.black),
-                                maxLines: 1,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.schedule, size: 2 * SavedData.scaleFactor),
-                        SizedBox(
-                            width: 185 * SavedData.scaleFactor,
-                            child: AutoSizeText(
-                              savedFileJson["timestamp"],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 6,
-                              style: comfortaaBold(18, color: Colors.black),
-                            ))
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.account_circle,
-                              size: 23 * SavedData.scaleFactor,
-                            ),
-                            SizedBox(
-                                width: 185 * SavedData.scaleFactor,
-                                child: AutoSizeText(
-                                  savedFileJson["interviewerName"],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  minFontSize: 6,
-                                  style: comfortaaBold(18, color: Colors.black),
-                                ))
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.no_accounts,
-                              size: 23 * SavedData.scaleFactor,
-                            ),
-                            SizedBox(
-                                width: 185 * SavedData.scaleFactor,
-                                child: AutoSizeText(
-                                  savedFileJson["intervieweeName"],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  minFontSize: 6,
-                                  style: comfortaaBold(18, color: Colors.black),
-                                ))
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              ],
-            )
-          ],
-        ),
-      );
-    } else if ([
-      "matchType",
-      "matchNumber",
-      "scouterName",
-      "redHPTeam",
-      "blueHPTeam"
-    ].every((value) => savedFileJson.containsKey(value))) {
-      matchInfo = Padding(
-        padding: EdgeInsets.all(8.0 * SavedData.scaleFactor),
-        child: Column(
-          children: [
             SizedBox(
+              height: 50 * SavedData.scaleFactor,
+              width: 100 * SavedData.scaleFactor,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      AutoSizeText(
-                        savedFileJson["redHPTeam"].toString(),
-                        style: comfortaaBold(40 * SavedData.scaleFactor,
-                            color: Constants.pastelRed),
-                      ),
-                      AutoSizeText(
-                        savedFileJson["blueHPTeam"].toString(),
-                        style: comfortaaBold(40 * SavedData.scaleFactor,
-                            color: Constants.pastelBlue),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      AutoSizeText(
-                        savedFileJson["matchType"],
-                        style: comfortaaBold(16 * SavedData.scaleFactor,
+                  Icon(Icons.data_object, size: 30 * SavedData.scaleFactor),
+                  SizedBox(
+                      width: 70 * SavedData.scaleFactor,
+                      child: AutoSizeText(
+                        savedFileJson["layout"],
+                        style: comfortaaBold(25 * SavedData.scaleFactor,
                             color: Colors.black),
-                      ),
-                      AutoSizeText(
-                        savedFileJson["matchNumber"].toString(),
-                        style: comfortaaBold(35 * SavedData.scaleFactor,
-                            color: Colors.black),
-                      )
-                    ],
-                  )
+                        maxLines: 1,
+                      )),
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 50 * SavedData.scaleFactor,
-                      width: 100 * SavedData.scaleFactor,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(Icons.data_object,
-                              size: 30 * SavedData.scaleFactor),
-                          SizedBox(
-                              width: 70 * SavedData.scaleFactor,
-                              child: AutoSizeText(
-                                savedFileJson["layout"],
-                                style: comfortaaBold(25 * SavedData.scaleFactor,
-                                    color: Colors.black),
-                                maxLines: 1,
-                              )),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(Icons.schedule, size: 2 * SavedData.scaleFactor),
-                        SizedBox(
-                            width: 185 * SavedData.scaleFactor,
-                            child: AutoSizeText(
-                              savedFileJson["timestamp"],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 6,
-                              style: comfortaaBold(18, color: Colors.black),
-                            ))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.account_circle,
-                          size: 23 * SavedData.scaleFactor,
-                        ),
-                        SizedBox(
-                            width: 185 * SavedData.scaleFactor,
-                            child: AutoSizeText(
-                              savedFileJson["scouterName"],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              minFontSize: 6,
-                              style: comfortaaBold(18, color: Colors.black),
-                            ))
-                      ],
-                    )
-                  ],
-                )
-              ],
-            )
           ],
         ),
       );
@@ -1030,7 +853,8 @@ class _DataEditState extends State<DataEdit> {
                                     context, "/home-scouter");
                               }
                             },
-                            child: Text("Save", style: comfortaaBold(18,color: Colors.black))))
+                            child: Text("Save",
+                                style: comfortaaBold(18, color: Colors.black))))
                   ],
                 ),
               )),

@@ -103,23 +103,7 @@ Map<String, List<String>> missingFieldMap = {
     "driverStation",
     "dataQuality"
   ],
-  "Chronos": [
-    "scouterName",
-    "matchNumber",
-    "teamNumber",
-    "matchType",
-    "driverStation",
-    "dataQuality"
-  ],
-  "Pit": ["interviewerName", "teamNumber", "humanPlayerPreference"],
-  "Human Player": [
-    "scouterName",
-    "matchNumber",
-    "redHPTeam",
-    "blueHPTeam",
-    "matchType",
-    "dataQuality"
-  ]
+  "Pit": ["teamNumber"],
 };
 
 void showReturnDialog(BuildContext context) {
