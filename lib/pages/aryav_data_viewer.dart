@@ -734,6 +734,29 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return divisor == 0 ? 0 : dividend / divisor;
   }
 
+  double _metricToValue(String metric) {
+    switch (metric) {
+      case "Great":
+        return 1;
+      case "Decent":
+        return 0;
+      case "Poor":
+        return -1;
+      default:
+        return 0;
+    }
+  }
+
+  String _valueToMetric(double value) {
+    if (value > 0.34) {
+      return "Great";
+    } else if (value < -0.34) {
+      return "Poor";
+    } else {
+      return "Decent";
+    }
+  }
+
   // ignore: unused_element
   List<Map<String, dynamic>> _getDataAsMapFromSavedMatches(String layout) {
     assert(configData["eventKey"] != null);
@@ -776,8 +799,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   }
 
   bool _loadData(int team) {
-    _atlasData = _getDataAsMapFromDatabase("Atlas");
-    _pitData = _getDataAsMapFromDatabase("Pit");
+    _atlasData = _getDataAsMapFromSavedMatches("Atlas");
+    _pitData = _getDataAsMapFromSavedMatches("Pit");
     _teams = _getTeamsInDatabase();
 
     _tags = {};
@@ -799,10 +822,14 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
     _feedingPercentage = -1;
     _feedingMetric = "";
+    double totalFeedingMetricValue = 0;
+    int totalFeedingMetricCount = 0;
     _feedingMatches = [];
 
     _defensePercentage = -1;
     _defenseMetric = "";
+    double totalDefenseMetricValue = 0;
+    int totalDefenseMetricCount = 0;
     _defenseMatches = [];
 
     _autos = [];
@@ -849,6 +876,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         "firstOnshiftCycles",
         "secondOnshiftCycles",
       ];
+      curStats.totalActiveShifts += 2;
       for (String cycleShift in cycleShifts) {
         if (_toList(entry[cycleShift]) == null) continue;
 
@@ -872,7 +900,6 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                       (_toDouble(item['capacity']) ?? 1)));
 
           curStats.totalCycles += cycles.length;
-          curStats.totalActiveShifts += 1;
         }
 
         if (cycleShift == cycleShifts[0]) {
@@ -906,18 +933,35 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           "transitionOnshiftIsDefending",
         ];
 
+        bool flag = false;
+        double metricValue = 0;
+        int metricCount = 0;
         for (String key in defenseKeys) {
-          if (entry[key] == null || entry[key] is! Map<String, dynamic>) {
-            debugPrint(":(");
+          if (entry[key] == null) {
             continue;
           }
-          Map<String, dynamic> metric = entry[key];
-          if (metric["isChecked"] == true) {
-            _defenseMatches.add(MetricMatch(
-                match: shortenedMatch, metric: metric["selection"]));
-            break;
+
+          if (entry[key] is Map<String, dynamic>) {
+            Map<String, dynamic> metric = entry[key];
+            if (metric["isChecked"] == true) {
+              flag = true;
+              metricValue += _metricToValue(_toString(metric["selection"]));
+              metricCount++;
+            }
+          } else if (entry[key] is bool) {
+            if (entry[key]) flag = true;
           }
         }
+
+        if (flag) {
+          _defenseMatches.add(MetricMatch(
+              match: shortenedMatch,
+              metric: _valueToMetric(
+                  zeroSafeDivision(metricValue, metricCount.toDouble()))));
+        }
+
+        totalDefenseMetricValue += metricValue;
+        totalDefenseMetricCount += metricCount;
 
         List<String> feedingKeys = [
           "firstOffshiftIsFeeding",
@@ -928,16 +972,34 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           "transitionOnshiftIsFeeding",
         ];
 
+        flag = false;
+        metricValue = 0;
+        metricCount = 0;
         for (String key in feedingKeys) {
-          if (entry[key] == null || entry[key] is! Map<String, dynamic>) {
+          if (entry[key] == null) {
             continue;
           }
-          Map<String, dynamic> metric = entry[key];
-          if (metric["isChecked"] == true) {
-            _feedingMatches.add(MetricMatch(
-                match: shortenedMatch, metric: metric["selection"]));
-            break;
+
+          if (entry[key] is Map<String, dynamic>) {
+            Map<String, dynamic> metric = entry[key];
+            if (metric["isChecked"] == true) {
+              flag = true;
+              metricValue += _metricToValue(_toString(metric["selection"]));
+              metricCount++;
+            }
+          } else if (entry[key] is bool) {
+            if (entry[key]) flag = true;
           }
+        }
+
+        totalFeedingMetricValue += metricValue;
+        totalFeedingMetricCount += metricCount;
+
+        if (flag) {
+          _feedingMatches.add(MetricMatch(
+              match: shortenedMatch,
+              metric: _valueToMetric(
+                  zeroSafeDivision(metricValue, metricCount.toDouble()))));
         }
 
         if (!_isEmpty(entry["comments"])) {
@@ -1008,12 +1070,19 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     // % Defense
     _defensePercentage =
         zeroSafeDivision(_defenseMatches.length.toDouble(), curStats.matches);
+    _defenseMetric = totalDefenseMetricCount == 0
+        ? "No Data"
+        : _valueToMetric(zeroSafeDivision(
+            totalDefenseMetricValue, totalDefenseMetricCount.toDouble()));
 
     // % Feeding
     _feedingPercentage =
         zeroSafeDivision(_feedingMatches.length.toDouble(), curStats.matches);
+    _feedingMetric = totalFeedingMetricCount == 0
+        ? "No Data"
+        : _valueToMetric(zeroSafeDivision(
+            totalFeedingMetricValue, totalFeedingMetricCount.toDouble()));
 
-    // This won't run successfully on init
     setState(() {});
 
     return true;
@@ -1022,11 +1091,10 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   @override
   void initState() {
     super.initState();
-    // Get the team number after the first frame because it doesn't work on init.
     _loadData(_teams.firstOrNull ?? -1);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        _setTeamNameWithNumber(_teams.firstOrNull ?? -1);
+        setState(() {});
       }
     });
   }
@@ -1076,7 +1144,6 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                         child: CustomDropdown(
                           options: _teams.map((x) => "$x").toList(),
                           color: Constants.pastelYellow,
-                          initialValue: _teams.firstOrNull?.toString(),
                           onChanged: (value) {
                             _loadData(
                                 _toInt(value) ?? _teams.firstOrNull ?? -1);
@@ -1167,9 +1234,10 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                                                 children: [
                                                   Expanded(
                                                     child: InfoBox(
-                                                      title: "Time Scoring (s)",
-                                                      info: _timeScoring
-                                                          .toStringAsFixed(2),
+                                                      title:
+                                                          "Time Scoring / Match",
+                                                      info:
+                                                          "${_timeScoring.toStringAsFixed(2)} s",
                                                       subInfo:
                                                           "#$_timeScoringRank",
                                                     ),
@@ -1215,6 +1283,24 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                                     child: Wrap(
                                       spacing: _margin,
                                       runSpacing: _margin,
+                                      children: _feedingMatches
+                                          .map(
+                                            (match) => DefaultContainer(
+                                              margin: _margin,
+                                              color: match.metric == "Great"
+                                                  ? Constants.pastelGreen
+                                                  : (match.metric == "Decent"
+                                                      ? Constants.pastelYellow
+                                                      : Constants.pastelRed),
+                                              child: Text(
+                                                match.match,
+                                                style: comfortaaBold(17,
+                                                    color:
+                                                        Constants.pastelBrown),
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
                                     ),
                                   ),
                                 ),
@@ -1243,6 +1329,24 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                                     child: Wrap(
                                       spacing: _margin,
                                       runSpacing: _margin,
+                                      children: _defenseMatches
+                                          .map(
+                                            (match) => DefaultContainer(
+                                              margin: _margin,
+                                              color: match.metric == "Great"
+                                                  ? Constants.pastelGreen
+                                                  : (match.metric == "Decent"
+                                                      ? Constants.pastelYellow
+                                                      : Constants.pastelRed),
+                                              child: Text(
+                                                match.match,
+                                                style: comfortaaBold(17,
+                                                    color:
+                                                        Constants.pastelBrown),
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
                                     ),
                                   ),
                                 ),
