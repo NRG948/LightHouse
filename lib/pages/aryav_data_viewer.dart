@@ -799,8 +799,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   }
 
   bool _loadData(int team) {
-    _atlasData = _getDataAsMapFromSavedMatches("Atlas");
-    _pitData = _getDataAsMapFromSavedMatches("Pit");
+    _atlasData = _getDataAsMapFromDatabase("Atlas");
+    _pitData = _getDataAsMapFromDatabase("Pit");
     _teams = _getTeamsInDatabase();
 
     _tags = {};
