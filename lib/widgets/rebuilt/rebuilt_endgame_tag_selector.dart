@@ -8,15 +8,14 @@ class RebuiltEndgameTagSelector extends StatelessWidget {
 
   List<String> getPossibleTags() {
     return [
-      "defense",
-      "climb",
-      "passing",
       "shoot while moving",  
-      "ground intake", 
       "outpost intake", 
       "shoot from anywhere", 
       "shoot from hub", 
-      "beached on fuel"
+      "beached on fuel",
+      "stuck on bump",
+      "prefer bump",
+      "prefer trench",
     ];
   }
 
