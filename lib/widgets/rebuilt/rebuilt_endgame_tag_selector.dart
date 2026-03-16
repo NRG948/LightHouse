@@ -8,14 +8,18 @@ class RebuiltEndgameTagSelector extends StatelessWidget {
 
   List<String> getPossibleTags() {
     return [
-      "shoot while moving",  
-      "outpost intake", 
-      "shoot from anywhere", 
-      "shoot from hub", 
-      "beached on fuel",
-      "stuck on bump",
       "prefer bump",
       "prefer trench",
+      "fouled",
+      "disabled",
+      "robot issues",
+      "beached on fuel",
+      "stuck on bump",
+      "high game sense",
+      "poor game sense",
+      "rush center auto",
+      "wanders",
+      "no show",
     ];
   }
 

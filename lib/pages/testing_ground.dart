@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/widgets/rebuilt/cycle_counter.dart";
+import "package:lighthouse/widgets/rebuilt/rebuilt_location_tracker.dart";
 
 class TestingGroundPage extends StatefulWidget {
   const TestingGroundPage({super.key});
@@ -38,12 +39,10 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
             )),
       ),
       body: Center(
-          child: SizedBox(
-              width: 380,
-              child: CycleCounter(
-                jsonKey: "test",
-                margin: 15,
-                isCompact: false,
+          child: Padding(
+              padding: EdgeInsets.all(10),
+              child: RebuiltLocationTracker(
+                margin: 10,
               ))),
     );
   }

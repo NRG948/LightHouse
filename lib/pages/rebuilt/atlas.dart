@@ -7,6 +7,7 @@ import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
+import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 import 'package:lighthouse/widgets/game_agnostic/match_info.dart';
 import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/rating.dart';
@@ -16,6 +17,7 @@ import 'package:lighthouse/widgets/rebuilt/cycle_counter.dart';
 import 'package:lighthouse/widgets/rebuilt/metric.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_endgame_tag_selector.dart';
+import 'package:lighthouse/widgets/rebuilt/rebuilt_location_tracker.dart';
 import 'package:lighthouse/widgets/rebuilt/shift_container.dart';
 import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';
 
@@ -49,7 +51,7 @@ class AtlasState extends State<Atlas> {
                   Container(
                     height: 70,
                     padding: EdgeInsets.all(margin),
-                decoration: BoxDecoration(
+                    decoration: BoxDecoration(
                       color: Constants.pastelWhite,
                       borderRadius: BorderRadius.circular(margin),
                     ),
@@ -74,158 +76,129 @@ class AtlasState extends State<Atlas> {
         icon: CustomIcons.autonomous,
         content: Container(
           margin: EdgeInsets.all(15),
+          child: RebuiltAutoPathSelector(
+            margin: margin,
+            flipField: driverStation != null && driverStation!.startsWith("B"),
+            pit: false,
+          ),
+        ),
+      ),
+      "Offense": DataEntrySubPage(
+        icon: Icons.workspaces_rounded,
+        content: Container(
+          margin: EdgeInsets.all(15),
           child: Column(
             spacing: margin,
             children: [
-              RebuiltAutoPathSelector(
-                
+              RebuiltLocationTracker(
                 margin: margin,
-                flipField: driverStation != null && driverStation!.startsWith("B"),
-                pit: false,
+                jsonKey: "scoringLocations",
               ),
-              Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Constants.pastelWhite,
-                  borderRadius: BorderRadius.circular(margin),
+              SizedBox(
+                height: 50,
+                child: DefaultContainer(
+                  margin: margin,
+                  child: CustomCheckbox(
+                    title: "Being Defended",
+                    selectColor: Constants.pastelWhite,
+                    optionColor: Constants.pastelYellow,
+                    textColor: Constants.pastelBrown,
+                    jsonKey: "isBeingDefended",
+                  ),
                 ),
-                child: CycleCounter(
-                  jsonKey: "autoCycles",
-                  isCompact: true,
+              ),
+              DefaultContainer(
+                expandHorizontal: true,
+                margin: margin,
+                child: Center(
+                  child: DefaultContainer(
+                    color: Constants.pastelGray,
+                    margin: margin / 2,
+                    child: Text(
+                      "Feeding",
+                      textAlign: TextAlign.center,
+                      style: comfortaaBold(
+                        17,
+                        color: Constants.pastelWhite,
+                        customFontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
                 ),
+              ),
+              Metric(
+                checkboxTitle: "Pushing (Herding)",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: Constants.pastelRed,
+                jsonKey: "isHerding",
+              ),
+              Metric(
+                checkboxTitle: "Shooting Over",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: Constants.pastelRed,
+                jsonKey: "isFeeding",
               ),
             ],
           ),
         ),
       ),
-      // TODO: get more sensible icons
-      //
-      // oh yeah right I kinda just put whatever was in [CustomIcons] already lol
-      "Onshift": DataEntrySubPage(
-        icon: CustomIcons.racecar,
+      "Defense": DataEntrySubPage(
+        icon: Icons.shield_rounded,
         content: Container(
           margin: EdgeInsets.all(15),
-          child: ShiftContainer(
-            height: 75,
-            margin: margin,
-            shifts: ["Transition", "1st Onshift", "2nd Onshift"],
-            childBuilder: (index) {
-              final List<String> onshiftKeyPrefixes = [
-                'transitionOnshift',
-                'firstOnshift',
-                'secondOnshift',
-              ];
-              return Column(
-                spacing: margin,
-                children: [
-                  CycleCounter(jsonKey: "${onshiftKeyPrefixes[index]}Cycles"),
-                  Container(
-                    height: 167,
-                    padding: EdgeInsets.all(margin),
-                    decoration: BoxDecoration(
+          child: Column(
+            spacing: margin,
+            children: [
+              DefaultContainer(
+                expandHorizontal: true,
+                margin: margin,
+                child: Center(
+                  child: DefaultContainer(
+                    color: Constants.pastelGray,
+                    margin: margin / 2,
+                    child: Text(
+                      "Defending",
+                      textAlign: TextAlign.center,
+                      style: comfortaaBold(
+                        17,
                         color: Constants.pastelWhite,
-                        borderRadius: BorderRadius.circular(margin)),
-                    child: Column(
-                      spacing: margin,
-                      children: [
-                        Expanded(
-                          child: CustomCheckbox(
-                            title: "Feeding",
-                            selectColor: Constants.pastelWhite,
-                            optionColor: Constants.pastelYellow,
-                            textColor: Constants.pastelBrown,
-                            jsonKey: "${onshiftKeyPrefixes[index]}IsFeeding",
-                          ),
-                        ),
-                        Expanded(
-                          child: CustomCheckbox(
-                            title: "Disabled",
-                            selectColor: Constants.pastelWhite,
-                            optionColor: Constants.pastelRed,
-                            textColor: Constants.pastelBrown,
-                            jsonKey: "${onshiftKeyPrefixes[index]}IsDisabled",
-                          ),
-                        ),
-                        Expanded(
-                          child: CustomCheckbox(
-                            title: "Defending",
-                            selectColor: Constants.pastelWhite,
-                            optionColor: Constants.pastelYellow,
-                            textColor: Constants.pastelBrown,
-                            jsonKey: "${onshiftKeyPrefixes[index]}IsDefending",
-                          ),
-                        ),
-                      ],
+                        customFontWeight: FontWeight.w900,
+                      ),
                     ),
                   ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-      "Offshift": DataEntrySubPage(
-        icon: CustomIcons.timer,
-        content: Container(
-          margin: EdgeInsets.all(15),
-          child: ShiftContainer(
-            height: 75,
-            margin: margin,
-            shifts: ["Transition", "1st Offshift", "2nd Offshift"],
-            childBuilder: (index) {
-              final List<String> offshiftKeyPrefixes = [
-                'transitionOffshift',
-                'firstOffshift',
-                'secondOffshift',
-              ];
-              return Column(
-                spacing: margin,
-                children: [
-                  Metric(
-                    checkboxTitle: "Defending",
-                    selectOptions: ["Poor", "Decent", "Great"],
-                    height: 100,
-                    optionColor: Constants.pastelYellow,
-                    jsonKey: "${offshiftKeyPrefixes[index]}IsDefending",
-                  ),
-                  Metric(
-                    checkboxTitle: "Feeding / Collecting",
-                    selectOptions: ["Poor", "Decent", "Great"],
-                    height: 100,
-                    optionColor: Constants.pastelRed,
-                    jsonKey: "${offshiftKeyPrefixes[index]}IsFeeding",
-                  ),
-                  Metric(
-                    checkboxTitle: "Stealing",
-                    selectOptions: ["Poor", "Decent", "Great"],
-                    height: 100,
-                    optionColor: Constants.pastelYellow,
-                    jsonKey: "${offshiftKeyPrefixes[index]}IsStealing",
-                  ),
-                  Container(
-                    height: 65,
-                    padding: EdgeInsets.all(margin),
-                    decoration: BoxDecoration(
-                        color: Constants.pastelWhite,
-                        borderRadius: BorderRadius.circular(margin)),
-                    child: Column(
-                      spacing: margin,
-                      children: [
-                        Expanded(
-                          child: CustomCheckbox(
-                            title: "Disabled",
-                            selectColor: Constants.pastelWhite,
-                            optionColor: Constants.pastelRed,
-                            textColor: Constants.pastelBrown,
-                            jsonKey: "${offshiftKeyPrefixes[index]}IsDisabled",
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
+                ),
+              ),
+              Metric(
+                checkboxTitle: "Trench / Bump",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: Constants.pastelYellow,
+                jsonKey: "isAccessDefending",
+              ),
+              Metric(
+                checkboxTitle: "Neutral Zone",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: Constants.pastelYellow,
+                jsonKey: "isCenterDefending",
+              ),
+              Metric(
+                checkboxTitle: "Alliance Zone",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: Constants.pastelYellow,
+                jsonKey: "isAllianceDefending",
+              ),
+              Metric(
+                checkboxTitle: "Stealing",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: Constants.pastelYellow,
+                jsonKey: "isStealing",
+              ),
+            ],
           ),
         ),
       ),

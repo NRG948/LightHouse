@@ -4,23 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
-
-class Zone {
-  String id;
-  double top;
-  double left;
-  double width;
-  double height;
-
-  Zone(
-      {required this.id,
-      required this.top,
-      required this.left,
-      required this.width,
-      required this.height});
-}
 
 typedef NodeIconBuilder = Widget Function(
   BuildContext context,
@@ -95,60 +81,6 @@ class NodeData {
       this.groupLabel});
 }
 
-class BoxRegion extends StatefulWidget {
-  final String id;
-  final double width;
-  final double height;
-  final double top;
-  final double left;
-  final Color color;
-  final Function(String id, Offset center) onTap;
-
-  const BoxRegion(
-      {super.key,
-      required this.id,
-      required this.width,
-      required this.height,
-      required this.top,
-      required this.left,
-      this.color = const Color.fromARGB(1, 255, 255, 255),
-      this.onTap = _noop});
-
-  static void _noop(String _, Offset __) {}
-
-  @override
-  State<BoxRegion> createState() => _BoxRegionState();
-
-  @override
-  String toStringShort() => "${runtimeType.toString()}(id: $id)";
-}
-
-class _BoxRegionState extends State<BoxRegion> {
-  String get _id => widget.id;
-  double get _width => widget.width;
-  double get _height => widget.height;
-  double get _top => widget.top;
-  double get _left => widget.left;
-  Color get _color => widget.color;
-  Function(String id, Offset center) get _onTap => widget.onTap;
-
-  Offset getCenter() => Offset(_left + _width / 2, _top + _height / 2);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        top: _top,
-        left: _left,
-        child: Semantics(
-          button: true,
-          child: GestureDetector(
-              onTap: () {
-                _onTap(_id, getCenter());
-              },
-              child: Container(width: _width, height: _height, color: _color)),
-        ));
-  }
-}
 
 class UserAction {
   UserActionType actionType;
@@ -295,7 +227,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _margin => widget.margin ?? _width / 25;
   double get _bottomOffset => _pit ? _width * 0.125 : _width * 0.25;
 
-  double get _nodeRadius => _imageWidth / 16;
+  double get _nodeRadius => _imageWidth / 17;
   double get _nodeBorderWidth => _width / 100;
   int get _maximumGroupSize => widget.maximumGroupSize;
 

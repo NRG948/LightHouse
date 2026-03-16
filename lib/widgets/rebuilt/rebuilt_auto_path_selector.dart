@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
+import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 
 class RebuiltAutoPathSelector extends StatelessWidget {
   final bool debug;
@@ -48,7 +47,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       pit: pit,
       jsonKey: jsonKey ?? "autoPath",
       flipField: flipField,
-      imageScalingFactor: viewOnly ? 1 : 0.75,
+      imageScalingFactor: 1,
       viewOnly: viewOnly,
       initialPath: initialPath,
       converter: AutoPathSelector.getConverterFromPoints(

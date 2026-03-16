@@ -14,7 +14,7 @@ class MultiChoiceSelector extends StatefulWidget {
   final Color textColor;
   final Color lockedColor;
 
-  final String jsonKey;
+  final String? jsonKey;
 
   const MultiChoiceSelector({
     super.key,
@@ -26,7 +26,7 @@ class MultiChoiceSelector extends StatefulWidget {
     this.selectColor = Constants.pastelWhite,
     this.textColor = Constants.pastelBrown,
     this.lockedColor = Constants.pastelGray,
-    required this.jsonKey,
+    this.jsonKey,
   });
 
   @override
