@@ -16,6 +16,7 @@ class LocationTracker extends StatefulWidget {
   final bool viewOnly;
   final Color mainColor;
   final Color backgroundColor;
+  final bool flipField;
 
   final Widget Function(BuildContext context, String? regionId,
       void Function(dynamic data) onUpdate) childBuilder;
@@ -32,6 +33,7 @@ class LocationTracker extends StatefulWidget {
     this.viewOnly = false,
     this.mainColor = Constants.pastelRed,
     this.backgroundColor = Constants.pastelWhite,
+    this.flipField = false,
     required this.childBuilder,
   });
 
@@ -46,6 +48,8 @@ class _LocationTrackerState extends State<LocationTracker>
 
   String? get _jsonKey => widget.jsonKey;
   bool get _viewOnly => widget.viewOnly;
+
+  bool get _flipField => widget.flipField;
 
   late double _width;
   String? _selectedId;
@@ -124,24 +128,27 @@ class _LocationTrackerState extends State<LocationTracker>
                   SizedBox(
                     width: _imageWidth,
                     height: _imageHeight,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: widget.mainColor,
-                            borderRadius: BorderRadius.circular(_margin / 2),
-                            image: DecorationImage(
-                              image: AssetImage(widget.imageFilePath),
-                              fit: BoxFit.fill,
-                              colorFilter: ColorFilter.mode(
-                                widget.backgroundColor,
-                                BlendMode.modulate,
+                    child: Transform.flip(
+                      flipX: _flipField,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: widget.mainColor,
+                              borderRadius: BorderRadius.circular(_margin / 2),
+                              image: DecorationImage(
+                                image: AssetImage(widget.imageFilePath),
+                                fit: BoxFit.fill,
+                                colorFilter: ColorFilter.mode(
+                                  widget.backgroundColor,
+                                  BlendMode.modulate,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        ..._getRegions(),
-                      ],
+                          ..._getRegions(),
+                        ],
+                      ),
                     ),
                   ),
                   if (!_viewOnly) Expanded(

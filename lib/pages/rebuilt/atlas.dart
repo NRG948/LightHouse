@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
-import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
@@ -9,16 +8,12 @@ import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 import 'package:lighthouse/widgets/game_agnostic/match_info.dart';
-import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
 import 'package:lighthouse/widgets/game_agnostic/rating.dart';
-import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/textbox.dart';
-import 'package:lighthouse/widgets/rebuilt/cycle_counter.dart';
 import 'package:lighthouse/widgets/rebuilt/metric.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_endgame_tag_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_location_tracker.dart';
-import 'package:lighthouse/widgets/rebuilt/shift_container.dart';
 import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';
 
 class Atlas extends StatefulWidget {
@@ -35,7 +30,9 @@ class AtlasState extends State<Atlas> {
   @override
   void initState() {
     super.initState();
-    driverStation = configData["currentDriverStation"];
+    if (configData["autofillLastMatch"] == "true") {
+      driverStation = configData["currentDriverStation"];
+    }
   }
 
   @override
@@ -93,6 +90,7 @@ class AtlasState extends State<Atlas> {
               RebuiltLocationTracker(
                 margin: margin,
                 jsonKey: "scoringLocations",
+                flipField: driverStation != null && driverStation!.startsWith("B"),
               ),
               SizedBox(
                 height: 50,

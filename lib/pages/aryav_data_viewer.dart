@@ -2,6 +2,7 @@ import "dart:collection";
 import "dart:convert";
 
 import "package:auto_size_text/auto_size_text.dart";
+import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
@@ -11,6 +12,7 @@ import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import "package:lighthouse/widgets/game_agnostic/star_display.dart";
 import "package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart";
+import "package:lighthouse/widgets/rebuilt/rebuilt_location_tracker.dart";
 import "package:lighthouse/widgets/rebuilt/tower_location_selector.dart";
 
 class TagViewer extends StatefulWidget {
@@ -132,7 +134,7 @@ class InfoBox extends StatelessWidget {
     super.key,
     required this.title,
     required this.info,
-    required this.subInfo,
+    this.subInfo = "",
     this.onTap,
   });
 
@@ -188,7 +190,6 @@ class AutoPreview extends StatefulWidget {
   ///   "match": String,
   ///   "attemptedClimb": bool,
   ///   "climbSuccessful": bool,
-  ///   "fuelScored": double,
   ///   "path": List<String>,
   /// }
   /// ```
@@ -215,7 +216,6 @@ class _AutoPreviewState extends State<AutoPreview> {
     String match = auto["match"] ?? "";
     bool attemptedClimb = auto["attemptedClimb"] ?? false;
     bool climbResult = auto["climbSuccessful"] ?? false;
-    double estTotalFuelScored = auto["fuelScored"] ?? 0;
 
     return DefaultContainer(
       margin: _margin / 3,
@@ -223,6 +223,7 @@ class _AutoPreviewState extends State<AutoPreview> {
         spacing: _margin,
         children: [
           Expanded(
+            flex: 3,
             child: RebuiltAutoPathSelector(
               margin: 0,
               viewOnly: true,
@@ -230,28 +231,25 @@ class _AutoPreviewState extends State<AutoPreview> {
             ),
           ),
           Expanded(
+              flex: 2,
               child: Column(
-            spacing: _margin,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              StarDisplay(starRating: rating),
-              AutoSizeText(
-                "$scouterName  $match",
-                textAlign: TextAlign.left,
-                style: comfortaaBold(17, color: Constants.pastelBrown),
-              ),
-              AutoSizeText(
-                "Fuel Scored: $estTotalFuelScored",
-                style: comfortaaBold(17, color: Constants.pastelBrown),
-              ),
-              if (attemptedClimb)
-                AutoSizeText(
-                  "Climb Attempted: ${climbResult ? "Successful" : "Unsuccessful"}",
-                  style: comfortaaBold(17, color: Constants.pastelBrown),
-                ),
-            ],
-          )),
+                spacing: _margin,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  StarDisplay(starRating: rating),
+                  AutoSizeText(
+                    "$scouterName  $match",
+                    textAlign: TextAlign.left,
+                    style: comfortaaBold(17, color: Constants.pastelBrown),
+                  ),
+                  if (attemptedClimb)
+                    AutoSizeText(
+                      "Climb Attempted: ${climbResult ? "Successful" : "Unsuccessful"}",
+                      style: comfortaaBold(17, color: Constants.pastelBrown),
+                    ),
+                ],
+              )),
         ],
       ),
     );
@@ -563,39 +561,171 @@ class MetricMatch {
   const MetricMatch({required this.match, required this.metric});
 }
 
-class RobotStatistics {
-  int teamNumber;
+class ScoringLocationViewer extends StatefulWidget {
+  final double margin;
+  final Map<String, double?> accuracyColors;
+  final Map<String, double?> frequencyColors;
 
-  double totalAccuracy;
-  double accuracyCycles;
+  const ScoringLocationViewer(
+      {super.key,
+      required this.margin,
+      required this.accuracyColors,
+      required this.frequencyColors});
 
-  int capacity;
+  @override
+  State<ScoringLocationViewer> createState() => _ScoringLocationViewerState();
+}
 
-  double totalTimeScoring;
-  double matches;
+class _ScoringLocationViewerState extends State<ScoringLocationViewer> {
+  double get _margin => widget.margin;
+  Map<String, double?> get _accuracyColors => widget.accuracyColors;
+  Map<String, double?> get _frequencyColors => widget.frequencyColors;
 
-  double totalCycles;
-  double totalActiveShifts;
+  Color _getColorFromValue(double? value) {
+    Color noValueColor = Color.fromARGB(100, 191, 199, 200);
+    Color badValueColor = Color.fromARGB(100, 233, 105, 98);
+    Color midValueColor = Color.fromARGB(100, 242, 225, 74);
+    Color goodValueColor = Color.fromARGB(100, 121, 234, 68);
 
-  double
-      fuelPerShift; // capacity * (capacityFactor / totalCycles) * totalCycles / totalActiveShifts
-  double totalCapacityFactor;
+    if (value == null) {
+      return noValueColor;
+    } else {
+      double clampedValue = value.clamp(0.0, 1.0);
+      if (clampedValue < 0.5) {
+        return Color.lerp(badValueColor, midValueColor, clampedValue * 2) ??
+            noValueColor;
+      } else {
+        return Color.lerp(
+                midValueColor, goodValueColor, (clampedValue - 0.5) * 2) ??
+            noValueColor;
+      }
+    }
+  }
 
-  double totalAutoCapacityFactor;
+  @override
+  Widget build(BuildContext context) {
+    return DefaultContainer(
+      margin: _margin,
+      child: Column(
+        spacing: _margin / 2,
+        children: [
+          Row(
+            spacing: _margin,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                "Accuracy",
+                textAlign: TextAlign.center,
+                style: comfortaaBold(
+                  17,
+                  color: Constants.pastelBrown,
+                ),
+              ),
+              Text(
+                "Frequency",
+                textAlign: TextAlign.center,
+                style: comfortaaBold(
+                  17,
+                  color: Constants.pastelBrown,
+                ),
+              ),
+            ],
+          ),
+          Row(
+            spacing: _margin,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    RebuiltLocationTracker(
+                      viewOnly: true,
+                      margin: 0,
+                      mapColor: Constants.pastelGray,
+                      assignedColors: _accuracyColors.map(
+                        (key, value) => MapEntry(
+                          key,
+                          _getColorFromValue(value),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    RebuiltLocationTracker(
+                      viewOnly: true,
+                      margin: 0,
+                      mapColor: Constants.pastelGray,
+                      assignedColors: _frequencyColors.map(
+                        (key, value) => MapEntry(
+                          key,
+                          _getColorFromValue(value),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-  RobotStatistics({
-    required this.teamNumber,
-    this.totalAccuracy = 0,
-    this.accuracyCycles = 0,
-    this.capacity = 0,
-    this.totalTimeScoring = 0,
-    this.matches = 0,
-    this.totalCycles = 0,
-    this.totalActiveShifts = 0,
-    this.fuelPerShift = 0,
-    this.totalCapacityFactor = 0,
-    this.totalAutoCapacityFactor = 0,
+class PopupInfoBox extends StatefulWidget {
+  final String title;
+  final String info;
+  final String subInfo;
+  final Widget? child;
+
+  const PopupInfoBox({
+    super.key,
+    required this.info,
+    this.child,
+    this.subInfo = "",
+    required this.title,
   });
+
+  @override
+  State<PopupInfoBox> createState() => _PopupInfoBoxState();
+}
+
+class _PopupInfoBoxState extends State<PopupInfoBox> {
+  String get _title => widget.title;
+  String get _info => widget.info;
+  String get _subInfo => widget.subInfo;
+  Widget? get _child => widget.child;
+
+  @override
+  Widget build(BuildContext context) {
+    return InfoBox(
+      title: _title,
+      info: _info,
+      subInfo: _subInfo,
+      onTap: (details) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return GestureDetector(
+              onTapUp: (details) {
+                Navigator.of(context).pop();
+              },
+              child: Dialog(
+                backgroundColor: Colors.transparent,
+                child: Center(
+                  child: _child,
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
 class AryavDataViewer extends StatefulWidget {
@@ -611,38 +741,62 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   List<Map<String, dynamic>> _atlasData = [];
   List<Map<String, dynamic>> _pitData = [];
 
+  // General
   String? _teamName;
+  int _matches = 0;
 
+  // Tags
   Map<String, List<String>> _tags = {};
 
-  double _fuelPerShift = -1;
-  int _fuelPerShiftRank = -1;
+  // Pit
+  double _weight = 0;
+  int _capacity = 0;
+  String _shooterType = "";
+  String _accessType = "";
+  String _drivetrain = "";
 
-  double _averageAccuracy = -1;
-  int _averageAccuracyRank = -1;
-
-  int _capacity = -1;
-  int _capacityRank = -1;
-
-  double _timeScoring = -1;
-  int _timeScoringRank = -1;
-
-  double _cyclesPerShift = -1;
-  int _cyclesPerShiftRank = -1;
-
-  double _feedingPercentage = -1;
+  // Feeding
+  double _feedingPercentage = 0;
   String _feedingMetric = "";
-  List<MetricMatch> _feedingMatches = [];
 
-  double _defensePercentage = -1;
+  double _shootingPercentage = 0;
+  String _shootingMetric = "";
+  List<MetricMatch> _shootingMatches = [];
+
+  double _herdingPercentage = 0;
+  String _herdingMetric = "";
+  List<MetricMatch> _herdingMatches = [];
+
+  // Defense
+  double _defensePercentage = 0;
   String _defenseMetric = "";
-  List<MetricMatch> _defenseMatches = [];
 
+  double _accessPercentage = 0;
+  String _accessMetric = "";
+  List<MetricMatch> _accessMatches = [];
+
+  double _centerPercentage = 0;
+  String _centerMetric = "";
+  List<MetricMatch> _centerMatches = [];
+
+  double _alliancePercentage = 0;
+  String _allianceMetric = "";
+  List<MetricMatch> _allianceMatches = [];
+
+  double _stealingPercentage = 0;
+  String _stealingMetric = "";
+  List<MetricMatch> _stealingMatches = [];
+
+  // Autos
   List<Map<String, dynamic>> _autos = [];
 
+  // Endgame
   List<Climb> _climbs = [];
-
   List<Comment> _comments = [];
+
+  // Mappings
+  Map<String, double?> _accuracyMappings = {};
+  Map<String, double?> _frequencyMappings = {};
 
   int? _toInt(dynamic value) {
     if (value == null) return null;
@@ -705,6 +859,17 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return false;
   }
 
+  Map<String, dynamic>? _toMap(dynamic value) {
+    if (value is Map) {
+      try {
+        return Map<String, dynamic>.from(value);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }
+
   String _shortenMatch(String matchType, int matchNumber) {
     if (matchType.isEmpty) {
       return "$matchNumber";
@@ -727,7 +892,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   }
 
   double _accuracyMetricConverter(double accuracy) {
-    return (accuracy + 1) / 6;
+    return (accuracy - 1) / 2;
   }
 
   double zeroSafeDivision(double dividend, double divisor) {
@@ -798,121 +963,155 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     }
   }
 
+  Widget _getMatchesWidgetList(List<MetricMatch> matches) {
+    return Wrap(
+      spacing: _margin,
+      runSpacing: _margin,
+      children: matches
+          .map(
+            (match) => DefaultContainer(
+              margin: _margin,
+              color: match.metric == "Great"
+                  ? Constants.pastelGreen
+                  : (match.metric == "Decent"
+                      ? Constants.pastelYellow
+                      : Constants.pastelRed),
+              child: Text(
+                match.match,
+                style: comfortaaBold(17, color: Constants.pastelBrown),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+
+  String _doubleToPercentageString(double value) {
+    return "${(value * 100).toStringAsFixed(2)}%";
+  }
+
   bool _loadData(int team) {
     _atlasData = _getDataAsMapFromDatabase("Atlas");
     _pitData = _getDataAsMapFromDatabase("Pit");
     _teams = _getTeamsInDatabase();
 
+    _matches = 0;
+
+    // Tags
     _tags = {};
 
-    _fuelPerShift = -1;
-    _fuelPerShiftRank = -1;
+    // Pit
+    _weight = 0;
+    _capacity = 0;
+    _shooterType = "";
+    _accessType = "";
+    _drivetrain = "";
 
-    _averageAccuracy = -1;
-    _averageAccuracyRank = -1;
-
-    _capacity = -1;
-    _capacityRank = -1;
-
-    _timeScoring = -1;
-    _timeScoringRank = -1;
-
-    _cyclesPerShift = -1;
-    _cyclesPerShiftRank = -1;
-
-    _feedingPercentage = -1;
+    // Feeding
+    _feedingPercentage = 0;
     _feedingMetric = "";
-    double totalFeedingMetricValue = 0;
-    int totalFeedingMetricCount = 0;
-    _feedingMatches = [];
+    int feedingCount = 0;
+    double totalFeedingMetric = 0;
 
-    _defensePercentage = -1;
+    _shootingPercentage = 0;
+    _shootingMetric = "";
+    _shootingMatches = [];
+    double totalShootingMetric = 0;
+
+    _herdingPercentage = 0;
+    _herdingMetric = "";
+    _herdingMatches = [];
+    double totalHerdingMetric = 0;
+
+    // Defense
+    _defensePercentage = 0;
     _defenseMetric = "";
-    double totalDefenseMetricValue = 0;
-    int totalDefenseMetricCount = 0;
-    _defenseMatches = [];
+    int defenseCount = 0;
+    double totalDefenseMetric = 0;
 
+    _accessPercentage = 0;
+    _accessMetric = "";
+    _accessMatches = [];
+    double totalAccessMetric = 0;
+
+    _centerPercentage = 0;
+    _centerMetric = "";
+    _centerMatches = [];
+    double totalCenterMetric = 0;
+
+    _alliancePercentage = 0;
+    _allianceMetric = "";
+    _allianceMatches = [];
+    double totalAllianceMetric = 0;
+
+    _stealingPercentage = 0;
+    _stealingMetric = "";
+    _stealingMatches = [];
+    double totalStealingMetric = 0;
+
+    // Autos
     _autos = [];
 
+    // Endgame
     _climbs = [];
-
     _comments = [];
+
+    // Mappings
+    _accuracyMappings = {};
+    _frequencyMappings = {};
+
+    List<String> scoringRegions = [
+      "depot_corner",
+      "depot_trench",
+      "depot_wall",
+      "depot_bump",
+      "tower",
+      "hub",
+      "outpost_wall",
+      "outpost_bump",
+      "outpost_corner",
+      "outpost_trench",
+    ];
+    Map<String, List<double>> accuracyCount = {
+      for (var e in scoringRegions) e: []
+    };
+    Map<String, int> frequencyCount = {for (var e in scoringRegions) e: 0};
+    _accuracyMappings = {};
+    _frequencyMappings = {};
 
     if (!_teams.contains(team)) return false;
 
     debugPrint(_atlasData.toString(), wrapWidth: 100);
-    debugPrint(_pitData.toString());
+    debugPrint(_pitData.toString(), wrapWidth: 100);
 
     _setTeamNameWithNumber(team);
-
-    Map<int, RobotStatistics> robotStats = {
-      for (int t in _teams) t: RobotStatistics(teamNumber: t)
-    };
 
     for (Map<String, dynamic> entry in _pitData) {
       int? curTeam = _toInt(entry["teamNumber"]);
       if (curTeam == null) continue;
-      if (robotStats[curTeam] == null) continue;
 
-      RobotStatistics curStats = robotStats[curTeam]!;
-
-      curStats.capacity = _toInt(entry["fuelCapacity"]) ?? -1;
+      if (team == curTeam) {
+        _capacity = _toInt(entry["fuelCapacity"]) ?? -1;
+        _shooterType = _toString(entry["shooterType"]);
+        _accessType =
+            ["able", "preferred"].contains(_toString(entry["canGoTrench"]))
+                ? "Trench"
+                : "Bump";
+        _drivetrain = _toString(entry["drivetrain"]);
+        _weight = _toDouble(entry["weight"]) ?? 0;
+      }
     }
 
     for (Map<String, dynamic> entry in _atlasData) {
       int? curTeam = _toInt(entry["teamNumber"]);
       if (curTeam == null) continue;
-      if (robotStats[curTeam] == null) continue;
-
-      RobotStatistics curStats = robotStats[curTeam]!;
-      String shortenedMatch = _shortenMatch(
-          _toString(entry["matchType"]), _toInt(entry["matchNumber"]) ?? 0);
-
-      curStats.matches++;
-
-      List<String> cycleShifts = [
-        "autoCycles",
-        "transitionOnshiftCycles",
-        "firstOnshiftCycles",
-        "secondOnshiftCycles",
-      ];
-      curStats.totalActiveShifts += 2;
-      for (String cycleShift in cycleShifts) {
-        if (_toList(entry[cycleShift]) == null) continue;
-
-        List<dynamic> cycles = _toList(entry[cycleShift])!;
-
-        curStats.accuracyCycles += cycles.length;
-        curStats.totalAccuracy += cycles.fold(
-            0.0,
-            (sum, item) =>
-                sum +
-                (_accuracyMetricConverter(_toDouble(item['accuracy']) ?? -1)));
-        curStats.totalTimeScoring += cycles.fold(0.0,
-            (sum, item) => sum + (_toDouble(item['duration']) ?? 0) / 1000);
-
-        if (cycleShift == cycleShifts[2] || cycleShift == cycleShifts[3]) {
-          curStats.totalCapacityFactor += cycles.fold(
-              0.0,
-              (sum, item) =>
-                  sum +
-                  (_accuracyMetricConverter(_toDouble(item['accuracy']) ?? 3) *
-                      (_toDouble(item['capacity']) ?? 1)));
-
-          curStats.totalCycles += cycles.length;
-        }
-
-        if (cycleShift == cycleShifts[0]) {
-          curStats.totalAutoCapacityFactor += cycles.fold(
-              0.0,
-              (sum, item) =>
-                  sum +
-                  (_accuracyMetricConverter(_toDouble(item['accuracy']) ?? 3) *
-                      (_toDouble(item['capacity']) ?? 1)));
-        }
-      }
 
       if (team == curTeam) {
+        String shortenedMatch = _shortenMatch(
+            _toString(entry["matchType"]), _toInt(entry["matchNumber"]) ?? 0);
+
+        _matches++;
+
         // Tags
         if (entry["tags"] != null) {
           List<dynamic> curTags = _toList(entry["tags"])!;
@@ -924,84 +1123,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           }
         }
 
-        List<String> defenseKeys = [
-          "firstOffshiftIsDefending",
-          "secondOffshiftIsDefending",
-          "transitionOffshiftIsDefending",
-          "firstOnshiftIsDefending",
-          "secondOnshiftIsDefending",
-          "transitionOnshiftIsDefending",
-        ];
-
-        bool flag = false;
-        double metricValue = 0;
-        int metricCount = 0;
-        for (String key in defenseKeys) {
-          if (entry[key] == null) {
-            continue;
-          }
-
-          if (entry[key] is Map<String, dynamic>) {
-            Map<String, dynamic> metric = entry[key];
-            if (metric["isChecked"] == true) {
-              flag = true;
-              metricValue += _metricToValue(_toString(metric["selection"]));
-              metricCount++;
-            }
-          } else if (entry[key] is bool) {
-            if (entry[key]) flag = true;
-          }
-        }
-
-        if (flag) {
-          _defenseMatches.add(MetricMatch(
-              match: shortenedMatch,
-              metric: _valueToMetric(
-                  zeroSafeDivision(metricValue, metricCount.toDouble()))));
-        }
-
-        totalDefenseMetricValue += metricValue;
-        totalDefenseMetricCount += metricCount;
-
-        List<String> feedingKeys = [
-          "firstOffshiftIsFeeding",
-          "secondOffshiftIsFeeding",
-          "transitionOffshiftIsFeeding",
-          "firstOnshiftIsFeeding",
-          "secondOnshiftIsFeeding",
-          "transitionOnshiftIsFeeding",
-        ];
-
-        flag = false;
-        metricValue = 0;
-        metricCount = 0;
-        for (String key in feedingKeys) {
-          if (entry[key] == null) {
-            continue;
-          }
-
-          if (entry[key] is Map<String, dynamic>) {
-            Map<String, dynamic> metric = entry[key];
-            if (metric["isChecked"] == true) {
-              flag = true;
-              metricValue += _metricToValue(_toString(metric["selection"]));
-              metricCount++;
-            }
-          } else if (entry[key] is bool) {
-            if (entry[key]) flag = true;
-          }
-        }
-
-        totalFeedingMetricValue += metricValue;
-        totalFeedingMetricCount += metricCount;
-
-        if (flag) {
-          _feedingMatches.add(MetricMatch(
-              match: shortenedMatch,
-              metric: _valueToMetric(
-                  zeroSafeDivision(metricValue, metricCount.toDouble()))));
-        }
-
+        // Comments
         if (!_isEmpty(entry["comments"])) {
           _comments.add(Comment(
             author: _toString(entry["scouterName"]),
@@ -1011,6 +1133,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           ));
         }
 
+        // Auto
         if (!_isEmpty(entry["autoPath"]) &&
             entry["autoPath"] is Map<String, dynamic>) {
           _autos.add({
@@ -1019,7 +1142,6 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
             "match": shortenedMatch,
             "attemptedClimb": entry["autoPath"]!["attemptedClimb"],
             "climbSuccessful": entry["autoPath"]!["climbSuccessful"],
-            "fuelScored": curStats.totalAutoCapacityFactor * curStats.capacity,
             "path": _toList(entry["autoPath"]!["path"]),
           });
 
@@ -1032,6 +1154,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           }
         }
 
+        // Climb
         if (!_isEmpty(entry["climb"]) &&
             entry["climb"] is Map<String, dynamic> &&
             entry["climb"]!["attempted"] == true) {
@@ -1040,48 +1163,148 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                   entry["climb"]!["level"]),
               time: _toDouble(entry["climb"]!["startTime"])));
         }
+
+        // Accuracy & Frequency Maps
+        if (!_isEmpty(entry["scoringLocations"]) &&
+            entry["scoringLocations"] is Map<String, dynamic>) {
+          for (String region in scoringRegions) {
+            if (entry["scoringLocations"]![region] is! List<dynamic>) continue;
+            for (dynamic item
+                in _toList(entry["scoringLocations"]![region]) ?? []) {
+              double? value = _toDouble(item);
+              if (value != null) {
+                accuracyCount[region]!.add(_accuracyMetricConverter(value));
+              }
+              frequencyCount[region] = frequencyCount[region]! + 1;
+            }
+          }
+        }
+
+        Map<String, dynamic>? temp;
+
+        // Feeding
+        if (_toMap(entry["isHerding"])?["isChecked"] == true ||
+            _toMap(entry["isFeeding"])?["isChecked"] == true) {
+          feedingCount++;
+        }
+
+        temp = _toMap(entry["isHerding"]);
+        if (temp?["isChecked"] == true) {
+          _herdingMatches.add(MetricMatch(
+              match: shortenedMatch, metric: _toString(temp?["selection"])));
+          totalHerdingMetric += _metricToValue(temp?["selection"]);
+        }
+
+        temp = _toMap(entry["isFeeding"]);
+        if (temp?["isChecked"] == true) {
+          _shootingMatches.add(MetricMatch(
+              match: shortenedMatch, metric: _toString(temp?["selection"])));
+          totalShootingMetric += _metricToValue(temp?["selection"]);
+        }
+
+        // Defense
+        if (_toMap(entry["isAccessDefending"])?["isChecked"] == true ||
+            _toMap(entry["isCenterDefending"])?["isChecked"] == true ||
+            _toMap(entry["isAllianceDefending"])?["isChecked"] == true ||
+            _toMap(entry["isStealing"])?["isChecked"] == true) {
+          defenseCount++;
+        }
+
+        temp = _toMap(entry["isAccessDefending"]);
+        if (temp?["isChecked"] == true) {
+          _accessMatches.add(MetricMatch(
+              match: shortenedMatch, metric: _toString(temp?["selection"])));
+          totalAccessMetric += _metricToValue(temp?["selection"]);
+        }
+
+        temp = _toMap(entry["isCenterDefending"]);
+        if (temp?["isChecked"] == true) {
+          _centerMatches.add(MetricMatch(
+              match: shortenedMatch, metric: _toString(temp?["selection"])));
+          totalCenterMetric += _metricToValue(temp?["selection"]);
+        }
+
+        temp = _toMap(entry["isAllianceDefending"]);
+        if (temp?["isChecked"] == true) {
+          _allianceMatches.add(MetricMatch(
+              match: shortenedMatch, metric: _toString(temp?["selection"])));
+          totalAllianceMetric += _metricToValue(temp?["selection"]);
+        }
+
+        temp = _toMap(entry["isStealing"]);
+        if (temp?["isChecked"] == true) {
+          _stealingMatches.add(MetricMatch(
+              match: shortenedMatch, metric: _toString(temp?["selection"])));
+          totalStealingMetric += _metricToValue(temp?["selection"]);
+        }
       }
     }
 
-    RobotStatistics curStats = robotStats[team]!;
-
-    // Fuel / Shift
-    debugPrint(
-        "${curStats.totalCapacityFactor}, ${curStats.capacity}, ${curStats.totalActiveShifts}");
-    _fuelPerShift = curStats.totalCapacityFactor *
-        curStats.capacity /
-        curStats.totalActiveShifts;
-
-    // Capacity
-    _capacity = curStats.capacity;
-
-    // Average Accuracy
-    _averageAccuracy =
-        zeroSafeDivision(curStats.totalAccuracy, curStats.accuracyCycles);
-
-    // Time Scoring
-    _timeScoring =
-        zeroSafeDivision(curStats.totalTimeScoring, curStats.matches);
-
-    // Cycles / Shift
-    _cyclesPerShift =
-        zeroSafeDivision(curStats.totalCycles, curStats.totalActiveShifts);
+    // TODO: Holy copy paste code. I will make this better when I have time.
 
     // % Defense
     _defensePercentage =
-        zeroSafeDivision(_defenseMatches.length.toDouble(), curStats.matches);
-    _defenseMetric = totalDefenseMetricCount == 0
+        zeroSafeDivision(defenseCount.toDouble(), _matches.toDouble());
+    _defenseMetric = totalDefenseMetric == 0
+        ? "No Data"
+        : _valueToMetric(
+            zeroSafeDivision(totalDefenseMetric, defenseCount.toDouble()));
+
+    _stealingPercentage = zeroSafeDivision(
+        _stealingMatches.length.toDouble(), _matches.toDouble());
+    _stealingMetric = totalStealingMetric == 0
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalDefenseMetricValue, totalDefenseMetricCount.toDouble()));
+            totalStealingMetric, _stealingMatches.length.toDouble()));
+
+    _centerPercentage =
+        zeroSafeDivision(_centerMatches.length.toDouble(), _matches.toDouble());
+    _centerMetric = totalCenterMetric == 0
+        ? "No Data"
+        : _valueToMetric(zeroSafeDivision(
+            totalCenterMetric, _centerMatches.length.toDouble()));
+
+    _alliancePercentage = zeroSafeDivision(
+        _allianceMatches.length.toDouble(), _matches.toDouble());
+    _allianceMetric = totalAllianceMetric == 0
+        ? "No Data"
+        : _valueToMetric(zeroSafeDivision(
+            totalAllianceMetric, _allianceMatches.length.toDouble()));
+
+    _accessPercentage =
+        zeroSafeDivision(_accessMatches.length.toDouble(), _matches.toDouble());
+    _accessMetric = totalAccessMetric == 0
+        ? "No Data"
+        : _valueToMetric(zeroSafeDivision(
+            totalAccessMetric, _accessMatches.length.toDouble()));
 
     // % Feeding
     _feedingPercentage =
-        zeroSafeDivision(_feedingMatches.length.toDouble(), curStats.matches);
-    _feedingMetric = totalFeedingMetricCount == 0
+        zeroSafeDivision(feedingCount.toDouble(), _matches.toDouble());
+    _feedingMetric = totalFeedingMetric == 0
+        ? "No Data"
+        : _valueToMetric(
+            zeroSafeDivision(totalFeedingMetric, feedingCount.toDouble()));
+
+    _shootingPercentage = zeroSafeDivision(
+        _shootingMatches.length.toDouble(), _matches.toDouble());
+    _shootingMetric = totalShootingMetric == 0
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalFeedingMetricValue, totalFeedingMetricCount.toDouble()));
+            totalShootingMetric, _shootingMatches.length.toDouble()));
+
+    _herdingPercentage = zeroSafeDivision(
+        _herdingMatches.length.toDouble(), _matches.toDouble());
+    _herdingMetric = totalHerdingMetric == 0
+        ? "No Data"
+        : _valueToMetric(zeroSafeDivision(
+            totalHerdingMetric, _herdingMatches.length.toDouble()));
+
+    // Accuracy & Frequency Maps
+    _accuracyMappings = accuracyCount.map(
+        (key, value) => MapEntry(key, value.isEmpty ? null : value.average));
+    _frequencyMappings = frequencyCount.map((key, value) =>
+        MapEntry(key, value <= 0 ? null : value / frequencyCount.values.max));
 
     setState(() {});
 
@@ -1181,194 +1404,108 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                   spacing: _margin,
                   children: [
                     Expanded(
-                      child: InfoBox(
-                        title: "Fuel / Shift",
-                        info: _fuelPerShift.toStringAsFixed(2),
-                        subInfo: "#$_fuelPerShiftRank",
-                        onTap: (details) {
-                          showDialog(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (context) {
-                                return GestureDetector(
-                                  onTapUp: (details) {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Dialog(
-                                    backgroundColor: Colors.transparent,
-                                    child: Center(
-                                      child: ConstrainedBox(
-                                        constraints: const BoxConstraints(
-                                            maxHeight: 200),
-                                        child: Column(
-                                          spacing: _margin,
-                                          children: [
-                                            Expanded(
-                                              child: Row(
-                                                spacing: _margin,
-                                                children: [
-                                                  Expanded(
-                                                    child: InfoBox(
-                                                      title: "Avg. Accuracy",
-                                                      info: _averageAccuracy
-                                                          .toStringAsFixed(2),
-                                                      subInfo:
-                                                          "#$_averageAccuracyRank",
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: InfoBox(
-                                                      title: "Capacity",
-                                                      info:
-                                                          _capacity.toString(),
-                                                      subInfo:
-                                                          "#$_capacityRank",
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Row(
-                                                spacing: _margin,
-                                                children: [
-                                                  Expanded(
-                                                    child: InfoBox(
-                                                      title:
-                                                          "Time Scoring / Match",
-                                                      info:
-                                                          "${_timeScoring.toStringAsFixed(2)} s",
-                                                      subInfo:
-                                                          "#$_timeScoringRank",
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: InfoBox(
-                                                      title: "Cycles / Shift",
-                                                      info: _cyclesPerShift
-                                                          .toStringAsFixed(2),
-                                                      subInfo:
-                                                          "#$_cyclesPerShiftRank",
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              });
-                        },
+                      child: PopupInfoBox(
+                        title: "Weight (lb)",
+                        info: _weight.toStringAsFixed(1),
+                        subInfo: "with bumpers",
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: _margin,
+                          mainAxisSpacing: _margin,
+                          childAspectRatio: 1.4,
+                          children: [
+                            InfoBox(info: _shooterType, title: "Shooter Type"),
+                            InfoBox(info: "$_capacity", title: "Capacity"),
+                            InfoBox(info: _accessType, title: "Neutral Access"),
+                            InfoBox(info: _drivetrain, title: "Drivetrain"),
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(
-                      child: InfoBox(
+                      child: PopupInfoBox(
                         title: "% Feeding",
-                        info: _feedingPercentage.toStringAsFixed(2),
+                        info: _doubleToPercentageString(_feedingPercentage),
                         subInfo: _feedingMetric,
-                        onTap: (details) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return GestureDetector(
-                                onTapUp: (details) {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Dialog(
-                                  backgroundColor: Colors.transparent,
-                                  child: Center(
-                                    child: Wrap(
-                                      spacing: _margin,
-                                      runSpacing: _margin,
-                                      children: _feedingMatches
-                                          .map(
-                                            (match) => DefaultContainer(
-                                              margin: _margin,
-                                              color: match.metric == "Great"
-                                                  ? Constants.pastelGreen
-                                                  : (match.metric == "Decent"
-                                                      ? Constants.pastelYellow
-                                                      : Constants.pastelRed),
-                                              child: Text(
-                                                match.match,
-                                                style: comfortaaBold(17,
-                                                    color:
-                                                        Constants.pastelBrown),
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: _margin,
+                          mainAxisSpacing: _margin,
+                          childAspectRatio: 1.4,
+                          children: [
+                            PopupInfoBox(
+                              info: _doubleToPercentageString(
+                                  _shootingPercentage),
+                              title: "Shooting",
+                              subInfo: _shootingMetric,
+                              child: _getMatchesWidgetList(_shootingMatches),
+                            ),
+                            PopupInfoBox(
+                              info:
+                                  _doubleToPercentageString(_herdingPercentage),
+                              title: "Herding",
+                              subInfo: _herdingMetric,
+                              child: _getMatchesWidgetList(_herdingMatches),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(
-                      child: InfoBox(
+                      child: PopupInfoBox(
                         title: "% Defending",
-                        info: _defensePercentage.toStringAsFixed(2),
+                        info: _doubleToPercentageString(_defensePercentage),
                         subInfo: _defenseMetric,
-                        onTap: (details) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return GestureDetector(
-                                onTapUp: (details) {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Dialog(
-                                  backgroundColor: Colors.transparent,
-                                  child: Center(
-                                    child: Wrap(
-                                      spacing: _margin,
-                                      runSpacing: _margin,
-                                      children: _defenseMatches
-                                          .map(
-                                            (match) => DefaultContainer(
-                                              margin: _margin,
-                                              color: match.metric == "Great"
-                                                  ? Constants.pastelGreen
-                                                  : (match.metric == "Decent"
-                                                      ? Constants.pastelYellow
-                                                      : Constants.pastelRed),
-                                              child: Text(
-                                                match.match,
-                                                style: comfortaaBold(17,
-                                                    color:
-                                                        Constants.pastelBrown),
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        },
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: _margin,
+                          mainAxisSpacing: _margin,
+                          childAspectRatio: 1.4,
+                          children: [
+                            PopupInfoBox(
+                              info:
+                                  _doubleToPercentageString(_accessPercentage),
+                              title: "Trench / Bump",
+                              subInfo: _accessMetric,
+                              child: _getMatchesWidgetList(_accessMatches),
+                            ),
+                            PopupInfoBox(
+                              info:
+                                  _doubleToPercentageString(_centerPercentage),
+                              title: "Neutral Zone",
+                              subInfo: _centerMetric,
+                              child: _getMatchesWidgetList(_centerMatches),
+                            ),
+                            PopupInfoBox(
+                              info: _doubleToPercentageString(
+                                  _alliancePercentage),
+                              title: "Alliance Zone",
+                              subInfo: _allianceMetric,
+                              child: _getMatchesWidgetList(_allianceMatches),
+                            ),
+                            PopupInfoBox(
+                              info: _doubleToPercentageString(
+                                  _stealingPercentage),
+                              title: "Stealing",
+                              subInfo: _stealingMetric,
+                              child: _getMatchesWidgetList(_stealingMatches),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
               SizedBox(
-                height: 200,
+                height: 250,
                 child: AutoPreview(
                   margin: _margin,
                   autoData: _autos,
                 ),
-              ),
-              SizedBox(
-                height: 90,
-                child: ClimbInfoBox(margin: _margin, climbs: _climbs),
               ),
               SizedBox(
                 height: 200,
@@ -1376,6 +1513,15 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                   comments: _comments,
                   margin: _margin,
                 ),
+              ),
+              ScoringLocationViewer(
+                margin: _margin,
+                accuracyColors: _accuracyMappings,
+                frequencyColors: _frequencyMappings,
+              ),
+              SizedBox(
+                height: 90,
+                child: ClimbInfoBox(margin: _margin, climbs: _climbs),
               ),
             ],
           ),

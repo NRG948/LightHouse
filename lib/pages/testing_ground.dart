@@ -1,7 +1,6 @@
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/widgets/rebuilt/cycle_counter.dart";
 import "package:lighthouse/widgets/rebuilt/rebuilt_location_tracker.dart";
 
 class TestingGroundPage extends StatefulWidget {

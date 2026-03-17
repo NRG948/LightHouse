@@ -9,6 +9,8 @@ class RebuiltLocationTracker extends StatelessWidget {
   final double? margin;
   final bool viewOnly;
   final Map<String, Color>? assignedColors;
+  final Color mapColor;
+  final bool flipField;
 
   const RebuiltLocationTracker({
     super.key,
@@ -16,6 +18,8 @@ class RebuiltLocationTracker extends StatelessWidget {
     this.margin,
     this.viewOnly = false,
     this.assignedColors,
+    this.mapColor = Constants.pastelRed,
+    this.flipField = false,
   });
 
   List<Zone> getZones() {
@@ -44,6 +48,8 @@ class RebuiltLocationTracker extends StatelessWidget {
       margin: margin,
       viewOnly: viewOnly,
       assignedColors: assignedColors,
+      mainColor: mapColor,
+      flipField: flipField,
       childBuilder: (context, regionId, onUpdate) {
         return Column(
           children: [
