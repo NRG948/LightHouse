@@ -132,7 +132,7 @@ class _MatchInfoState extends State<MatchInfo>
         _width = constraints.maxWidth;
         return Container(
           width: _width,
-          height: _width * 0.7,
+          height: _width * 0.8,
           padding: EdgeInsets.all(_margin),
           decoration: BoxDecoration(
               color: Constants.pastelWhite,
@@ -335,7 +335,7 @@ class _MatchInfoState extends State<MatchInfo>
                                   value: v,
                                   child: Text(
                                     v,
-                                    style: comfortaaBold(_width / 25,
+                                    style: comfortaaBold(_width / 26,
                                         color: Constants.pastelBrown),
                                   ));
                             }).toList(),
@@ -348,6 +348,7 @@ class _MatchInfoState extends State<MatchInfo>
                                   matchData != []) {
                                 autofillTeamNumber();
                               }
+                              setState(() {}); // for some reason it doesn't change unless this is here :(
                             },
                             dropdownColor: Constants.pastelYellow,
                           ),
