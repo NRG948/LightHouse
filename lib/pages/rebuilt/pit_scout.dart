@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
-import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
-import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/old_textbox.dart';
-import 'package:lighthouse/widgets/game_agnostic/placeholder.dart';
-import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/team_info.dart';
-import 'package:lighthouse/widgets/rebuilt/metric.dart';
 import 'package:lighthouse/widgets/rebuilt/pit_auto_container.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';

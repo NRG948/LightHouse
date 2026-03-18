@@ -85,7 +85,6 @@ class _TagViewerState extends State<TagViewer> {
         _onTap(_isExpanded);
         setState(() {
           _isExpanded = !_isExpanded;
-          print(_isExpanded);
         });
       },
       child: AnimatedSize(
@@ -755,6 +754,11 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   String _accessType = "";
   String _drivetrain = "";
 
+  // Accuracy
+  double _averageAccuracy = 0;
+
+  double _averageDefendedAccuracy = 0;
+
   // Feeding
   double _feedingPercentage = 0;
   String _feedingMetric = "";
@@ -891,8 +895,12 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return teams.toSet();
   }
 
-  double _accuracyMetricConverter(double accuracy) {
+  double _accuracyMetricToNormalized(double accuracy) {
     return (accuracy - 1) / 2;
+  }
+
+  double _accuracyMetricToPercentage(double accuracy) {
+    return accuracy / 3;
   }
 
   double zeroSafeDivision(double dividend, double divisor) {
@@ -950,7 +958,6 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
       teamPage = jsonDecode(await rootBundle.loadString(
           "assets/text/teams${(teamNumber ~/ 500) * 500}-${(teamNumber ~/ 500) * 500 + 500}.txt"));
     } catch (e) {
-      debugPrint(e.toString());
       return;
     }
 
@@ -990,6 +997,30 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return "${(value * 100).toStringAsFixed(2)}%";
   }
 
+  int _matchToIdentifier(String shortenedMatch) {
+    int value = 0;
+    switch (shortenedMatch[0]) {
+      case "Q":
+        value += 1000;
+        break;
+      case "P":
+        if (shortenedMatch == "Pit") break;
+        value += 2000;
+        break;
+      case "F":
+        value += 3000;
+        break;
+      default:
+        break;
+    }
+    value += _toInt(shortenedMatch.substring(1)) ?? 0;
+    return value;
+  }
+
+  int _compareMatches(String a, String b) {
+    return _matchToIdentifier(a).compareTo(_matchToIdentifier(b));
+  }
+
   bool _loadData(int team) {
     _atlasData = _getDataAsMapFromDatabase("Atlas");
     _pitData = _getDataAsMapFromDatabase("Pit");
@@ -1006,6 +1037,15 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     _shooterType = "";
     _accessType = "";
     _drivetrain = "";
+
+    // Accuracy
+    _averageAccuracy = 0;
+    double totalAccuracy = 0;
+    int accuracyMeasureCount = 0;
+
+    _averageDefendedAccuracy = 0;
+    double totalDefendedAccuracy = 0;
+    int defendedAccuracyCount = 0;
 
     // Feeding
     _feedingPercentage = 0;
@@ -1072,17 +1112,14 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
       "outpost_corner",
       "outpost_trench",
     ];
-    Map<String, List<double>> accuracyCount = {
+    Map<String, List<double>> accuracyPerRegion = {
       for (var e in scoringRegions) e: []
     };
-    Map<String, int> frequencyCount = {for (var e in scoringRegions) e: 0};
+    Map<String, int> frequencyPerRegion = {for (var e in scoringRegions) e: 0};
     _accuracyMappings = {};
     _frequencyMappings = {};
 
     if (!_teams.contains(team)) return false;
-
-    debugPrint(_atlasData.toString(), wrapWidth: 100);
-    debugPrint(_pitData.toString(), wrapWidth: 100);
 
     _setTeamNameWithNumber(team);
 
@@ -1099,6 +1136,24 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                 : "Bump";
         _drivetrain = _toString(entry["drivetrain"]);
         _weight = _toDouble(entry["weight"]) ?? 0;
+
+        int i = 1;
+        while (true) {
+          if (!_isEmpty(entry["autoPath$i"]) &&
+              entry["autoPath$i"] is Map<String, dynamic>) {
+            _autos.add({
+              "scouterName": "",
+              "rating": _toDouble(entry["dataQuality"]) ?? 0,
+              "match": "Pit",
+              "attemptedClimb": entry["autoPath$i"]!["attemptedClimb"],
+              "climbSuccessful": false,
+              "path": _toList(entry["autoPath$i"]!["path"]),
+            });
+            i++;
+          } else {
+            break;
+          }
+        }
       }
     }
 
@@ -1173,9 +1228,17 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                 in _toList(entry["scoringLocations"]![region]) ?? []) {
               double? value = _toDouble(item);
               if (value != null) {
-                accuracyCount[region]!.add(_accuracyMetricConverter(value));
+                accuracyPerRegion[region]!
+                    .add(_accuracyMetricToNormalized(value));
+
+                accuracyMeasureCount++;
+                totalAccuracy += _accuracyMetricToPercentage(value);
+                if (entry["isBeingDefended"] == true) {
+                  defendedAccuracyCount++;
+                  totalDefendedAccuracy += _accuracyMetricToPercentage(value);
+                }
               }
-              frequencyCount[region] = frequencyCount[region]! + 1;
+              frequencyPerRegion[region] = frequencyPerRegion[region]! + 1;
             }
           }
         }
@@ -1201,6 +1264,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
               match: shortenedMatch, metric: _toString(temp?["selection"])));
           totalShootingMetric += _metricToValue(temp?["selection"]);
         }
+
+        totalFeedingMetric = totalHerdingMetric + totalShootingMetric;
 
         // Defense
         if (_toMap(entry["isAccessDefending"])?["isChecked"] == true ||
@@ -1237,43 +1302,58 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
               match: shortenedMatch, metric: _toString(temp?["selection"])));
           totalStealingMetric += _metricToValue(temp?["selection"]);
         }
+
+        totalDefenseMetric = totalAccessMetric +
+            totalCenterMetric +
+            totalAllianceMetric +
+            totalStealingMetric;
       }
     }
 
+    // Autos and Comments
+    _autos.sort((a, b) => _compareMatches(b["match"] ?? "", a["match"] ?? ""));
+    _comments.sort((a, b) => _compareMatches(b.match, a.match));
+
     // TODO: Holy copy paste code. I will make this better when I have time.
+
+    // Accuracy & Defended accuracy
+    _averageAccuracy =
+        zeroSafeDivision(totalAccuracy, accuracyMeasureCount.toDouble());
+    _averageDefendedAccuracy = zeroSafeDivision(
+        totalDefendedAccuracy, defendedAccuracyCount.toDouble());
 
     // % Defense
     _defensePercentage =
         zeroSafeDivision(defenseCount.toDouble(), _matches.toDouble());
-    _defenseMetric = totalDefenseMetric == 0
+    _defenseMetric = defenseCount == 0
         ? "No Data"
         : _valueToMetric(
             zeroSafeDivision(totalDefenseMetric, defenseCount.toDouble()));
 
     _stealingPercentage = zeroSafeDivision(
         _stealingMatches.length.toDouble(), _matches.toDouble());
-    _stealingMetric = totalStealingMetric == 0
+    _stealingMetric = _stealingMatches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
             totalStealingMetric, _stealingMatches.length.toDouble()));
 
     _centerPercentage =
         zeroSafeDivision(_centerMatches.length.toDouble(), _matches.toDouble());
-    _centerMetric = totalCenterMetric == 0
+    _centerMetric = _centerMatches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
             totalCenterMetric, _centerMatches.length.toDouble()));
 
     _alliancePercentage = zeroSafeDivision(
         _allianceMatches.length.toDouble(), _matches.toDouble());
-    _allianceMetric = totalAllianceMetric == 0
+    _allianceMetric = _allianceMatches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
             totalAllianceMetric, _allianceMatches.length.toDouble()));
 
     _accessPercentage =
         zeroSafeDivision(_accessMatches.length.toDouble(), _matches.toDouble());
-    _accessMetric = totalAccessMetric == 0
+    _accessMetric = _accessMatches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
             totalAccessMetric, _accessMatches.length.toDouble()));
@@ -1281,30 +1361,30 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     // % Feeding
     _feedingPercentage =
         zeroSafeDivision(feedingCount.toDouble(), _matches.toDouble());
-    _feedingMetric = totalFeedingMetric == 0
+    _feedingMetric = feedingCount == 0
         ? "No Data"
         : _valueToMetric(
             zeroSafeDivision(totalFeedingMetric, feedingCount.toDouble()));
 
     _shootingPercentage = zeroSafeDivision(
         _shootingMatches.length.toDouble(), _matches.toDouble());
-    _shootingMetric = totalShootingMetric == 0
+    _shootingMetric = _shootingMatches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
             totalShootingMetric, _shootingMatches.length.toDouble()));
 
     _herdingPercentage = zeroSafeDivision(
         _herdingMatches.length.toDouble(), _matches.toDouble());
-    _herdingMetric = totalHerdingMetric == 0
+    _herdingMetric = _herdingMatches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
             totalHerdingMetric, _herdingMatches.length.toDouble()));
 
     // Accuracy & Frequency Maps
-    _accuracyMappings = accuracyCount.map(
+    _accuracyMappings = accuracyPerRegion.map(
         (key, value) => MapEntry(key, value.isEmpty ? null : value.average));
-    _frequencyMappings = frequencyCount.map((key, value) =>
-        MapEntry(key, value <= 0 ? null : value / frequencyCount.values.max));
+    _frequencyMappings = frequencyPerRegion.map((key, value) => MapEntry(
+        key, value <= 0 ? null : value / frequencyPerRegion.values.max));
 
     setState(() {});
 
@@ -1419,6 +1499,14 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                             InfoBox(info: "$_capacity", title: "Capacity"),
                             InfoBox(info: _accessType, title: "Neutral Access"),
                             InfoBox(info: _drivetrain, title: "Drivetrain"),
+                            InfoBox(
+                                info:
+                                    _doubleToPercentageString(_averageAccuracy),
+                                title: "Avg. Accuracy"),
+                            InfoBox(
+                                info: _doubleToPercentageString(
+                                    _averageDefendedAccuracy),
+                                title: "Defended Avg. Acc"),
                           ],
                         ),
                       ),
