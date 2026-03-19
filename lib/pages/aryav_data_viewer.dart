@@ -1255,14 +1255,14 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         if (temp?["isChecked"] == true) {
           _herdingMatches.add(MetricMatch(
               match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalHerdingMetric += _metricToValue(temp?["selection"]);
+          totalHerdingMetric += _metricToValue(_toString(temp?["selection"]));
         }
 
         temp = _toMap(entry["isFeeding"]);
         if (temp?["isChecked"] == true) {
           _shootingMatches.add(MetricMatch(
               match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalShootingMetric += _metricToValue(temp?["selection"]);
+          totalShootingMetric += _metricToValue(_toString(temp?["selection"]));
         }
 
         totalFeedingMetric = totalHerdingMetric + totalShootingMetric;
@@ -1279,28 +1279,28 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         if (temp?["isChecked"] == true) {
           _accessMatches.add(MetricMatch(
               match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalAccessMetric += _metricToValue(temp?["selection"]);
+          totalAccessMetric += _metricToValue(_toString(temp?["selection"]));
         }
 
         temp = _toMap(entry["isCenterDefending"]);
         if (temp?["isChecked"] == true) {
           _centerMatches.add(MetricMatch(
               match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalCenterMetric += _metricToValue(temp?["selection"]);
+          totalCenterMetric += _metricToValue(_toString(temp?["selection"]));
         }
 
         temp = _toMap(entry["isAllianceDefending"]);
         if (temp?["isChecked"] == true) {
           _allianceMatches.add(MetricMatch(
               match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalAllianceMetric += _metricToValue(temp?["selection"]);
+          totalAllianceMetric += _metricToValue(_toString(temp?["selection"]));
         }
 
         temp = _toMap(entry["isStealing"]);
         if (temp?["isChecked"] == true) {
           _stealingMatches.add(MetricMatch(
               match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalStealingMetric += _metricToValue(temp?["selection"]);
+          totalStealingMetric += _metricToValue(_toString(temp?["selection"]));
         }
 
         totalDefenseMetric = totalAccessMetric +
