@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/widgets/game_agnostic/team_guessr.dart";
 import "package:lighthouse/widgets/rebuilt/rebuilt_location_tracker.dart";
 
 class TestingGroundPage extends StatefulWidget {
@@ -40,9 +41,7 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
       body: Center(
           child: Padding(
               padding: EdgeInsets.all(10),
-              child: RebuiltLocationTracker(
-                margin: 10,
-              ))),
+              child: TeamGuessr())),
     );
   }
 }
