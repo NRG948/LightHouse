@@ -34,7 +34,9 @@ class Metric extends StatefulWidget {
   State<Metric> createState() => _MetricState();
 }
 
-class _MetricState extends State<Metric> {
+class _MetricState extends State<Metric> with AutomaticKeepAliveClientMixin {
+@override
+  bool get wantKeepAlive => true;
   String get _checkboxTitle => widget.checkboxTitle;
   List<String> get _selectOptions => widget.selectOptions;
   double get _height => widget.height;
@@ -63,6 +65,7 @@ class _MetricState extends State<Metric> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       height: _height,
       padding: EdgeInsets.all(_margin),
@@ -108,4 +111,5 @@ class _MetricState extends State<Metric> {
       ),
     );
   }
+  
 }

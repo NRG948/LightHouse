@@ -261,6 +261,7 @@ class _UploadDialogState extends State<UploadDialog> {
   // Build the list of uploaded files
   List<Widget> buildUploadedFiles() {
     final List<Widget> list = uploadedFiles.keys.map((key) {
+      print(uploadedFiles[key]);
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

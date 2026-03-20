@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 
@@ -40,6 +41,7 @@ class _CycleListCounterState extends State<CycleListCounter> {
 
   void _addSelector() {
     setState(() {
+      HapticFeedback.mediumImpact();
       _selectorsData.add(SelectorItem(
         id: DateTime.now().microsecondsSinceEpoch.toString(),
         value: null,
