@@ -127,6 +127,7 @@ class _TeamGuessrState extends State<TeamGuessr>
         .toLowerCase()
         .replaceAll(RegExp(r'\(.*?\)|".*?"'), '')
         .replaceAll(RegExp(r'the', caseSensitive: false), '')
+        .replaceFirst(RegExp(r'\brobotics?$'), '')
         .replaceAll(RegExp(r'[ \-]'), '')
         .replaceFirst(RegExp(r's$'), '');
   }
