@@ -1140,7 +1140,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         int i = 1;
         while (true) {
           if (!_isEmpty(entry["autoPath$i"]) &&
-              entry["autoPath$i"] is Map<String, dynamic>) {
+              entry["autoPath$i"] is Map<String, dynamic> &&
+              !_isEmpty(entry["autoPath$i"]!["path"])) {
             _autos.add({
               "scouterName": "",
               "rating": _toDouble(entry["dataQuality"]) ?? 0,
