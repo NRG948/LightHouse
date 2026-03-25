@@ -26,6 +26,7 @@ class Atlas extends StatefulWidget {
 class AtlasState extends State<Atlas> {
   double margin = 10;
   String? driverStation;
+  bool get flipField => (driverStation?.startsWith("B") ?? false) ^ (configData["flipField"] == "true");
 
   @override
   void initState() {
@@ -75,7 +76,7 @@ class AtlasState extends State<Atlas> {
           margin: EdgeInsets.all(15),
           child: RebuiltAutoPathSelector(
             margin: margin,
-            flipField: driverStation != null && driverStation!.startsWith("B"),
+            flipField: flipField,
             pit: false,
           ),
         ),
@@ -90,7 +91,7 @@ class AtlasState extends State<Atlas> {
               RebuiltLocationTracker(
                 margin: margin,
                 jsonKey: "scoringLocations",
-                flipField: driverStation != null && driverStation!.startsWith("B"),
+                flipField: flipField,
               ),
               SizedBox(
                 height: 50,

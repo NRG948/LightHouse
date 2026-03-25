@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
@@ -128,8 +130,8 @@ class _LocationTrackerState extends State<LocationTracker>
                   SizedBox(
                     width: _imageWidth,
                     height: _imageHeight,
-                    child: Transform.flip(
-                      flipX: _flipField,
+                    child: Transform.rotate(
+                      angle: _flipField ? pi : 0,
                       child: Stack(
                         children: [
                           Container(

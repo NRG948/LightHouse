@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -37,8 +38,8 @@ class VisualNode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.flip(
-      flipX: flip,
+    return Transform.rotate(
+      angle: flip ? pi : 0,
       child: Container(
         width: 2 * radius,
         height: 2 * radius,
@@ -640,8 +641,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                 spacing: _margin,
                 children: [
                   Center(
-                    child: Transform.flip(
-                      flipX: _flipField,
+                    child: Transform.rotate(
+                      angle: _flipField ? pi : 0,
                       child: Container(
                         width: _imageWidth,
                         height: _imageHeight,
