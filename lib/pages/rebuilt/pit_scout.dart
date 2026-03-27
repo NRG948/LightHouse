@@ -3,6 +3,8 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
+import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/old_textbox.dart';
@@ -166,6 +168,17 @@ class PitScoutState extends State<PitScout> {
                         width: double.infinity,
                         fontSize: 20,
                         maxLines: 1),
+                    DefaultContainer(
+                      color: Colors.white,
+                      child: AspectRatio(
+                          aspectRatio: 8,
+                          child: CustomCheckbox(
+                            title: "Crossed Midline",
+                            jsonKey: "autoCrossedMidline${(index + 1)}",
+                            selectColor: Constants.pastelWhite,
+                            optionColor: Constants.pastelRed,
+                          )),
+                    ),
                   ],
                 ),
               ),
@@ -239,27 +252,27 @@ class PitScoutState extends State<PitScout> {
         "Endgame": DataEntrySubPage(
           icon: CustomIcons.flag,
           content: Container(
-            margin: EdgeInsets.all(10),
-            child: Column(spacing: 10,
-            children: [
-              TowerLocationSelector(
-                margin: 10,
-                jsonKey: "climb",
-              ),
-              NRGMultiThreeStageCheckbox(
-                  title: "Shooting",
-                  jsonKey: [
-                    "canShootEndgame",
-                  ],
-                  width: double.infinity,
-                  height: 100,
-                  boxNames: [
-                    ["Shoot during Endgame"]
-                  ],
-                ),
-
-            ],)
-          ),
+              margin: EdgeInsets.all(10),
+              child: Column(
+                spacing: 10,
+                children: [
+                  TowerLocationSelector(
+                    margin: 10,
+                    jsonKey: "climb",
+                  ),
+                  NRGMultiThreeStageCheckbox(
+                    title: "Shooting",
+                    jsonKey: [
+                      "canShootEndgame",
+                    ],
+                    width: double.infinity,
+                    height: 100,
+                    boxNames: [
+                      ["Shoot during Endgame"]
+                    ],
+                  ),
+                ],
+              )),
         )
       },
     );

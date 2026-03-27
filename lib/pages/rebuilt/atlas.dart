@@ -26,7 +26,9 @@ class Atlas extends StatefulWidget {
 class AtlasState extends State<Atlas> {
   double margin = 10;
   String? driverStation;
-  bool get flipField => (driverStation?.startsWith("B") ?? false) ^ (configData["flipField"] == "true");
+  bool get flipField =>
+      (driverStation?.startsWith("B") ?? false) ^
+      (configData["flipField"] == "true");
 
   @override
   void initState() {
@@ -74,10 +76,27 @@ class AtlasState extends State<Atlas> {
         icon: CustomIcons.autonomous,
         content: Container(
           margin: EdgeInsets.all(15),
-          child: RebuiltAutoPathSelector(
-            margin: margin,
-            flipField: flipField,
-            pit: false,
+          child: Column(
+            spacing: 10,
+            children: [
+              RebuiltAutoPathSelector(
+                margin: margin,
+                flipField: flipField,
+                pit: false,
+              ),
+
+              DefaultContainer(
+                color: Colors.white,
+                child: AspectRatio(
+                    aspectRatio: 8,
+                    child: CustomCheckbox(
+                      title: "Crossed Midline",
+                      jsonKey: "autoCrossedMidline",
+                      selectColor: Constants.pastelWhite,
+                      optionColor: Constants.pastelRed,
+                    )),
+              ),
+            ],
           ),
         ),
       ),
