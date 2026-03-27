@@ -1,0 +1,61 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'atlas_data.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
+  ..scouterName = json['scouterName'] as String?
+  ..matchNumber = (json['matchNumber'] as num?)?.toInt()
+  ..isReplay = json['isReplay'] as bool?
+  ..matchType = json['matchType'] as String?
+  ..driverStation = json['driverStation'] as String?
+  ..autoPaths = (json['autoPaths'] as List<dynamic>?)
+      ?.map((e) => AutoPathData.fromJson(e as Map<String, dynamic>))
+      .toList()
+  ..crossedMidline = json['crossedMidline'] as bool?
+  ..locations = json['locations'] == null
+      ? null
+      : LocationTrackerData.fromJson(json['locations'] as Map<String, dynamic>)
+  ..isDefended = json['isDefended'] as bool?
+  ..isShoveling = json['isShoveling'] == null
+      ? null
+      : MetricData.fromJson(json['isShoveling'] as Map<String, dynamic>)
+  ..isFeeding = json['isFeeding'] == null
+      ? null
+      : MetricData.fromJson(json['isFeeding'] as Map<String, dynamic>)
+  ..isDefendingTrenchOrBump = json['isDefendingTrenchOrBump'] == null
+      ? null
+      : MetricData.fromJson(
+          json['isDefendingTrenchOrBump'] as Map<String, dynamic>)
+  ..isDefendingNeutralZone = json['isDefendingNeutralZone'] == null
+      ? null
+      : MetricData.fromJson(
+          json['isDefendingNeutralZone'] as Map<String, dynamic>)
+  ..isDefendingAllianceZone = json['isDefendingAllianceZone'] == null
+      ? null
+      : MetricData.fromJson(
+          json['isDefendingAllianceZone'] as Map<String, dynamic>)
+  ..isStealing = json['isStealing'] == null
+      ? null
+      : MetricData.fromJson(json['isStealing'] as Map<String, dynamic>);
+
+Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
+      'scouterName': instance.scouterName,
+      'matchNumber': instance.matchNumber,
+      'isReplay': instance.isReplay,
+      'matchType': instance.matchType,
+      'driverStation': instance.driverStation,
+      'autoPaths': instance.autoPaths,
+      'crossedMidline': instance.crossedMidline,
+      'locations': instance.locations,
+      'isDefended': instance.isDefended,
+      'isShoveling': instance.isShoveling,
+      'isFeeding': instance.isFeeding,
+      'isDefendingTrenchOrBump': instance.isDefendingTrenchOrBump,
+      'isDefendingNeutralZone': instance.isDefendingNeutralZone,
+      'isDefendingAllianceZone': instance.isDefendingAllianceZone,
+      'isStealing': instance.isStealing,
+    };
