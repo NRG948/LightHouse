@@ -82,7 +82,6 @@ class NodeData {
       this.groupLabel});
 }
 
-
 class UserAction {
   UserActionType actionType;
   int nodeIndice;
@@ -226,7 +225,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _scaleFactor => _imageWidth / _rawImageWidth;
 
   double get _margin => widget.margin ?? _width / 25;
-  double get _bottomOffset => _pit ? _width * 0.125 : _width * 0.25;
+  double get _bottomOffset => _pit ? _width * 0.225 : _width * 0.35;
 
   double get _nodeRadius => _imageWidth / 17;
   double get _nodeBorderWidth => _width / 100;
@@ -260,6 +259,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   bool get _pit => widget.pit;
   List<String>? get _climbLevels => widget.climbLevels;
   bool _attemptedClimb = false;
+  bool _shotPreload = false;
   bool? _climbSuccessful;
   String? _climbLevel;
 
@@ -281,8 +281,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
               case [num x, num y]:
                 Offset pixelPosition = Offset(x.toDouble(), y.toDouble());
                 addNodeFromMap((_converter == null
-                    ? pixelPosition
-                    : _converter!(pixelPosition, inverse: true)) * _scaleFactor);
+                        ? pixelPosition
+                        : _converter!(pixelPosition, inverse: true)) *
+                    _scaleFactor);
 
               case String region:
                 addNodeFromRegion(region);
@@ -330,6 +331,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     data["attemptedClimb"] = _attemptedClimb;
     data["climbSuccessful"] = _climbSuccessful;
     data["climbLevel"] = _climbLevel;
+    data["shotPreload"] = _shotPreload;
 
     DataEntry.exportData[_jsonKey!] = data;
   }
@@ -591,6 +593,20 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
             optionColor: _mainColor,
             lockedColor: _lockedColor,
             textColor: _textColor,
+            title: _pit ? "Shoots Preload" : "Shot Preload",
+            onToggle: (value) {
+              setState(() {
+                _shotPreload = value;
+                _serializeData();
+              });
+            },
+          )),
+          Expanded(
+              child: CustomCheckbox(
+            selectColor: _backgroundColor,
+            optionColor: _mainColor,
+            lockedColor: _lockedColor,
+            textColor: _textColor,
             title: _pit ? "Attempts Climb" : "Attempted Climb",
             onToggle: (value) {
               setState(() {
@@ -699,7 +715,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                                   }
                                 });
                               },
-                              iconSize: _buttonSize * 0.7,
+                              iconSize: _buttonSize * 0.4,
                               color: _backgroundColor,
                               highlightColor: Constants.pastelRedSuperDark,
                               icon: const Icon(Icons.undo_rounded)),
