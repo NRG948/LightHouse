@@ -60,9 +60,9 @@ class AtlasState extends State<Atlas> {
                     child: InputTextBox(
                       maxLines: 1,
                       hintText: "Scouter name",
-                      jsonKey: "scouterName",
-                      access: (val) => data.scouterName = val ?? val,
                       autofillKey: "scouterName",
+                      setValue: (val) => data.scouterName = val,
+                      getValue: () => data.scouterName ?? "",
                     ),
                   ),
                   MatchInfo(

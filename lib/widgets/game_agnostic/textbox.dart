@@ -44,13 +44,8 @@ class InputTextBox extends StatefulWidget {
   /// The text displayed when the input field is empty.
   final String hintText;
 
-  /// Called when the user changes the input field.
-  final void Function(String text) onChanged;
-
-  /// The key which stores the value of this widget in [DataEntry]
-  final String? jsonKey;
-
-  final String? Function(String?)? access;
+  final String Function() getValue;
+  final void Function(String) setValue;
 
   /// The key from which the autofill value is taken from [configData]
   final String? autofillKey;
@@ -69,13 +64,11 @@ class InputTextBox extends StatefulWidget {
     this.hintColor = Constants.pastelRedDark,
     this.lockedColor = Constants.pastelGray,
     this.hintText = "",
-    this.onChanged = _noop,
-    this.jsonKey,
-    this.access, 
+    required this.setValue,
+    required this.getValue,  
     this.autofillKey,
   });
 
-  static void _noop(String text) {}
 
   @override
   State<InputTextBox> createState() => _InputTextBoxState();
@@ -99,28 +92,16 @@ class _InputTextBoxState extends State<InputTextBox>
   Color get _lockedColor => widget.lockedColor;
   Color get _hintColor => widget.hintColor;
   String get _hintText => widget.hintText;
-  String? get _jsonKey => widget.jsonKey;
-  String? Function(String?)? get _access => widget.access;
+  String Function() get _getValue => widget.getValue;
+  void Function(String) get _setValue => widget.setValue;
   String? get _autofillKey => widget.autofillKey;
-  String _value = "";
-  void Function(String text) get _onChanged => widget.onChanged;
 
   @override
   void initState() {
     super.initState();
     if (_autofillKey != null && configData.containsKey(_autofillKey)) {
-      _value = configData[_autofillKey!]!;
-      _serializeData();
+      _setValue(configData[_autofillKey!]!);
     }
-  }
-
-  void _serializeData() {
-    if (_access != null) {
-      _access!(_value);
-    }
-    // if (_jsonKey != null) {
-    //   DataEntry.exportData[_jsonKey!] = _value;
-    // }
   }
 
   @override
@@ -170,9 +151,7 @@ class _InputTextBoxState extends State<InputTextBox>
             cursorColor: _isLocked ? Colors.black.withAlpha(100) : _textColor,
             keyboardType: _isNumeric ? TextInputType.number : null,
             onChanged: (value) {
-              _value = value;
-              _serializeData();
-              _onChanged(value);
+              _setValue(value);
             },
             onTapOutside: (event) {
               FocusScope.of(context).unfocus();

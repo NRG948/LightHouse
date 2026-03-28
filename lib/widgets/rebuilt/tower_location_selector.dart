@@ -182,14 +182,16 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                       Expanded(
                         flex: 50,
                         child: InputTextBox(
-                            isNumeric: true,
-                            hintText: "Start Time",
-                            maxLines: 1,
-                            isLocked: _isLocked,
-                            onChanged: (String text) {
-                              _startTime = text;
-                              _serializeData();
-                            }),
+                          isNumeric: true,
+                          hintText: "Start Time",
+                          maxLines: 1,
+                          isLocked: _isLocked,
+                          setValue: (String text) {
+                            _startTime = text;
+                            _serializeData();
+                          },
+                          getValue: () => _startTime,
+                        ),
                       ),
                     ],
                   ),
