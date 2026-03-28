@@ -87,6 +87,7 @@ class AtlasState extends State<Atlas> {
                 margin: margin,
                 flipField: flipField,
                 pit: false,
+                data: data.autoPath,
               ),
               DefaultContainer(
                 color: Colors.white,

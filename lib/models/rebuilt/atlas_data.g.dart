@@ -13,9 +13,7 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
   ..isReplay = json['isReplay'] as bool?
   ..matchType = json['matchType'] as String?
   ..driverStation = json['driverStation'] as String?
-  ..autoPaths = (json['autoPaths'] as List<dynamic>?)
-      ?.map((e) => AutoPathData.fromJson(e as Map<String, dynamic>))
-      .toList()
+  ..autoPath = AutoPathData.fromJson(json['autoPath'] as Map<String, dynamic>)
   ..crossedMidline = json['crossedMidline'] as bool?
   ..locations = json['locations'] == null
       ? null
@@ -56,7 +54,7 @@ Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'isReplay': instance.isReplay,
       'matchType': instance.matchType,
       'driverStation': instance.driverStation,
-      'autoPaths': instance.autoPaths,
+      'autoPath': instance.autoPath,
       'crossedMidline': instance.crossedMidline,
       'locations': instance.locations,
       'isDefended': instance.isDefended,

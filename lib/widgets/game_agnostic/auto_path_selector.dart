@@ -4,7 +4,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/models/general/auto_path_data.dart';
+import 'package:lighthouse/models/general/point_data.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
@@ -82,7 +83,6 @@ class NodeData {
       this.groupLabel});
 }
 
-
 class UserAction {
   UserActionType actionType;
   int nodeIndice;
@@ -108,7 +108,7 @@ class AutoPathSelector extends StatefulWidget {
   final double rawImageHeight;
   final int maximumGroupSize;
 
-  final String? jsonKey;
+  final AutoPathData data;
 
   final double? margin;
 
@@ -147,7 +147,7 @@ class AutoPathSelector extends StatefulWidget {
     required this.rawImageHeight,
     required this.zones,
     exportLocation,
-    this.jsonKey,
+    required this.data,
     this.margin,
     this.debug = false,
     this.canStartInZone = false,
@@ -211,7 +211,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _rawImageWidth => widget.rawImageWidth;
   double get _rawImageHeight => widget.rawImageHeight;
 
-  String? get _jsonKey => widget.jsonKey;
+  AutoPathData get _data => widget.data;
 
   late double _width;
   double get _height =>
@@ -272,6 +272,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     super.initState();
     _fieldImage = AssetImage(_imageFieldPath);
     if (_climbLevels == null) _climbSuccessful = false;
+    _data.attemptedClimb = false;
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -281,8 +282,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
               case [num x, num y]:
                 Offset pixelPosition = Offset(x.toDouble(), y.toDouble());
                 addNodeFromMap((_converter == null
-                    ? pixelPosition
-                    : _converter!(pixelPosition, inverse: true)) * _scaleFactor);
+                        ? pixelPosition
+                        : _converter!(pixelPosition, inverse: true)) *
+                    _scaleFactor);
 
               case String region:
                 addNodeFromRegion(region);
@@ -299,39 +301,6 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   @override
   void setState(VoidCallback fn) {
     super.setState(fn);
-    _serializeData();
-  }
-
-  void _serializeData() {
-    if (_jsonKey == null || _viewOnly) return;
-
-    Map<String, dynamic> data = {};
-
-    // each element can either be a string or another list for x-y coords
-    List<dynamic> positions = List.empty(growable: true);
-    for (NodeData node in _nodeStack) {
-      if (node.groupLabel != null) {
-        positions.add(node.groupLabel);
-      } else {
-        double pixelX = node.position!.dx / _scaleFactor;
-        double pixelY = node.position!.dy / _scaleFactor;
-
-        if (_converter == null) {
-          positions.add([pixelX, pixelY]);
-        } else {
-          Offset convertedOffset =
-              _converter!(Offset(pixelX, pixelY), inverse: false);
-          positions.add([convertedOffset.dx, convertedOffset.dy]);
-        }
-      }
-    }
-
-    data["path"] = positions;
-    data["attemptedClimb"] = _attemptedClimb;
-    data["climbSuccessful"] = _climbSuccessful;
-    data["climbLevel"] = _climbLevel;
-
-    DataEntry.exportData[_jsonKey!] = data;
   }
 
   void setPositionsForGroupedNodes() {
@@ -473,13 +442,21 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       HapticFeedback.mediumImpact();
       if (actionType == UserActionType.place) {
         _nodeStack.removeLast();
+        _data.path.removeLast();
       } else if (actionType == UserActionType.move) {
-        // use of bang operator is ok because only *non-grouped* nodes can be moved
         _nodeStack[action.nodeIndice].position =
             _nodeStack[action.nodeIndice].position! - action.coordinates;
       }
       _history.removeLast();
     });
+  }
+
+  AutoZone? _parseAutoZone(String label) {
+    try {
+      return AutoZone.values.firstWhere((e) => e.name == label);
+    } catch (_) {
+      return null;
+    }
   }
 
   NodeData addNodeFromRegion(String groupLabel) {
@@ -490,13 +467,11 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       color: _regionNodeColor,
     );
     _nodeStack.add(newNode);
+    _data.path.add(PointData(x: 0, y: 0, autoZone: _parseAutoZone(groupLabel)));
     _history.add(UserAction(
         actionType: UserActionType.place,
         nodeIndice: _nodeStack.length - 1,
-        coordinates: Offset
-            .zero)); // Very hacky, I know, but it literally does not matter
-
-    setState(() {});
+        coordinates: Offset.zero));
     return newNode;
   }
 
@@ -507,12 +482,21 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         draggable: true,
         color: _nodeStack.isEmpty ? _startNodeColor : _allianceZoneNodeColor);
     _nodeStack.add(newNode);
+    double pixelX = position.dx / _scaleFactor;
+    double pixelY = position.dy / _scaleFactor;
+
+    if (_converter == null) {
+      _data.path.add(PointData(x: pixelX, y: pixelY));
+    } else {
+      Offset convertedOffset =
+          _converter!(Offset(pixelX, pixelY), inverse: false);
+      _data.path.add(PointData(x: convertedOffset.dx, y: convertedOffset.dy));
+    }
     _history.add(UserAction(
         actionType: UserActionType.place,
         nodeIndice: _nodeStack.length - 1,
-        coordinates: Offset.zero)); // Refer to the comment about hackiness
+        coordinates: Offset.zero));
 
-    setState(() {});
     return newNode;
   }
 
@@ -562,8 +546,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         title: "Climb Successful",
         isLocked: !_attemptedClimb,
         onToggle: (value) {
-          _climbSuccessful = value;
-          _serializeData();
+          setState(() {
+            _climbSuccessful = value;
+            _data.climbSuccessful = value;
+          });
         },
       );
     } else {
@@ -574,8 +560,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         options: _climbLevels!,
         isLocked: !_attemptedClimb,
         onChanged: (value) {
-          _climbLevel = value;
-          _serializeData();
+          setState(() {
+            _climbLevel = value;
+          });
         },
       );
     }
@@ -595,7 +582,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
             onToggle: (value) {
               setState(() {
                 _attemptedClimb = value;
-                _serializeData();
+                _data.attemptedClimb = value;
               });
             },
           )),

@@ -18,8 +18,8 @@ PitData _$PitDataFromJson(Map<String, dynamic> json) => PitData()
   ..length = (json['length'] as num?)?.toInt()
   ..drivetrain = json['drivetrain'] as String?
   ..mechanisms = json['mechanisms'] as String?
-  ..autos = (json['autos'] as List<dynamic>?)
-      ?.map((e) => PitAutoData.fromJson(e as Map<String, dynamic>))
+  ..autos = (json['autos'] as List<dynamic>)
+      .map((e) => PitAutoData.fromJson(e as Map<String, dynamic>))
       .toList()
   ..canGoBump = json['canGoBump'] == null
       ? null

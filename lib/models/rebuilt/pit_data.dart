@@ -24,7 +24,7 @@ class PitData implements PageData{
   String? mechanisms;
 
   // auto
-  List<PitAutoData>? autos;
+  List<PitAutoData> autos;
 
   // teleop
   ThreeStageCheckboxData? canGoBump;
@@ -45,7 +45,7 @@ class PitData implements PageData{
   ClimbData? climb;
   ThreeStageCheckboxData? canShootEndgame;
 
-  PitData(); // default constructor
+  PitData() : autos = []; // default constructor
 
   factory PitData.fromJson(Map<String, dynamic> json) =>
       _$PitDataFromJson(json);

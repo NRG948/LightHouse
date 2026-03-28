@@ -18,7 +18,7 @@ class AtlasData implements PageData{
   String? driverStation;
 
   // auto
-  List<AutoPathData>? autoPaths;
+  AutoPathData autoPath;
   bool? crossedMidline;
 
   // offense
@@ -39,7 +39,7 @@ class AtlasData implements PageData{
   String? comments;
 
 
-  AtlasData(); // default constructor
+  AtlasData() : autoPath = AutoPathData();
 
   factory AtlasData.fromJson(Map<String, dynamic> json) =>
       _$AtlasDataFromJson(json);

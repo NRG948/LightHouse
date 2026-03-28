@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/models/general/auto_path_data.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 
 class RebuiltAutoPathSelector extends StatelessWidget {
   final bool debug;
-  final String? jsonKey;
+  final AutoPathData data;
   final double? margin;
   final bool flipField;
   final bool viewOnly;
@@ -19,7 +20,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       this.viewOnly = false,
       this.initialPath,
       this.pit = false,
-      this.jsonKey});
+      required this.data});
 
   List<Zone> getZones() {
     return [
@@ -45,7 +46,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       zones: getZones(),
       showClimbOptions: true,
       pit: pit,
-      jsonKey: jsonKey ?? "autoPath",
+      data: data, 
       flipField: flipField,
       imageScalingFactor: 1,
       viewOnly: viewOnly,

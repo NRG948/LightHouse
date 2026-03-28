@@ -161,7 +161,7 @@ class PitScoutState extends State<PitScout> {
                   children: [
                     RebuiltAutoPathSelector(
                       margin: 7,
-                      jsonKey: "autoPath${(index + 1)}",
+                      data: data.autos[index].path,
                       pit: true,
                     ),
                     buildPitTextBox(
