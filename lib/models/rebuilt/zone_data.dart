@@ -4,7 +4,7 @@ part "zone_data.g.dart";
 
 @JsonSerializable()
 class ZoneData {
-  String zoneId;
+  Zone zoneId;
   List<int> data;
 
   ZoneData({required this.zoneId, List<int>? data}) : data = data ?? [];
@@ -12,4 +12,17 @@ class ZoneData {
   factory ZoneData.fromJson(Map<String, dynamic> json) =>
       _$ZoneDataFromJson(json);
   Map<String, dynamic> toJson() => _$ZoneDataToJson(this);
+}
+
+enum Zone {
+  depotCorner, 
+  depotTrench, 
+  depotWall, 
+  depotBump, 
+  tower, 
+  hub, 
+  outpostWall, 
+  outpostBump, 
+  outpostCorner, 
+  outpostTrench, 
 }

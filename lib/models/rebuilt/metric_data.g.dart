@@ -8,11 +8,17 @@ part of 'metric_data.dart';
 
 MetricData _$MetricDataFromJson(Map<String, dynamic> json) => MetricData(
       isChecked: json['isChecked'] as bool? ?? false,
-      selection: json['selection'] as String?,
+      selection: $enumDecodeNullable(_$SelectionEnumMap, json['selection']),
     );
 
 Map<String, dynamic> _$MetricDataToJson(MetricData instance) =>
     <String, dynamic>{
       'isChecked': instance.isChecked,
-      'selection': instance.selection,
+      'selection': _$SelectionEnumMap[instance.selection],
     };
+
+const _$SelectionEnumMap = {
+  Selection.poor: 'poor',
+  Selection.decent: 'decent',
+  Selection.great: 'great',
+};

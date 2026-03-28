@@ -8,7 +8,7 @@ class AutoPathData {
   List<PointData> path;
   bool attemptedClimb;
   bool? climbSuccessful;
-  String? climbLevel;
+  bool? crossedMidline;
 
   AutoPathData({List<PointData>? path, this.attemptedClimb = false}) : path = path ?? [];
 

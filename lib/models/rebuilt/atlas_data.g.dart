@@ -40,7 +40,13 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
           json['isDefendingAllianceZone'] as Map<String, dynamic>)
   ..isStealing = json['isStealing'] == null
       ? null
-      : MetricData.fromJson(json['isStealing'] as Map<String, dynamic>);
+      : MetricData.fromJson(json['isStealing'] as Map<String, dynamic>)
+  ..tags = (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList()
+  ..climb = json['climb'] == null
+      ? null
+      : ClimbData.fromJson(json['climb'] as Map<String, dynamic>)
+  ..rating = (json['rating'] as num?)?.toDouble()
+  ..comments = json['comments'] as String?;
 
 Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'scouterName': instance.scouterName,
@@ -58,4 +64,8 @@ Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'isDefendingNeutralZone': instance.isDefendingNeutralZone,
       'isDefendingAllianceZone': instance.isDefendingAllianceZone,
       'isStealing': instance.isStealing,
+      'tags': instance.tags,
+      'climb': instance.climb,
+      'rating': instance.rating,
+      'comments': instance.comments,
     };

@@ -13,12 +13,12 @@ AutoPathData _$AutoPathDataFromJson(Map<String, dynamic> json) => AutoPathData(
       attemptedClimb: json['attemptedClimb'] as bool? ?? false,
     )
       ..climbSuccessful = json['climbSuccessful'] as bool?
-      ..climbLevel = json['climbLevel'] as String?;
+      ..crossedMidline = json['crossedMidline'] as bool?;
 
 Map<String, dynamic> _$AutoPathDataToJson(AutoPathData instance) =>
     <String, dynamic>{
       'path': instance.path,
       'attemptedClimb': instance.attemptedClimb,
       'climbSuccessful': instance.climbSuccessful,
-      'climbLevel': instance.climbLevel,
+      'crossedMidline': instance.crossedMidline,
     };
