@@ -84,7 +84,6 @@ class AtlasState extends State<Atlas> {
                 flipField: flipField,
                 pit: false,
               ),
-
               DefaultContainer(
                 color: Colors.white,
                 child: AspectRatio(
@@ -157,6 +156,13 @@ class AtlasState extends State<Atlas> {
                 height: 80,
                 optionColor: Constants.pastelRed,
                 jsonKey: "isFeeding",
+              ),
+              Metric(
+                checkboxTitle: "Counter Defense",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: Constants.pastelRed,
+                jsonKey: "isCounterDefending",
               ),
             ],
           ),

@@ -348,7 +348,8 @@ class _MatchInfoState extends State<MatchInfo>
                                   matchData != []) {
                                 autofillTeamNumber();
                               }
-                              setState(() {}); // for some reason it doesn't change unless this is here :(
+                              setState(
+                                  () {}); // for some reason it doesn't change unless this is here :(
                             },
                             dropdownColor: Constants.pastelYellow,
                           ),
@@ -429,8 +430,9 @@ class _MatchInfoState extends State<MatchInfo>
                                   matchData != []) {
                                 autofillTeamNumber();
                               }
-                              if (_onDriverStationUpdate != null)
+                              if (_onDriverStationUpdate != null) {
                                 _onDriverStationUpdate!(driverStation);
+                              }
                             },
                             dropdownColor: DataEntry.exportData["driverStation"]
                                     .contains("Red")

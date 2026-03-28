@@ -20,6 +20,7 @@ class RebuiltEndgameTagSelector extends StatelessWidget {
       "rush center auto",
       "wanders",
       "no show",
+      "shoots while moving",
     ];
   }
 

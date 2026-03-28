@@ -4,6 +4,7 @@ import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
+import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart';
@@ -142,6 +143,11 @@ class PitScoutState extends State<PitScout> {
                     width: double.infinity,
                     fontSize: 20,
                     maxLines: 20),
+                NRGCommentBox(
+                  title: "Comments",
+                  jsonKey: "comments",
+                  height: 90,
+                ),
               ]),
             )),
         "Auto": DataEntrySubPage(

@@ -32,9 +32,13 @@ class _SettingsPageState extends State<SettingsPage> {
         case "tba":
           return TBACheckbox();
         case "dropdown":
-          return SettingsDropdown(setting: setting,);
+          return SettingsDropdown(
+            setting: setting,
+          );
         case "serverIP":
-          return ServerTestWidget(width: 400,);
+          return ServerTestWidget(
+            width: 400,
+          );
         default:
           return Placeholder();
       }
@@ -43,8 +47,9 @@ class _SettingsPageState extends State<SettingsPage> {
     //settingsList.add(SaveSettingsButton());
     // Adds a button to reset configuration.
     settingsList.add(Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),
-      color: Constants.pastelWhite),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Constants.borderRadius),
+          color: Constants.pastelWhite),
       child: TextButton(
           onPressed: () {
             HapticFeedback.mediumImpact();
@@ -52,7 +57,10 @@ class _SettingsPageState extends State<SettingsPage> {
             Navigator.pushReplacementNamed(
                 context, "/settings"); //reloads the setting page
           },
-          child: Text("Reset Configuration",style: comfortaaBold(18,color: Colors.black),)),
+          child: Text(
+            "Reset Configuration",
+            style: comfortaaBold(18, color: Colors.black),
+          )),
     ));
   }
 
@@ -69,7 +77,8 @@ class _SettingsPageState extends State<SettingsPage> {
           // App bar with back navigation and title.
           appBar: AppBar(
             iconTheme: IconThemeData(color: Constants.pastelWhite),
-            backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
+            backgroundColor:
+                themeColorPalettes[configData["theme"] ?? "Dark"]![0],
             title: const Text(
               "Settings",
               style: TextStyle(
@@ -81,48 +90,48 @@ class _SettingsPageState extends State<SettingsPage> {
             actions: [
               AuthButton(),
               if (configData["debugMode"] == "true")
-              IconButton(
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text(configData.toString()),
-                          );
-                        });
-                  },
-                  icon: Icon(Icons.javascript))
+                IconButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content: Text(configData.toString()),
+                            );
+                          });
+                    },
+                    icon: Icon(Icons.javascript))
             ],
             leading: IconButton(
                 onPressed: () async {
                   HapticFeedback.mediumImpact();
-              if (configData["downloadTheBlueAllianceInfo"] == "true") {
-                  
-                  await showTBADownloadDialog(context);
-                }
-              // Ensures widget is still part of the tree before proceeding.
-              if (!mounted) {
-                return;
-              } 
-              if (await saveConfig() == 0) {
-                // Saves settings and checks if the operation was successful.
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: Text("Successfully saved."), //confirmation message
-                        actions: [
-                          TextButton(
-                              onPressed: () {
-                                HapticFeedback.mediumImpact();
-                                Navigator.pushReplacementNamed(context,
-                                    "/home-scouter"); //navigates back to home
-                              },
-                              child: Text("OK"))
-                        ],
-                      );
-                    });
-              } // navigates back to home
+                  if (configData["downloadTheBlueAllianceInfo"] == "true") {
+                    await showTBADownloadDialog(context);
+                  }
+                  // Ensures widget is still part of the tree before proceeding.
+                  if (!mounted) {
+                    return;
+                  }
+                  if (await saveConfig() == 0) {
+                    // Saves settings and checks if the operation was successful.
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: Text(
+                                "Successfully saved."), //confirmation message
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    HapticFeedback.mediumImpact();
+                                    Navigator.pushReplacementNamed(context,
+                                        "/home-scouter"); //navigates back to home
+                                  },
+                                  child: Text("OK"))
+                            ],
+                          );
+                        });
+                  } // navigates back to home
                 },
                 icon: Icon(Icons.home)),
           ),
@@ -132,7 +141,8 @@ class _SettingsPageState extends State<SettingsPage> {
             width: screenWidth,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
+                    image: AssetImage(backgrounds[configData["theme"]] ??
+                        "assets/images/background-hires-dark.png"),
                     fit: BoxFit.cover)), // covers the entire background
             child: Center(
               child: Padding(
@@ -143,7 +153,8 @@ class _SettingsPageState extends State<SettingsPage> {
                     return Padding(
                       padding: const EdgeInsets.only(
                           top: 10.0, left: 10.0, right: 10.0),
-                      child: settingsList[index], // Displays each setting widget.
+                      child:
+                          settingsList[index], // Displays each setting widget.
                     );
                   },
                 ),
@@ -156,10 +167,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
 class SettingsDropdown extends StatefulWidget {
   final String setting;
-  const SettingsDropdown({
-    super.key,
-    required this.setting
-  });
+  const SettingsDropdown({super.key, required this.setting});
 
   @override
   State<SettingsDropdown> createState() => _SettingsDropdownState();
@@ -171,7 +179,8 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
   @override
   void initState() {
     super.initState();
-    selectedValue = configData[widget.setting] ?? settingsDropdownMap[widget.setting]![0];
+    selectedValue =
+        configData[widget.setting] ?? settingsDropdownMap[widget.setting]![0];
   }
 
   @override
@@ -190,27 +199,44 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Icon(settingsIconMap[widget.setting] ?? Icons.data_object,color: Constants.pastelWhite,),
-              SizedBox(width: 10,),
-              Text(widget.setting.toSentenceCase,style: comfortaaBold(18),)
-            ],),
+                Icon(
+                  settingsIconMap[widget.setting] ?? Icons.data_object,
+                  color: Constants.pastelWhite,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  widget.setting.toSentenceCase,
+                  style: comfortaaBold(18),
+                )
+              ],
+            ),
           ),
           Center(
             child: DropdownButton<String>(
-              style: comfortaaBold(18,color: Colors.white),
-              
-              dropdownColor: Constants.pastelWhite,
-              value: selectedValue,
-              borderRadius: BorderRadius.circular(Constants.borderRadius),
-              items: (settingsDropdownMap[widget.setting] ?? []).map((e) {
-              return DropdownMenuItem(value: e,child: Text(e,style: comfortaaBold(18,color: Colors.black),),);
-            }).toList(), onChanged: (newvalue) {
-              if (newvalue == null) {return;}
-              setState(() {
-                selectedValue = newvalue;
-              configData[widget.setting] = newvalue;
-              });
-            }),
+                style: comfortaaBold(18, color: Colors.white),
+                dropdownColor: Constants.pastelWhite,
+                value: selectedValue,
+                borderRadius: BorderRadius.circular(Constants.borderRadius),
+                items: (settingsDropdownMap[widget.setting] ?? []).map((e) {
+                  return DropdownMenuItem(
+                    value: e,
+                    child: Text(
+                      e,
+                      style: comfortaaBold(18, color: Colors.black),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (newvalue) {
+                  if (newvalue == null) {
+                    return;
+                  }
+                  setState(() {
+                    selectedValue = newvalue;
+                    configData[widget.setting] = newvalue;
+                  });
+                }),
           )
         ],
       ),
@@ -253,24 +279,34 @@ class _TBACheckboxState extends State<TBACheckbox> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ValueListenableBuilder(valueListenable: enabled, builder: (context,isChecked,child) {
-              return Checkbox(value: isChecked, onChanged: 
-             (e) {
-              setState(() {
-                enabled.value = !enabled.value;
-                configData[widget.setting] = enabled.value ? "true" : "false";
-              });  
-             });
-            }),
+            ValueListenableBuilder(
+                valueListenable: enabled,
+                builder: (context, isChecked, child) {
+                  return Checkbox(
+                      value: isChecked,
+                      onChanged: (e) {
+                        setState(() {
+                          enabled.value = !enabled.value;
+                          configData[widget.setting] =
+                              enabled.value ? "true" : "false";
+                        });
+                      });
+                }),
             SizedBox(
               width: 30,
               height: 30,
-              child: Image(image:AssetImage("assets/images/tba_lamp.png")),
+              child: Image(image: AssetImage("assets/images/tba_lamp.png")),
             ),
-            SizedBox(width: 10,),
             SizedBox(
-              width: 250,
-              child: AutoSizeText("Download Event Info",style: comfortaaBold(20,color: Colors.black),maxLines: 2,))
+              width: 10,
+            ),
+            SizedBox(
+                width: 250,
+                child: AutoSizeText(
+                  "Download Event Info",
+                  style: comfortaaBold(20, color: Colors.black),
+                  maxLines: 2,
+                ))
           ],
         ),
       ),
@@ -280,23 +316,19 @@ class _TBACheckboxState extends State<TBACheckbox> {
 
 class SettingsTextBox extends StatefulWidget {
   final String setting;
-  const SettingsTextBox({
-    super.key,
-    required this.setting
-  });
+  const SettingsTextBox({super.key, required this.setting});
 
   @override
   State<SettingsTextBox> createState() => _SettingsTextBoxState();
 }
 
 class _SettingsTextBoxState extends State<SettingsTextBox> {
-
   @override
   void initState() {
     super.initState();
     if (!(configData.containsKey(widget.setting))) {
-            configData[widget.setting] = "";
-          }
+      configData[widget.setting] = "";
+    }
   }
 
   @override
@@ -319,9 +351,9 @@ class _SettingsTextBoxState extends State<SettingsTextBox> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(settingsIconMap[widget.setting]),
-                    SizedBox(width:5),
+                    SizedBox(width: 5),
                     Text(widget.setting.toSentenceCase,
-                        style: comfortaaBold(20,color: Colors.black)),
+                        style: comfortaaBold(20, color: Colors.black)),
                   ],
                 )),
             // TextField for modifying the setting value.
@@ -333,7 +365,7 @@ class _SettingsTextBoxState extends State<SettingsTextBox> {
               },
               decoration: InputDecoration(
                   labelText: "Enter Text",
-                  labelStyle: comfortaaBold(20,color: Colors.black),
+                  labelStyle: comfortaaBold(20, color: Colors.black),
                   border:
                       OutlineInputBorder()), // Adds a border around the text field.
             )
@@ -378,19 +410,27 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ValueListenableBuilder(valueListenable: enabled, builder: (context,isChecked,child) {
-              return Checkbox(value: isChecked, onChanged: 
-             (e) {
-              setState(() {
-                enabled.value = !enabled.value;
-                configData[widget.setting] = enabled.value ? "true" : "false";
-              });  
-             });
-            }),
+            ValueListenableBuilder(
+                valueListenable: enabled,
+                builder: (context, isChecked, child) {
+                  return Checkbox(
+                      value: isChecked,
+                      onChanged: (e) {
+                        setState(() {
+                          enabled.value = !enabled.value;
+                          configData[widget.setting] =
+                              enabled.value ? "true" : "false";
+                        });
+                      });
+                }),
             Icon(settingsIconMap[widget.setting]),
             SizedBox(
-              width: 200,
-              child: AutoSizeText(widget.setting.toSentenceCase,style: comfortaaBold(20,color: Colors.black),maxLines: 2,))
+                width: 200,
+                child: AutoSizeText(
+                  widget.setting.toSentenceCase,
+                  style: comfortaaBold(20, color: Colors.black),
+                  maxLines: 2,
+                ))
           ],
         ),
       ),
@@ -410,26 +450,27 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),
-      color: Constants.pastelWhite),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Constants.borderRadius),
+          color: Constants.pastelWhite),
       child: TextButton(
           onPressed: () async {
             HapticFeedback.mediumImpact();
             if (configData["downloadTheBlueAllianceInfo"] == "true") {
-                
-                await showTBADownloadDialog(context);
-              }
+              await showTBADownloadDialog(context);
+            }
             // Ensures widget is still part of the tree before proceeding.
             if (!mounted) {
               return;
-            } 
+            }
             if (await saveConfig() == 0) {
               // Saves settings and checks if the operation was successful.
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      content: Text("Successfully saved."), //confirmation message
+                      content:
+                          Text("Successfully saved."), //confirmation message
                       actions: [
                         TextButton(
                             onPressed: () {
@@ -443,15 +484,20 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
                   });
             }
           },
-          child: Text("Save",style: comfortaaBold(18,color: Colors.black),)),
+          child: Text(
+            "Save",
+            style: comfortaaBold(18, color: Colors.black),
+          )),
     );
   }
 }
 
 Future<bool> showTBADownloadDialog(BuildContext context) async {
-  showDialog(context: context, builder: (context) {
-    return TBADownloadDialog();
-  });
+  showDialog(
+      context: context,
+      builder: (context) {
+        return TBADownloadDialog();
+      });
   int? code = await TBADownloadDialog.responseCode.future;
   debugPrint("Recieved code $code");
   return Future.value(true);
@@ -463,7 +509,7 @@ class TBADownloadDialog extends StatefulWidget {
 
   void setResponseCode(int code) {
     if (!responseCode.isCompleted) {
-    responseCode.complete(code);
+      responseCode.complete(code);
     }
   }
 
@@ -472,8 +518,8 @@ class TBADownloadDialog extends StatefulWidget {
 }
 
 class _TBADownloadDialogState extends State<TBADownloadDialog> {
-
-  String progressIndicator = "Downloading TBA Match data for ${configData["eventKey"]}...";
+  String progressIndicator =
+      "Downloading TBA Match data for ${configData["eventKey"]}...";
   @override
   void initState() {
     super.initState();
@@ -486,45 +532,73 @@ class _TBADownloadDialogState extends State<TBADownloadDialog> {
       child: Container(
         width: 350,
         height: 600,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(Constants.borderRadius),
-        color: Constants.pastelWhite),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Constants.borderRadius),
+            color: Constants.pastelWhite),
         child: Row(
           children: [
-            CircularProgressIndicator(color: Colors.black,),
-            AutoSizeText(progressIndicator,style: comfortaaBold(10,color: Colors.black),),
+            CircularProgressIndicator(
+              color: Colors.black,
+            ),
+            AutoSizeText(
+              progressIndicator,
+              style: comfortaaBold(10, color: Colors.black),
+            ),
           ],
         ),
       ),
     );
   }
-  
+
   void downloadTBAInfo() async {
-    http.Response responseMatches = await http.get(Uri.parse("https://www.thebluealliance.com/api/v3/event/${configData["eventKey"]}/matches/simple"),
-    headers: {"X-TBA-Auth-Key":Constants.tbaAPIKey});
-    http.Response responseEventInfo = await http.get(Uri.parse("https://www.thebluealliance.com/api/v3/event/${configData["eventKey"]}/simple"),
-    headers: {"X-TBA-Auth-Key":Constants.tbaAPIKey});
+    http.Response responseMatches = await http.get(
+        Uri.parse(
+            "https://www.thebluealliance.com/api/v3/event/${configData["eventKey"]}/matches/simple"),
+        headers: {"X-TBA-Auth-Key": Constants.tbaAPIKey});
+    http.Response responseEventInfo = await http.get(
+        Uri.parse(
+            "https://www.thebluealliance.com/api/v3/event/${configData["eventKey"]}/simple"),
+        headers: {"X-TBA-Auth-Key": Constants.tbaAPIKey});
+    http.Response responseEventOprs = await http.get(
+        Uri.parse(
+            "https://www.thebluealliance.com/api/v3/event/${configData["eventKey"]}/oprs"),
+        headers: {"X-TBA-Auth-Key": Constants.tbaAPIKey});
 
     if (responseMatches.statusCode == 200) {
-      saveTBAFile(configData["eventKey"]!,responseMatches.body,"matches");
+      saveTBAFile(configData["eventKey"]!, responseMatches.body, "matches");
       progressIndicator = "Downloaded Matches.";
     } else {
       setState(() {
-        progressIndicator = "MATCH ERROR ${responseMatches.statusCode}: ${responseMatches.body}";
-        
+        progressIndicator =
+            "MATCH ERROR ${responseMatches.statusCode}: ${responseMatches.body}";
       });
       await Future.delayed(Duration(seconds: 1));
     }
 
-      if (responseEventInfo.statusCode == 200) {
-      saveTBAFile(configData["eventKey"]!,responseEventInfo.body,"event_info");
+    if (responseEventInfo.statusCode == 200) {
+      saveTBAFile(
+          configData["eventKey"]!, responseEventInfo.body, "event_info");
       progressIndicator += "\nDownloaded Event Info.";
     } else {
       setState(() {
-        progressIndicator += "\nEVENT INFO ERROR ${responseEventInfo.statusCode}: ${responseEventInfo.body}";
-        
+        progressIndicator +=
+            "\nEVENT INFO ERROR ${responseEventInfo.statusCode}: ${responseEventInfo.body}";
       });
       await Future.delayed(Duration(seconds: 1));
     }
+
+    if (responseEventOprs.statusCode == 200) {
+      saveTBAFile(
+          configData["eventKey"]!, responseEventOprs.body, "event_oprs");
+      progressIndicator += "\nDownloaded OPRs";
+    } else {
+      setState(() {
+        progressIndicator +=
+            "\nEVENT OPR ERROR ${responseEventOprs.statusCode}: ${responseEventOprs.body}";
+      });
+      await Future.delayed(Duration(seconds: 1));
+    }
+
     widget.setResponseCode(responseMatches.statusCode);
   }
 }
