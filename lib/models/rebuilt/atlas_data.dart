@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:lighthouse/models/rebuilt/auto_path_data.dart';
+import 'package:lighthouse/models/general/auto_path_data.dart';
 import 'package:lighthouse/models/rebuilt/climb_data.dart';
 import 'package:lighthouse/models/rebuilt/location_tracker_data.dart';
-import 'package:lighthouse/models/rebuilt/metric_data.dart';
+import 'package:lighthouse/models/general/metric_data.dart';
 
 part "atlas_data.g.dart";
 

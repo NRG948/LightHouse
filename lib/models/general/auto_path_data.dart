@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:lighthouse/models/rebuilt/point_data.dart';
+import 'package:lighthouse/models/general/point_data.dart';
 
 part "auto_path_data.g.dart";
 
