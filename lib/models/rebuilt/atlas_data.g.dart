@@ -8,6 +8,7 @@ part of 'atlas_data.dart';
 
 AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
   ..scouterName = json['scouterName'] as String?
+  ..teamNumber = (json['teamNumber'] as num?)?.toInt()
   ..matchNumber = (json['matchNumber'] as num?)?.toInt()
   ..isReplay = json['isReplay'] as bool?
   ..matchType = json['matchType'] as String?
@@ -50,6 +51,7 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
 
 Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'scouterName': instance.scouterName,
+      'teamNumber': instance.teamNumber,
       'matchNumber': instance.matchNumber,
       'isReplay': instance.isReplay,
       'matchType': instance.matchType,

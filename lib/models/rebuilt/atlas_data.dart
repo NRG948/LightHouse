@@ -11,6 +11,7 @@ part "atlas_data.g.dart";
 class AtlasData implements PageData{
   // setup
   String? scouterName;
+  int? teamNumber;
   int? matchNumber;
   bool? isReplay;
   String? matchType;

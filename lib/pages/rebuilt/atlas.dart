@@ -66,6 +66,7 @@ class AtlasState extends State<Atlas> {
                     ),
                   ),
                   MatchInfo(
+                    data: data,
                     margin: margin,
                     onDriverStationUpdate: (driverStation) {
                       setState(() {

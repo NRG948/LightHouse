@@ -7,18 +7,21 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/models/rebuilt/atlas_data.dart';
 import 'package:lighthouse/team_spritesheet.dart';
 
 class MatchInfo extends StatefulWidget {
   final double? margin;
   final Function(String driverStation)? onDriverStationUpdate;
   final Function(int teamNumber)? onTeamNumberUpdate;
+  final AtlasData data;
 
   const MatchInfo({
     super.key,
     this.margin,
     this.onDriverStationUpdate,
     this.onTeamNumberUpdate,
+    required this.data,
   });
 
   @override
@@ -35,6 +38,7 @@ class _MatchInfoState extends State<MatchInfo>
       widget.onDriverStationUpdate;
   Function(int teamNumber)? get _onTeamNumberUpdate =>
       widget.onTeamNumberUpdate;
+  AtlasData get _data => widget.data;
 
   Completer<String> displayEventKey = Completer<String>();
   @override
@@ -78,16 +82,16 @@ class _MatchInfoState extends State<MatchInfo>
     teamNumberController.addListener(() {
       int team = int.tryParse(teamNumberController.text) ?? 0;
       setState(() {
-        DataEntry.exportData["teamNumber"] = team;
+        _data.teamNumber = team;
         getTeamInfo(team);
       });
       if (_onTeamNumberUpdate != null) _onTeamNumberUpdate!(team);
     });
-    DataEntry.exportData["matchNumber"] ??= 0;
-    DataEntry.exportData["teamNumber"] ??= 0;
-    DataEntry.exportData["replay"] ??= false;
-    DataEntry.exportData["matchType"] ??= "Qualifications";
-    DataEntry.exportData["driverStation"] ??= "Red 1";
+    _data.matchNumber ??= 0;
+    _data.teamNumber ??= 0;
+    _data.isReplay ??= false;
+    _data.matchType ??= "Qualifications";
+    _data.driverStation ??= "Red 1";
 
     setInitialValue();
   }
@@ -96,14 +100,14 @@ class _MatchInfoState extends State<MatchInfo>
     if (configData["autofillLastMatch"] == "true") {
       int value = int.parse(configData["currentMatch"]!) + 1;
 
-      DataEntry.exportData["matchNumber"] = value;
+      _data.matchNumber = value;
       _autofilledMatchNumber = "$value";
 
       driverStation = configData["currentDriverStation"]!;
-      DataEntry.exportData["driverStation"] = driverStation;
+      _data.driverStation = driverStation;
 
       matchType = configData["currentMatchType"]!;
-      DataEntry.exportData["matchType"] = matchType;
+      _data.matchType = matchType;
     }
   }
 
@@ -302,7 +306,7 @@ class _MatchInfoState extends State<MatchInfo>
                             setState(() {
                               HapticFeedback.mediumImpact();
                               replay = v ?? false;
-                              DataEntry.exportData["replay"] = replay;
+                              _data.isReplay = replay;
                             });
                           },
                           activeColor: Constants.pastelYellow,
@@ -342,13 +346,14 @@ class _MatchInfoState extends State<MatchInfo>
                             onChanged: (value) {
                               HapticFeedback.mediumImpact();
                               matchType = value ?? "Qualifications";
-                              DataEntry.exportData["matchType"] = value;
+                              _data.matchType = value;
                               if (configData["downloadTheBlueAllianceInfo"] ==
                                       "true" &&
                                   matchData != []) {
                                 autofillTeamNumber();
                               }
-                              setState(() {}); // for some reason it doesn't change unless this is here :(
+                              setState(
+                                  () {}); // for some reason it doesn't change unless this is here :(
                             },
                             dropdownColor: Constants.pastelYellow,
                           ),
@@ -365,8 +370,7 @@ class _MatchInfoState extends State<MatchInfo>
                         ],
                         onChanged: (value) {
                           HapticFeedback.mediumImpact();
-                          DataEntry.exportData["matchNumber"] =
-                              int.tryParse(value) ?? 0;
+                          _data.matchNumber = int.tryParse(value) ?? 0;
                           if (configData["downloadTheBlueAllianceInfo"] ==
                                   "true" &&
                               matchData != []) {
@@ -393,8 +397,7 @@ class _MatchInfoState extends State<MatchInfo>
                       flex: 3,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: DataEntry.exportData["driverStation"]
-                                    .contains("Red")
+                            color: (_data.driverStation ?? "").contains("Red")
                                 ? Constants.pastelRed
                                 : Constants.pastelBlue,
                             borderRadius:
@@ -423,7 +426,7 @@ class _MatchInfoState extends State<MatchInfo>
                             onChanged: (value) {
                               HapticFeedback.mediumImpact();
                               driverStation = value ?? "Red 1";
-                              DataEntry.exportData["driverStation"] = value;
+                              _data.driverStation = value;
                               if (configData["downloadTheBlueAllianceInfo"] ==
                                       "true" &&
                                   matchData != []) {
@@ -432,10 +435,10 @@ class _MatchInfoState extends State<MatchInfo>
                               if (_onDriverStationUpdate != null)
                                 _onDriverStationUpdate!(driverStation);
                             },
-                            dropdownColor: DataEntry.exportData["driverStation"]
-                                    .contains("Red")
-                                ? Constants.pastelRed
-                                : Constants.pastelBlue,
+                            dropdownColor:
+                                (_data.driverStation ?? "").contains("Red")
+                                    ? Constants.pastelRed
+                                    : Constants.pastelBlue,
                           ),
                         ),
                       ),
@@ -490,24 +493,23 @@ class _MatchInfoState extends State<MatchInfo>
             ? 1
             : 2;
     for (dynamic match in matchData) {
-      if (match["comp_level"] ==
-          tbaAPIMatchTypes[DataEntry.exportData["matchType"]]) {
+      if (match["comp_level"] == tbaAPIMatchTypes[_data.matchType]) {
         // Skips if match number in iterated match doesn't match
         // entered match number, (confusingly enough) using negation
         // and continue statements unlike the logic above
         // to make this even more confusing, semifinals put the match number
         // in a different place >:(
         if (match["comp_level"] == "sf") {
-          if (!(match["set_number"] == DataEntry.exportData["matchNumber"])) {
+          if (!(match["set_number"] == _data.matchNumber)) {
             continue;
           }
         } else {
-          if (!(match["match_number"] == DataEntry.exportData["matchNumber"])) {
+          if (!(match["match_number"] == _data.matchNumber)) {
             continue;
           }
         }
         int team = int.tryParse(match["alliances"][
-                    DataEntry.exportData["driverStation"].contains("Red")
+                    (_data.driverStation ?? "").contains("Red")
                         ? "red"
                         : "blue"]["team_keys"][stationIndex]
                 .substring(3)) ??
