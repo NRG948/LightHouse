@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
+import 'package:lighthouse/models/rebuilt/pit_data.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -55,9 +56,12 @@ Widget buildPitTextBox({
 }
 
 class PitScoutState extends State<PitScout> {
+  PitData data = PitData();
+
   @override
   Widget build(BuildContext context) {
     return DataEntryPage(
+      data: PitData(),
       name: "Pit",
       pages: {
         "Setup": DataEntrySubPage(

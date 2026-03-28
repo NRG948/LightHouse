@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/models/rebuilt/atlas_data.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -24,6 +25,7 @@ class Atlas extends StatefulWidget {
 }
 
 class AtlasState extends State<Atlas> {
+  AtlasData data = AtlasData();
   double margin = 10;
   String? driverStation;
   bool get flipField =>
@@ -40,7 +42,7 @@ class AtlasState extends State<Atlas> {
 
   @override
   Widget build(BuildContext context) {
-    return DataEntryPage(name: "Atlas", pages: {
+    return DataEntryPage(data: data, name: "Atlas", pages: {
       "Setup": DataEntrySubPage(
           icon: CustomIcons.wrench,
           content: Container(
@@ -59,6 +61,7 @@ class AtlasState extends State<Atlas> {
                       maxLines: 1,
                       hintText: "Scouter name",
                       jsonKey: "scouterName",
+                      access: (val) => data.scouterName = val ?? val,
                       autofillKey: "scouterName",
                     ),
                   ),
@@ -84,7 +87,6 @@ class AtlasState extends State<Atlas> {
                 flipField: flipField,
                 pit: false,
               ),
-
               DefaultContainer(
                 color: Colors.white,
                 child: AspectRatio(

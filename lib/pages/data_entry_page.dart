@@ -6,12 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/models/general/page_data.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
 
 class DataEntryPage extends StatefulWidget {
-  const DataEntryPage({super.key, required this.pages, required this.name});
+  const DataEntryPage({super.key, required this.pages, required this.name, required this.data});
   final Map<String, DataEntrySubPage> pages;
   final String name;
+  final PageData data;
 
   @override
   State<DataEntryPage> createState() => DataEntryPageState();
@@ -20,6 +22,7 @@ class DataEntryPage extends StatefulWidget {
 class DataEntryPageState extends State<DataEntryPage> {
   Map<String, DataEntrySubPage> get _pages => widget.pages;
   String get _name => widget.name;
+  PageData get _data => widget.data;
   int currentPage = 0;
   static late double deviceWidth;
   static late double deviceHeight;
@@ -111,7 +114,7 @@ class DataEntryPageState extends State<DataEntryPage> {
                               child: Container(
                                   padding: EdgeInsets.all(15),
                                   child:
-                                      Text(jsonEncode(DataEntry.exportData))),
+                                      Text(jsonEncode(_data.toJson()))),
                             );
                           });
                     },

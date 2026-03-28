@@ -50,6 +50,8 @@ class InputTextBox extends StatefulWidget {
   /// The key which stores the value of this widget in [DataEntry]
   final String? jsonKey;
 
+  final String? Function(String?)? access;
+
   /// The key from which the autofill value is taken from [configData]
   final String? autofillKey;
 
@@ -69,6 +71,7 @@ class InputTextBox extends StatefulWidget {
     this.hintText = "",
     this.onChanged = _noop,
     this.jsonKey,
+    this.access, 
     this.autofillKey,
   });
 
@@ -97,6 +100,7 @@ class _InputTextBoxState extends State<InputTextBox>
   Color get _hintColor => widget.hintColor;
   String get _hintText => widget.hintText;
   String? get _jsonKey => widget.jsonKey;
+  String? Function(String?)? get _access => widget.access;
   String? get _autofillKey => widget.autofillKey;
   String _value = "";
   void Function(String text) get _onChanged => widget.onChanged;
@@ -111,9 +115,12 @@ class _InputTextBoxState extends State<InputTextBox>
   }
 
   void _serializeData() {
-    if (_jsonKey != null) {
-      DataEntry.exportData[_jsonKey!] = _value;
+    if (_access != null) {
+      _access!(_value);
     }
+    // if (_jsonKey != null) {
+    //   DataEntry.exportData[_jsonKey!] = _value;
+    // }
   }
 
   @override

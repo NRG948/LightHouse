@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:lighthouse/models/general/page_data.dart';
 import 'package:lighthouse/models/general/three_stage_checkbox_data.dart';
 import 'package:lighthouse/models/rebuilt/climb_data.dart';
 import 'package:lighthouse/models/rebuilt/pit_auto_data.dart';
@@ -6,7 +7,7 @@ import 'package:lighthouse/models/rebuilt/pit_auto_data.dart';
 part "pit_data.g.dart";
 
 @JsonSerializable()
-class PitData {
+class PitData implements PageData{
   // setup
   int? teamNumber;
   String? teamName;
