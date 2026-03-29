@@ -87,7 +87,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             );
                           });
                     },
-                    icon: Icon(Icons.javascript))
+                    icon: Icon(Icons.javascript,
+                        color: context.colors.containerText))
             ],
             leading: IconButton(
                 onPressed: () async {
@@ -126,7 +127,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         });
                   } // navigates back to home
                 },
-                icon: Icon(Icons.home)),
+                icon: Icon(Icons.home, color: context.colors.titleText)),
           ),
           // Background container with image.
           body: Container(
@@ -322,7 +323,11 @@ class _TBACheckboxState extends State<TBACheckbox> {
             SizedBox(
               width: 30,
               height: 30,
-              child: Image(image: AssetImage("assets/images/tba_lamp.png")),
+              child: Image(
+                image: AssetImage("assets/images/tba_lamp.png"),
+                color: context.colors.containerText,
+                colorBlendMode: BlendMode.srcIn,
+              ),
             ),
             SizedBox(
               width: 10,
@@ -458,7 +463,8 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
                         });
                       });
                 }),
-            Icon(settingsIconMap[widget.setting]),
+            Icon(settingsIconMap[widget.setting],
+                color: context.colors.containerText),
             SizedBox(
                 width: 200,
                 child: AutoSizeText(

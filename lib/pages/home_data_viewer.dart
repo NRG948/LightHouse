@@ -146,7 +146,7 @@ class DataViewerHome extends StatelessWidget {
             if (configData["debugMode"] == "true")
               // Button to display JSON config data in a dialog.
               IconButton(
-                icon: Icon(Icons.javascript_outlined),
+                icon: Icon(Icons.javascript_outlined, color: context.colors.titleText),
                 onPressed: (() {
                   showDialog(
                       context: context,
@@ -164,7 +164,7 @@ class DataViewerHome extends StatelessWidget {
               ),
             // Button to navigate to settings page.
             IconButton(
-                icon: Icon(Icons.settings),
+                icon: Icon(Icons.settings, color: context.colors.titleText),
                 onPressed: () {
                   Navigator.pushNamed(context, "/settings");
                 })

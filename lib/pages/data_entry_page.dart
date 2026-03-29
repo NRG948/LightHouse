@@ -183,7 +183,7 @@ class DataEntryPageState extends State<DataEntryPage> {
         List<BottomNavigationBarItem>.empty(growable: true);
     for (var entry in pages.entries) {
       String title = entry.key;
-      Icon icon = Icon(entry.value.icon);
+      Icon icon = Icon(entry.value.icon, color: context.colors.titleText);
       items.add(BottomNavigationBarItem(icon: icon, label: title));
     }
     return items;
