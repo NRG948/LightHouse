@@ -5,6 +5,7 @@ import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/data_entry.dart";
+import "package:lighthouse/themes.dart";
 
 // Stateful widget for a custom text box
 class NRGTextbox extends StatefulWidget {
@@ -99,7 +100,7 @@ class _NRGTextboxState extends State<NRGTextbox>
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Center(
           child: TextField(
@@ -107,13 +108,13 @@ class _NRGTextboxState extends State<NRGTextbox>
             inputFormatters:
                 _numeric ? [FilteringTextInputFormatter.digitsOnly] : [],
             controller: _controller,
-            style: comfortaaBold(_fontSize, color: Constants.pastelBrown),
+            style: comfortaaBold(_fontSize, color: context.colors.text),
             maxLines: _maxLines,
             decoration: InputDecoration(
                 labelText: _title,
                 labelStyle: comfortaaBold(_fontSize,
-                    color: Constants.pastelBrown, italic: true),
-                fillColor: Constants.pastelYellow,
+                    color: context.colors.hintText, italic: true),
+                fillColor: context.colors.accent2,
                 filled: true,
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 border: OutlineInputBorder(

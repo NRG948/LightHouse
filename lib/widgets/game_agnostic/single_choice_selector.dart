@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 
 class SingleChoiceSelector extends StatefulWidget {
   /// The list of choices.
@@ -18,13 +19,13 @@ class SingleChoiceSelector extends StatefulWidget {
   final double spacing;
 
   /// The color of the input.
-  final Color optionColor;
+  final Color? optionColor;
 
   /// The color of the icon when an input is selected.
-  final Color selectColor;
+  final Color? selectColor;
 
   /// The color of the label next to the left of each input.
-  final Color textColor;
+  final Color? textColor;
 
   /// If the selection can be changed.
   final bool isLocked;
@@ -36,7 +37,7 @@ class SingleChoiceSelector extends StatefulWidget {
   final bool retainSelectionOnLock;
 
   /// The color of the input when [isLocked] is ```true```.
-  final Color lockedColor;
+  final Color? lockedColor;
 
   /// Creates a single selection multiple choice widget.
   ///
@@ -51,9 +52,9 @@ class SingleChoiceSelector extends StatefulWidget {
     this.onSelect = _noop,
     required this.selectColor,
     this.initialValue,
-    this.optionColor = const Color.fromARGB(1, 255, 255, 255),
-    this.textColor = Colors.black,
-    this.lockedColor = const Color.fromARGB(1, 255, 255, 255),
+    this.optionColor,
+    this.textColor,
+    this.lockedColor,
     this.isLocked = false,
     this.retainSelectionOnLock = true,
   });
@@ -71,10 +72,10 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
   late double _height;
   double get _choiceWidth => _height * 0.7;
   double get _spacing => widget.spacing;
-  Color get _optionColor => widget.optionColor;
-  Color get _lockedColor => widget.lockedColor;
-  Color get _selectColor => widget.selectColor;
-  Color get _textColor => widget.textColor;
+  Color? get _optionColor => widget.optionColor;
+  Color? get _lockedColor => widget.lockedColor;
+  Color? get _selectColor => widget.selectColor;
+  Color? get _textColor => widget.textColor;
   bool get _isLocked => widget.isLocked;
   bool get _retainSelectionOnLock => widget.retainSelectionOnLock;
 
@@ -104,7 +105,7 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
             spacing: _choiceWidth / 2,
             children: [
               AutoSizeText(choice,
-                  style: comfortaaBold(_height * 0.71, color: _isLocked ? Colors.black.withAlpha(100) : _textColor),
+                  style: comfortaaBold(_height * 0.71, color: _isLocked ?  context.colors.lockedText : _textColor ?? context.colors.containerText),
                   overflow: TextOverflow.visible,
                   maxLines: 1,
                   minFontSize: 5),
@@ -112,7 +113,7 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
                   width: _choiceWidth,
                   height: _choiceWidth,
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: _isLocked ? _lockedColor : _optionColor),
+                      shape: BoxShape.circle, color: _isLocked ? _lockedColor ?? context.colors.locked : _optionColor ?? context.colors.accent1),
                   child: FractionallySizedBox(
                     widthFactor: 0.5,
                     heightFactor: 0.5,
@@ -120,8 +121,8 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: choice == _selectedChoice
-                              ? _selectColor
-                              : Color.fromARGB(1, 255, 255, 255)),
+                              ? _selectColor ?? context.colors.container
+                              : Colors.transparent),
                     ),
                   )),
             ],

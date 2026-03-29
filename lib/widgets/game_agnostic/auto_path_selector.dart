@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
@@ -113,13 +114,13 @@ class AutoPathSelector extends StatefulWidget {
 
   final List<Zone> zones;
 
-  final Color mainColor;
-  final Color backgroundColor;
-  final Color startNodeColor;
-  final Color allianceZoneNodeColor;
-  final Color regionNodeColor;
-  final Color lockedColor;
-  final Color textColor;
+  final Color? mainColor;
+  final Color? backgroundColor;
+  final Color? startNodeColor;
+  final Color? allianceZoneNodeColor;
+  final Color? regionNodeColor;
+  final Color? lockedColor;
+  final Color? textColor;
 
   final bool debug;
   final bool canStartInZone;
@@ -154,13 +155,13 @@ class AutoPathSelector extends StatefulWidget {
     this.showClimbOptions = false,
     this.flipField = false,
     this.climbLevels,
-    this.mainColor = Constants.pastelRed,
-    this.backgroundColor = Constants.pastelWhite,
-    this.startNodeColor = Constants.pastelGreen,
-    this.allianceZoneNodeColor = Constants.pastelYellow,
-    this.regionNodeColor = Constants.pastelBlue,
-    this.lockedColor = Constants.pastelGray,
-    this.textColor = Constants.pastelBrown,
+    this.mainColor,
+    this.backgroundColor,
+    this.startNodeColor,
+    this.allianceZoneNodeColor,
+    this.regionNodeColor ,
+    this.lockedColor,
+    this.textColor,
     required this.pit,
     this.converter,
     this.viewOnly = false,
@@ -243,13 +244,13 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   List<NodeData> _nodeStack = [];
   List<UserAction> _history = [];
 
-  Color get _mainColor => widget.mainColor;
-  Color get _backgroundColor => widget.backgroundColor;
-  Color get _startNodeColor => widget.startNodeColor;
-  Color get _allianceZoneNodeColor => widget.allianceZoneNodeColor;
-  Color get _regionNodeColor => widget.regionNodeColor;
-  Color get _lockedColor => widget.lockedColor;
-  Color get _textColor => widget.textColor;
+  Color? get _mainColor => widget.mainColor;
+  Color? get _backgroundColor => widget.backgroundColor;
+  Color? get _startNodeColor => widget.startNodeColor;
+  Color? get _allianceZoneNodeColor => widget.allianceZoneNodeColor;
+  Color? get _regionNodeColor => widget.regionNodeColor;
+  Color? get _lockedColor => widget.lockedColor;
+  Color? get _textColor => widget.textColor;
 
   bool get _flipField => widget.flipField;
 
@@ -369,10 +370,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     return VisualNode(
       radius: node.radius,
       color: node.color,
-      borderColor: Constants.pastelWhite,
+      borderColor: context.colors.container,
       borderWidth: _nodeBorderWidth,
       text: "${index + 1}",
-      textColor: Constants.pastelWhite,
+      textColor: context.colors.container,
       flip: flip,
     );
   }
@@ -489,7 +490,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       groupLabel: groupLabel,
       radius: _nodeRadius,
       draggable: false,
-      color: _regionNodeColor,
+      color: _regionNodeColor ?? context.colors.accent4,
     );
     _nodeStack.add(newNode);
     _history.add(UserAction(
@@ -507,7 +508,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         position: position,
         radius: _nodeRadius,
         draggable: true,
-        color: _nodeStack.isEmpty ? _startNodeColor : _allianceZoneNodeColor);
+        color: _nodeStack.isEmpty
+            ? _startNodeColor ?? context.colors.confirm
+            : _allianceZoneNodeColor ?? context.colors.accent2);
     _nodeStack.add(newNode);
     _history.add(UserAction(
         actionType: UserActionType.place,
@@ -570,9 +573,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       );
     } else {
       climbOutcome = CustomDropdown(
-        color: _mainColor,
-        textColor: _textColor,
-        lockedColor: _lockedColor,
+        color: _mainColor ?? context.colors.accent1,
+        textColor: _textColor ?? context.colors.text,
+        lockedColor: _lockedColor ?? context.colors.locked,
         options: _climbLevels!,
         isLocked: !_attemptedClimb,
         onChanged: (value) {
@@ -630,7 +633,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     return CustomPaint(
         painter: PathPainter(
             vertices: vertices,
-            color: _backgroundColor,
+            color: _backgroundColor ?? context.colors.container,
             strokeWidth: _nodeBorderWidth));
   }
 
@@ -651,7 +654,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
               padding: EdgeInsets.all(_margin),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(_margin),
-                color: _backgroundColor,
+                color: _backgroundColor ?? context.colors.container,
               ),
               child: Column(
                 spacing: _margin,
@@ -663,13 +666,17 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                         width: _imageWidth,
                         height: _imageHeight,
                         decoration: BoxDecoration(
-                            color: _mainColor,
-                            borderRadius: BorderRadius.circular(_margin),
-                            image: DecorationImage(
-                                image: _fieldImage,
-                                fit: BoxFit.fill,
-                                colorFilter: ColorFilter.mode(
-                                    _backgroundColor, BlendMode.modulate))),
+                          color: _mainColor ?? context.colors.accent1,
+                          borderRadius: BorderRadius.circular(_margin),
+                          image: DecorationImage(
+                            image: _fieldImage,
+                            fit: BoxFit.fill,
+                            colorFilter: ColorFilter.mode(
+                              _backgroundColor ?? context.colors.container,
+                              BlendMode.modulate,
+                            ),
+                          ),
+                        ),
                         child: Semantics(
                           button: true,
                           child: GestureDetector(
@@ -703,7 +710,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                           width: _buttonSize,
                           height: _buttonSize,
                           decoration: BoxDecoration(
-                              color: Constants.pastelRedDark,
+                              color: context.colors.delete,
                               borderRadius:
                                   BorderRadius.circular(_buttonSize / 4)),
                           child: IconButton(
@@ -715,9 +722,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                                   }
                                 });
                               },
-                              iconSize: _buttonSize * 0.4,
+                              iconSize: _buttonSize * 0.7,
                               color: _backgroundColor,
-                              highlightColor: Constants.pastelRedSuperDark,
+                              highlightColor: context.colors.delete,
                               icon: const Icon(Icons.undo_rounded)),
                         ),
                       ],

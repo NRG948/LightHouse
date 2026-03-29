@@ -2,8 +2,8 @@ import "dart:convert";
 import "dart:io";
 import "dart:math";
 import "package:flutter/material.dart";
-import "package:lighthouse/constants.dart";
 import "package:lighthouse/data_entry.dart";
+import "package:lighthouse/themes.dart";
 import "package:path/path.dart";
 
 import "package:path_provider/path_provider.dart";
@@ -380,7 +380,7 @@ Future<String> loadTBAFile(String eventKey, String type) async {
 }
 
 final Map<String, String> defaultConfig = {
-  "eventKey": "2025nrg",
+  "eventKey": "2026nrg",
   "scouterName": "Scouter",
   "serverIP": "http://169.254.9.48:8080",
   "downloadTheBlueAllianceInfo": "false",
@@ -390,7 +390,7 @@ final Map<String, String> defaultConfig = {
   "currentDriverStation": "Red 1",
   "currentMatchType": "Qualifications",
   "autofillLastMatch": "false",
-  "theme": "Light"
+  "theme": "light"
 };
 
 // These maps tell Lighthouse what things to display for any
@@ -408,7 +408,7 @@ final Map<String, String> settingsMap = {
 };
 
 final Map<String, List<String>> settingsDropdownMap = {
-  "theme": backgrounds.keys.toList()
+  "theme": LightHouseThemes.themes.keys.toList()
 };
 
 final Map<String, IconData> settingsIconMap = {

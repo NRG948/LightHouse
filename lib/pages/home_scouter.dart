@@ -4,10 +4,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/filemgr.dart';
-import 'package:lighthouse/layouts.dart';
 import 'package:lighthouse/splash_texts.dart';
+import 'package:lighthouse/themes.dart';
 
 //stateless widget representing the home screen of the app
 class ScouterHomePage extends StatefulWidget {
@@ -31,19 +30,26 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
     final enabledLaunchers = List<Launcher>.empty(growable: true);
     // Adding extra launchers for viewing saved data and syncing to the server.
     enabledLaunchers.add(Launcher(
-        icon: Icons.public, title: "Atlas", route: "/atlas", color: Constants.pastelRed));
-    enabledLaunchers.add(Launcher(icon: Icons.analytics_rounded, title: "Pit", route: "/pit", color: Constants.pastelGreen));
+        icon: Icons.public,
+        title: "Atlas",
+        route: "/atlas",
+        color: context.colors.accent1));
+    enabledLaunchers.add(Launcher(
+        icon: Icons.analytics_rounded,
+        title: "Pit",
+        route: "/pit",
+        color: context.colors.accent2));
     enabledLaunchers.add(Launcher(
       icon: Icons.folder,
       title: "View Saved Data",
       route: "/saved_data",
-      color: colorMap["View Saved Data"] ?? Colors.black,
+      color: context.colors.accent3,
     ));
     enabledLaunchers.add(Launcher(
         icon: Icons.sync_outlined,
         route: "/sync",
         title: "Sync to Server",
-        color: colorMap["Sync to Server"] ?? Colors.black));
+        color: context.colors.accent4));
     return enabledLaunchers;
   }
 
@@ -71,30 +77,30 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
             canPop: false,
             child: Scaffold(
               resizeToAvoidBottomInset: false,
-              backgroundColor:
-                  (themeColorPalettes[snapshot.data!["theme"] ?? "Dark"]!)[0],
+              backgroundColor: context.colors.backgroundPrimary,
               // Drawer menu with navigation options
               drawer: Drawer(
+                backgroundColor: context.colors.container,
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
                     DrawerHeader(
                         decoration: BoxDecoration(
-                            color: themeColorPalettes[
-                                configData["theme"] ?? "Dark"]![0]),
+                            color: context.colors.backgroundPrimary),
                         child: AutoSizeText(
                           "Hi, ${configData["scouterName"]}!",
-                          style: comfortaaBold(25),
+                          style: comfortaaBold(25,
+                              color: context.colors.titleText),
                           textAlign: TextAlign.start,
                         )),
                     ListTile(
                         leading: Icon(
                           Icons.home,
-                          color: Constants.pastelBrown,
+                          color: context.colors.containerText,
                         ),
                         title: Text("Scouter Home",
                             style: comfortaaBold(18,
-                                color: Constants.pastelBrown)),
+                                color: context.colors.containerText)),
                         onTap: () {
                           HapticFeedback.mediumImpact();
                           Navigator.pop(context);
@@ -102,11 +108,11 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                     ListTile(
                         leading: Icon(
                           Icons.bar_chart,
-                          color: Constants.pastelBrown,
+                          color: context.colors.containerText,
                         ),
                         title: Text("Data Viewer Home",
                             style: comfortaaBold(18,
-                                color: Constants.pastelBrown)),
+                                color: context.colors.containerText)),
                         onTap: () async {
                           HapticFeedback.mediumImpact();
                           Navigator.pushNamed(context, "/home-data-viewer");
@@ -114,11 +120,11 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                     ListTile(
                         leading: Icon(
                           Icons.grid_3x3,
-                          color: Constants.pastelBrown,
+                          color: context.colors.containerText,
                         ),
                         title: Text("Testing Ground",
                             style: comfortaaBold(18,
-                                color: Constants.pastelBrown)),
+                                color: context.colors.containerText)),
                         onTap: () async {
                           HapticFeedback.mediumImpact();
                           Navigator.pushNamed(context, "/testing-ground");
@@ -128,9 +134,8 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
               ),
               // App bar with icons for settings and displaying config data
               appBar: AppBar(
-                iconTheme: IconThemeData(color: Constants.pastelWhite),
-                backgroundColor:
-                    (themeColorPalettes[snapshot.data!["theme"] ?? "Dark"]!)[0],
+                iconTheme: IconThemeData(color: context.colors.titleText),
+                backgroundColor: context.colors.backgroundPrimary,
                 centerTitle: true,
                 actions: [
                   // Buttons used for testing functionality
@@ -150,7 +155,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                   IconButton(
                       icon: Icon(
                         Icons.settings,
-                        color: Constants.pastelWhite,
+                        color: context.colors.titleText,
                       ),
                       onPressed: () {
                         HapticFeedback.mediumImpact();
@@ -162,20 +167,15 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
               body: Container(
                   width: screenWidth,
                   height: screenHeight,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(
-                              backgrounds[snapshot.data!["theme"]] ??
-                                  "assets/images/background-hires-dark.png"),
-                          fit: BoxFit.cover)),
-                  // Column containing title, splash text, and launcher buttons
+                  decoration: context.backgroundDecoration,
                   child: Column(
                     children: [
                       SizedBox(
                         width: 0.75 * screenWidth,
                         child: AutoSizeText(
                           secretScreen ? "LightHuose" : "LightHouse",
-                          style: comfortaaBold(60, spacing: -6),
+                          style: comfortaaBold(60,
+                              spacing: -6, color: context.colors.titleText),
                           maxLines: 1,
                           textAlign: TextAlign.center,
                         ),
@@ -187,7 +187,8 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                             secretScreen
                                 ? "Nobody will ever believe you"
                                 : randomSplashText(),
-                            style: comfortaaBold(18, spacing: -1),
+                            style: comfortaaBold(18,
+                                spacing: -1, color: context.colors.titleText),
                             maxLines: 2,
                             textAlign: TextAlign.center,
                           )),
@@ -199,7 +200,8 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                           width: 0.8 * screenWidth,
                           child: AutoSizeText(
                             "${Constants.versionName} | ${snapshot.data!["scouterName"]} | ${snapshot.data!["eventKey"]}",
-                            style: comfortaaBold(18),
+                            style: comfortaaBold(18,
+                                color: context.colors.titleText),
                             textAlign: TextAlign.center,
                           ))
                     ],
@@ -240,7 +242,7 @@ class Launcher extends StatelessWidget {
 
           //the size of the box that holds each choice
           decoration: BoxDecoration(
-              color: Constants.pastelWhite,
+              color: context.colors.container,
               borderRadius: BorderRadius.circular(Constants.borderRadius)),
           child: Row(
             children: [
@@ -262,8 +264,8 @@ class Launcher extends StatelessWidget {
 
                     child: Center(
                       child: AutoSizeText(title.toUpperCase(),
-                          style:
-                              comfortaaBold(25, color: Constants.pastelWhite)),
+                          style: comfortaaBold(25,
+                              color: context.colors.container)),
                     ),
                   ),
                 ),

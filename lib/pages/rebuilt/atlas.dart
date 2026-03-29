@@ -4,6 +4,7 @@ import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
@@ -52,7 +53,7 @@ class AtlasState extends State<Atlas> {
                     height: 70,
                     padding: EdgeInsets.all(margin),
                     decoration: BoxDecoration(
-                      color: Constants.pastelWhite,
+                      color: context.colors.container,
                       borderRadius: BorderRadius.circular(margin),
                     ),
                     child: InputTextBox(
@@ -85,14 +86,13 @@ class AtlasState extends State<Atlas> {
                 pit: false,
               ),
               DefaultContainer(
-                color: Colors.white,
+                color: context.colors.container,
                 child: AspectRatio(
                     aspectRatio: 8,
                     child: CustomCheckbox(
                       title: "Crossed Midline",
                       jsonKey: "autoCrossedMidline",
-                      selectColor: Constants.pastelWhite,
-                      optionColor: Constants.pastelRed,
+                      optionColor: context.colors.accent1,
                     )),
               ),
             ],
@@ -117,9 +117,6 @@ class AtlasState extends State<Atlas> {
                   margin: margin,
                   child: CustomCheckbox(
                     title: "Being Defended",
-                    selectColor: Constants.pastelWhite,
-                    optionColor: Constants.pastelYellow,
-                    textColor: Constants.pastelBrown,
                     jsonKey: "isBeingDefended",
                   ),
                 ),
@@ -129,14 +126,14 @@ class AtlasState extends State<Atlas> {
                 margin: margin,
                 child: Center(
                   child: DefaultContainer(
-                    color: Constants.pastelGray,
+                    color: context.colors.muted,
                     margin: margin / 2,
                     child: Text(
                       "Feeding",
                       textAlign: TextAlign.center,
                       style: comfortaaBold(
                         17,
-                        color: Constants.pastelWhite,
+                        color: context.colors.container,
                         customFontWeight: FontWeight.w900,
                       ),
                     ),
@@ -147,14 +144,14 @@ class AtlasState extends State<Atlas> {
                 checkboxTitle: "Pushing (Herding)",
                 selectOptions: ["Poor", "Decent", "Great"],
                 height: 80,
-                optionColor: Constants.pastelRed,
+                optionColor: context.colors.accent1,
                 jsonKey: "isHerding",
               ),
               Metric(
                 checkboxTitle: "Shooting Over",
                 selectOptions: ["Poor", "Decent", "Great"],
                 height: 80,
-                optionColor: Constants.pastelRed,
+                optionColor: context.colors.accent1,
                 jsonKey: "isFeeding",
               ),
               Metric(
@@ -180,14 +177,14 @@ class AtlasState extends State<Atlas> {
                 margin: margin,
                 child: Center(
                   child: DefaultContainer(
-                    color: Constants.pastelGray,
+                    color: context.colors.muted,
                     margin: margin / 2,
                     child: Text(
                       "Defending",
                       textAlign: TextAlign.center,
                       style: comfortaaBold(
                         17,
-                        color: Constants.pastelWhite,
+                        color: context.colors.container,
                         customFontWeight: FontWeight.w900,
                       ),
                     ),
@@ -198,28 +195,28 @@ class AtlasState extends State<Atlas> {
                 checkboxTitle: "Trench / Bump",
                 selectOptions: ["Poor", "Decent", "Great"],
                 height: 80,
-                optionColor: Constants.pastelYellow,
+                optionColor: context.colors.accent2,
                 jsonKey: "isAccessDefending",
               ),
               Metric(
                 checkboxTitle: "Neutral Zone",
                 selectOptions: ["Poor", "Decent", "Great"],
                 height: 80,
-                optionColor: Constants.pastelYellow,
+                optionColor: context.colors.accent2,
                 jsonKey: "isCenterDefending",
               ),
               Metric(
                 checkboxTitle: "Alliance Zone",
                 selectOptions: ["Poor", "Decent", "Great"],
                 height: 80,
-                optionColor: Constants.pastelYellow,
+                optionColor: context.colors.accent2,
                 jsonKey: "isAllianceDefending",
               ),
               Metric(
                 checkboxTitle: "Stealing",
                 selectOptions: ["Poor", "Decent", "Great"],
                 height: 80,
-                optionColor: Constants.pastelYellow,
+                optionColor: context.colors.accent2,
                 jsonKey: "isStealing",
               ),
             ],

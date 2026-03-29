@@ -3,6 +3,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/pages/data_entry_page.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
@@ -21,41 +22,40 @@ class PitScout extends StatefulWidget {
   State<PitScout> createState() => PitScoutState();
 }
 
-// TODO: bad interim solution, fix this as soon as season ends if not sooner lol
-Widget buildPitTextBox({
-  required String title,
-  required String jsonKey,
-  required double height,
-  required double width,
-  bool numeric = false,
-  String defaultText = "Enter Text",
-  required double fontSize,
-  required int maxLines,
-  String? autoFill,
-  String? hintText,
-}) {
-  return Container(
-    padding: EdgeInsets.all(10),
-    decoration: BoxDecoration(
-      color: Constants.pastelWhite,
-      borderRadius: BorderRadius.circular(Constants.borderRadius),
-    ),
-    child: NRGTextbox(
-      title: title,
-      jsonKey: jsonKey,
-      height: height,
-      width: width,
-      numeric: numeric,
-      defaultText: defaultText,
-      fontSize: fontSize,
-      maxLines: maxLines,
-      autoFill: autoFill,
-      hintText: hintText,
-    ),
-  );
-}
-
 class PitScoutState extends State<PitScout> {
+  Widget buildPitTextBox({
+    required String title,
+    required String jsonKey,
+    required double height,
+    required double width,
+    bool numeric = false,
+    String defaultText = "Enter Text",
+    required double fontSize,
+    required int maxLines,
+    String? autoFill,
+    String? hintText,
+  }) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: context.colors.container,
+        borderRadius: BorderRadius.circular(Constants.borderRadius),
+      ),
+      child: NRGTextbox(
+        title: title,
+        jsonKey: jsonKey,
+        height: height,
+        width: width,
+        numeric: numeric,
+        defaultText: defaultText,
+        fontSize: fontSize,
+        maxLines: maxLines,
+        autoFill: autoFill,
+        hintText: hintText,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DataEntryPage(
@@ -175,14 +175,14 @@ class PitScoutState extends State<PitScout> {
                         fontSize: 20,
                         maxLines: 1),
                     DefaultContainer(
-                      color: Colors.white,
+                      color: context.colors.container,
                       child: AspectRatio(
                           aspectRatio: 8,
                           child: CustomCheckbox(
                             title: "Crossed Midline",
                             jsonKey: "autoCrossedMidline${(index + 1)}",
-                            selectColor: Constants.pastelWhite,
-                            optionColor: Constants.pastelRed,
+                            selectColor: context.colors.container,
+                            optionColor: context.colors.accent1,
                           )),
                     ),
                   ],

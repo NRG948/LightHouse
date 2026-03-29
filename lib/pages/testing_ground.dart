@@ -1,8 +1,6 @@
 import "package:flutter/material.dart";
-import "package:lighthouse/constants.dart";
-import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/themes.dart";
 import "package:lighthouse/widgets/game_agnostic/team_guessr.dart";
-import "package:lighthouse/widgets/rebuilt/rebuilt_location_tracker.dart";
 
 class TestingGroundPage extends StatefulWidget {
   const TestingGroundPage({super.key});
@@ -16,17 +14,15 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: configData["theme"] != null
-          ? themeColorPalettes[configData["theme"] ?? "Dark"]![0]
-          : Constants.pastelRed,
+      backgroundColor: context.colors.backgroundPrimary,
       appBar: AppBar(
-        backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
-        title: const Text(
+        backgroundColor: context.colors.backgroundPrimary,
+        title: Text(
           "Testing Ground",
           style: TextStyle(
               fontFamily: "Comfortaa",
               fontWeight: FontWeight.w900,
-              color: Constants.pastelWhite),
+              color: context.colors.titleText),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -35,7 +31,7 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
             },
             icon: Icon(
               Icons.home,
-              color: Constants.pastelWhite,
+              color: context.colors.titleText,
             )),
       ),
       body: Center(

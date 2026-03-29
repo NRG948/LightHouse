@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
-import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/themes.dart';
 
 class NRGEndgameTagSelector extends StatefulWidget {
   final List<String> possibleTags;
@@ -47,7 +45,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
               margin: EdgeInsets.all(15),
               padding: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: Constants.pastelWhite,
+                color: context.colors.container,
                 borderRadius: BorderRadius.circular(Constants.borderRadius),
               ),
               child: Container(
@@ -56,7 +54,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
                 padding: EdgeInsets.all(5),
                 constraints: BoxConstraints(minHeight: 100),
                 decoration: BoxDecoration(
-                  color: Constants.coolGray,
+                  color: context.colors.accent2,
                   borderRadius: BorderRadius.circular(Constants.borderRadius),
                 ),
                 child: SingleChildScrollView(
@@ -76,7 +74,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
   List<Tag> getTagsFromData() {
     List<Tag> tags = List.empty(growable: true);
     for (String name in selectedTags) {
-      tags.add(Tag(color: Constants.pastelGreenSuperDark, name: name));
+      tags.add(Tag(color: context.colors.container, name: name));
     }
     return tags;
   }
@@ -84,7 +82,10 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
   List<SelectableTag> getPossibleTags() {
     List<SelectableTag> tags = List.empty(growable: true);
     for (String name in _possibleTags) {
-      tags.add(SelectableTag(name: name, selectedTags: selectedTags,));
+      tags.add(SelectableTag(
+        name: name,
+        selectedTags: selectedTags,
+      ));
     }
     return tags;
   }
@@ -95,7 +96,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
     return Container(
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Constants.pastelWhite,
+        color: context.colors.container,
         borderRadius: BorderRadius.circular(Constants.borderRadius),
       ),
       child: Column(
@@ -114,7 +115,7 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
                 margin: EdgeInsets.all(5),
                 padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                  color: Constants.coolGray,
+                  color: context.colors.accent2,
                   borderRadius: BorderRadius.circular(Constants.borderRadius),
                 ),
                 child: Align(
@@ -136,8 +137,10 @@ class NRGEndgameTagSelectorState extends State<NRGEndgameTagSelector>
 class Tag extends StatelessWidget {
   final Color color;
   final String name;
+  final bool? selected;
 
-  const Tag({super.key, required this.color, required this.name});
+  const Tag(
+      {super.key, required this.color, required this.name, this.selected});
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +153,15 @@ class Tag extends StatelessWidget {
       ),
       child: Text(
         name,
-        style: comfortaaBold(15),
+        style: comfortaaBold(
+          15,
+          color: selected == null || selected!
+              ? context.colors.containerText
+              : context.colors.lockedText,
+          customFontWeight: selected == null || !selected!
+              ? FontWeight.bold
+              : FontWeight.w900,
+        ),
       ),
     );
   }
@@ -160,24 +171,19 @@ class SelectableTag extends StatefulWidget {
   final String name;
   final List<String> selectedTags;
 
-  const SelectableTag({super.key, required this.name, required this.selectedTags});
+  const SelectableTag(
+      {super.key, required this.name, required this.selectedTags});
 
   @override
   State<StatefulWidget> createState() => SelectableTagState();
 }
 
 class SelectableTagState extends State<SelectableTag> {
-  Color color = Constants.darkModeDarkGray;
   String get _name => widget.name;
   List<String> get _selectedTags => widget.selectedTags;
 
   @override
   Widget build(BuildContext context) {
-    if (_selectedTags.contains(_name)) {
-      color = Constants.pastelGreenSuperDark;
-    } else {
-      color = Constants.darkModeDarkGray;
-    }
     return GestureDetector(
         onTap: () {
           HapticFeedback.mediumImpact();
@@ -189,6 +195,10 @@ class SelectableTagState extends State<SelectableTag> {
             }
           });
         },
-        child: Tag(color: color, name: _name));
+        child: Tag(
+          color: context.colors.container,
+          name: _name,
+          selected: _selectedTags.contains(_name),
+        ));
   }
 }

@@ -6,6 +6,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/device_id.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/sync.dart';
+import 'package:lighthouse/themes.dart';
 
 class DataViewerHome extends StatelessWidget {
   const DataViewerHome({super.key});
@@ -25,12 +26,7 @@ class DataViewerHome extends StatelessWidget {
         body: Container(
           width: screenWidth,
           height: screenHeight,
-          decoration: BoxDecoration(
-              color: Constants.darkPurple,
-              image: DecorationImage(
-                  image: AssetImage(backgrounds[configData["theme"]] ??
-                      "assets/images/background-hires-dark.png"),
-                  fit: BoxFit.cover)),
+          decoration: context.backgroundDecoration,
           child: Column(
             spacing: 10,
             children: [
@@ -46,11 +42,11 @@ class DataViewerHome extends StatelessWidget {
                     Icon(
                       Icons.bar_chart,
                       size: 30,
-                      color: Constants.pastelWhite,
+                      color: Colors.white,
                     ),
                     Text(
                       "Data Viewer Home",
-                      style: comfortaaBold(25, color: Constants.pastelWhite),
+                      style: comfortaaBold(25, color: Colors.white),
                     )
                   ],
                 ),
@@ -74,10 +70,12 @@ class DataViewerHome extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("ARYAV'S DATA VIEWER", style: comfortaaBold(25)),
+                        Text("ARYAV'S DATA VIEWER",
+                            style: comfortaaBold(25, color: Colors.white)),
                         AutoSizeText(
                           "A more specialized data viewer page made specifically for drive team, featuring detailed auto information and comments.",
-                          style: comfortaaBold(screenWidth * 0.03),
+                          style: comfortaaBold(screenWidth * 0.03,
+                              color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -87,8 +85,7 @@ class DataViewerHome extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context,
-                      "/data-viewer-amongview");
+                  Navigator.pushNamed(context, "/data-viewer-amongview");
                 },
                 child: Container(
                   width: screenWidth * 0.85,
@@ -104,10 +101,12 @@ class DataViewerHome extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("AMONGVIEW", style: comfortaaBold(25)),
+                        Text("AMONGVIEW",
+                            style: comfortaaBold(25, color: Colors.white)),
                         AutoSizeText(
                           "A more comprehensive data viewer page geared more towards strat team, with a focus on direct data comparison between teams.",
-                          style: comfortaaBold(screenWidth * 0.03),
+                          style: comfortaaBold(screenWidth * 0.03,
+                              color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -131,17 +130,17 @@ class DataViewerHome extends StatelessWidget {
         ),
 
         appBar: AppBar(
-          backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![
-              0], // Sets the app bar color.
-          title: const Text(
+          backgroundColor:
+              context.colors.backgroundPrimary, // Sets the app bar color.
+          title: Text(
             "LightHouse",
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Constants.pastelWhite),
+                color: context.colors.titleText),
           ),
           centerTitle: true, // Centers the title in the app bar.
-          iconTheme: IconThemeData(color: Constants.pastelWhite),
+          iconTheme: IconThemeData(color: context.colors.titleText),
           actions: [
             AuthButton(),
             if (configData["debugMode"] == "true")
@@ -153,7 +152,13 @@ class DataViewerHome extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                            content: Text(jsonEncode(configData).toString()));
+                          backgroundColor: context.colors.container,
+                          content: Text(
+                            jsonEncode(configData).toString(),
+                            style: comfortaaBold(15,
+                                color: context.colors.containerText),
+                          ),
+                        );
                       });
                 }),
               ),
@@ -168,35 +173,37 @@ class DataViewerHome extends StatelessWidget {
 
         // Drawer menu for navigation between different app modes.
         drawer: Drawer(
+          backgroundColor: context.colors.container,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
               DrawerHeader(
-                  decoration: BoxDecoration(
-                      color: themeColorPalettes[configData["theme"] ?? "Dark"]![
-                          0]),
+                  decoration:
+                      BoxDecoration(color: context.colors.backgroundPrimary),
                   child: AutoSizeText(
                     "Hi, ${configData["scouterName"]}!",
-                    style: comfortaaBold(25),
+                    style: comfortaaBold(25, color: context.colors.titleText),
                     textAlign: TextAlign.start,
                   )),
               ListTile(
                   leading: Icon(
                     Icons.home,
-                    color: Constants.pastelBrown,
+                    color: context.colors.containerText,
                   ),
                   title: Text("Scouter Home",
-                      style: comfortaaBold(18, color: Constants.pastelBrown)),
+                      style: comfortaaBold(18,
+                          color: context.colors.containerText)),
                   onTap: () {
                     Navigator.pushNamed(context, "/home-scouter");
                   }),
               ListTile(
                   leading: Icon(
                     Icons.bar_chart,
-                    color: Constants.pastelBrown,
+                    color: context.colors.containerText,
                   ),
                   title: Text("Data Viewer Home",
-                      style: comfortaaBold(18, color: Constants.pastelBrown)),
+                      style: comfortaaBold(18,
+                          color: context.colors.containerText)),
                   onTap: () {
                     Navigator.pop(
                         context); // Closes the drawer, since the user is already on this page.
@@ -204,10 +211,11 @@ class DataViewerHome extends StatelessWidget {
               ListTile(
                   leading: Icon(
                     Icons.grid_3x3,
-                    color: Constants.pastelBrown,
+                    color: context.colors.containerText,
                   ),
                   title: Text("Testing Ground",
-                      style: comfortaaBold(18, color: Constants.pastelBrown)),
+                      style: comfortaaBold(18,
+                          color: context.colors.containerText)),
                   onTap: () async {
                     Navigator.pushNamed(context, "/testing-ground");
                   })

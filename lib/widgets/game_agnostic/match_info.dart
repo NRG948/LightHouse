@@ -8,6 +8,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/team_spritesheet.dart';
+import 'package:lighthouse/themes.dart';
 
 class MatchInfo extends StatefulWidget {
   final double? margin;
@@ -124,9 +125,7 @@ class _MatchInfoState extends State<MatchInfo>
 
   @override
   Widget build(BuildContext context) {
-    // Build the main container for the widget
     super.build(context);
-
     return LayoutBuilder(
       builder: (context, constraints) {
         _width = constraints.maxWidth;
@@ -135,7 +134,7 @@ class _MatchInfoState extends State<MatchInfo>
           height: _width * 0.8,
           padding: EdgeInsets.all(_margin),
           decoration: BoxDecoration(
-              color: Constants.pastelWhite,
+              color: context.colors.container,
               borderRadius: BorderRadius.circular(Constants.borderRadius)),
           child: Column(
             spacing: 10,
@@ -146,7 +145,7 @@ class _MatchInfoState extends State<MatchInfo>
                   height: double.infinity,
                   padding: EdgeInsets.all(_margin),
                   decoration: BoxDecoration(
-                      color: Constants.pastelGray,
+                      color: context.colors.muted,
                       borderRadius:
                           BorderRadius.circular(Constants.borderRadius)),
                   child: Center(
@@ -165,7 +164,7 @@ class _MatchInfoState extends State<MatchInfo>
                                 Icon(
                                   Icons.event,
                                   size: _width / 20,
-                                  color: Constants.pastelWhite,
+                                  color: context.colors.container,
                                 ),
                                 Expanded(
                                   child: FutureBuilder(
@@ -178,7 +177,10 @@ class _MatchInfoState extends State<MatchInfo>
                                         return Center(
                                             child: AutoSizeText(
                                           snapshot.data ?? "",
-                                          style: comfortaaBold(_width / 22),
+                                          style: comfortaaBold(
+                                            _width / 22,
+                                            color: context.colors.container,
+                                          ),
                                           minFontSize: 10,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -195,13 +197,16 @@ class _MatchInfoState extends State<MatchInfo>
                                 Icon(
                                   Icons.person,
                                   size: _width / 20,
-                                  color: Constants.pastelWhite,
+                                  color: context.colors.container,
                                 ),
                                 Expanded(
                                   child: Center(
                                       child: AutoSizeText(
                                     teamName ?? "No Team Selected",
-                                    style: comfortaaBold(_width / 22),
+                                    style: comfortaaBold(
+                                      _width / 22,
+                                      color: context.colors.container,
+                                    ),
                                     minFontSize: 10,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -217,13 +222,13 @@ class _MatchInfoState extends State<MatchInfo>
                                 Icon(
                                   Icons.location_pin,
                                   size: _width / 20,
-                                  color: Constants.pastelWhite,
+                                  color: context.colors.container,
                                 ),
                                 Expanded(
                                   child: Center(
                                       child: AutoSizeText(
                                     teamLocation ?? "",
-                                    style: comfortaaBold(_width / 22),
+                                    style: comfortaaBold(_width / 22, color: context.colors.container),
                                     minFontSize: 10,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -277,9 +282,9 @@ class _MatchInfoState extends State<MatchInfo>
                             labelText: "Team Number",
                             labelStyle: comfortaaBold(
                               _width / 22,
-                              color: Constants.pastelRedDark,
+                              color: context.colors.hintText,
                             ),
-                            fillColor: Constants.pastelRed,
+                            fillColor: context.colors.accent1,
                             filled: true),
                       ),
                     ),
@@ -287,8 +292,7 @@ class _MatchInfoState extends State<MatchInfo>
                       child: Center(
                           child: AutoSizeText(
                         "Replay",
-                        style: comfortaaBold(_width / 18,
-                            color: Constants.pastelBrown),
+                        style: comfortaaBold(_width / 18, color: context.colors.containerText),
                         maxLines: 1,
                         textAlign: TextAlign.start,
                       )),
@@ -305,7 +309,7 @@ class _MatchInfoState extends State<MatchInfo>
                               DataEntry.exportData["replay"] = replay;
                             });
                           },
-                          activeColor: Constants.pastelYellow,
+                          activeColor: context.colors.accent2,
                         ),
                       ),
                     )
@@ -321,7 +325,7 @@ class _MatchInfoState extends State<MatchInfo>
                       flex: 4,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: Constants.pastelYellow,
+                            color: context.colors.accent2,
                             borderRadius:
                                 BorderRadius.circular(Constants.borderRadius)),
                         child: Center(
@@ -336,7 +340,7 @@ class _MatchInfoState extends State<MatchInfo>
                                   child: Text(
                                     v,
                                     style: comfortaaBold(_width / 26,
-                                        color: Constants.pastelBrown),
+                                        color: context.colors.text),
                                   ));
                             }).toList(),
                             onChanged: (value) {
@@ -351,7 +355,7 @@ class _MatchInfoState extends State<MatchInfo>
                               setState(
                                   () {}); // for some reason it doesn't change unless this is here :(
                             },
-                            dropdownColor: Constants.pastelYellow,
+                            dropdownColor: context.colors.accent2,
                           ),
                         ),
                       ),
@@ -383,10 +387,10 @@ class _MatchInfoState extends State<MatchInfo>
                             labelText: "#",
                             labelStyle: comfortaaBold(
                               _width / 20,
-                              color: Constants.pastelYellowDark,
+                              color: context.colors.hintText,
                               italic: true,
                             ),
-                            fillColor: Constants.pastelYellow,
+                            fillColor: context.colors.accent2,
                             filled: true),
                       ),
                     ),
@@ -396,8 +400,8 @@ class _MatchInfoState extends State<MatchInfo>
                         decoration: BoxDecoration(
                             color: DataEntry.exportData["driverStation"]
                                     .contains("Red")
-                                ? Constants.pastelRed
-                                : Constants.pastelBlue,
+                                ? context.colors.red
+                                : context.colors.blue,
                             borderRadius:
                                 BorderRadius.circular(Constants.borderRadius)),
                         child: Center(
@@ -418,7 +422,7 @@ class _MatchInfoState extends State<MatchInfo>
                                   child: Text(
                                     v,
                                     style: comfortaaBold(_width / 22,
-                                        color: Constants.pastelBrown),
+                                        color: context.colors.text),
                                   ));
                             }).toList(),
                             onChanged: (value) {
@@ -436,8 +440,8 @@ class _MatchInfoState extends State<MatchInfo>
                             },
                             dropdownColor: DataEntry.exportData["driverStation"]
                                     .contains("Red")
-                                ? Constants.pastelRed
-                                : Constants.pastelBlue,
+                                ? context.colors.red
+                                : context.colors.blue,
                           ),
                         ),
                       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/textbox.dart';
@@ -50,19 +50,19 @@ extension ClimbLevelExtension on ClimbLevel {
 }
 
 class TowerLocationSelector extends StatefulWidget {
-  final Color backgroundColor;
-  final Color mainColor;
-  final Color textColor;
-  final Color lockedColor;
+  final Color? backgroundColor;
+  final Color? mainColor;
+  final Color? textColor;
+  final Color? lockedColor;
   final double? margin;
   final String? jsonKey;
 
   const TowerLocationSelector({
     super.key,
-    this.backgroundColor = Constants.pastelWhite,
-    this.mainColor = Constants.pastelRed,
-    this.textColor = Constants.pastelBrown,
-    this.lockedColor = Constants.pastelGray,
+    this.backgroundColor,
+    this.mainColor,
+    this.textColor,
+    this.lockedColor,
     this.margin,
     this.jsonKey,
   });
@@ -78,10 +78,10 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
   double get _topOffset => _width * 0.15;
   double get _margin => widget.margin ?? _width / 25;
 
-  Color get _mainColor => widget.mainColor;
-  Color get _backgroundColor => widget.backgroundColor;
-  Color get _textColor => widget.textColor;
-  Color get _lockedColor => widget.lockedColor;
+  Color? get _mainColor => widget.mainColor;
+  Color? get _backgroundColor => widget.backgroundColor;
+  Color? get _textColor => widget.textColor;
+  Color? get _lockedColor => widget.lockedColor;
 
   double get _rawImageHeight => 164;
   double get _rawImageWidth => 764;
@@ -153,7 +153,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
             height: _height,
             padding: EdgeInsets.all(_margin),
             decoration: BoxDecoration(
-                color: _backgroundColor,
+                color: _backgroundColor ?? context.colors.container,
                 borderRadius: BorderRadius.circular(_margin)),
             child: Column(
               spacing: _margin,
@@ -199,7 +199,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                   child: Container(
                     //height: _height - _bottomOffset - _topOffset - 2.1 * _margin, // 2.1 to prevent overflow due to rounding error
                     decoration: BoxDecoration(
-                      color: _isLocked ? _lockedColor : _mainColor,
+                      color: _isLocked ? _lockedColor ?? context.colors.locked : _mainColor ?? context.colors.accent1,
                       borderRadius: BorderRadius.circular(_margin),
                     ),
                     child: Stack(
@@ -214,7 +214,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                                 image: _towerImage,
                                 fit: BoxFit.fill,
                                 colorFilter: ColorFilter.mode(
-                                    _backgroundColor, BlendMode.modulate),
+                                    _backgroundColor ?? context.colors.container, BlendMode.modulate),
                               ),
                             ),
                           ),

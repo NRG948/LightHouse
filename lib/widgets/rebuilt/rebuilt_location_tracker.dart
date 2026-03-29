@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/location_tracker.dart';
 import 'package:lighthouse/widgets/rebuilt/cycle_list_counter.dart';
@@ -9,7 +10,7 @@ class RebuiltLocationTracker extends StatelessWidget {
   final double? margin;
   final bool viewOnly;
   final Map<String, Color>? assignedColors;
-  final Color mapColor;
+  final Color? mapColor;
   final bool flipField;
 
   const RebuiltLocationTracker({
@@ -18,7 +19,7 @@ class RebuiltLocationTracker extends StatelessWidget {
     this.margin,
     this.viewOnly = false,
     this.assignedColors,
-    this.mapColor = Constants.pastelRed,
+    this.mapColor,
     this.flipField = false,
   });
 
@@ -55,7 +56,7 @@ class RebuiltLocationTracker extends StatelessWidget {
           children: [
             Text(
               "Accuracy",
-              style: comfortaaBold(17, color: Constants.pastelBrown),
+              style: comfortaaBold(17, color: context.colors.containerText),
             ),
             Expanded(
               child: CycleListCounter(

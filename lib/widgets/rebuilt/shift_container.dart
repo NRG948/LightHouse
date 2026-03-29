@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 
 class ShiftContainer extends StatefulWidget {
   final double height;
@@ -50,12 +51,12 @@ class _ShiftContainerState extends State<ShiftContainer>
             child: Container(
               padding: EdgeInsets.all(_margin / 2),
               decoration: BoxDecoration(
-                  color: index == currentIndex ? Constants.pastelYellow : Color.fromARGB(1, 255, 255, 255),
+                  color: index == currentIndex ? context.colors.accent2 : Color.fromARGB(1, 255, 255, 255),
                   borderRadius: BorderRadius.circular(_margin / 2)),
               child: AutoSizeText(
                 _shifts[index],
                 style: comfortaaBold(_fontSize,
-                    color: index == currentIndex ? Constants.pastelWhite : Constants.pastelBrown,
+                    color: index == currentIndex ? context.colors.container : context.colors.containerText,
                     customFontWeight: index == currentIndex ? FontWeight.w900 : FontWeight.bold),
               ),
             ),
@@ -81,7 +82,7 @@ class _ShiftContainerState extends State<ShiftContainer>
             child: Container(
           height: _height,
           decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(_margin),
           ),
           child: Row(

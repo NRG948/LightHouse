@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/dropdown.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 
@@ -20,20 +21,20 @@ class Cycle {
 class CycleCounter extends StatefulWidget {
   final double? margin;
   final String jsonKey;
-  final Color color;
-  final Color backgroundColor;
-  final Color textColor;
-  final Color lockedColor;
+  final Color? color;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final Color? lockedColor;
   final bool isCompact;
 
   const CycleCounter({
     super.key,
     required this.jsonKey,
     this.margin,
-    this.color = Constants.pastelRed,
-    this.backgroundColor = Constants.pastelWhite,
-    this.textColor = Constants.pastelBrown,
-    this.lockedColor = Constants.pastelGray,
+    this.color,
+    this.backgroundColor,
+    this.textColor,
+    this.lockedColor,
     this.isCompact = false,
   });
 
@@ -47,10 +48,10 @@ class _CycleCounterState extends State<CycleCounter> {
   double get _height => _width * (_isCompact ? 0.55 : 0.78);
   double get _buttonSize => _width * 0.25;
   double get _margin => widget.margin ?? _width / 25;
-  Color get _color => widget.color;
-  Color get _backgroundColor => widget.backgroundColor;
-  Color get _textColor => widget.textColor;
-  Color get _lockedColor => widget.lockedColor;
+  Color? get _color => widget.color;
+  Color? get _backgroundColor => widget.backgroundColor;
+  Color? get _textColor => widget.textColor;
+  Color? get _lockedColor => widget.lockedColor;
   bool get _isCompact => widget.isCompact;
   double get _fontSize => _height / 13;
   String get _jsonKey => widget.jsonKey;
@@ -91,13 +92,13 @@ class _CycleCounterState extends State<CycleCounter> {
       return Container(
         padding: EdgeInsets.all(_margin / 2),
         decoration: BoxDecoration(
-          color: _cycles.isEmpty ? _lockedColor : _color,
+          color: _cycles.isEmpty ? _lockedColor ?? context.colors.locked : _color ?? context.colors.accent1,
           borderRadius: BorderRadius.circular(_margin),
         ),
         child: Container(
           padding: EdgeInsets.all(_margin),
           decoration: BoxDecoration(
-            color: _backgroundColor,
+            color: _backgroundColor ?? context.colors.container,
             borderRadius: BorderRadius.circular(_margin / sqrt(2)),
           ),
           child: child,
@@ -118,7 +119,7 @@ class _CycleCounterState extends State<CycleCounter> {
             height: _height,
             padding: EdgeInsets.all(_margin),
             decoration: BoxDecoration(
-              color: _backgroundColor,
+              color: _backgroundColor ?? context.colors.container,
               borderRadius: BorderRadius.circular(_margin),
             ),
             child: Column(
@@ -137,8 +138,8 @@ class _CycleCounterState extends State<CycleCounter> {
                             height: _buttonSize,
                             decoration: BoxDecoration(
                               color: _cycles.isEmpty || _isTimerActive
-                                  ? _lockedColor
-                                  : _color,
+                                  ? _lockedColor ?? context.colors.locked
+                                  : _color ?? context.colors.accent1,
                               shape: BoxShape.circle,
                             ),
                             child: IconButton(
@@ -158,7 +159,7 @@ class _CycleCounterState extends State<CycleCounter> {
                               },
                               padding: EdgeInsets.zero,
                               iconSize: _buttonSize * 0.45,
-                              color: _backgroundColor,
+                              color: _backgroundColor ?? context.colors.container,
                               icon: const Icon(Icons.delete_rounded),
                             ),
                           ),
@@ -194,12 +195,12 @@ class _CycleCounterState extends State<CycleCounter> {
                             width: _buttonSize,
                             height: _buttonSize,
                             decoration: BoxDecoration(
-                              color: _color,
+                              color: _color ?? context.colors.accent1,
                               shape: BoxShape.circle,
                               border: _isTimerActive
                                   ? Border.all(
                                       width: _buttonSize * 0.05,
-                                      color: Constants.pastelGreen)
+                                      color: context.colors.confirm)
                                   : null,
                             ),
                             child: IconButton(
@@ -229,7 +230,7 @@ class _CycleCounterState extends State<CycleCounter> {
                               },
                               padding: EdgeInsets.zero,
                               iconSize: _buttonSize * 0.45,
-                              color: _backgroundColor,
+                              color: _backgroundColor ?? context.colors.container,
                               icon: _isTimerActive
                                   ? const Icon(Icons.stop_rounded)
                                   : const Icon(Icons.add_rounded),
@@ -254,10 +255,10 @@ class _CycleCounterState extends State<CycleCounter> {
                                   accuracyMetrics: accuracyMetrics,
                                   capacityMetrics: capcityMetrics,
                                   margin: _margin,
-                                  color: _color,
-                                  backgroundColor: _backgroundColor,
-                                  textColor: _textColor,
-                                  lockedColor: _lockedColor,
+                                  color: _color ?? context.colors.accent1,
+                                  backgroundColor: _backgroundColor ?? context.colors.container,
+                                  textColor: _textColor ?? context.colors.containerText,
+                                  lockedColor: _lockedColor ?? context.colors.locked,
                                   isCompact: _isCompact,
                                   fontSize: _fontSize,
                                   parentSetState: setState)
@@ -270,10 +271,10 @@ class _CycleCounterState extends State<CycleCounter> {
                                 accuracyMetrics: accuracyMetrics,
                                 capacityMetrics: capcityMetrics,
                                 margin: _margin,
-                                color: _color,
-                                backgroundColor: _backgroundColor,
-                                textColor: _textColor,
-                                lockedColor: _lockedColor,
+                                color: _color ?? context.colors.accent1,
+                                backgroundColor: _backgroundColor ?? context.colors.container,
+                                textColor: _textColor ?? context.colors.containerText,
+                                lockedColor: _lockedColor ?? context.colors.locked,
                                 isCompact: _isCompact,
                                 fontSize: _fontSize,
                                 parentSetState: setState,

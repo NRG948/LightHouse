@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 
 // Stateful widget for NRG Rating
 class NRGRating extends StatefulWidget {
@@ -45,7 +46,7 @@ class _NRGRatingState extends State<NRGRating>
       height: widget.height,
       width: widget.width,
       decoration: BoxDecoration(
-          color: Constants.pastelWhite,
+          color: context.colors.container,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
         children: [
@@ -56,11 +57,11 @@ class _NRGRatingState extends State<NRGRating>
             width: 0.5 * widget.width,
             height: 0.3 * widget.height,
             decoration: BoxDecoration(
-                color: Constants.pastelGray,
+                color: context.colors.muted,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: AutoSizeText(
               widget.title,
-              style: comfortaaBold(20),
+              style: comfortaaBold(20, color: context.colors.container),
               textAlign: TextAlign.center,
             ),
           ),
@@ -83,8 +84,8 @@ class _NRGRatingState extends State<NRGRating>
 class StarRating extends StatefulWidget {
   final double initialRating; // Initial rating value
   final ValueChanged<double?> onRatingChanged; // Callback for rating changes
-  final Color activeColor; // Color for filled stars
-  final Color inactiveColor; // Color for unfilled stars
+  final Color? activeColor; // Color for filled stars
+  final Color? inactiveColor; // Color for unfilled stars
   final double starSize; // Size of the star icons
   final bool clearable;
 
@@ -92,8 +93,8 @@ class StarRating extends StatefulWidget {
     super.key,
     this.initialRating = 0.0,
     required this.onRatingChanged,
-    this.activeColor = Colors.amber,
-    this.inactiveColor = Constants.pastelGray,
+    this.activeColor,
+    this.inactiveColor,
     this.starSize = 30.0,
     this.clearable = false, 
   });
@@ -152,8 +153,8 @@ class _StarRatingState extends State<StarRating> {
               child: Icon(
                 icon,
                 color: icon == Icons.star_border
-                    ? widget.inactiveColor
-                    : widget.activeColor,
+                    ? widget.inactiveColor ?? context.colors.locked
+                    : widget.activeColor ?? context.colors.accent2,
                 size: widget.starSize,
               ),
             );
@@ -166,7 +167,7 @@ class _StarRatingState extends State<StarRating> {
               width: 0.7 * widget.starSize,
               height: 0.7 * widget.starSize,
               decoration: BoxDecoration(
-                  color: Constants.pastelRedSuperDark,
+                  color: context.colors.delete,
                   borderRadius: BorderRadius.circular(Constants.borderRadius)),
               child: Center(
                   child: AutoSizeText(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 
 class TeamInfo extends StatefulWidget {
 
@@ -40,7 +41,7 @@ class _TeamInfoState extends State<TeamInfo>
         padding: EdgeInsets.all(5),
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -55,13 +56,13 @@ class _TeamInfoState extends State<TeamInfo>
                   controller: teamNumberController,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   style:
-                      comfortaaBold(25.0, color: Constants.pastelBrown),
+                      comfortaaBold(25.0, color: context.colors.text),
                   maxLines: 1,
                   decoration: InputDecoration(
                       labelText: "Team Number",
                       labelStyle: comfortaaBold(30.0,
-                          color: Constants.pastelBrown, italic: true),
-                      fillColor: Constants.pastelYellow,
+                          color: context.colors.hintText, italic: true),
+                      fillColor: context.colors.accent2,
                       filled: true,
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       border: OutlineInputBorder(
@@ -77,14 +78,14 @@ class _TeamInfoState extends State<TeamInfo>
                   height: 100,
                   width: 400,
                   decoration: BoxDecoration(
-                      color: Constants.pastelYellow,
+                      color: context.colors.accent2,
                       borderRadius:
                           BorderRadius.circular(Constants.borderRadius)),
                   child: Align(
                     alignment: Alignment(-0.85, 0),
                     child: Text(teamName ?? "Team Name",
                         style: comfortaaBold(30,
-                            color: Constants.pastelBrown,
+                            color: context.colors.text,
                             italic: teamName == null)),
                   ),
                 ),

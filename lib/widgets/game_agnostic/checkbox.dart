@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 
 class CustomCheckbox extends StatefulWidget {
   /// The text displayed to the right of the checkbox.
@@ -17,16 +18,16 @@ class CustomCheckbox extends StatefulWidget {
   final bool initialValue;
 
   /// The color of the select icon when the checkbox is checked.
-  final Color selectColor;
+  final Color? selectColor;
 
   /// The color of the [title].
-  final Color textColor;
+  final Color? textColor;
 
   /// The color of the checkbox.
-  final Color optionColor;
+  final Color? optionColor;
 
   /// The color of the checkbox when [isLocked] is ```true```.
-  final Color lockedColor;
+  final Color? lockedColor;
 
   /// If the checkbox stops accepting inputs.
   final bool isLocked;
@@ -40,10 +41,10 @@ class CustomCheckbox extends StatefulWidget {
     this.title = "",
     this.onToggle = _noop,
     this.initialValue = false,
-    this.selectColor = Colors.black,
-    this.textColor = Colors.black,
-    this.optionColor = Colors.white,
-    this.lockedColor = Colors.grey,
+    this.selectColor,
+    this.textColor,
+    this.optionColor,
+    this.lockedColor,
     this.isLocked = false,
     this.jsonKey,
   });
@@ -62,10 +63,10 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
   Function(bool value) get _onToggle => widget.onToggle;
   bool get _initialValue => widget.initialValue;
 
-  Color get _selectColor => widget.selectColor;
-  Color get _optionColor => widget.optionColor;
-  Color get _textColor => widget.textColor;
-  Color get _lockedColor => widget.lockedColor;
+  Color? get _selectColor => widget.selectColor;
+  Color? get _optionColor => widget.optionColor;
+  Color? get _textColor => widget.textColor;
+  Color? get _lockedColor => widget.lockedColor;
 
   String? get _jsonKey => widget.jsonKey;
 
@@ -114,7 +115,7 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
                     width: _height * 0.6,
                     height: _height * 0.6,
                     decoration: BoxDecoration(
-                      color: _isLocked ? _lockedColor : _optionColor,
+                      color: _isLocked ? _lockedColor ?? context.colors.locked : _optionColor ?? context.colors.accent2,
                       borderRadius: BorderRadius.circular(_height * 0.2),
                     ),
                     child: FractionallySizedBox(
@@ -123,7 +124,7 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: currentValue
-                                ? _selectColor
+                                ? _selectColor ?? context.colors.container
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(_height * 0.12),
                           ),
@@ -135,8 +136,8 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
                       _title,
                       style: comfortaaBold(_height * 0.7,
                           color: _isLocked
-                              ? Colors.black.withAlpha(100)
-                              : _textColor),
+                              ? context.colors.lockedText
+                              : _textColor ?? context.colors.containerText),
                       maxLines: 1,
                       minFontSize: 9,
                     ),

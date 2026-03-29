@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 
@@ -10,10 +10,10 @@ class Metric extends StatefulWidget {
   final double height;
   final double? margin;
 
-  final Color optionColor;
-  final Color selectColor;
-  final Color textColor;
-  final Color lockedColor;
+  final Color? optionColor;
+  final Color? selectColor;
+  final Color? textColor;
+  final Color? lockedColor;
 
   final String? jsonKey;
 
@@ -23,10 +23,10 @@ class Metric extends StatefulWidget {
     required this.selectOptions,
     required this.height,
     this.margin,
-    this.optionColor = Constants.pastelRed,
-    this.selectColor = Constants.pastelWhite,
-    this.textColor = Constants.pastelBrown,
-    this.lockedColor = Constants.pastelGray,
+    this.optionColor,
+    this.selectColor,
+    this.textColor,
+    this.lockedColor,
     this.jsonKey,
   });
 
@@ -42,10 +42,10 @@ class _MetricState extends State<Metric> with AutomaticKeepAliveClientMixin {
   double get _height => widget.height;
   double get _margin => widget.margin ?? widget.height / 10;
 
-  Color get _optionColor => widget.optionColor;
-  Color get _selectColor => widget.selectColor;
-  Color get _textColor => widget.textColor;
-  Color get _lockedColor => widget.lockedColor;
+  Color? get _optionColor => widget.optionColor;
+  Color? get _selectColor => widget.selectColor;
+  Color? get _textColor => widget.textColor;
+  Color? get _lockedColor => widget.lockedColor;
 
   String? get _jsonKey => widget.jsonKey;
 
@@ -70,7 +70,7 @@ class _MetricState extends State<Metric> with AutomaticKeepAliveClientMixin {
       height: _height,
       padding: EdgeInsets.all(_margin),
       decoration: BoxDecoration(
-          color: Constants.pastelWhite,
+          color: context.colors.container,
           borderRadius: BorderRadius.circular(_margin)),
       child: Column(
         spacing: _margin,
@@ -79,9 +79,9 @@ class _MetricState extends State<Metric> with AutomaticKeepAliveClientMixin {
             flex: 4,
             child: CustomCheckbox(
               title: _checkboxTitle,
-              selectColor: _selectColor,
-              optionColor: _optionColor,
-              textColor: _textColor,
+              selectColor: _selectColor ?? context.colors.container,
+              optionColor: _optionColor ?? context.colors.accent1,
+              textColor: _textColor ?? context.colors.containerText,
               onToggle: (value) {
                 setState(() {
                   _isChecked = value;

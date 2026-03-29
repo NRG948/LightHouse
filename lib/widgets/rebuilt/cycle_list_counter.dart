@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 
 class SelectorItem {
@@ -77,10 +77,10 @@ class _CycleListCounterState extends State<CycleListCounter> {
                         height: _selectorHeight,
                         child: SingleChoiceSelector(
                           initialValue: item.value,
-                          selectColor: Constants.pastelWhite,
-                          optionColor: Constants.pastelYellow,
-                          textColor: Constants.pastelBrown,
-                          lockedColor: Constants.pastelGray,
+                          selectColor: context.colors.container,
+                          optionColor: context.colors.accent2,
+                          textColor: context.colors.containerText,
+                          lockedColor: context.colors.locked,
                           isLocked: _isLocked,
                           choices: _options,
                           spacing: _selectorSpacing,
@@ -98,8 +98,8 @@ class _CycleListCounterState extends State<CycleListCounter> {
                           icon: Icon(
                             Icons.remove_circle_rounded,
                             color: _isLocked
-                                ? Constants.pastelGray
-                                : Constants.pastelRed,
+                                ? context.colors.locked
+                                : context.colors.delete,
                           ),
                           iconSize: _removeIconSize,
                           onPressed: () => _removeSelector(index),
@@ -116,7 +116,7 @@ class _CycleListCounterState extends State<CycleListCounter> {
                 icon: Icon(
                   Icons.add_circle,
                   size: _addIconSize,
-                  color: _isLocked ? Constants.pastelGray : Constants.pastelYellow,
+                  color: _isLocked ? context.colors.locked : context.colors.accent2,
                 ),
                 onPressed: _addSelector,
               ),

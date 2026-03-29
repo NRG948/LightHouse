@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 
 // A custom checkbox widget that supports three states: unable, able, and preferred.
 class NRGThreeStageCheckbox extends StatefulWidget {
@@ -66,7 +67,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
             height: _height,
             width: _width,
             decoration: BoxDecoration(
-                color: Constants.pastelWhite,
+                color: context.colors.container,
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +78,8 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                     Transform.scale(
                       scale: 1.4,
                       child: Icon(
-                        const IconData(0xef45, fontFamily: 'MaterialIcons') // Base icon for the checkbox.
+                        const IconData(0xef45, fontFamily: 'MaterialIcons'), // Base icon for the checkbox.
+                        color: context.colors.containerText,
                       ),
                     ), 
                     ValueListenableBuilder(
@@ -87,7 +89,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                           scale: 0.9,
                           child: Icon(
                             getCheckIcon(), 
-                            color: checkboxNotifier.value == CheckboxStage.preferred ? Colors.red : Colors.black, // Change color based on state.
+                            color: checkboxNotifier.value == CheckboxStage.preferred ? context.colors.accent1 : context.colors.containerText, // Change color based on state.
                           ),
                         );
                       }
@@ -95,7 +97,7 @@ class _NRGThreeStageCheckboxState extends State<NRGThreeStageCheckbox> with Auto
                   ]
                 ),
                 SizedBox(width: 3), 
-                Text(_title, style: comfortaaBold(20, color: Constants.pastelBrown)), // Display the title.
+                Text(_title, style: comfortaaBold(20, color: context.colors.containerText)), // Display the title.
               ],
             )));
   }

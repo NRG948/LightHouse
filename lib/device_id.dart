@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:uuid/uuid.dart';
 
@@ -21,27 +22,29 @@ class _DeviceAuthSetupDialogState extends State<DeviceAuthSetupDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: context.colors.container,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(Constants.borderRadius),
         child: Container(
           width: 350,
           height: 250,
-          decoration: Constants.roundBorder(),
+          decoration: Constants.roundBorder(color: context.colors.container),
           child: Material(
+            color: context.colors.container,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
                   "AUTHORIZE DEVICE",
-                  style: comfortaaBold(25, color: Constants.black),
+                  style: comfortaaBold(25, color: context.colors.containerText),
                 ),
                 Text(
                   "Authorizing to Server:",
-                  style: comfortaaBold(16, color: Constants.black),
+                  style: comfortaaBold(16, color: context.colors.containerText),
                 ),
                 AutoSizeText(
                   "${configData["serverIP"]}",
-                  style: comfortaaBold(16, color: Constants.pastelBlue),
+                  style: comfortaaBold(16, color: context.colors.accent4),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   minFontSize: 14,
@@ -51,19 +54,22 @@ class _DeviceAuthSetupDialogState extends State<DeviceAuthSetupDialog> {
                   height: 50,
                   child: TextField(
                     autocorrect: false,
-                    style: comfortaaBold(18, color: Constants.black),
+                    style: comfortaaBold(18, color: context.colors.text),
                     onChanged: (e) => key = e,
                     decoration: InputDecoration(
-                        fillColor: Constants.pastelRed,
+                        fillColor: context.colors.accent1,
                         filled: true,
-                        label: Text("Enter key")),
+                        label: Text("Enter key",
+                            style:
+                                comfortaaBold(18, color: context.colors.text))),
                   ),
                 ),
                 SizedBox(
                     width: 300,
                     child: AutoSizeText(
                       "Talk to the strat team to get a one-time key to allow your phone to upload to/download from the server.",
-                      style: comfortaaBold(10, color: Colors.black),
+                      style: comfortaaBold(10,
+                          color: context.colors.containerText),
                       textAlign: TextAlign.center,
                       minFontSize: 10,
                     )),
@@ -82,20 +88,21 @@ class _DeviceAuthSetupDialogState extends State<DeviceAuthSetupDialog> {
                       height: 30,
                       width: 300,
                       decoration:
-                          Constants.roundBorder(color: Constants.pastelRed),
+                          Constants.roundBorder(color: context.colors.accent1),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.mail_lock,
-                            color: Constants.pastelWhite,
+                            color: context.colors.container,
                           ),
                           SizedBox(
                             width: 20,
                           ),
                           Text(
                             "Authorize",
-                            style: comfortaaBold(18),
+                            style: comfortaaBold(18,
+                                color: context.colors.container),
                           )
                         ],
                       ),
@@ -135,19 +142,23 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: context.colors.container,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(Constants.borderRadius),
         child: Container(
           width: 350,
           height: 250,
-          decoration: Constants.roundBorder(),
+          decoration: Constants.roundBorder(
+            color: context.colors.container,
+          ),
           child: Material(
+            color: context.colors.container,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "AUTHORIZE DEVICE",
-                  style: comfortaaBold(25, color: Constants.black),
+                  style: comfortaaBold(25, color: context.colors.containerText),
                 ),
                 if (currentStep == Step.retrieveID)
                   Row(
@@ -157,25 +168,29 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                           width: 30,
                           height: 30,
                           child: CircularProgressIndicator.adaptive(
-                            backgroundColor: Constants.pastelWhite,
+                            backgroundColor: context.colors.container,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                Constants.pastelBlue),
+                                context.colors.accent4),
                           )),
                       SizedBox(
                         width: 20,
                       ),
-                      Text("Loading Device ID...")
+                      Text("Loading Device ID...",
+                          style: comfortaaBold(15,
+                              color: context.colors.containerText))
                     ],
                   ),
                 if (currentStep == Step.uploadToServer ||
                     currentStep == Step.showReturnCode)
                   Column(
                     children: [
-                      Text("Device ID:"),
-                      AutoSizeText(
-                        uuid,
-                        textAlign: TextAlign.center,
-                      ),
+                      Text("Device ID:",
+                          style: comfortaaBold(15,
+                              color: context.colors.containerText)),
+                      AutoSizeText(uuid,
+                          textAlign: TextAlign.center,
+                          style: comfortaaBold(15,
+                              color: context.colors.containerText)),
                       SizedBox(
                         height: 10,
                       )
@@ -189,14 +204,16 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                           width: 30,
                           height: 30,
                           child: CircularProgressIndicator.adaptive(
-                            backgroundColor: Constants.pastelWhite,
+                            backgroundColor: context.colors.container,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                Constants.pastelBlue),
+                                context.colors.accent4),
                           )),
                       SizedBox(
                         width: 20,
                       ),
-                      Text("Uploading to server...")
+                      Text("Uploading to server...",
+                          style: comfortaaBold(15,
+                              color: context.colors.containerText))
                     ],
                   ),
                 if (currentStep == Step.showReturnCode)
@@ -209,12 +226,14 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                             width: 300,
                             decoration: Constants.roundBorder(
                                 color: responseCode == 200
-                                    ? Constants.pastelGreen
-                                    : Constants.pastelRed),
+                                    ? context.colors.confirm
+                                    : context.colors.delete),
                             child: AutoSizeText(
                               "Recieved Code $responseCode - ${responseCodes[responseCode]}",
-                              style: comfortaaBold(14,
-                                  color: Constants.pastelWhite),
+                              style: comfortaaBold(
+                                14,
+                                color: context.colors.container,
+                              ),
                               textAlign: TextAlign.center,
                             )),
                       // Occurs if POST statement encounters an error
@@ -222,12 +241,15 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                         Container(
                             width: 300,
                             decoration: Constants.roundBorder(
-                                color: Constants.pastelRed),
+                                color: context.colors.delete),
                             child: AutoSizeText(
                               responseCode,
                               maxLines: 3,
                               textAlign: TextAlign.center,
-                              style: comfortaaBold(14),
+                              style: comfortaaBold(
+                                14,
+                                color: context.colors.container,
+                              ),
                             )),
                       SizedBox(
                         height: 10,
@@ -238,11 +260,11 @@ class _DeviceAuthUploadDialogState extends State<DeviceAuthUploadDialog> {
                           width: 300,
                           height: 50,
                           decoration: Constants.roundBorder(
-                              color: Constants.pastelGray),
+                              color: context.colors.muted),
                           child: Center(
                               child: Text(
                             "OK",
-                            style: comfortaaBold(30),
+                            style: comfortaaBold(30, color: context.colors.container),
                             textAlign: TextAlign.center,
                           )),
                         ),
@@ -453,11 +475,11 @@ class AuthButton extends StatelessWidget {
         width: 30,
         height: 30,
         decoration: background
-            ? Constants.roundBorder(color: Constants.pastelRedSuperDark)
+            ? Constants.roundBorder(color: context.colors.accent1)
             : null,
         child: Icon(
           Icons.lock_open,
-          color: Constants.pastelWhite,
+          color: context.colors.titleText,
         ),
       ),
     );

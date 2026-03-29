@@ -1,6 +1,8 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/themes.dart";
 
 // used by all active widgets to save data short-term, before serialization to json
 class DataEntry {
@@ -14,14 +16,18 @@ void saveJson(BuildContext context) async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: context.colors.container,
           content: Text(
-              "Are you sure you want to save? Please make sure your data is accurate."),
+            "Are you sure you want to save? Please make sure your data is accurate.",
+            style: comfortaaBold(17, color: context.colors.containerText),
+          ),
           actions: [
             TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("No")),
+                child: Text("No",
+                    style: comfortaaBold(15, color: context.colors.accent1))),
             TextButton(
                 onPressed: () async {
                   HapticFeedback.mediumImpact();
@@ -46,7 +52,10 @@ void saveJson(BuildContext context) async {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              content: Text("Successfully saved"),
+                              backgroundColor: context.colors.container,
+                              content: Text("Successfully saved",
+                                  style: comfortaaBold(17,
+                                      color: context.colors.containerText)),
                               actions: [
                                 TextButton(
                                     onPressed: () {
@@ -55,7 +64,9 @@ void saveJson(BuildContext context) async {
                                           "/home-scouter",
                                           (Route<dynamic> route) => false);
                                     },
-                                    child: Text("OK"))
+                                    child: Text("OK",
+                                        style: comfortaaBold(15,
+                                            color: context.colors.accent1)))
                               ],
                             );
                           });
@@ -65,17 +76,23 @@ void saveJson(BuildContext context) async {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            content: Text("MISSING DATA:\n$missingFields"),
+                            backgroundColor: context.colors.container,
+                            content: Text("MISSING DATA:\n$missingFields",
+                                style: comfortaaBold(17,
+                                    color: context.colors.containerText)),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text("OK"))
+                                  child: Text("OK",
+                                      style: comfortaaBold(15,
+                                          color: context.colors.accent1)))
                             ],
                           );
                         });
                   }
                 },
-                child: Text("Yes")),
+                child: Text("Yes",
+                    style: comfortaaBold(15, color: context.colors.accent1))),
           ],
         );
       });
@@ -112,21 +129,25 @@ void showReturnDialog(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
+        backgroundColor: context.colors.container,
         content: Text(
-            "Are you sure you want to return home? \n Non-saved data CANNOT be recovered!"),
+            "Are you sure you want to return home? \n Non-saved data CANNOT be recovered!",
+            style: comfortaaBold(17, color: context.colors.containerText)),
         actions: [
           TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("No")),
+              child: Text("No",
+                  style: comfortaaBold(15, color: context.colors.accent1))),
           TextButton(
             onPressed: () {
               HapticFeedback.mediumImpact();
               Navigator.pushNamedAndRemoveUntil(
                   context, "/home-scouter", (Route<dynamic> route) => false);
             },
-            child: Text("Yes"),
+            child: Text("Yes",
+                style: comfortaaBold(15, color: context.colors.accent1)),
           ),
         ],
       );

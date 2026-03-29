@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/themes.dart';
 
 // Main widget for displaying saved data
 class SavedData extends StatelessWidget {
@@ -29,37 +30,54 @@ class SavedData extends StatelessWidget {
         !ensureSavedDataExists(configData["eventKey"]!)) {
       return Scaffold(
         appBar: AppBar(
+          backgroundColor: context.colors.backgroundPrimary,
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.arrow_back_ios_new)),
+              icon: Icon(Icons.arrow_back_ios_new,
+                  color: context.colors.titleText)),
         ),
-        body: Column(
-          children: [
-            Text("NO DATA",
-                style: comfortaaBold(18, color: Constants.pastelBrown)),
-            Text(configData.toString(),
-                style: comfortaaBold(18, color: Constants.pastelBrown)),
-            TextButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, "/saved_data");
-                },
-                child: Text("Reload Page"))
-          ],
+        body: Container(
+          height: screenHeight,
+          width: screenWidth,
+          decoration: context.backgroundDecoration, // set background image
+          child: Container(
+            margin: EdgeInsets.all(15),
+            padding: EdgeInsets.all(5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(Constants.borderRadius),
+                color: context.colors.container),
+            child: Column(
+              children: [
+                Text("NO DATA",
+                    style:
+                        comfortaaBold(18, color: context.colors.containerText)),
+                Text(configData.toString(),
+                    style:
+                        comfortaaBold(18, color: context.colors.containerText)),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, "/saved_data");
+                    },
+                    child: Text("Reload Page",
+                        style:
+                            comfortaaBold(15, color: context.colors.accent1)))
+              ],
+            ),
+          ),
         ),
       );
     }
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor:
-              themeColorPalettes[configData["theme"] ?? "Dark"]![0],
-          title: const Text(
+          iconTheme: IconThemeData(color: context.colors.titleText),
+          backgroundColor: context.colors.backgroundPrimary,
+          title: Text(
             "Saved Data",
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Constants.pastelWhite),
+                color: context.colors.titleText),
           ),
           centerTitle: true,
           leading: IconButton(
@@ -68,7 +86,7 @@ class SavedData extends StatelessWidget {
               },
               icon: Icon(
                 Icons.home,
-                color: Constants.pastelWhite,
+                color: context.colors.titleText,
               )),
           actions: [
             GestureDetector(
@@ -77,29 +95,48 @@ class SavedData extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
+                        backgroundColor: context.colors.container,
                         content: Text(
-                            "Are you sure you want to delete EVERYTHING for this event?"),
+                          "Are you sure you want to delete EVERYTHING for this event?",
+                          style: comfortaaBold(17,
+                              color: context.colors.containerText),
+                        ),
                         actions: [
                           TextButton(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              child: Text("No")),
+                              child: Text(
+                                "No",
+                                style: comfortaaBold(15,
+                                    color: context.colors.accent1),
+                              )),
                           TextButton(
                               onPressed: () {
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
+                                        backgroundColor:
+                                            context.colors.container,
                                         content: Text(
-                                            "Are you REALLY sure? Your data will be lost forever (a long time)!"),
+                                          "Are you REALLY sure? Your data will be lost forever (a long time)!",
+                                          style: comfortaaBold(17,
+                                              color:
+                                                  context.colors.containerText),
+                                        ),
                                         actions: [
                                           TextButton(
                                               onPressed: () {
                                                 Navigator.pop(context);
                                                 Navigator.pop(context);
                                               },
-                                              child: Text("No")),
+                                              child: Text(
+                                                "No",
+                                                style: comfortaaBold(15,
+                                                    color:
+                                                        context.colors.accent1),
+                                              )),
                                           TextButton(
                                               onPressed: () {
                                                 showDialog(
@@ -107,8 +144,16 @@ class SavedData extends StatelessWidget {
                                                     builder:
                                                         (BuildContext context) {
                                                       return AlertDialog(
+                                                        backgroundColor: context
+                                                            .colors.container,
                                                         content: Text(
-                                                            "THIS IS PERMANENT"),
+                                                          "THIS IS PERMANENT",
+                                                          style: comfortaaBold(
+                                                              17,
+                                                              color: context
+                                                                  .colors
+                                                                  .containerText),
+                                                        ),
                                                         actions: [
                                                           TextButton(
                                                               onPressed: () {
@@ -119,8 +164,14 @@ class SavedData extends StatelessWidget {
                                                                 Navigator.pop(
                                                                     context);
                                                               },
-                                                              child:
-                                                                  Text("No")),
+                                                              child: Text(
+                                                                "No",
+                                                                style: comfortaaBold(
+                                                                    15,
+                                                                    color: context
+                                                                        .colors
+                                                                        .accent1),
+                                                              )),
                                                           TextButton(
                                                               onPressed: () {
                                                                 clearSavedData();
@@ -138,18 +189,33 @@ class SavedData extends StatelessWidget {
                                                                       false,
                                                                 );
                                                               },
-                                                              child:
-                                                                  Text("Yes"))
+                                                              child: Text(
+                                                                "Yes",
+                                                                style: comfortaaBold(
+                                                                    15,
+                                                                    color: context
+                                                                        .colors
+                                                                        .accent1),
+                                                              ))
                                                         ],
                                                       );
                                                     });
                                               },
-                                              child: Text("Yes"))
+                                              child: Text(
+                                                "Yes",
+                                                style: comfortaaBold(15,
+                                                    color:
+                                                        context.colors.accent1),
+                                              ))
                                         ],
                                       );
                                     });
                               },
-                              child: Text("Yes"))
+                              child: Text(
+                                "Yes",
+                                style: comfortaaBold(15,
+                                    color: context.colors.accent1),
+                              ))
                         ],
                       );
                     });
@@ -158,14 +224,14 @@ class SavedData extends StatelessWidget {
                 width: 80,
                 height: 30,
                 decoration: BoxDecoration(
-                    color: Colors.red,
+                    color: context.colors.delete,
                     borderRadius:
                         BorderRadius.circular(Constants.borderRadius)),
                 padding: EdgeInsets.all(2),
                 child: Center(
                     child: Text(
                   "Delete All",
-                  style: comfortaaBold(14, color: Constants.pastelWhite),
+                  style: comfortaaBold(14, color: context.colors.titleText),
                 )),
               ),
             ),
@@ -177,11 +243,7 @@ class SavedData extends StatelessWidget {
         body: Container(
             height: screenHeight,
             width: screenWidth,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ??
-                        "assets/images/background-hires-dark.png"),
-                    fit: BoxFit.cover)), // set background image
+            decoration: context.backgroundDecoration, // set background image
             child: Column(
               children: [
                 EventKeyDropdown(), //dropdown for event selection
@@ -238,21 +300,25 @@ class _EventKeyDropdownState extends State<EventKeyDropdown> {
       width: 400 * SavedData.scaleFactor,
       height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
-          color: Constants.pastelWhite,
+          color: context.colors.container,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
         children: [
           Text(
             "Showing data for event:",
-            style: comfortaaBold(18, color: Colors.black),
+            style: comfortaaBold(18, color: context.colors.containerText),
           ),
           DropdownButton<String>(
               borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
+              dropdownColor: context.colors.container,
+              iconEnabledColor: context.colors.containerText,
               items: getSavedEvents().map((item) {
                 return DropdownMenuItem<String>(
                   value: item,
-                  child: Text(item),
+                  child: Text(item,
+                      style: comfortaaBold(18,
+                          color: context.colors.containerText)),
                 );
               }).toList(),
               onChanged: (eventKey) {
@@ -302,21 +368,25 @@ class _LayoutDropdownState extends State<LayoutDropdown> {
       width: 400 * SavedData.scaleFactor,
       height: 0.12 * SavedData.screenHeight,
       decoration: BoxDecoration(
-          color: Constants.pastelWhite,
+          color: context.colors.container,
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: Column(
         children: [
           Text(
             "Showing layout:",
-            style: comfortaaBold(18, color: Colors.black),
+            style: comfortaaBold(18, color: context.colors.containerText),
           ),
           DropdownButton<String>(
               borderRadius: BorderRadius.circular(Constants.borderRadius),
               value: selectedValue,
+              dropdownColor: context.colors.container,
+              iconEnabledColor: context.colors.containerText,
               items: layouts.map((item) {
                 return DropdownMenuItem<String>(
                   value: item,
-                  child: Text(item),
+                  child: Text(item,
+                      style: comfortaaBold(18,
+                          color: context.colors.containerText)),
                 );
               }).toList(),
               onChanged: (layout) {
@@ -353,14 +423,17 @@ class _SavedFileListState extends State<SavedFileList> {
   @override
   Widget build(BuildContext context) {
     if (SavedData.sharedState.activeLayout == "No Data") {
-      return Text("No layouts", style: comfortaaBold(10));
+      return Text("No layouts",
+          style: comfortaaBold(10, color: context.colors.containerText));
     } // check if there's no layout
 
     List<String> fileListStrings = getFilesInLayout(
         SavedData.sharedState.activeEvent, SavedData.sharedState.activeLayout);
     if (fileListStrings.isEmpty) {
       return Text("No matches for layout ${SavedData.sharedState.activeLayout}",
-          style: comfortaaBold(10)); //display message if no files found
+          style: comfortaaBold(10,
+              color: context
+                  .colors.containerText)); //display message if no files found
     }
     List<SavedFile> savedFiles = fileListStrings.map((file) {
       return SavedFile(
@@ -421,19 +494,19 @@ class _SavedFileState extends State<SavedFile> {
                   AutoSizeText(
                     savedFileJson["teamNumber"].toString(),
                     style: comfortaaBold(40 * SavedData.scaleFactor,
-                        color: Colors.black),
+                        color: context.colors.containerText),
                   ),
                   Column(
                     children: [
                       AutoSizeText(
                         savedFileJson["matchType"],
                         style: comfortaaBold(16 * SavedData.scaleFactor,
-                            color: Colors.black),
+                            color: context.colors.containerText),
                       ),
                       AutoSizeText(
                         savedFileJson["matchNumber"].toString(),
                         style: comfortaaBold(35 * SavedData.scaleFactor,
-                            color: Colors.black),
+                            color: context.colors.containerText),
                       )
                     ],
                   )
@@ -451,13 +524,13 @@ class _SavedFileState extends State<SavedFile> {
                       color: savedFileJson["driverStation"]
                               .toString()
                               .contains("Red")
-                          ? Constants.pastelRed
-                          : Constants.pastelBlue,
+                          ? context.colors.red
+                          : context.colors.blue,
                       child: Center(
                           child: AutoSizeText(
                         savedFileJson["driverStation"],
                         textAlign: TextAlign.center,
-                        style: comfortaaBold(30 * SavedData.scaleFactor),
+                        style: comfortaaBold(30 * SavedData.scaleFactor, color: context.colors.container),
                       )),
                     ),
                     SizedBox(
@@ -467,13 +540,14 @@ class _SavedFileState extends State<SavedFile> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Icon(Icons.data_object,
-                              size: 30 * SavedData.scaleFactor),
+                              size: 30 * SavedData.scaleFactor,
+                              color: context.colors.containerText),
                           SizedBox(
                               width: 70 * SavedData.scaleFactor,
                               child: AutoSizeText(
                                 savedFileJson["layout"],
                                 style: comfortaaBold(25 * SavedData.scaleFactor,
-                                    color: Colors.black),
+                                    color: context.colors.containerText),
                                 maxLines: 1,
                               )),
                         ],
@@ -486,7 +560,9 @@ class _SavedFileState extends State<SavedFile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.schedule, size: 2 * SavedData.scaleFactor),
+                        Icon(Icons.schedule,
+                            size: 2 * SavedData.scaleFactor,
+                            color: context.colors.containerText),
                         SizedBox(
                             width: 185 * SavedData.scaleFactor,
                             child: AutoSizeText(
@@ -494,7 +570,8 @@ class _SavedFileState extends State<SavedFile> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 6,
-                              style: comfortaaBold(18, color: Colors.black),
+                              style: comfortaaBold(18,
+                                  color: context.colors.containerText),
                             ))
                       ],
                     ),
@@ -503,6 +580,7 @@ class _SavedFileState extends State<SavedFile> {
                         Icon(
                           Icons.account_circle,
                           size: 23 * SavedData.scaleFactor,
+                          color: context.colors.containerText,
                         ),
                         SizedBox(
                             width: 185 * SavedData.scaleFactor,
@@ -511,7 +589,8 @@ class _SavedFileState extends State<SavedFile> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 6,
-                              style: comfortaaBold(18, color: Colors.black),
+                              style: comfortaaBold(18,
+                                  color: context.colors.containerText),
                             ))
                       ],
                     )
@@ -536,14 +615,14 @@ class _SavedFileState extends State<SavedFile> {
                   AutoSizeText(
                     savedFileJson["teamNumber"].toString(),
                     style: comfortaaBold(40 * SavedData.scaleFactor,
-                        color: Colors.black),
+                        color: context.colors.containerText),
                   ),
                   SizedBox(
                       width: 200 * SavedData.scaleFactor,
                       child: AutoSizeText(
                         savedFileJson["teamName"].toString(),
                         style: comfortaaBold(20 * SavedData.scaleFactor,
-                            color: Colors.black),
+                            color: context.colors.containerText),
                         maxLines: 2,
                       ))
                 ],
@@ -555,13 +634,15 @@ class _SavedFileState extends State<SavedFile> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(Icons.data_object, size: 30 * SavedData.scaleFactor),
+                  Icon(Icons.data_object,
+                      size: 30 * SavedData.scaleFactor,
+                      color: context.colors.titleText),
                   SizedBox(
                       width: 70 * SavedData.scaleFactor,
                       child: AutoSizeText(
                         savedFileJson["layout"],
                         style: comfortaaBold(25 * SavedData.scaleFactor,
-                            color: Colors.black),
+                            color: context.colors.containerText),
                         maxLines: 1,
                       )),
                 ],
@@ -587,13 +668,14 @@ class _SavedFileState extends State<SavedFile> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Icon(Icons.data_object,
-                              size: 30 * SavedData.scaleFactor),
+                              size: 30 * SavedData.scaleFactor,
+                              color: context.colors.containerText),
                           SizedBox(
                               width: 70 * SavedData.scaleFactor,
                               child: AutoSizeText(
                                 savedFileJson["layout"],
                                 style: comfortaaBold(25 * SavedData.scaleFactor,
-                                    color: Colors.black),
+                                    color: context.colors.containerText),
                                 maxLines: 1,
                               )),
                         ],
@@ -606,7 +688,9 @@ class _SavedFileState extends State<SavedFile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.schedule, size: 2 * SavedData.scaleFactor),
+                        Icon(Icons.schedule,
+                            size: 2 * SavedData.scaleFactor,
+                            color: context.colors.containerText),
                         SizedBox(
                             width: 185 * SavedData.scaleFactor,
                             child: AutoSizeText(
@@ -614,7 +698,8 @@ class _SavedFileState extends State<SavedFile> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 6,
-                              style: comfortaaBold(18, color: Colors.black),
+                              style: comfortaaBold(18,
+                                  color: context.colors.containerText),
                             ))
                       ],
                     ),
@@ -632,7 +717,7 @@ class _SavedFileState extends State<SavedFile> {
         width: 400 * SavedData.scaleFactor,
         height: 200 * SavedData.scaleFactor,
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -659,22 +744,24 @@ class _SavedFileState extends State<SavedFile> {
                             });
                       },
                       icon: Icon(Icons.edit_note,
-                          size: 50 * SavedData.scaleFactor)),
+                          size: 50 * SavedData.scaleFactor,
+                          color: context.colors.containerText)),
                   IconButton(
                       onPressed: () {
                         showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
+                                backgroundColor: context.colors.container,
                                 title: Text(
                                   "Delete Data",
                                   style: comfortaaBold(25,
-                                      color: Constants.pastelBrown),
+                                      color: context.colors.containerText),
                                 ),
                                 content: Text(
                                     "Are you sure you want to delete ${widget.fileName}?",
-                                    style: comfortaaBold(12,
-                                        color: Constants.pastelBrown)),
+                                    style: comfortaaBold(15,
+                                        color: context.colors.containerText)),
                                 actions: [
                                   TextButton(
                                       onPressed: () {
@@ -682,7 +769,7 @@ class _SavedFileState extends State<SavedFile> {
                                       },
                                       child: Text("No",
                                           style: comfortaaBold(18,
-                                              color: Constants.pastelBrown))),
+                                              color: context.colors.accent1))),
                                   TextButton(
                                       onPressed: () {
                                         if (deleteFile(
@@ -701,20 +788,27 @@ class _SavedFileState extends State<SavedFile> {
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
-                                                    content: Text("Error"));
+                                                    backgroundColor: context
+                                                        .colors.container,
+                                                    content: Text("Error",
+                                                        style: comfortaaBold(18,
+                                                            color: context
+                                                                .colors
+                                                                .containerText)));
                                               });
                                         }
                                         //
                                       },
                                       child: Text("Yes",
                                           style: comfortaaBold(18,
-                                              color: Constants.pastelBrown)))
+                                              color: context.colors.accent1)))
                                 ],
                               );
                             });
                       },
-                      icon:
-                          Icon(Icons.delete, size: 50 * SavedData.scaleFactor))
+                      icon: Icon(Icons.delete,
+                          size: 50 * SavedData.scaleFactor,
+                          color: context.colors.containerText))
                 ],
               ),
             ),
@@ -789,7 +883,7 @@ class _DataEditState extends State<DataEdit> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Constants.pastelWhite,
+      backgroundColor: context.colors.container,
       child: Center(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -797,7 +891,7 @@ class _DataEditState extends State<DataEdit> {
               height: 525 * SavedData.scaleFactor,
               width: 350 * SavedData.scaleFactor,
               decoration: BoxDecoration(
-                  color: Constants.pastelWhite,
+                  color: context.colors.container,
                   borderRadius: BorderRadius.circular(Constants.borderRadius)),
               child: SizedBox(
                 width: 300 * SavedData.scaleFactor,
@@ -806,18 +900,23 @@ class _DataEditState extends State<DataEdit> {
                     AutoSizeText(
                       "Edit Data",
                       style: comfortaaBold(30 * SavedData.scaleFactor,
-                          color: Constants.pastelBrown),
+                          color: context.colors.containerText),
                     ),
                     AutoSizeText(
                       statusText,
-                      style: comfortaaBold(15, color: Colors.red),
+                      style: comfortaaBold(15, color: context.colors.delete),
                       maxLines: 1,
                     ),
                     DropdownButton(
                         items: jsonFile.keys.map((file) {
                           return DropdownMenuItem(
-                              value: file, child: Text(file));
+                              value: file,
+                              child: Text(file,
+                                  style: comfortaaBold(15,
+                                      color: context.colors.containerText)));
                         }).toList(),
+                        dropdownColor: context.colors.container,
+                        iconEnabledColor: context.colors.containerText,
                         value: activeKey,
                         onChanged: (value) {
                           setState(() {
@@ -837,6 +936,8 @@ class _DataEditState extends State<DataEdit> {
                         smartQuotesType: SmartQuotesType.disabled,
                         controller: controller,
                         maxLines: 10,
+                        style: comfortaaBold(15,
+                            color: context.colors.containerText),
                       ),
                     ),
                     SizedBox(
@@ -854,7 +955,8 @@ class _DataEditState extends State<DataEdit> {
                               }
                             },
                             child: Text("Save",
-                                style: comfortaaBold(18, color: Colors.black))))
+                                style: comfortaaBold(18,
+                                    color: context.colors.containerText))))
                   ],
                 ),
               )),

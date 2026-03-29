@@ -4,7 +4,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/device_id.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:http/http.dart' as http;
-import 'package:uuid/uuid.dart';
+import 'package:lighthouse/themes.dart';
 
 // Main widget for the Sync page
 class SyncPage extends StatefulWidget {
@@ -28,15 +28,16 @@ class SyncPageState extends State<SyncPage> {
     debugPrint("size scale factor: $sizeScaleFactor");
     return Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Constants.pastelWhite),
-          backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
+          iconTheme: IconThemeData(color: context.colors.titleText),
+          backgroundColor:
+              context.colors.backgroundPrimary,
           actions: [AuthButton()],
-          title: const Text(
+          title: Text(
             "Sync",
             style: TextStyle(
                 fontFamily: "Comfortaa",
                 fontWeight: FontWeight.w900,
-                color: Constants.pastelWhite),
+                color: context.colors.titleText),
           ),
           centerTitle: true,
           leading: IconButton(
@@ -48,16 +49,13 @@ class SyncPageState extends State<SyncPage> {
         body: Container(
           height: screenHeight,
           width: 400 * sizeScaleFactor,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(backgrounds[configData["theme"]] ?? "assets/images/background-hires-dark.png"),
-                  fit: BoxFit.cover)),
+          decoration: context.backgroundDecoration,
           child: Center(
             child: Column(
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: Constants.pastelWhite,
+                      color: context.colors.container,
                       borderRadius:
                           BorderRadius.circular(Constants.borderRadius)),
                 ),
@@ -110,8 +108,9 @@ class _UploadButtonState extends State<UploadButton> {
               width: 350 * scaleFactor,
               height: 100 * scaleFactor,
               decoration: BoxDecoration(
-                color: Constants.darkPurple,
-                image: DecorationImage(image: AssetImage("assets/images/upload_bg.png")),
+                  color: Constants.darkPurple,
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/upload_bg.png")),
                   borderRadius: BorderRadius.circular(Constants.borderRadius)),
               child: Text(
                 "Loading...",
@@ -124,8 +123,9 @@ class _UploadButtonState extends State<UploadButton> {
             height: 100 * scaleFactor,
             decoration: BoxDecoration(
                 color: Constants.darkPurple,
-                image: DecorationImage(image: AssetImage("assets/images/upload_bg.png"),fit: BoxFit.fitWidth),
-              
+                image: DecorationImage(
+                    image: AssetImage("assets/images/upload_bg.png"),
+                    fit: BoxFit.fitWidth),
                 borderRadius: BorderRadius.circular(Constants.borderRadius)),
             child: TextButton(
                 onPressed: () {
@@ -134,12 +134,10 @@ class _UploadButtonState extends State<UploadButton> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Center(
-                        child: Text("UPLOAD", style: comfortaaBold(25))),
+                    Center(child: Text("UPLOAD", style: comfortaaBold(25))),
                     Text(
                         "Upload ${(snapshot.data ?? []).length} items to server",
-                        style: comfortaaBold(18,
-                             bold: false))
+                        style: comfortaaBold(18, bold: false))
                   ],
                 )),
           );
@@ -196,7 +194,8 @@ class _UploadDialogState extends State<UploadDialog> {
                 return AlertDialog(
                   content: Text(
                     "No files to upload",
-                    style: comfortaaBold(18, color: Constants.pastelBrown),
+                    style:
+                        comfortaaBold(18, color: context.colors.containerText),
                   ),
                 );
               });
@@ -206,11 +205,11 @@ class _UploadDialogState extends State<UploadDialog> {
         width: 300 * scaleFactor,
         height: 300 * scaleFactor,
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Text(
           "Loading...",
-          style: comfortaaBold(18, color: Colors.black),
+          style: comfortaaBold(18, color: context.colors.containerText),
         ),
       );
     }
@@ -219,7 +218,7 @@ class _UploadDialogState extends State<UploadDialog> {
         width: 350 * scaleFactor,
         height: 400 * scaleFactor,
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: ListView(
           children: buildUploadedFiles(),
@@ -267,11 +266,12 @@ class _UploadDialogState extends State<UploadDialog> {
         children: [
           Container(
               width: 350 * scaleFactor,
-              color: uploadedFiles[key] == "OK" ? null : Colors.red,
+              color: uploadedFiles[key] == "OK" ? null : context.colors.delete,
               child: AutoSizeText(
-                "${key.split("/").last} uploaded, status ${uploadedFiles[key]}",
-                maxLines: 1,
-              )),
+                  "${key.split("/").last} uploaded, status ${uploadedFiles[key]}",
+                  maxLines: 1,
+                  style:
+                      comfortaaBold(15, color: context.colors.containerText))),
         ],
       );
     }).toList();
@@ -280,11 +280,14 @@ class _UploadDialogState extends State<UploadDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            AutoSizeText("Uploading ${currentFile.split("/").last}"),
+            AutoSizeText("Uploading ${currentFile.split("/").last}",
+                maxLines: 1,
+                style: comfortaaBold(15, color: context.colors.containerText)),
             SizedBox(
               height: 20 * scaleFactor,
               width: 20 * scaleFactor,
-              child: CircularProgressIndicator(color: Colors.black),
+              child: CircularProgressIndicator(
+                  color: context.colors.containerText),
             )
           ],
         ),
@@ -351,7 +354,9 @@ class _DownloadButtonState extends State<DownloadButton> {
       height: 100 * scaleFactor,
       decoration: BoxDecoration(
           color: Constants.darkPurple,
-          image: DecorationImage(image: AssetImage("assets/images/download_bg.png"),fit: BoxFit.fitWidth),
+          image: DecorationImage(
+              image: AssetImage("assets/images/download_bg.png"),
+              fit: BoxFit.fitWidth),
           borderRadius: BorderRadius.circular(Constants.borderRadius)),
       child: TextButton(
         onPressed: () {
@@ -366,8 +371,7 @@ class _DownloadButtonState extends State<DownloadButton> {
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Center(child: Text("DOWNLOAD", style: comfortaaBold(25))),
           Text("Download Items from server",
-              style:
-                  comfortaaBold(18, bold: false))
+              style: comfortaaBold(18, bold: false))
         ]),
       ),
     );
@@ -402,7 +406,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
         width: 350 * scaleFactor,
         height: 500 * scaleFactor,
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           children: showDownloadStatuses(),
@@ -417,14 +421,14 @@ class _DownloadDialogState extends State<DownloadDialog> {
     for (String status in downloadStatuses.keys) {
       statuses.add(Text(
           "Database $status downloaded w/ code ${downloadStatuses[status]}",
-          style: comfortaaBold(10, color: Colors.black)));
+          style: comfortaaBold(10, color: context.colors.containerText)));
     }
     statuses.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Text("Downloading $currentlyDownloading",
-            style: comfortaaBold(10, color: Colors.black)),
-        CircularProgressIndicator(color: Colors.black)
+            style: comfortaaBold(10, color: context.colors.containerText)),
+        CircularProgressIndicator(color: context.colors.containerText)
       ],
     ));
     return statuses;
@@ -473,7 +477,8 @@ class _DownloadDialogState extends State<DownloadDialog> {
 class ServerTestWidget extends StatefulWidget {
   final double width;
   final bool darkMode;
-  const ServerTestWidget({super.key, required this.width, this.darkMode = false});
+  const ServerTestWidget(
+      {super.key, required this.width, this.darkMode = false});
 
   @override
   State<ServerTestWidget> createState() => _ServerTestWidgetState();
@@ -498,7 +503,8 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
       height: 150 * scaleFactor,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.borderRadius),
-          color: widget.darkMode ? Constants.darkPurple : Constants.pastelWhite),
+          color:
+              widget.darkMode ? Constants.darkPurple : context.colors.container),
       child: Column(
         children: [
           SizedBox(
@@ -512,7 +518,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
               children: [
                 Icon(
                   Icons.language,
-                  color: widget.darkMode ? Constants.pastelWhite : Colors.black,
+                  color: widget.darkMode ? Colors.white : context.colors.containerText,
                   size: 25 * scaleFactor,
                 ),
                 SizedBox(
@@ -520,7 +526,10 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                 ),
                 Text(
                   "Server IP",
-                  style: comfortaaBold(18 * scaleFactor, color: widget.darkMode ? Constants.pastelWhite : Colors.black),
+                  style: comfortaaBold(18 * scaleFactor,
+                      color: widget.darkMode
+                          ? Colors.white
+                          : context.colors.containerText),
                 )
               ],
             ),
@@ -544,10 +553,10 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                             borderRadius:
                                 BorderRadius.circular(Constants.borderRadius)),
                         filled: true,
-                        fillColor: Constants.pastelRed,
+                        fillColor: context.colors.accent1,
                         contentPadding: EdgeInsets.only(
                             left: 5 * scaleFactor, right: 5 * scaleFactor)),
-                    style: comfortaaBold(15 * scaleFactor),
+                    style: comfortaaBold(15 * scaleFactor, color: context.colors.text),
                     onChanged: (e) {
                       configData["serverIP"] = e;
                       saveConfig();
@@ -559,7 +568,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                   height: 50 * scaleFactor,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Constants.borderRadius),
-                    color: Constants.pastelRed,
+                    color: context.colors.accent1,
                   ),
                   child: IconButton(
                       onPressed: () {
@@ -569,7 +578,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                       },
                       icon: Icon(
                         Icons.network_ping,
-                        color: Constants.pastelWhite,
+                        color: context.colors.container,
                       )),
                 )
               ],
@@ -588,7 +597,7 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                     decoration: BoxDecoration(
                         borderRadius:
                             BorderRadius.circular(Constants.borderRadius),
-                        color: Constants.pastelGray),
+                        color: context.colors.muted),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -596,13 +605,13 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                             height: 20 * scaleFactor,
                             width: 20 * scaleFactor,
                             child: CircularProgressIndicator.adaptive(
-                              backgroundColor: Constants.pastelWhite,
+                              backgroundColor: context.colors.container,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  Constants.pastelBlue),
+                                  context.colors.accent4),
                             )),
                         Text(
                           "Waiting for response...",
-                          style: comfortaaBold(15 * scaleFactor),
+                          style: comfortaaBold(15 * scaleFactor, color: context.colors.container),
                         )
                       ],
                     ),
@@ -618,20 +627,23 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                           borderRadius:
                               BorderRadius.circular(Constants.borderRadius),
                           color: snapshot.data! == "Code 200 - OK"
-                              ? Constants.pastelGreen
-                              : Constants.pastelRedSuperDark),
+                              ? context.colors.confirm
+                              : context.colors.delete),
                       child: Center(
                           child: AutoSizeText(
                         snapshot.data!,
-                        style: comfortaaBold(18 * scaleFactor),
+                        style: comfortaaBold(18 * scaleFactor, color: context.colors.container),
                         textAlign: TextAlign.center,
                         minFontSize: (12 * scaleFactor).truncate().toDouble(),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       )),
                     ),
-                    if (snapshot.data! == "Code 400 - Bad Request" || snapshot.data! == "Code 403 - Forbidden")
-                    AuthButton(background: true,)
+                    if (snapshot.data! == "Code 400 - Bad Request" ||
+                        snapshot.data! == "Code 403 - Forbidden")
+                      AuthButton(
+                        background: true,
+                      )
                   ],
                 );
               })
@@ -686,15 +698,15 @@ class _StartSyncState extends State<StartSync> {
         width: 350 * scaleFactor,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Constants.borderRadius),
-            color: Constants.pastelWhite),
+            color: context.colors.container),
         child: Center(
           child: Container(
             height: 70 * scaleFactor,
             width: 300 * scaleFactor,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Constants.borderRadius),
-                color: Constants.pastelBlue),
-            child: Text("hi"),
+                color: context.colors.accent4),
+            child: Text("hi", style: comfortaaBold(15, color: context.colors.container)),
           ),
         ));
   }

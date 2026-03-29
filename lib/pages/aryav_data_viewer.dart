@@ -7,6 +7,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/themes.dart";
 import "package:lighthouse/widgets/game_agnostic/default_container.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
 import 'package:just_the_tooltip/just_the_tooltip.dart';
@@ -64,15 +65,15 @@ class _TagViewerState extends State<TagViewer> {
           padding: EdgeInsets.all(_margin),
           child: Text(
             "$matches",
-            style: comfortaaBold(17, color: Constants.pastelBrown),
+            style: comfortaaBold(17, color: context.colors.containerText),
           ),
         ),
-        backgroundColor: Constants.pastelWhite,
+        backgroundColor: context.colors.container,
         triggerMode: TooltipTriggerMode.tap,
         borderRadius: BorderRadius.circular(_margin),
         child: DefaultContainer(
-          color: Constants.pastelRedDark,
-          child: Text("${matches.length} $name", style: comfortaaBold(13)),
+          color: context.colors.accent1,
+          child: Text("${matches.length} $name", style: comfortaaBold(13, color: context.colors.container)),
         ),
       ),
     );
@@ -109,7 +110,7 @@ class _TagViewerState extends State<TagViewer> {
                           child: Icon(
                             Icons.arrow_drop_up_rounded,
                             size: 25,
-                            color: Constants.pastelBrown,
+                            color: context.colors.containerText,
                           ),
                         )
                       : Container(),
@@ -149,7 +150,7 @@ class InfoBox extends StatelessWidget {
               child: Center(
                 child: AutoSizeText(
                   title,
-                  style: comfortaaBold(10, color: Constants.pastelBrown),
+                  style: comfortaaBold(10, color: context.colors.containerText),
                 ),
               ),
             ),
@@ -158,7 +159,7 @@ class InfoBox extends StatelessWidget {
               child: Center(
                 child: AutoSizeText(
                   info,
-                  style: comfortaaBold(30, color: Constants.pastelBrown),
+                  style: comfortaaBold(30, color: context.colors.containerText),
                 ),
               ),
             ),
@@ -167,7 +168,7 @@ class InfoBox extends StatelessWidget {
               child: Center(
                 child: AutoSizeText(
                   subInfo,
-                  style: comfortaaBold(10, color: Constants.pastelBrown),
+                  style: comfortaaBold(10, color: context.colors.containerText),
                 ),
               ),
             ),
@@ -240,12 +241,12 @@ class _AutoPreviewState extends State<AutoPreview> {
                   AutoSizeText(
                     "$scouterName  $match",
                     textAlign: TextAlign.left,
-                    style: comfortaaBold(17, color: Constants.pastelBrown),
+                    style: comfortaaBold(17, color: context.colors.containerText),
                   ),
                   if (attemptedClimb)
                     AutoSizeText(
                       "Climb Attempted: ${climbResult ? "Successful" : "Unsuccessful"}",
-                      style: comfortaaBold(17, color: Constants.pastelBrown),
+                      style: comfortaaBold(17, color: context.colors.containerText),
                     ),
                 ],
               )),
@@ -261,7 +262,7 @@ class _AutoPreviewState extends State<AutoPreview> {
       expandHorizontal: true,
       child: DefaultContainer(
         margin: _margin / 3,
-        color: Constants.pastelRed,
+        color: context.colors.accent1,
         child: SingleChildScrollView(
           child: Column(
             spacing: _margin,
@@ -340,7 +341,7 @@ class _CommentViewerState extends State<CommentViewer> {
   Widget _getCommentBox(Comment comment) {
     return DefaultContainer(
       expandHorizontal: true,
-      color: Constants.pastelWhite,
+      color: context.colors.container,
       margin: _margin,
       child: Column(
         spacing: _margin / 2,
@@ -353,7 +354,7 @@ class _CommentViewerState extends State<CommentViewer> {
               Text(
                 "${comment.author}  ${comment.match}",
                 style: comfortaaBold(17,
-                    color: Constants.pastelBrown,
+                    color: context.colors.containerText,
                     customFontWeight: FontWeight.w900),
                 maxLines: 1,
               ),
@@ -362,7 +363,7 @@ class _CommentViewerState extends State<CommentViewer> {
           ),
           Text(
             comment.body,
-            style: comfortaaBold(14, color: Constants.pastelBrown),
+            style: comfortaaBold(14, color: context.colors.containerText),
           ),
         ],
       ),
@@ -376,7 +377,7 @@ class _CommentViewerState extends State<CommentViewer> {
       expandHorizontal: true,
       child: DefaultContainer(
         margin: _margin / 2,
-        color: Constants.pastelYellow,
+        color: context.colors.accent2,
         child: SingleChildScrollView(
           child: Column(
             spacing: _margin / 2,
@@ -445,14 +446,14 @@ class ClimbInfoBox extends StatelessWidget {
                 AutoSizeText(
                   "Auto Climb",
                   maxLines: 1,
-                  style: comfortaaBold(10, color: Constants.pastelBrown),
+                  style: comfortaaBold(10, color: context.colors.containerText),
                 ),
                 DefaultContainer(
-                  color: Constants.pastelGrayDark,
+                  color: context.colors.muted,
                   child: AutoSizeText(
                     "${data.autoSuccessfulClimbs.toInt()} / ${data.autoClimbs.toInt()}",
                     style: comfortaaBold(18,
-                        color: Constants.pastelWhite,
+                        color: context.colors.container,
                         customFontWeight: FontWeight.w900),
                   ),
                 ),
@@ -467,14 +468,14 @@ class ClimbInfoBox extends StatelessWidget {
                 AutoSizeText(
                   "Endgame Climb",
                   maxLines: 1,
-                  style: comfortaaBold(10, color: Constants.pastelBrown),
+                  style: comfortaaBold(10, color: context.colors.containerText),
                 ),
                 DefaultContainer(
-                  color: Constants.pastelGrayDark,
+                  color: context.colors.muted,
                   child: AutoSizeText(
                     "${data.endgameSucessfulClimbs.toInt()} / ${data.endgameClimbs.toInt()}",
                     style: comfortaaBold(18,
-                        color: Constants.pastelWhite,
+                        color: context.colors.container,
                         customFontWeight: FontWeight.w900),
                   ),
                 ),
@@ -489,7 +490,7 @@ class ClimbInfoBox extends StatelessWidget {
                 AutoSizeText(
                   "Average Time: ${data.timedClimbs == 0 ? "N/A" : (data.totalTime / data.timedClimbs).toStringAsFixed(2)}",
                   maxLines: 1,
-                  style: comfortaaBold(10, color: Constants.pastelBrown),
+                  style: comfortaaBold(10, color: context.colors.containerText),
                 ),
                 Row(
                   spacing: margin / 2,
@@ -497,14 +498,14 @@ class ClimbInfoBox extends StatelessWidget {
                     Expanded(
                       child: DefaultContainer(
                         margin: margin,
-                        color: Constants.pastelGreen,
+                        color: context.colors.accent3,
                         child: AutoSizeText(
                           "${data.level1.toInt()}",
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           style: comfortaaBold(
                             18,
-                            color: Constants.pastelWhite,
+                            color: context.colors.container,
                             customFontWeight: FontWeight.w900,
                           ),
                         ),
@@ -513,14 +514,14 @@ class ClimbInfoBox extends StatelessWidget {
                     Expanded(
                       child: DefaultContainer(
                         margin: margin,
-                        color: Constants.pastelBlue,
+                        color: context.colors.accent4,
                         child: AutoSizeText(
                           "${data.level2.toInt()}",
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           style: comfortaaBold(
                             18,
-                            color: Constants.pastelWhite,
+                            color: context.colors.container,
                             customFontWeight: FontWeight.w900,
                           ),
                         ),
@@ -529,14 +530,14 @@ class ClimbInfoBox extends StatelessWidget {
                     Expanded(
                       child: DefaultContainer(
                         margin: margin,
-                        color: Constants.pastelRed,
+                        color: context.colors.accent1,
                         child: AutoSizeText(
                           "${data.level3.toInt()}",
                           textAlign: TextAlign.center,
                           maxLines: 1,
                           style: comfortaaBold(
                             18,
-                            color: Constants.pastelWhite,
+                            color: context.colors.container,
                             customFontWeight: FontWeight.w900,
                           ),
                         ),
@@ -617,7 +618,7 @@ class _ScoringLocationViewerState extends State<ScoringLocationViewer> {
                 textAlign: TextAlign.center,
                 style: comfortaaBold(
                   17,
-                  color: Constants.pastelBrown,
+                  color: context.colors.containerText,
                 ),
               ),
               Text(
@@ -625,7 +626,7 @@ class _ScoringLocationViewerState extends State<ScoringLocationViewer> {
                 textAlign: TextAlign.center,
                 style: comfortaaBold(
                   17,
-                  color: Constants.pastelBrown,
+                  color: context.colors.containerText,
                 ),
               ),
             ],
@@ -639,7 +640,7 @@ class _ScoringLocationViewerState extends State<ScoringLocationViewer> {
                     RebuiltLocationTracker(
                       viewOnly: true,
                       margin: 0,
-                      mapColor: Constants.pastelGray,
+                      mapColor: context.colors.muted,
                       assignedColors: _accuracyColors.map(
                         (key, value) => MapEntry(
                           key,
@@ -656,7 +657,7 @@ class _ScoringLocationViewerState extends State<ScoringLocationViewer> {
                     RebuiltLocationTracker(
                       viewOnly: true,
                       margin: 0,
-                      mapColor: Constants.pastelGray,
+                      mapColor: context.colors.muted,
                       assignedColors: _frequencyColors.map(
                         (key, value) => MapEntry(
                           key,
@@ -979,13 +980,13 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
             (match) => DefaultContainer(
               margin: _margin,
               color: match.metric == "Great"
-                  ? Constants.pastelGreen
+                  ? context.colors.good
                   : (match.metric == "Decent"
-                      ? Constants.pastelYellow
-                      : Constants.pastelRed),
+                      ? context.colors.neutral
+                      : context.colors.bad),
               child: Text(
                 match.match,
-                style: comfortaaBold(17, color: Constants.pastelBrown),
+                style: comfortaaBold(17, color: context.colors.containerText),
               ),
             ),
           )
@@ -1407,17 +1408,15 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: configData["theme"] != null
-          ? themeColorPalettes[configData["theme"] ?? "Dark"]![0]
-          : Constants.pastelRed,
+      backgroundColor: context.colors.backgroundPrimary,
       appBar: AppBar(
-        backgroundColor: themeColorPalettes[configData["theme"] ?? "Dark"]![0],
-        title: const Text(
+        backgroundColor: context.colors.backgroundPrimary,
+        title: Text(
           "Aryav's Data Viewer",
           style: TextStyle(
               fontFamily: "Comfortaa",
               fontWeight: FontWeight.w900,
-              color: Constants.pastelWhite),
+              color: context.colors.titleText),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -1426,11 +1425,12 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
             },
             icon: Icon(
               Icons.home,
-              color: Constants.pastelWhite,
+              color: context.colors.titleText,
             )),
       ),
       body: Container(
         padding: EdgeInsets.all(_margin),
+        decoration: context.backgroundDecoration,
         child: SingleChildScrollView(
           child: Column(
             spacing: _margin,
@@ -1447,7 +1447,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                         margin: _margin,
                         child: CustomDropdown(
                           options: _teams.map((x) => "$x").toList(),
-                          color: Constants.pastelYellow,
+                          color: context.colors.accent2,
                           onChanged: (value) {
                             _loadData(
                                 _toInt(value) ?? _teams.firstOrNull ?? -1);
@@ -1466,7 +1466,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                             textAlign: TextAlign.left,
                             maxLines: 2,
                             style:
-                                comfortaaBold(17, color: Constants.pastelBrown),
+                                comfortaaBold(17, color: context.colors.containerText),
                           ),
                         ),
                       ),

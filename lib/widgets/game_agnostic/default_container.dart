@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 
 class DefaultContainer extends StatelessWidget {
   final Color? color;
@@ -24,7 +24,7 @@ class DefaultContainer extends StatelessWidget {
       width: expandHorizontal ? double.infinity : null,
       padding: EdgeInsets.all(margin ?? 10),
       decoration: BoxDecoration(
-        color: color ?? Constants.pastelWhite,
+        color: color ?? context.colors.container,
         borderRadius: BorderRadius.circular(margin ?? 10),
       ),
       child: child,

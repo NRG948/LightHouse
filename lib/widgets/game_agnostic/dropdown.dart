@@ -2,16 +2,17 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 
 class CustomDropdown extends StatefulWidget {
   final List<String> options;
   final String? initialValue;
   final String hintText;
 
-  final Color color;
-  final Color hintColor;
-  final Color textColor;
-  final Color lockedColor;
+  final Color? color;
+  final Color? hintColor;
+  final Color? textColor;
+  final Color? lockedColor;
 
   final bool isLocked;
 
@@ -24,10 +25,10 @@ class CustomDropdown extends StatefulWidget {
     required this.options,
     this.initialValue,
     this.hintText = "",
-    this.color = Constants.pastelRed,
-    this.textColor = Constants.pastelBrown,
-    this.lockedColor = Constants.pastelGray,
-    this.hintColor = Constants.pastelRedDark,
+    this.color,
+    this.textColor,
+    this.lockedColor,
+    this.hintColor,
     this.onChanged = _noop,
     this.isLocked = false,
     this.fontSize = 17,
@@ -46,10 +47,10 @@ class _CustomDropdownState extends State<CustomDropdown> {
   List<String> get _options => widget.options;
   String get _hintText => widget.hintText;
   String? get _initialValue => widget.initialValue;
-  Color get _color => widget.color;
-  Color get _hintColor => widget.hintColor;
-  Color get _textColor => widget.textColor;
-  Color get _lockedColor => widget.lockedColor;
+  Color? get _color => widget.color;
+  Color? get _hintColor => widget.hintColor;
+  Color? get _textColor => widget.textColor;
+  Color? get _lockedColor => widget.lockedColor;
   bool get _isLocked => widget.isLocked;
   double get _fontSize => widget.fontSize;
   Function(String? value) get _onChanged => widget.onChanged;
@@ -74,35 +75,35 @@ class _CustomDropdownState extends State<CustomDropdown> {
             width: _width,
             height: _height,
             decoration: BoxDecoration(
-                color: _isLocked ? _lockedColor : _color,
+                color: _isLocked ? _lockedColor ?? context.colors.locked : _color ?? context.colors.accent1,
                 borderRadius: BorderRadius.circular(_height * 0.2)),
             child: Directionality(
               textDirection: TextDirection.ltr,
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
-                  focusColor: _isLocked ? _lockedColor : _color,
-                  dropdownColor: _isLocked ? _lockedColor : _color,
+                  focusColor: _isLocked ? _lockedColor ?? context.colors.text : _color ?? context.colors.accent1,
+                  dropdownColor: _isLocked ? _lockedColor ?? context.colors.text : _color ?? context.colors.accent1,
                   borderRadius: BorderRadius.circular(_height * 0.2),
                   padding: EdgeInsets.only(left: _height * 0.2),
                   icon: Icon(Icons.arrow_drop_down_rounded,
-                      color: Constants.pastelWhite),
+                      color: context.colors.container),
                   iconSize: _height,
                   style: comfortaaBold(_fontSize,
                       color:
-                          _isLocked ? Colors.black.withAlpha(100) : _textColor),
+                          _isLocked ? context.colors.lockedText : _textColor ?? context.colors.text),
                   hint: AutoSizeText(_hintText,
                       style: comfortaaBold(_fontSize,
                           color: _isLocked
-                              ? Colors.black.withAlpha(100)
-                              : _hintColor)),
+                              ? context.colors.locked
+                              : _hintColor ?? context.colors.hintText)),
                   items: _options
                       .map((String value) => DropdownMenuItem<String>(
                             value: value,
                             child: AutoSizeText(value,
                                 style: comfortaaBold(_fontSize,
                                     color: _isLocked
-                                        ? Colors.black.withAlpha(100)
-                                        : _textColor)),
+                                        ? context.colors.locked
+                                        : _textColor ?? context.colors.text)),
                           ))
                       .toList(),
                   onChanged: (String? value) {

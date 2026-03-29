@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/themes.dart';
 
 /// An empty widget.
 class NRGPlaceholder extends StatefulWidget {
@@ -34,9 +35,9 @@ class _NRGPlaceholderState extends State<NRGPlaceholder> {
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: Text("Placeholder $title"));
+        child: Text("Placeholder $title", style: comfortaaBold(17, color: context.colors.containerText),));
   }
 
   @override

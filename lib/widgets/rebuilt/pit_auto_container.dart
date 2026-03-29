@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 
 class PitAutoContainer extends StatefulWidget {
   final double height;
@@ -30,7 +31,8 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
       _selectedOption = _optionCount - 1;
       _children = List.generate(
         _optionCount,
-        (int x) => KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
+        (int x) =>
+            KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
       );
     });
   }
@@ -42,7 +44,8 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
         _selectedOption = _optionCount - 1;
         _children = List.generate(
           _optionCount,
-          (int x) => KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
+          (int x) =>
+              KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
         );
       });
     }
@@ -65,24 +68,33 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
         Container(
           padding: EdgeInsets.fromLTRB(5, 0, 5, 5),
           decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius),
           ),
           child: DropdownButton<int>(
             value: _selectedOption,
+            dropdownColor: context.colors.container,
             isExpanded: true,
             items: [
-              ...List.generate(_optionCount, (i) => DropdownMenuItem(
-                    value: i,
-                    child: Text('${i + 1}'),
-                  )),
-              const DropdownMenuItem(
+              ...List.generate(
+                  _optionCount,
+                  (i) => DropdownMenuItem(
+                        value: i,
+                        child: Text('${i + 1}',
+                            style: comfortaaBold(17,
+                                color: context.colors.containerText)),
+                      )),
+              DropdownMenuItem(
                 value: -1,
-                child: Text('Add'),
+                child: Text('Add',
+                    style:
+                        comfortaaBold(17, color: context.colors.containerText)),
               ),
-              const DropdownMenuItem(
+              DropdownMenuItem(
                 value: -2,
-                child: Text('Remove'),
+                child: Text('Remove',
+                    style:
+                        comfortaaBold(17, color: context.colors.containerText)),
               ),
             ],
             onChanged: (value) {

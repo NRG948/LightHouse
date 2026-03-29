@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 
 class NRGCommentBox extends StatefulWidget {
   final String title;
@@ -60,14 +61,14 @@ class _NRGCommentBoxState extends State<NRGCommentBox>
         width: _width ?? double.infinity,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_margin),
-          color: Constants.pastelWhite,
+          color: context.colors.container,
         ),
         child: Padding(
           padding: EdgeInsets.all(_margin),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(_margin),
-              color: Constants.pastelYellow,
+              color: context.colors.accent2,
             ),
             child: _hasText ? _buildExpanded() : _buildCollapsed(),
           ),
@@ -82,7 +83,7 @@ class _NRGCommentBoxState extends State<NRGCommentBox>
         _title,
         style: comfortaaBold(
           _collapsedTitleFontSize,
-          color: Colors.black,
+          color: context.colors.text,
         ),
       ),
     );
@@ -95,7 +96,7 @@ class _NRGCommentBoxState extends State<NRGCommentBox>
           _title,
           style: comfortaaBold(
             _expandedTitleFontSize,
-            color: Colors.black,
+            color: context.colors.text,
           ),
         ),
         Expanded(
@@ -107,6 +108,7 @@ class _NRGCommentBoxState extends State<NRGCommentBox>
               child: AutoSizeText(
                 _storedText,
                 minFontSize: _minCommentFontSize,
+                style: comfortaaBold(_minCommentFontSize, color: context.colors.text),
               ),
             ),
           ),
@@ -198,7 +200,7 @@ class _CommentBoxDialogState extends State<CommentBoxDialog> {
         height: dialogHeight,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_margin),
-          color: Constants.pastelWhite,
+          color: context.colors.container,
         ),
         child: Column(
           children: [
@@ -206,7 +208,7 @@ class _CommentBoxDialogState extends State<CommentBoxDialog> {
               "COMMENTS",
               style: comfortaaBold(
                 screenSize.width * _dialogTitleFontFactor,
-                color: Colors.black,
+                color: context.colors.containerText,
               ),
             ),
             Padding(
@@ -217,10 +219,11 @@ class _CommentBoxDialogState extends State<CommentBoxDialog> {
                     (screenSize.height * _maxLinesHeightFactor).truncate(),
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  fillColor: Constants.pastelYellow,
+                  fillColor: context.colors.accent2,
                   filled: true,
                   labelStyle: comfortaaBold(
                     screenSize.width * _dialogLabelFontFactor,
+                    color: context.colors.text,
                   ),
                 ),
               ),

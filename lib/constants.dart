@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lighthouse/filemgr.dart';
 
 class Constants {
   // Pastel
@@ -79,15 +78,6 @@ class Constants {
         borderRadius: BorderRadius.circular(Constants.borderRadius),
         color: color);
   }
-
-  static Color primaryColor() {
-    try {
-      return (themeColorPalettes[configData["theme"] ?? "Light"] ??
-          [pastelRed])[0];
-    } catch (_) {
-      return pastelRed;
-    }
-  }
 }
 
 TextStyle comfortaaBold(double fontSize,
@@ -131,26 +121,6 @@ final Map<int, String> responseCodes = {
   403: "Forbidden",
   404: "File Not Found",
   500: "Internal Server Error"
-};
-
-final Map<String, String> backgrounds = {
-  "Light": "assets/images/background-hires.png",
-  "Dark": "assets/images/background-hires-dark.png",
-  "Black": "assets/images/background-hires-black.png",
-  "Pink": "assets/images/background-hires-pink.png",
-  "Blue": "assets/images/background-hires-blue.png",
-  "Tony": "assets/images/background-tony.jpg", 
-  "Aryav": "assets/images/background-aryav.jpg"
-};
-
-final Map<String, List<Color>> themeColorPalettes = {
-  "Light": [Constants.pastelRed, Constants.pastelYellow],
-  "Dark": [Constants.darkModeDarkGray, Constants.darkModeLightGray],
-  "Pink": [Constants.pinkModeDarkPink, Constants.pinkModeLightPink],
-  "Black": [Colors.black, Colors.black],
-  "Blue": [Constants.blueModeDarkBlue, Constants.blueModeLightBlue],
-  "Tony": [Constants.darkModeDarkGray, Constants.darkModeLightGray], 
-  "Aryav": [Constants.pastelRed, Constants.darkModeLightGray]
 };
 
 extension StringExtensions on String {

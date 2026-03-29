@@ -87,7 +87,7 @@ flutter:
   assets:
       - assets/images/amongview_bg.png
       - assets/images/auto_field_map.png
-      - assets/images/Background.png
+      - assets/images/background.png
       - assets/images/background-hires.png
       - assets/images/background-hires-dark.png
       - assets/images/background-hires-pink.png

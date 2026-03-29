@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 
@@ -16,8 +16,8 @@ class LocationTracker extends StatefulWidget {
   final List<Zone> zones;
   final Map<String, Color>? assignedColors;
   final bool viewOnly;
-  final Color mainColor;
-  final Color backgroundColor;
+  final Color? mainColor;
+  final Color? backgroundColor;
   final bool flipField;
 
   final Widget Function(BuildContext context, String? regionId,
@@ -33,8 +33,8 @@ class LocationTracker extends StatefulWidget {
     required this.zones,
     this.assignedColors,
     this.viewOnly = false,
-    this.mainColor = Constants.pastelRed,
-    this.backgroundColor = Constants.pastelWhite,
+    this.mainColor,
+    this.backgroundColor,
     this.flipField = false,
     required this.childBuilder,
   });
@@ -121,7 +121,7 @@ class _LocationTrackerState extends State<LocationTracker>
             width: _width,
             height: _imageHeight + (2 * _margin),
             child: DefaultContainer(
-              color: widget.backgroundColor,
+              color: widget.backgroundColor ?? context.colors.container,
               margin: _margin,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,13 +136,13 @@ class _LocationTrackerState extends State<LocationTracker>
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: widget.mainColor,
+                              color: widget.mainColor ?? context.colors.accent1,
                               borderRadius: BorderRadius.circular(_margin / 2),
                               image: DecorationImage(
                                 image: AssetImage(widget.imageFilePath),
                                 fit: BoxFit.fill,
                                 colorFilter: ColorFilter.mode(
-                                  widget.backgroundColor,
+                                  widget.backgroundColor ?? context.colors.container,
                                   BlendMode.modulate,
                                 ),
                               ),

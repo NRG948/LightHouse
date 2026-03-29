@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/three_stage_checkbox.dart';
 
 // This widget represents a multi three-stage checkbox with a title and a list of JSON keys.
@@ -44,7 +45,7 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
         height: _height,
         width: _width,
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(Constants.borderRadius)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -53,7 +54,7 @@ class _NRGMultiThreeStageCheckboxState extends State<NRGMultiThreeStageCheckbox>
             // Title of the checkbox group.
             Text(
               _title,
-              style: comfortaaBold(18,color: Constants.pastelBrown),
+              style: comfortaaBold(18,color: context.colors.containerText),
               textAlign: TextAlign.center,
             ),
             // Build the three-stage checkboxes.

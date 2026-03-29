@@ -8,7 +8,7 @@ import "package:lighthouse/device_id.dart";
 import "package:lighthouse/filemgr.dart";
 import 'package:http/http.dart' as http;
 import "package:lighthouse/pages/sync.dart";
-import "package:material_symbols_icons/material_symbols_icons.dart";
+import "package:lighthouse/themes.dart";
 
 // a stateful widget that allows users to modify application settings.
 class SettingsPage extends StatefulWidget {
@@ -43,25 +43,8 @@ class _SettingsPageState extends State<SettingsPage> {
           return Placeholder();
       }
     }).toList();
-    // Adds a button to save settings.
-    //settingsList.add(SaveSettingsButton());
-    // Adds a button to reset configuration.
-    settingsList.add(Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Constants.borderRadius),
-          color: Constants.pastelWhite),
-      child: TextButton(
-          onPressed: () {
-            HapticFeedback.mediumImpact();
-            loadConfig(reset: true); //resets setting to default values
-            Navigator.pushReplacementNamed(
-                context, "/settings"); //reloads the setting page
-          },
-          child: Text(
-            "Reset Configuration",
-            style: comfortaaBold(18, color: Colors.black),
-          )),
-    ));
+
+    settingsList.add(ResetConfigurationButton());
   }
 
   @override
@@ -76,15 +59,14 @@ class _SettingsPageState extends State<SettingsPage> {
           resizeToAvoidBottomInset: false,
           // App bar with back navigation and title.
           appBar: AppBar(
-            iconTheme: IconThemeData(color: Constants.pastelWhite),
-            backgroundColor:
-                themeColorPalettes[configData["theme"] ?? "Dark"]![0],
-            title: const Text(
+            iconTheme: IconThemeData(color: context.colors.titleText),
+            backgroundColor: context.colors.backgroundPrimary,
+            title: Text(
               "Settings",
               style: TextStyle(
                   fontFamily: "Comfortaa",
                   fontWeight: FontWeight.w900,
-                  color: Constants.pastelWhite),
+                  color: context.colors.titleText),
             ),
             centerTitle: true,
             actions: [
@@ -96,7 +78,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              content: Text(configData.toString()),
+                              backgroundColor: context.colors.container,
+                              content: Text(
+                                configData.toString(),
+                                style: comfortaaBold(15,
+                                    color: context.colors.containerText),
+                              ),
                             );
                           });
                     },
@@ -118,8 +105,12 @@ class _SettingsPageState extends State<SettingsPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
+                            backgroundColor: context.colors.container,
                             content: Text(
-                                "Successfully saved."), //confirmation message
+                              "Successfully saved.",
+                              style: comfortaaBold(17,
+                                  color: context.colors.containerText),
+                            ), //confirmation message
                             actions: [
                               TextButton(
                                   onPressed: () {
@@ -127,7 +118,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                     Navigator.pushReplacementNamed(context,
                                         "/home-scouter"); //navigates back to home
                                   },
-                                  child: Text("OK"))
+                                  child: Text("OK",
+                                      style: comfortaaBold(15,
+                                          color: context.colors.accent1)))
                             ],
                           );
                         });
@@ -139,11 +132,7 @@ class _SettingsPageState extends State<SettingsPage> {
           body: Container(
             height: screenHeight,
             width: screenWidth,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage(backgrounds[configData["theme"]] ??
-                        "assets/images/background-hires-dark.png"),
-                    fit: BoxFit.cover)), // covers the entire background
+            decoration: context.backgroundDecoration,
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 10.0),
@@ -165,6 +154,32 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
+class ResetConfigurationButton extends StatelessWidget {
+  const ResetConfigurationButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Constants.borderRadius),
+          color: context.colors.container),
+      child: TextButton(
+          onPressed: () {
+            HapticFeedback.mediumImpact();
+            loadConfig(reset: true); //resets setting to default values
+            ThemeController.setTheme(
+                configData["theme"] ?? LightHouseThemes.themes.keys.first);
+            Navigator.pushReplacementNamed(
+                context, "/settings"); //reloads the setting page
+          },
+          child: Text(
+            "Reset Configuration",
+            style: comfortaaBold(18, color: context.colors.containerText),
+          )),
+    );
+  }
+}
+
 class SettingsDropdown extends StatefulWidget {
   final String setting;
   const SettingsDropdown({super.key, required this.setting});
@@ -179,8 +194,13 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
   @override
   void initState() {
     super.initState();
-    selectedValue =
-        configData[widget.setting] ?? settingsDropdownMap[widget.setting]![0];
+    if (settingsDropdownMap[widget.setting]!
+        .contains(configData[widget.setting])) {
+      selectedValue =
+          configData[widget.setting] ?? settingsDropdownMap[widget.setting]![0];
+    } else {
+      selectedValue = settingsDropdownMap[widget.setting]![0];
+    }
   }
 
   @override
@@ -188,35 +208,35 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
     return Container(
       width: 400,
       height: 100,
-      decoration: Constants.roundBorder(),
+      decoration: Constants.roundBorder(color: context.colors.container),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
             width: 150,
             height: 50,
-            decoration: Constants.roundBorder(color: Constants.pastelGray),
+            decoration: Constants.roundBorder(color: context.colors.muted),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   settingsIconMap[widget.setting] ?? Icons.data_object,
-                  color: Constants.pastelWhite,
+                  color: context.colors.container,
                 ),
                 SizedBox(
                   width: 10,
                 ),
                 Text(
                   widget.setting.toSentenceCase,
-                  style: comfortaaBold(18),
+                  style: comfortaaBold(18, color: context.colors.container),
                 )
               ],
             ),
           ),
           Center(
             child: DropdownButton<String>(
-                style: comfortaaBold(18, color: Colors.white),
-                dropdownColor: Constants.pastelWhite,
+                style: comfortaaBold(18, color: context.colors.containerText),
+                dropdownColor: context.colors.container,
                 value: selectedValue,
                 borderRadius: BorderRadius.circular(Constants.borderRadius),
                 items: (settingsDropdownMap[widget.setting] ?? []).map((e) {
@@ -224,7 +244,8 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
                     value: e,
                     child: Text(
                       e,
-                      style: comfortaaBold(18, color: Colors.black),
+                      style: comfortaaBold(18,
+                          color: context.colors.containerText),
                     ),
                   );
                 }).toList(),
@@ -235,6 +256,10 @@ class _SettingsDropdownState extends State<SettingsDropdown> {
                   setState(() {
                     selectedValue = newvalue;
                     configData[widget.setting] = newvalue;
+                    if (widget.setting == "theme") {
+                      ThemeController.setTheme(configData[widget.setting] ??
+                          LightHouseThemes.themes.keys.first);
+                    }
                   });
                 }),
           )
@@ -275,7 +300,7 @@ class _TBACheckboxState extends State<TBACheckbox> {
       child: Container(
         height: 50,
         width: 400,
-        decoration: Constants.roundBorder(),
+        decoration: Constants.roundBorder(color: context.colors.container),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -304,7 +329,7 @@ class _TBACheckboxState extends State<TBACheckbox> {
                 width: 250,
                 child: AutoSizeText(
                   "Download Event Info",
-                  style: comfortaaBold(20, color: Colors.black),
+                  style: comfortaaBold(20, color: context.colors.containerText),
                   maxLines: 2,
                 ))
           ],
@@ -329,6 +354,7 @@ class _SettingsTextBoxState extends State<SettingsTextBox> {
     if (!(configData.containsKey(widget.setting))) {
       configData[widget.setting] = "";
     }
+    configData[widget.setting] = "";
   }
 
   @override
@@ -339,7 +365,7 @@ class _SettingsTextBoxState extends State<SettingsTextBox> {
         padding: const EdgeInsets.only(left: 10.0, right: 10.0),
         //margin: const EdgeInsets.only(left: 10.0, right: 10.0),
         decoration: BoxDecoration(
-            color: Constants.pastelWhite,
+            color: context.colors.container,
             borderRadius: BorderRadius.circular(8)),
         child: Column(
           spacing: 8.0, // Space between child widgets.
@@ -350,10 +376,14 @@ class _SettingsTextBoxState extends State<SettingsTextBox> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(settingsIconMap[widget.setting]),
+                    Icon(
+                      settingsIconMap[widget.setting],
+                      color: context.colors.containerText,
+                    ),
                     SizedBox(width: 5),
                     Text(widget.setting.toSentenceCase,
-                        style: comfortaaBold(20, color: Colors.black)),
+                        style: comfortaaBold(20,
+                            color: context.colors.containerText)),
                   ],
                 )),
             // TextField for modifying the setting value.
@@ -363,9 +393,11 @@ class _SettingsTextBoxState extends State<SettingsTextBox> {
               onChanged: (text) {
                 configData[widget.setting] = text;
               },
+              style: comfortaaBold(20, color: context.colors.containerText),
               decoration: InputDecoration(
                   labelText: "Enter Text",
-                  labelStyle: comfortaaBold(20, color: Colors.black),
+                  labelStyle:
+                      comfortaaBold(20, color: context.colors.containerText),
                   border:
                       OutlineInputBorder()), // Adds a border around the text field.
             )
@@ -406,7 +438,7 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
         width: 400,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Constants.borderRadius),
-            color: Constants.pastelWhite),
+            color: context.colors.container),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -414,6 +446,8 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
                 valueListenable: enabled,
                 builder: (context, isChecked, child) {
                   return Checkbox(
+                      activeColor: context.colors.accent1,
+                      checkColor: context.colors.container,
                       value: isChecked,
                       onChanged: (e) {
                         setState(() {
@@ -428,7 +462,7 @@ class _SettingsCheckboxState extends State<SettingsCheckbox> {
                 width: 200,
                 child: AutoSizeText(
                   widget.setting.toSentenceCase,
-                  style: comfortaaBold(20, color: Colors.black),
+                  style: comfortaaBold(20, color: context.colors.containerText),
                   maxLines: 2,
                 ))
           ],
@@ -452,13 +486,14 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.borderRadius),
-          color: Constants.pastelWhite),
+          color: context.colors.container),
       child: TextButton(
           onPressed: () async {
             HapticFeedback.mediumImpact();
             if (configData["downloadTheBlueAllianceInfo"] == "true") {
               await showTBADownloadDialog(context);
             }
+            await showTBADownloadDialog(context);
             // Ensures widget is still part of the tree before proceeding.
             if (!mounted) {
               return;
@@ -534,15 +569,15 @@ class _TBADownloadDialogState extends State<TBADownloadDialog> {
         height: 600,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Constants.borderRadius),
-            color: Constants.pastelWhite),
+            color: context.colors.container),
         child: Row(
           children: [
             CircularProgressIndicator(
-              color: Colors.black,
+              color: context.colors.containerText,
             ),
             AutoSizeText(
               progressIndicator,
-              style: comfortaaBold(10, color: Colors.black),
+              style: comfortaaBold(10, color: context.colors.containerText),
             ),
           ],
         ),

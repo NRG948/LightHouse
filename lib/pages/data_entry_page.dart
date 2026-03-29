@@ -7,6 +7,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/filemgr.dart';
 import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/themes.dart';
 
 class DataEntryPage extends StatefulWidget {
   const DataEntryPage({super.key, required this.pages, required this.name});
@@ -81,15 +82,14 @@ class DataEntryPageState extends State<DataEntryPage> {
             // Prevents background image from being resized when keyboard opens
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              backgroundColor:
-                  themeColorPalettes[configData["theme"] ?? "Dark"]![0],
+              backgroundColor: context.colors.backgroundPrimary,
               title: FittedBox(
                 child: AutoSizeText(
                   "$_name - ${createNavBar(_pages)[currentPage].label}",
                   style: TextStyle(
                       fontFamily: "Comfortaa",
                       fontWeight: FontWeight.w900,
-                      color: Constants.pastelWhite),
+                      color: context.colors.titleText),
                   minFontSize: 4,
                 ),
               ),
@@ -98,20 +98,26 @@ class DataEntryPageState extends State<DataEntryPage> {
                   onPressed: () {
                     showReturnDialog(context);
                   },
-                  icon: Icon(Icons.home, color: Constants.pastelWhite)),
+                  icon: Icon(Icons.home, color: context.colors.titleText)),
               actions: [
                 if (configData["debugMode"] == "true")
                   IconButton(
-                    icon: Icon(Icons.javascript, color: Constants.pastelWhite),
+                    icon:
+                        Icon(Icons.javascript, color: context.colors.titleText),
                     onPressed: () {
                       showDialog(
                           context: context,
                           builder: (builder) {
                             return Dialog(
+                              backgroundColor: context.colors.container,
                               child: Container(
-                                  padding: EdgeInsets.all(15),
-                                  child:
-                                      Text(jsonEncode(DataEntry.exportData))),
+                                padding: EdgeInsets.all(15),
+                                child: Text(
+                                  jsonEncode(DataEntry.exportData),
+                                  style: comfortaaBold(15,
+                                      color: context.colors.containerText),
+                                ),
+                              ),
                             );
                           });
                     },
@@ -122,7 +128,7 @@ class DataEntryPageState extends State<DataEntryPage> {
                     },
                     icon: Icon(
                       Icons.save,
-                      color: Constants.pastelWhite,
+                      color: context.colors.titleText,
                     ))
               ],
             ),
@@ -130,11 +136,7 @@ class DataEntryPageState extends State<DataEntryPage> {
             body: Container(
               height: screenHeight,
               width: screenWidth,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(backgrounds[configData["theme"]] ??
-                          "assets/images/background-hires-dark.png"),
-                      fit: BoxFit.fill)),
+              decoration: context.backgroundDecoration,
               child: NotificationListener<OverscrollNotification>(
                 onNotification: (notification) {
                   if (notification.metrics.axis == Axis.vertical) {
@@ -151,7 +153,7 @@ class DataEntryPageState extends State<DataEntryPage> {
                 },
                 child: ScrollConfiguration(
                   behavior: ScrollBehavior().copyWith(overscroll: false),
-                child: PageView.builder(
+                  child: PageView.builder(
                     controller: controller,
                     scrollDirection: Axis.horizontal,
                     itemCount: _pages.values.toList().length,
@@ -207,17 +209,16 @@ class DataEntryPageState extends State<DataEntryPage> {
             });
           },
           unselectedIconTheme:
-              IconThemeData(color: Constants.pastelWhite, size: 25),
-          unselectedItemColor: Constants.pastelWhite,
+              IconThemeData(color: context.colors.titleText, size: 25),
+          unselectedItemColor: context.colors.titleText,
           selectedIconTheme:
-              IconThemeData(color: Constants.pastelWhite, size: 35),
-          selectedItemColor: Constants.pastelWhite,
+              IconThemeData(color: context.colors.titleText, size: 35),
+          selectedItemColor: context.colors.titleText,
           currentIndex: currentPage,
           showUnselectedLabels: false,
           showSelectedLabels: false,
           type: BottomNavigationBarType.fixed,
-          backgroundColor:
-              themeColorPalettes[configData["theme"] ?? "Dark"]![1],
+          backgroundColor: context.colors.backgroundSecondary,
           items: createNavBar(pages)),
     );
   }

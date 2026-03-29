@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 
 class MultiChoiceSelector extends StatefulWidget {
@@ -9,10 +10,10 @@ class MultiChoiceSelector extends StatefulWidget {
   final double? margin;
   final String? title;
 
-  final Color optionColor;
-  final Color selectColor;
-  final Color textColor;
-  final Color lockedColor;
+  final Color? optionColor;
+  final Color? selectColor;
+  final Color? textColor;
+  final Color? lockedColor;
 
   final String? jsonKey;
 
@@ -22,10 +23,10 @@ class MultiChoiceSelector extends StatefulWidget {
     required this.height,
     this.title, 
     this.margin,
-    this.optionColor = Constants.pastelRed,
-    this.selectColor = Constants.pastelWhite,
-    this.textColor = Constants.pastelBrown,
-    this.lockedColor = Constants.pastelGray,
+    this.optionColor,
+    this.selectColor,
+    this.textColor,
+    this.lockedColor,
     this.jsonKey,
   });
 
@@ -38,10 +39,10 @@ class _MultiChoiceSelectorState extends State<MultiChoiceSelector> {
   double get _height => widget.height;
   double get _margin => widget.margin ?? widget.height / 10;
 
-  Color get _optionColor => widget.optionColor;
-  Color get _selectColor => widget.selectColor;
-  Color get _textColor => widget.textColor;
-  Color get _lockedColor => widget.lockedColor;
+  Color? get _optionColor => widget.optionColor;
+  Color? get _selectColor => widget.selectColor;
+  Color? get _textColor => widget.textColor;
+  Color? get _lockedColor => widget.lockedColor;
 
   String? get _jsonKey => widget.jsonKey;
 
@@ -59,20 +60,20 @@ class _MultiChoiceSelectorState extends State<MultiChoiceSelector> {
       height: _height,
       padding: EdgeInsets.all(_margin),
       decoration: BoxDecoration(
-          color: Constants.pastelWhite,
+          color: context.colors.container,
           borderRadius: BorderRadius.circular(_margin)),
       child: Column(
         children: [
-          widget.title != null ? Text(widget.title!, style: comfortaaBold(25, color: Constants.black),) : Container(), 
+          widget.title != null ? Text(widget.title!, style: comfortaaBold(25, color: _textColor ?? context.colors.containerText),) : Container(), 
           Expanded(
             flex: 3,
             child: SingleChoiceSelector(
               choices: _selectOptions,
               spacing: _margin,
-              selectColor: _selectColor,
-              optionColor: _optionColor,
-              textColor: _textColor,
-              lockedColor: _lockedColor,
+              selectColor: _selectColor ?? context.colors.container,
+              optionColor: _optionColor ?? context.colors.accent1,
+              textColor: _textColor ?? context.colors.containerText,
+              lockedColor: _lockedColor ?? context.colors.locked,
               isLocked: false,
               retainSelectionOnLock: false,
               onSelect: (choice) {
