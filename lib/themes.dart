@@ -119,6 +119,28 @@ class LightHouseThemes {
       neutral: Color.fromARGB(255, 229, 198, 58),
       bad: Color.fromARGB(255, 207, 39, 76),
     ),
+    "marble": LightHouseColorScheme(
+        container: Color(0xffddd5d0),
+        accent1: Color.fromARGB(255, 173, 157, 154),
+        accent2: Color.fromARGB(255, 152, 152, 138),
+        accent3: Color.fromARGB(255, 129, 143, 127),
+        accent4: Color.fromARGB(255, 131, 152, 151),
+        muted: Color.fromARGB(255, 188, 173, 170),
+        locked: Color(0xffcfc0bd),
+        lockedText: Color.fromARGB(90, 0, 0, 0),
+        delete: Color.fromARGB(255, 168, 120, 111),
+        confirm: Color.fromARGB(255, 139, 165, 106),
+        hintText: Color.fromARGB(90, 0, 0, 0),
+        text: Color.fromARGB(255, 77, 76, 68),
+        red: Color.fromARGB(255, 168, 120, 111),
+        blue: Color.fromARGB(255, 111, 168, 162),
+        titleText: Color.fromARGB(255, 231, 227, 224),
+        backgroundPrimary: Color.fromARGB(255, 173, 157, 154),
+        backgroundSecondary: Color.fromARGB(255, 152, 152, 138),
+        containerText: Color.fromARGB(255, 77, 76, 68),
+        good: Color.fromARGB(255, 139, 165, 106),
+        neutral: Color.fromARGB(255, 177, 165, 108),
+        bad: Color.fromARGB(255, 168, 120, 111))
   };
 }
 

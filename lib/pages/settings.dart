@@ -309,6 +309,8 @@ class _TBACheckboxState extends State<TBACheckbox> {
                 builder: (context, isChecked, child) {
                   return Checkbox(
                       value: isChecked,
+                      activeColor: context.colors.accent1,
+                      checkColor: context.colors.container,
                       onChanged: (e) {
                         setState(() {
                           enabled.value = !enabled.value;
@@ -354,7 +356,6 @@ class _SettingsTextBoxState extends State<SettingsTextBox> {
     if (!(configData.containsKey(widget.setting))) {
       configData[widget.setting] = "";
     }
-    configData[widget.setting] = "";
   }
 
   @override

@@ -158,7 +158,7 @@ class AtlasState extends State<Atlas> {
                 checkboxTitle: "Counter Defense",
                 selectOptions: ["Poor", "Decent", "Great"],
                 height: 80,
-                optionColor: Constants.pastelRed,
+                optionColor: context.colors.accent1,
                 jsonKey: "isCounterDefending",
               ),
             ],

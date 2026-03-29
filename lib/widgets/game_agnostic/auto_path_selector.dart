@@ -159,7 +159,7 @@ class AutoPathSelector extends StatefulWidget {
     this.backgroundColor,
     this.startNodeColor,
     this.allianceZoneNodeColor,
-    this.regionNodeColor ,
+    this.regionNodeColor,
     this.lockedColor,
     this.textColor,
     required this.pit,
@@ -714,18 +714,22 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                               borderRadius:
                                   BorderRadius.circular(_buttonSize / 4)),
                           child: IconButton(
-                              padding: EdgeInsets.all(_buttonSize / 8),
-                              onPressed: () {
-                                setState(() {
-                                  if (_nodeStack.isNotEmpty) {
-                                    undo();
-                                  }
-                                });
-                              },
-                              iconSize: _buttonSize * 0.7,
-                              color: _backgroundColor,
-                              highlightColor: context.colors.delete,
-                              icon: const Icon(Icons.undo_rounded)),
+                            padding: EdgeInsets.all(_buttonSize / 8),
+                            onPressed: () {
+                              setState(() {
+                                if (_nodeStack.isNotEmpty) {
+                                  undo();
+                                }
+                              });
+                            },
+                            iconSize: _buttonSize * 0.7,
+                            color: _backgroundColor,
+                            highlightColor: context.colors.delete,
+                            icon: Icon(
+                              Icons.undo_rounded,
+                              color: context.colors.container,
+                            ),
+                          ),
                         ),
                       ],
                     )
