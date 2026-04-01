@@ -7,6 +7,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/statbotics_api.dart";
 import "package:lighthouse/themes.dart";
 import "package:lighthouse/widgets/game_agnostic/default_container.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
@@ -73,7 +74,8 @@ class _TagViewerState extends State<TagViewer> {
         borderRadius: BorderRadius.circular(_margin),
         child: DefaultContainer(
           color: context.colors.accent1,
-          child: Text("${matches.length} $name", style: comfortaaBold(13, color: context.colors.container)),
+          child: Text("${matches.length} $name",
+              style: comfortaaBold(13, color: context.colors.container)),
         ),
       ),
     );
@@ -124,10 +126,48 @@ class _TagViewerState extends State<TagViewer> {
   }
 }
 
+class MiniInfoBox extends StatelessWidget {
+  final String title;
+  final String info;
+  final double? margin;
+
+  const MiniInfoBox({super.key, required this.title, required this.info, this.margin});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultContainer(
+      margin: margin,
+      child: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Center(
+              child: AutoSizeText(
+                title,
+                style: comfortaaBold(10, color: context.colors.containerText),
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 3,
+            child: Center(
+              child: AutoSizeText(
+                info,
+                style: comfortaaBold(12, color: context.colors.containerText),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class InfoBox extends StatelessWidget {
   final String title;
   final String info;
   final String subInfo;
+  final double? margin;
   final Function(TapUpDetails details)? onTap;
 
   const InfoBox({
@@ -136,6 +176,7 @@ class InfoBox extends StatelessWidget {
     required this.info,
     this.subInfo = "",
     this.onTap,
+    this.margin,
   });
 
   @override
@@ -143,6 +184,7 @@ class InfoBox extends StatelessWidget {
     return GestureDetector(
       onTapUp: onTap,
       child: DefaultContainer(
+        margin: margin,
         child: Column(
           children: [
             Expanded(
@@ -241,12 +283,14 @@ class _AutoPreviewState extends State<AutoPreview> {
                   AutoSizeText(
                     "$scouterName  $match",
                     textAlign: TextAlign.left,
-                    style: comfortaaBold(17, color: context.colors.containerText),
+                    style:
+                        comfortaaBold(17, color: context.colors.containerText),
                   ),
                   if (attemptedClimb)
                     AutoSizeText(
                       "Climb Attempted: ${climbResult ? "Successful" : "Unsuccessful"}",
-                      style: comfortaaBold(17, color: context.colors.containerText),
+                      style: comfortaaBold(17,
+                          color: context.colors.containerText),
                     ),
                 ],
               )),
@@ -803,6 +847,13 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   Map<String, double?> _accuracyMappings = {};
   Map<String, double?> _frequencyMappings = {};
 
+  // APIs
+  double? _opr;
+  double? _totalEpa;
+  double? _autoEpa;
+  double? _teleopEpa;
+  double? _endgameEpa;
+
   int? _toInt(dynamic value) {
     if (value == null) return null;
 
@@ -971,6 +1022,36 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     }
   }
 
+  Future<void> _setOprWithTeamNumber(int teamNumber) async {
+    String content = await loadTBAFile(configData["eventKey"]!, "event_oprs");
+    dynamic matchData;
+
+    try {
+      matchData = Map<String, dynamic>.from(jsonDecode(content));
+
+      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+          matchData != []) {
+        debugPrint(matchData.toString());
+        setState(() {
+          _opr = matchData["oprs"]["frc$teamNumber"];
+        });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> _setEpasWithTeamNumber(int teamNumber) async {
+    Map<String, double> data =
+        await getTeamEPAFromEvent(teamNumber, configData["eventKey"]!);
+    setState(() {
+      _totalEpa = data["total_points"] ?? 0;
+      _autoEpa = data["auto_points"] ?? 0;
+      _teleopEpa = data["teleop_points"] ?? 0;
+      _endgameEpa = data["endgame_points"] ?? 0;
+    });
+  }
+
   Widget _getMatchesWidgetList(List<MetricMatch> matches) {
     return Wrap(
       spacing: _margin,
@@ -1101,6 +1182,13 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     _accuracyMappings = {};
     _frequencyMappings = {};
 
+    // APIs
+    _opr = null;
+    _totalEpa = null;
+    _autoEpa = null;
+    _teleopEpa = null;
+    _endgameEpa = null;
+
     List<String> scoringRegions = [
       "depot_corner",
       "depot_trench",
@@ -1123,6 +1211,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     if (!_teams.contains(team)) return false;
 
     _setTeamNameWithNumber(team);
+    _setOprWithTeamNumber(team);
+    _setEpasWithTeamNumber(team);
 
     for (Map<String, dynamic> entry in _pitData) {
       int? curTeam = _toInt(entry["teamNumber"]);
@@ -1465,8 +1555,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                             _teamName ?? "No team found",
                             textAlign: TextAlign.left,
                             maxLines: 2,
-                            style:
-                                comfortaaBold(17, color: context.colors.containerText),
+                            style: comfortaaBold(17,
+                                color: context.colors.containerText),
                           ),
                         ),
                       ),
@@ -1478,6 +1568,58 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                 tags: _tags,
                 margin: _margin,
                 initialHeight: 90,
+              ),
+              SizedBox(
+                height: 50,
+                child: Row(
+                  spacing: _margin,
+                  children: [
+                    Expanded(
+                      child: MiniInfoBox(
+                        title: "OPR",
+                        info: _opr?.toStringAsFixed(2) ?? "...",
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: DefaultContainer(
+                        margin: _margin,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: MiniInfoBox(
+                                margin: 0,
+                                title: "EPA",
+                                info: _totalEpa?.toStringAsFixed(2) ?? "...",
+                              ),
+                            ),
+                            Expanded(
+                              child: MiniInfoBox(
+                                margin: 0,
+                                title: "Auto",
+                                info: _autoEpa?.toStringAsFixed(2) ?? "...",
+                              ),
+                            ),
+                            Expanded(
+                              child: MiniInfoBox(
+                                margin: 0,
+                                title: "Teleop",
+                                info: _teleopEpa?.toStringAsFixed(2) ?? "...",
+                              ),
+                            ),
+                            Expanded(
+                              child: MiniInfoBox(
+                                margin: 0,
+                                title: "Endgame",
+                                info: _endgameEpa?.toStringAsFixed(2) ?? "...",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 100,
