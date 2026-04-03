@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/themes.dart';
 
 class PitAutoContainer extends StatefulWidget {
   final double height;
-  final String jsonKey;
+  final List<String> jsonKeys;
   final Widget Function(int index) childBuilder;
 
   const PitAutoContainer({
     super.key,
     required this.height,
-    required this.jsonKey,
+    required this.jsonKeys,
     required this.childBuilder,
   });
 
@@ -47,6 +48,9 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
           (int x) =>
               KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
         );
+        for (String jsonKey in widget.jsonKeys) {
+          DataEntry.exportData.remove("$jsonKey${_optionCount + 1}");
+        }
       });
     }
   }
@@ -92,7 +96,7 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
               ),
               DropdownMenuItem(
                 value: -2,
-                child: Text('Remove',
+                child: Text('Remove Last',
                     style:
                         comfortaaBold(17, color: context.colors.containerText)),
               ),

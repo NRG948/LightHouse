@@ -157,7 +157,7 @@ class PitScoutState extends State<PitScout> {
             child: Column(spacing: 15, children: [
               PitAutoContainer(
                 height: 50,
-                jsonKey: "autoPath",
+                jsonKeys: ["autoPath", "autoFuelScored", "autoCrossedMidline"],
                 childBuilder: (index) => Column(
                   spacing: 10,
                   children: [
