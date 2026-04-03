@@ -43,7 +43,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       debug: debug,
       margin: margin,
       zones: getZones(),
-      showClimbOptions: true,
+      showDetails: true,
       pit: pit,
       jsonKey: jsonKey ?? "autoPath",
       flipField: flipField,

@@ -126,18 +126,39 @@ class AutoPathSelector extends StatefulWidget {
   final bool canStartInZone;
   final bool flipField;
 
-  /// whether to show "climb successful" option
+  /// If the widget is used in pit scouting.
+  /// 
+  /// If ```true```, labels will be changed to present tense instead of past tense.
+  /// Climb levels or climb success will not be shown even if [showDetails] is ```true```.
   final bool pit;
-  final bool showClimbOptions;
+
+  /// If auto details should be shown.
+  /// 
+  /// If ```true```, options will be given about whether preload is scored,
+  /// whether climb was attempted, and the climb result.
+  final bool showDetails;
+
+  /// The list of possible climb results in auto.
+  /// 
+  /// The options will be displayed in a dropdown that is unlocked when "Attempted Climb" is selected.
+  /// If ```null```, the dropdown will be replaced by a checkbox labeled "Climb Successful".
   final List<String>? climbLevels;
 
+  /// Whether the widget is shown for viewing.
+  /// 
+  /// If ```true```, the widget will not be interactive and the undo button and any details will be hidden.
   final bool viewOnly;
 
+  /// The scaling factor of the field map.
   final double imageScalingFactor;
 
   /// The output of [converter] when the pixel offsets of the nodes are passed in is saved to [DataEntry].
   final Offset Function(Offset position, {bool inverse})? converter;
 
+  /// The initial path displayed.
+  /// 
+  /// This is often used in tandum with [viewOnly].
+  /// It is a list of [String] and [List\<num\>] representing region IDs and coordinates respectively. 
   final List<dynamic>? initialPath;
 
   const AutoPathSelector({
@@ -152,7 +173,7 @@ class AutoPathSelector extends StatefulWidget {
     this.debug = false,
     this.canStartInZone = false,
     this.maximumGroupSize = 4,
-    this.showClimbOptions = false,
+    this.showDetails = false,
     this.flipField = false,
     this.climbLevels,
     this.mainColor,
@@ -256,7 +277,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   bool get _debug => widget.debug;
   bool get _canStartInZone => widget.canStartInZone;
-  bool get _showClimbOptions => widget.showClimbOptions;
+  bool get _showDetails => widget.showDetails;
   bool get _pit => widget.pit;
   List<String>? get _climbLevels => widget.climbLevels;
   bool _attemptedClimb = false;
@@ -552,8 +573,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     return regions;
   }
 
-  Widget _getClimbOptions() {
-    if (!_showClimbOptions) {
+  Widget _getAutoDetails() {
+    if (!_showDetails) {
       return Container();
     }
 
@@ -596,7 +617,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
             optionColor: _mainColor,
             lockedColor: _lockedColor,
             textColor: _textColor,
-            title: _pit ? "Shoots Preload" : "Shot Preload",
+            title: _pit ? "Scores Preload" : "Scored Preload",
             onToggle: (value) {
               setState(() {
                 _shotPreload = value;
@@ -705,7 +726,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                       mainAxisAlignment: MainAxisAlignment.end,
                       spacing: _margin,
                       children: [
-                        _getClimbOptions(),
+                        _getAutoDetails(),
                         Container(
                           width: _buttonSize,
                           height: _buttonSize,
