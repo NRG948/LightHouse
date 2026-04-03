@@ -127,25 +127,25 @@ class AutoPathSelector extends StatefulWidget {
   final bool flipField;
 
   /// If the widget is used in pit scouting.
-  /// 
+  ///
   /// If ```true```, labels will be changed to present tense instead of past tense.
   /// Climb levels or climb success will not be shown even if [showDetails] is ```true```.
   final bool pit;
 
   /// If auto details should be shown.
-  /// 
+  ///
   /// If ```true```, options will be given about whether preload is scored,
   /// whether climb was attempted, and the climb result.
   final bool showDetails;
 
   /// The list of possible climb results in auto.
-  /// 
+  ///
   /// The options will be displayed in a dropdown that is unlocked when "Attempted Climb" is selected.
   /// If ```null```, the dropdown will be replaced by a checkbox labeled "Climb Successful".
   final List<String>? climbLevels;
 
   /// Whether the widget is shown for viewing.
-  /// 
+  ///
   /// If ```true```, the widget will not be interactive and the undo button and any details will be hidden.
   final bool viewOnly;
 
@@ -156,9 +156,9 @@ class AutoPathSelector extends StatefulWidget {
   final Offset Function(Offset position, {bool inverse})? converter;
 
   /// The initial path displayed.
-  /// 
+  ///
   /// This is often used in tandum with [viewOnly].
-  /// It is a list of [String] and [List\<num\>] representing region IDs and coordinates respectively. 
+  /// It is a list of [String] and [List\<num\>] representing region IDs and coordinates respectively.
   final List<dynamic>? initialPath;
 
   const AutoPathSelector({
@@ -297,24 +297,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        if (_initialPath != null) {
-          for (dynamic node in _initialPath!) {
-            switch (node) {
-              case [num x, num y]:
-                Offset pixelPosition = Offset(x.toDouble(), y.toDouble());
-                addNodeFromMap((_converter == null
-                        ? pixelPosition
-                        : _converter!(pixelPosition, inverse: true)) *
-                    _scaleFactor);
-
-              case String region:
-                addNodeFromRegion(region);
-
-              default:
-                break;
-            }
-          }
-        }
+        _resetToInitialPath();
       });
     });
   }
@@ -323,6 +306,31 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   void setState(VoidCallback fn) {
     super.setState(fn);
     _serializeData();
+  }
+
+  void _resetToInitialPath() {
+    while (_nodeStack.isNotEmpty) {
+      _nodeStack.removeLast();
+      _history.removeLast();
+    }
+    if (_initialPath != null) {
+      for (dynamic node in _initialPath!) {
+        switch (node) {
+          case [num x, num y]:
+            Offset pixelPosition = Offset(x.toDouble(), y.toDouble());
+            addNodeFromMap((_converter == null
+                    ? pixelPosition
+                    : _converter!(pixelPosition, inverse: true)) *
+                _scaleFactor);
+
+          case String region:
+            addNodeFromRegion(region);
+
+          default:
+            break;
+        }
+      }
+    }
   }
 
   void _serializeData() {
@@ -519,8 +527,6 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         nodeIndice: _nodeStack.length - 1,
         coordinates: Offset
             .zero)); // Very hacky, I know, but it literally does not matter
-
-    setState(() {});
     return newNode;
   }
 
@@ -537,8 +543,6 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         actionType: UserActionType.place,
         nodeIndice: _nodeStack.length - 1,
         coordinates: Offset.zero)); // Refer to the comment about hackiness
-
-    setState(() {});
     return newNode;
   }
 
@@ -664,6 +668,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     return LayoutBuilder(
       builder: (context, constraints) {
         _width = constraints.maxWidth;
+        if (_viewOnly) _resetToInitialPath();
         setPositionsForGroupedNodes();
 
         return IgnorePointer(
