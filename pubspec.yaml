@@ -47,6 +47,7 @@ dependencies:
   qr_flutter: ^4.1.0
   image_size_getter: ^2.3.0
   just_the_tooltip: ^0.0.12
+  animated_text_kit: ^4.2.2
 
 
 

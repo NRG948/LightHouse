@@ -131,7 +131,8 @@ class MiniInfoBox extends StatelessWidget {
   final String info;
   final double? margin;
 
-  const MiniInfoBox({super.key, required this.title, required this.info, this.margin});
+  const MiniInfoBox(
+      {super.key, required this.title, required this.info, this.margin});
 
   @override
   Widget build(BuildContext context) {
@@ -221,21 +222,34 @@ class InfoBox extends StatelessWidget {
   }
 }
 
+class Auto {
+  String scouterName;
+  double rating;
+  String match;
+  bool attemptedClimb;
+  bool climbSuccessful;
+  List<dynamic> path; // either String or List<num> of length 2.
+  bool crossCenter;
+  bool scorePreload;
+  int amountScored;
+  bool pit;
+
+  Auto({
+    required this.scouterName,
+    required this.rating,
+    required this.match,
+    required this.attemptedClimb,
+    required this.climbSuccessful,
+    required this.path,
+    required this.crossCenter,
+    required this.scorePreload,
+    required this.amountScored,
+    required this.pit,
+  });
+}
+
 class AutoPreview extends StatefulWidget {
-  /// Auto information.
-  ///
-  /// Formatted as an array containing maps:
-  /// ```dart
-  /// {
-  ///   "scouterName": String,
-  ///   "rating": float,
-  ///   "match": String,
-  ///   "attemptedClimb": bool,
-  ///   "climbSuccessful": bool,
-  ///   "path": List<String>,
-  /// }
-  /// ```
-  final List<Map<String, dynamic>> autoData;
+  final List<Auto> autoData;
   final double margin;
 
   const AutoPreview({
@@ -249,16 +263,10 @@ class AutoPreview extends StatefulWidget {
 }
 
 class _AutoPreviewState extends State<AutoPreview> {
-  List<Map<String, dynamic>> get _autoData => widget.autoData;
+  List<Auto> get _autoData => widget.autoData;
   double get _margin => widget.margin;
 
-  Widget _getAutoPreview(Map<String, dynamic> auto) {
-    String scouterName = auto["scouterName"] ?? "Unknown";
-    double rating = auto["rating"] ?? 0;
-    String match = auto["match"] ?? "";
-    bool attemptedClimb = auto["attemptedClimb"] ?? false;
-    bool climbResult = auto["climbSuccessful"] ?? false;
-
+  Widget _getAutoPreview(Auto auto) {
     return DefaultContainer(
       margin: _margin / 3,
       child: Row(
@@ -269,7 +277,7 @@ class _AutoPreviewState extends State<AutoPreview> {
             child: RebuiltAutoPathSelector(
               margin: 0,
               viewOnly: true,
-              initialPath: auto["path"],
+              initialPath: auto.path,
             ),
           ),
           Expanded(
@@ -279,16 +287,37 @@ class _AutoPreviewState extends State<AutoPreview> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  StarDisplay(starRating: rating),
+                  if (!auto.pit) StarDisplay(starRating: auto.rating),
                   AutoSizeText(
-                    "$scouterName  $match",
+                    "${auto.scouterName} ${auto.match}",
                     textAlign: TextAlign.left,
                     style:
                         comfortaaBold(17, color: context.colors.containerText),
                   ),
-                  if (attemptedClimb)
+                  if (auto.crossCenter)
                     AutoSizeText(
-                      "Climb Attempted: ${climbResult ? "Successful" : "Unsuccessful"}",
+                      "Cross Center",
+                      textAlign: TextAlign.left,
+                      style: comfortaaBold(17,
+                          color: context.colors.containerText),
+                    ),
+                  if (auto.scorePreload)
+                    AutoSizeText(
+                      "Scores Preload",
+                      textAlign: TextAlign.left,
+                      style: comfortaaBold(17,
+                          color: context.colors.containerText),
+                    ),
+                  if (auto.pit)
+                    AutoSizeText(
+                      "Fuel Scored: ${auto.amountScored}",
+                      textAlign: TextAlign.left,
+                      style: comfortaaBold(17,
+                          color: context.colors.containerText),
+                    ),
+                  if (auto.attemptedClimb)
+                    AutoSizeText(
+                      "Climb Attempted${auto.pit ? "" : ": ${auto.climbSuccessful ? "Successful" : "Unsuccessful"}"}",
                       style: comfortaaBold(17,
                           color: context.colors.containerText),
                     ),
@@ -355,12 +384,14 @@ class Comment {
   final String author;
   final String body;
   final String match;
+  final bool pit;
 
   const Comment({
     required this.rating,
     required this.author,
     required this.body,
     required this.match,
+    required this.pit,
   });
 }
 
@@ -402,7 +433,7 @@ class _CommentViewerState extends State<CommentViewer> {
                     customFontWeight: FontWeight.w900),
                 maxLines: 1,
               ),
-              StarDisplay(starRating: comment.rating),
+              if (!comment.pit) StarDisplay(starRating: comment.rating),
             ],
           ),
           Text(
@@ -837,7 +868,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   List<MetricMatch> _stealingMatches = [];
 
   // Autos
-  List<Map<String, dynamic>> _autos = [];
+  List<Auto> _autos = [];
 
   // Endgame
   List<Climb> _climbs = [];
@@ -904,6 +935,23 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     if (result.toLowerCase() == "null") return "";
 
     return result;
+  }
+
+  bool? _toBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      switch (value) {
+        case "true":
+          return true;
+        case "false":
+          return false;
+        default:
+          double? possibleDouble = double.tryParse(value);
+          return possibleDouble == null ? null : possibleDouble != 0;
+      }
+    }
+    return null;
   }
 
   bool _isEmpty(dynamic value) {
@@ -1029,7 +1077,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     try {
       matchData = Map<String, dynamic>.from(jsonDecode(content));
 
-      if (configData["downloadTheBlueAllianceInfo"] == "true" &&
+      if ((_toBool(configData["downloadTheBlueAllianceInfo"]) ?? false) &&
           matchData != []) {
         debugPrint(matchData.toString());
         setState(() {
@@ -1104,8 +1152,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   }
 
   bool _loadData(int team) {
-    _atlasData = _getDataAsMapFromDatabase("Atlas");
-    _pitData = _getDataAsMapFromDatabase("Pit");
+    _atlasData = _getDataAsMapFromSavedMatches("Atlas");
+    _pitData = _getDataAsMapFromSavedMatches("Pit");
     _teams = _getTeamsInDatabase();
 
     _matches = 0;
@@ -1205,8 +1253,6 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
       for (var e in scoringRegions) e: []
     };
     Map<String, int> frequencyPerRegion = {for (var e in scoringRegions) e: 0};
-    _accuracyMappings = {};
-    _frequencyMappings = {};
 
     if (!_teams.contains(team)) return false;
 
@@ -1219,6 +1265,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
       if (curTeam == null) continue;
 
       if (team == curTeam) {
+        // Misc Pit Data
         _capacity = _toInt(entry["fuelCapacity"]) ?? -1;
         _shooterType = _toString(entry["shooterType"]);
         _accessType =
@@ -1228,23 +1275,40 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         _drivetrain = _toString(entry["drivetrain"]);
         _weight = _toDouble(entry["weight"]) ?? 0;
 
+        // Pit Autos
         int i = 1;
         while (true) {
           if (!_isEmpty(entry["autoPath$i"]) &&
               entry["autoPath$i"] is Map<String, dynamic> &&
               !_isEmpty(entry["autoPath$i"]!["path"])) {
-            _autos.add({
-              "scouterName": "",
-              "rating": _toDouble(entry["dataQuality"]) ?? 0,
-              "match": "Pit",
-              "attemptedClimb": entry["autoPath$i"]!["attemptedClimb"],
-              "climbSuccessful": false,
-              "path": _toList(entry["autoPath$i"]!["path"]),
-            });
+            _autos.add(Auto(
+                scouterName: "",
+                rating: 0,
+                match: "Pit",
+                attemptedClimb:
+                    _toBool(entry["autoPath$i"]!["attemptedClimb"]) ?? false,
+                climbSuccessful: false,
+                path: _toList(entry["autoPath$i"]!["path"]) ?? [],
+                crossCenter: _toBool(entry["autoCrossedMidline$i"]) ?? false,
+                scorePreload:
+                    _toBool(entry["autoPath$i"]!["shotPreload"]) ?? false,
+                amountScored: _toInt(entry["autoFuelScored$i"]) ?? 0,
+                pit: true));
             i++;
           } else {
             break;
           }
+        }
+
+        // Pit Comments
+        if (!_isEmpty(entry["comments"])) {
+          _comments.add(Comment(
+            author: _toString(entry["scouterName"]),
+            rating: 0,
+            body: _toString(entry["comments"]),
+            match: "Pit",
+            pit: true,
+          ));
         }
       }
     }
@@ -1277,20 +1341,26 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
             rating: _toDouble(entry["dataQuality"]) ?? 0,
             body: _toString(entry["comments"]),
             match: shortenedMatch,
+            pit: false,
           ));
         }
 
         // Auto
         if (!_isEmpty(entry["autoPath"]) &&
             entry["autoPath"] is Map<String, dynamic>) {
-          _autos.add({
-            "scouterName": _toString(entry["scouterName"]),
-            "rating": _toDouble(entry["dataQuality"]) ?? 0,
-            "match": shortenedMatch,
-            "attemptedClimb": entry["autoPath"]!["attemptedClimb"],
-            "climbSuccessful": entry["autoPath"]!["climbSuccessful"],
-            "path": _toList(entry["autoPath"]!["path"]),
-          });
+          _autos.add(Auto(
+              scouterName: _toString(entry["scouterName"]),
+              rating: _toDouble(entry["dataQuality"]) ?? 0,
+              match: shortenedMatch,
+              attemptedClimb:
+                  _toBool(entry["autoPath"]!["attemptedClimb"]) ?? false,
+              climbSuccessful:
+                  _toBool(entry["autoPath"]!["climbSuccessful"]) ?? false,
+              path: _toList(entry["autoPath"]!["path"]) ?? [],
+              crossCenter: _toBool(entry["autoCrossedMidline"]) ?? false,
+              scorePreload: _toBool(entry["autoPath"]!["shotPreload"]) ?? false,
+              amountScored: 0,
+              pit: false));
 
           if (entry["autoPath"]!["attemptedClimb"] == true) {
             _climbs.add(Climb(
@@ -1403,7 +1473,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     }
 
     // Autos and Comments
-    _autos.sort((a, b) => _compareMatches(b["match"] ?? "", a["match"] ?? ""));
+    _autos.sort((a, b) => _compareMatches(b.match, a.match));
     _comments.sort((a, b) => _compareMatches(b.match, a.match));
 
     // TODO: Holy copy paste code. I will make this better when I have time.

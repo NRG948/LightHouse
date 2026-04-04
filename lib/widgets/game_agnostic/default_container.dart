@@ -3,6 +3,8 @@ import 'package:lighthouse/themes.dart';
 
 class DefaultContainer extends StatelessWidget {
   final Color? color;
+  final Color? borderColor;
+  final double borderWidth;
   final double? margin;
   final Widget? child;
   final bool expandHorizontal;
@@ -13,6 +15,8 @@ class DefaultContainer extends StatelessWidget {
     this.color,
     this.margin,
     this.child,
+    this.borderColor,
+    this.borderWidth = 0,
     this.expandHorizontal = false,
     this.expandVertical = false,
   });
@@ -26,6 +30,7 @@ class DefaultContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: color ?? context.colors.container,
         borderRadius: BorderRadius.circular(margin ?? 10),
+        border: borderColor == null ? null : Border.all(width: borderWidth, color: borderColor!)
       ),
       child: child,
     );

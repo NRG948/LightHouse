@@ -9,6 +9,7 @@ import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 import 'package:lighthouse/widgets/game_agnostic/match_info.dart';
+import 'package:lighthouse/widgets/game_agnostic/match_prediction.dart';
 import 'package:lighthouse/widgets/game_agnostic/rating.dart';
 import 'package:lighthouse/widgets/game_agnostic/textbox.dart';
 import 'package:lighthouse/widgets/rebuilt/metric.dart';
@@ -70,7 +71,11 @@ class AtlasState extends State<Atlas> {
                         this.driverStation = driverStation;
                       });
                     },
-                  )
+                  ),
+                  MatchPrediction(
+                    margin: margin,
+                    jsonKey: "matchPrediction",
+                  ),
                 ],
               ))),
       "Auto": DataEntrySubPage(

@@ -98,9 +98,9 @@ class LightHouseThemes {
     ),
     "abyssal": LightHouseColorScheme(
       container: Color(0xff2D2C2C),
-      accent1: Color(0xff5DDBA6),
-      accent2: Color.fromARGB(255, 72, 179, 152),
-      accent3: Color.fromARGB(255, 89, 181, 190),
+      accent1: Color.fromARGB(255, 89, 181, 190),
+      accent2: Color(0xff5DDBA6),
+      accent3: Color.fromARGB(255, 72, 179, 152),
       accent4: Color.fromARGB(255, 66, 131, 177),
       muted: Color.fromARGB(255, 123, 150, 139),
       locked: Color.fromARGB(255, 83, 95, 90),

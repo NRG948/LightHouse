@@ -64,8 +64,8 @@ class Constants {
   /// auto and the start of teleop. Thus, this is simply for
   /// adding a bit of delay before the next section. :)
   static final double startDelay = 3;
-  
-  static const String versionName = "Week 3 V3+";
+
+  static const String versionName = "DCMP V1";
   // Should this key be exposed to the internet? no
   // do i care? also no
   static const String tbaAPIKey =
@@ -141,4 +141,9 @@ String trunc(String string, int length) {
 
 extension DoubleExtensions on double {
   double get fourDigits => double.parse(toStringAsFixed(4));
+}
+
+bool isWishTime() {
+  TimeOfDay now = TimeOfDay.now();
+  return (now.hour == 9 || now.hour == 21) && now.minute == 48;
 }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +19,6 @@ class ScouterHomePage extends StatefulWidget {
 
 class _ScouterHomePageState extends State<ScouterHomePage> {
   late Future<Map<String, String>> asyncConfigData;
-  static late double scaleFactor;
   @override
   void initState() {
     super.initState();
@@ -59,7 +59,6 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     bool secretScreen = Random().nextInt(100) < 1;
-    scaleFactor = screenHeight / 914;
     return FutureBuilder(
         future: asyncConfigData,
         builder: (context, snapshot) {
@@ -165,6 +164,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
               ),
               // Main body of the page with a background image
               body: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   width: screenWidth,
                   height: screenHeight,
                   decoration: context.backgroundDecoration,
@@ -183,18 +183,55 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                       SizedBox(
                           height: 0.05 * screenHeight,
                           width: 0.8 * screenWidth,
-                          child: AutoSizeText(
-                            secretScreen
-                                ? "Nobody will ever believe you"
-                                : randomSplashText(),
-                            style: comfortaaBold(18,
-                                spacing: -1, color: context.colors.titleText),
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                          )),
+                          child: isWishTime()
+                              ? Stack(
+                                alignment: AlignmentDirectional.topCenter,
+                                  children: [
+                                    AnimatedTextKit(
+                                      animatedTexts: [
+                                        ColorizeAnimatedText(
+                                          "WISH!",
+                                          textStyle:
+                                              comfortaaBold(30, spacing: -1, customFontWeight: FontWeight.w900),
+                                          colors: [
+                                            Colors.red,
+                                            Colors.yellow,
+                                            Colors.red,
+                                          ],
+                                          speed:
+                                              const Duration(milliseconds: 400),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                      isRepeatingAnimation: true,
+                                      repeatForever: true,
+                                      pause: Duration.zero,
+                                    ),
+
+                                    Text(
+                                      "WISH!",
+                                      style: comfortaaBold(30,
+                                          spacing: -0.3,
+                                          customFontWeight: FontWeight.w100),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                )
+                              : AutoSizeText(
+                                  secretScreen
+                                      ? "Nobody will ever believe you"
+                                      : randomSplashText(),
+                                  style: comfortaaBold(18,
+                                      spacing: -1,
+                                      color: context.colors.titleText),
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                )),
                       Column(
+                          spacing: 10,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: getLaunchers()),
+                      SizedBox(height: 10),
                       SizedBox(
                           height: 0.05 * screenHeight,
                           width: 0.8 * screenWidth,
@@ -233,47 +270,33 @@ class Launcher extends StatelessWidget {
         Navigator.pushNamed(context, route, arguments: title);
         HapticFeedback.mediumImpact();
       },
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        //space between each choice
+      child: AspectRatio(
+        aspectRatio: 5,
         child: Container(
-          height: 75 * _ScouterHomePageState.scaleFactor,
-          width: 400 * _ScouterHomePageState.scaleFactor,
-
           //the size of the box that holds each choice
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: context.colors.container,
-              borderRadius: BorderRadius.circular(Constants.borderRadius)),
+              borderRadius: BorderRadius.circular(Constants.borderRadius * 2)),
           child: Row(
+            spacing: 10,
             children: [
               Expanded(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, bottom: 10, top: 10),
-                  child: Container(
-                    padding: EdgeInsets.only(
-                        left: 5,
-                        right: 5,
-                        top: 10,
-                        bottom: 10), // Padding inside the container
-                    decoration: BoxDecoration(
-                      color: color, // Background color of the container
-                      borderRadius:
-                          BorderRadius.circular(10), // Rounded corners
-                    ),
-
-                    child: Center(
-                      child: AutoSizeText(title.toUpperCase(),
-                          style: comfortaaBold(25,
-                              color: context.colors.container)),
-                    ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color, // Background color of the container
+                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                  ),
+                  child: Center(
+                    child: AutoSizeText(title.toUpperCase(),
+                        style:
+                            comfortaaBold(25, color: context.colors.container)),
                   ),
                 ),
               ),
 
               // Icon positioned on the right side
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              Center(
                 child: Icon(
                   icon,
                   color: color,

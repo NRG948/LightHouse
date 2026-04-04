@@ -37,60 +37,63 @@ class _TeamInfoState extends State<TeamInfo>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Container(
-        padding: EdgeInsets.all(5),
-        margin: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-            color: context.colors.container,
-            borderRadius: BorderRadius.circular(Constants.borderRadius)),
-        child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
-                child: TextField(
-                  keyboardType: TextInputType.text,
-                  controller: teamNumberController,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  style:
-                      comfortaaBold(25.0, color: context.colors.text),
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                      labelText: "Team Number",
-                      labelStyle: comfortaaBold(30.0,
-                          color: context.colors.hintText, italic: true),
-                      fillColor: context.colors.accent2,
-                      filled: true,
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(Constants.borderRadius),
-                          borderSide: BorderSide.none)),
-                ),
-              ),
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 10),
-                child: Container(
-                  height: 100,
-                  width: 400,
-                  decoration: BoxDecoration(
-                      color: context.colors.accent2,
-                      borderRadius:
-                          BorderRadius.circular(Constants.borderRadius)),
-                  child: Align(
-                    alignment: Alignment(-0.85, 0),
-                    child: Text(teamName ?? "Team Name",
-                        style: comfortaaBold(30,
-                            color: context.colors.text,
-                            italic: teamName == null)),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double width = constraints.maxWidth;
+        return Container(
+            width: width,
+            decoration: BoxDecoration(
+                color: context.colors.container,
+                borderRadius: BorderRadius.circular(Constants.borderRadius)),
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 5),
+                    child: TextField(
+                      keyboardType: TextInputType.text,
+                      controller: teamNumberController,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      style:
+                          comfortaaBold(25.0, color: context.colors.text),
+                      maxLines: 1,
+                      decoration: InputDecoration(
+                          labelText: "Team Number",
+                          labelStyle: comfortaaBold(30.0,
+                              color: context.colors.hintText, italic: true),
+                          fillColor: context.colors.accent2,
+                          filled: true,
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(Constants.borderRadius),
+                              borderSide: BorderSide.none)),
+                    ),
                   ),
-                ),
-              ),
-            ]));
+                  Padding(
+                    padding:
+                        EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 10),
+                    child: Container(
+                      height: 100,
+                      decoration: BoxDecoration(
+                          color: context.colors.accent2,
+                          borderRadius:
+                              BorderRadius.circular(Constants.borderRadius)),
+                      child: Align(
+                        alignment: Alignment(-0.85, 0),
+                        child: Text(teamName ?? "Team Name",
+                            style: comfortaaBold(30,
+                                color: context.colors.text,
+                                italic: teamName == null)),
+                      ),
+                    ),
+                  ),
+                ]));
+      }
+    );
   }
 
   void getTeamName(int teamNumber) async {

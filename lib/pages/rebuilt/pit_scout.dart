@@ -11,6 +11,7 @@ import 'package:lighthouse/widgets/game_agnostic/multi_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/multi_three_stage_checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/old_textbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/team_info.dart';
+import 'package:lighthouse/widgets/game_agnostic/textbox.dart';
 import 'package:lighthouse/widgets/rebuilt/pit_auto_container.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
 import 'package:lighthouse/widgets/rebuilt/tower_location_selector.dart';
@@ -64,17 +65,33 @@ class PitScoutState extends State<PitScout> {
         "Setup": DataEntrySubPage(
           icon: CustomIcons.pitCrew,
           content: Container(
+              margin: EdgeInsets.all(15),
               child: Column(
-            children: [
-              TeamInfo(),
-            ],
-          )),
+                spacing: 10,
+                children: [
+                  Container(
+                    height: 70,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: context.colors.container,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: InputTextBox(
+                      maxLines: 1,
+                      hintText: "Scouter name",
+                      jsonKey: "scouterName",
+                      autofillKey: "scouterName",
+                    ),
+                  ),
+                  TeamInfo(),
+                ],
+              )),
         ),
         "General": DataEntrySubPage(
             icon: CustomIcons.wrench,
             content: Container(
-              margin: EdgeInsets.all(10),
-              child: Column(spacing: 15, children: [
+              margin: EdgeInsets.all(15),
+              child: Column(spacing: 10, children: [
                 MultiChoiceSelector(
                   title: "Shooter Type",
                   selectOptions: ["Fixed", "Turret"],
@@ -143,18 +160,13 @@ class PitScoutState extends State<PitScout> {
                     width: double.infinity,
                     fontSize: 20,
                     maxLines: 20),
-                NRGCommentBox(
-                  title: "Comments",
-                  jsonKey: "comments",
-                  height: 90,
-                ),
               ]),
             )),
         "Auto": DataEntrySubPage(
           icon: CustomIcons.autonomous,
           content: Container(
-            margin: EdgeInsets.all(10),
-            child: Column(spacing: 15, children: [
+            margin: EdgeInsets.all(15),
+            child: Column(spacing: 10, children: [
               PitAutoContainer(
                 height: 50,
                 jsonKeys: ["autoPath", "autoFuelScored", "autoCrossedMidline"],
@@ -194,7 +206,7 @@ class PitScoutState extends State<PitScout> {
         "Teleop": DataEntrySubPage(
           icon: CustomIcons.racecar,
           content: Container(
-            margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(15),
             child: Column(
               spacing: 10,
               children: [
@@ -238,7 +250,7 @@ class PitScoutState extends State<PitScout> {
                     "canPushThroughTrench"
                   ],
                   width: double.infinity,
-                  height: 100,
+                  height: 130,
                   boxNames: [
                     ["Pass", "Bump", "Trench"]
                   ],
@@ -258,7 +270,7 @@ class PitScoutState extends State<PitScout> {
         "Endgame": DataEntrySubPage(
           icon: CustomIcons.flag,
           content: Container(
-              margin: EdgeInsets.all(10),
+              margin: EdgeInsets.all(15),
               child: Column(
                 spacing: 10,
                 children: [
@@ -276,6 +288,11 @@ class PitScoutState extends State<PitScout> {
                     boxNames: [
                       ["Shoot during Endgame"]
                     ],
+                  ),
+                  NRGCommentBox(
+                    title: "Comments",
+                    jsonKey: "comments",
+                    height: 90,
                   ),
                 ],
               )),
