@@ -48,6 +48,9 @@ void saveJson(BuildContext context) async {
                             "${DataEntry.exportData["driverStation"]}";
                         saveConfig();
                       }
+
+                      if (!context.mounted) return;
+
                       showDialog(
                           context: context,
                           builder: (context) {

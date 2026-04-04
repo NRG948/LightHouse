@@ -99,6 +99,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     return;
                   }
                   if (await saveConfig() == 0) {
+                    if (!context.mounted) return;
                     // Saves settings and checks if the operation was successful.
                     showDialog(
                         context: context,
@@ -503,6 +504,8 @@ class _SaveSettingsButtonState extends State<SaveSettingsButton> {
               return;
             }
             if (await saveConfig() == 0) {
+              if (!context.mounted) return;
+
               // Saves settings and checks if the operation was successful.
               showDialog(
                   context: context,

@@ -72,7 +72,7 @@ class _NRGRatingState extends State<NRGRating>
               DataEntry.exportData[widget.jsonKey] = value;
             },
             starSize: 0.6 * widget.height,
-            clearable: widget.clearable, 
+            clearable: widget.clearable,
           ),
         ],
       ),
@@ -96,15 +96,15 @@ class StarRating extends StatefulWidget {
     this.activeColor,
     this.inactiveColor,
     this.starSize = 30.0,
-    this.clearable = false, 
+    this.clearable = false,
   });
 
   @override
-  _StarRatingState createState() => _StarRatingState();
+  StarRatingState createState() => StarRatingState();
 }
 
 // State class for StarRating
-class _StarRatingState extends State<StarRating> {
+class StarRatingState extends State<StarRating> {
   late double? _currentRating; // Current rating value
 
   @override
@@ -159,24 +159,27 @@ class _StarRatingState extends State<StarRating> {
               ),
             );
           }),
-          widget.clearable ? GestureDetector(
-            onTap: () {
-              _updateRating(null);
-            },
-            child: Container(
-              width: 0.7 * widget.starSize,
-              height: 0.7 * widget.starSize,
-              decoration: BoxDecoration(
-                  color: context.colors.delete,
-                  borderRadius: BorderRadius.circular(Constants.borderRadius)),
-              child: Center(
-                  child: AutoSizeText(
-                "C",
-                style: comfortaaBold(20),
-                textAlign: TextAlign.end,
-              )),
-            ),
-          )  : SizedBox()
+          widget.clearable
+              ? GestureDetector(
+                  onTap: () {
+                    _updateRating(null);
+                  },
+                  child: Container(
+                    width: 0.7 * widget.starSize,
+                    height: 0.7 * widget.starSize,
+                    decoration: BoxDecoration(
+                        color: context.colors.delete,
+                        borderRadius:
+                            BorderRadius.circular(Constants.borderRadius)),
+                    child: Center(
+                        child: AutoSizeText(
+                      "C",
+                      style: comfortaaBold(20),
+                      textAlign: TextAlign.end,
+                    )),
+                  ),
+                )
+              : SizedBox()
         ]);
   }
 }

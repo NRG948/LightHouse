@@ -60,6 +60,7 @@ class DataEntryPageState extends State<DataEntryPage> {
         defaultConfig["eventKey"] == configData["eventKey"]) {
       hasEventKeyWarningShown = true;
       Future.delayed(Duration.zero, () {
+        if (!context.mounted) return;
         showDialog(
             context: context,
             builder: (context) {

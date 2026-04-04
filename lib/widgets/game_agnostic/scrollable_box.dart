@@ -3,7 +3,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/widgets/game_agnostic/tdv_comment_box.dart';
 
 // Enum to define different sorting options
-enum Sort { LENGTH_MAX, NAME_AZ, NAME_ZA, EARLIEST, LATEST }
+enum Sort { lengthMax, nameAZ, nameZA, earliest, latest }
 
 class ScrollableBox extends StatefulWidget {
   final double width; // Width of the scrollable box
@@ -28,7 +28,7 @@ class _ScrollableBoxState extends State<ScrollableBox> {
   double get _height => widget.height; // Getter for height
   String get _title => widget.title; // Getter for title
   List<List<String>> get _comments => widget.comments; // Getter for comments
-  Sort _sort = Sort.LATEST; // Getter for sorting option
+  Sort _sort = Sort.latest; // Getter for sorting option
 
   // Default sorting algorithm (by match number in descending order)
   int Function(List<String>, List<String>) sortingAlgorithm =
@@ -37,20 +37,20 @@ class _ScrollableBoxState extends State<ScrollableBox> {
   // Set the sorting algorithm based on the selected sorting option
   void setSortingAlgorithm() {
     switch (_sort) {
-      case Sort.LENGTH_MAX:
+      case Sort.lengthMax:
         sortingAlgorithm = (x, y) =>
             y[1].length - x[1].length; // Sort by comment length (descending)
-      case Sort.NAME_AZ:
+      case Sort.nameAZ:
         sortingAlgorithm =
             (x, y) => x[0].compareTo(y[0]); // Sort by scouter name (A-Z)
-      case Sort.NAME_ZA:
+      case Sort.nameZA:
         sortingAlgorithm =
             (x, y) => y[0].compareTo(x[0]); // Sort by scouter name (Z-A)
-      case Sort.EARLIEST:
+      case Sort.earliest:
         sortingAlgorithm = (x, y) =>
             int.parse(x[2]) -
             int.parse(y[2]); // Sort by match number (ascending)
-      case Sort.LATEST:
+      case Sort.latest:
         sortingAlgorithm = (x, y) =>
             int.parse(y[2]) -
             int.parse(x[2]); // Sort by match number (descending)
@@ -75,10 +75,10 @@ class _ScrollableBoxState extends State<ScrollableBox> {
     return GestureDetector(
       onDoubleTap: () => {
         setState(() {
-          if (_sort == Sort.LATEST) {
-            _sort = Sort.LENGTH_MAX;
+          if (_sort == Sort.latest) {
+            _sort = Sort.lengthMax;
           } else {
-            _sort = Sort.LATEST;
+            _sort = Sort.latest;
           }
         })
       },
@@ -109,9 +109,11 @@ class _ScrollableBoxState extends State<ScrollableBox> {
                           name: _comments[index][0], // Scouter name
                           text: _comments[index][1], // Comment text
                           time: _comments[index][2], // Match number
-                          type: _comments[index][3], // Layout (Atlas, Chronos, Pit)
-                          quality: double.tryParse(_comments[index][4]) ?? 0.0 // Data quality (null-safety included)
-                          ); 
+                          type: _comments[index]
+                              [3], // Layout (Atlas, Chronos, Pit)
+                          quality: double.tryParse(_comments[index][4]) ??
+                              0.0 // Data quality (null-safety included)
+                          );
                     }),
               ),
             ],

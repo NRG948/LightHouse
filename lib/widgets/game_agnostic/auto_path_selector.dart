@@ -262,8 +262,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       _bottomOffset -
       _margin; // TODO: make in terms of height AND width, to make sure no overflow
 
-  List<NodeData> _nodeStack = [];
-  List<UserAction> _history = [];
+  final List<NodeData> _nodeStack = [];
+  final List<UserAction> _history = [];
 
   Color? get _mainColor => widget.mainColor;
   Color? get _backgroundColor => widget.backgroundColor;

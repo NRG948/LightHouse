@@ -1,4 +1,4 @@
-/**
+/*
  * This file is a bygone relic of the 2025 season
  * Unfortunately, large parts of the code still rely on it
  * Because we're stupid

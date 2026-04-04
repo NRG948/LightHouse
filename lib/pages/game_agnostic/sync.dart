@@ -29,8 +29,7 @@ class SyncPageState extends State<SyncPage> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: context.colors.titleText),
-          backgroundColor:
-              context.colors.backgroundPrimary,
+          backgroundColor: context.colors.backgroundPrimary,
           actions: [AuthButton()],
           title: Text(
             "Sync",
@@ -187,7 +186,7 @@ class _UploadDialogState extends State<UploadDialog> {
     if (widget.queue.isEmpty) {
       Navigator.pop(context);
       Future.delayed(Duration.zero, () {
-        if (mounted) {
+        if (context.mounted) {
           showDialog(
               context: context,
               builder: (context) {
@@ -260,7 +259,6 @@ class _UploadDialogState extends State<UploadDialog> {
   // Build the list of uploaded files
   List<Widget> buildUploadedFiles() {
     final List<Widget> list = uploadedFiles.keys.map((key) {
-      print(uploadedFiles[key]);
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -503,8 +501,9 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
       height: 150 * scaleFactor,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Constants.borderRadius),
-          color:
-              widget.darkMode ? Constants.darkPurple : context.colors.container),
+          color: widget.darkMode
+              ? Constants.darkPurple
+              : context.colors.container),
       child: Column(
         children: [
           SizedBox(
@@ -518,7 +517,9 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
               children: [
                 Icon(
                   Icons.language,
-                  color: widget.darkMode ? Colors.white : context.colors.containerText,
+                  color: widget.darkMode
+                      ? Colors.white
+                      : context.colors.containerText,
                   size: 25 * scaleFactor,
                 ),
                 SizedBox(
@@ -556,7 +557,8 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                         fillColor: context.colors.accent1,
                         contentPadding: EdgeInsets.only(
                             left: 5 * scaleFactor, right: 5 * scaleFactor)),
-                    style: comfortaaBold(15 * scaleFactor, color: context.colors.text),
+                    style: comfortaaBold(15 * scaleFactor,
+                        color: context.colors.text),
                     onChanged: (e) {
                       configData["serverIP"] = e;
                       saveConfig();
@@ -611,7 +613,8 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                             )),
                         Text(
                           "Waiting for response...",
-                          style: comfortaaBold(15 * scaleFactor, color: context.colors.container),
+                          style: comfortaaBold(15 * scaleFactor,
+                              color: context.colors.container),
                         )
                       ],
                     ),
@@ -632,7 +635,8 @@ class _ServerTestWidgetState extends State<ServerTestWidget> {
                       child: Center(
                           child: AutoSizeText(
                         snapshot.data!,
-                        style: comfortaaBold(18 * scaleFactor, color: context.colors.container),
+                        style: comfortaaBold(18 * scaleFactor,
+                            color: context.colors.container),
                         textAlign: TextAlign.center,
                         minFontSize: (12 * scaleFactor).truncate().toDouble(),
                         maxLines: 2,
@@ -706,7 +710,8 @@ class _StartSyncState extends State<StartSync> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Constants.borderRadius),
                 color: context.colors.accent4),
-            child: Text("hi", style: comfortaaBold(15, color: context.colors.container)),
+            child: Text("hi",
+                style: comfortaaBold(15, color: context.colors.container)),
           ),
         ));
   }

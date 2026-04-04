@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 
@@ -55,19 +54,24 @@ class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
               spacing: 10,
               children: [
                 SizedBox(
-                height: _height * 0.3,
-                child: AutoSizeText(_title, style: comfortaaBold(30, color: Constants.pastelBrown))),
+                    height: _height * 0.3,
+                    child: AutoSizeText(_title,
+                        style:
+                            comfortaaBold(30, color: Constants.pastelBrown))),
                 Center(
-                  child: Container(
-                    height: _height * 0.4,
-                    width: _width * 0.9,
-                    decoration: BoxDecoration(
-                      color: _color,
-                      borderRadius: BorderRadius.circular(Constants.borderRadius)
-                    ),
-                    child: AutoSizeText("$_counter", style: comfortaaBold(40, color: Constants.pastelWhite), textAlign: TextAlign.center,)
-                  )
-                )
+                    child: Container(
+                        height: _height * 0.4,
+                        width: _width * 0.9,
+                        decoration: BoxDecoration(
+                            color: _color,
+                            borderRadius:
+                                BorderRadius.circular(Constants.borderRadius)),
+                        child: AutoSizeText(
+                          "$_counter",
+                          style:
+                              comfortaaBold(40, color: Constants.pastelWhite),
+                          textAlign: TextAlign.center,
+                        )))
               ],
             ),
             GestureDetector(
@@ -106,7 +110,7 @@ class CounterState extends State<Counter> with AutomaticKeepAliveClientMixin {
   void updateState() {
     DataEntry.exportData[_key] = _counter;
   }
-  
+
   @override
   bool get wantKeepAlive => true;
 }
