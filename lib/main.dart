@@ -1,16 +1,16 @@
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
-import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/pages/aryav_data_viewer.dart";
-import "package:lighthouse/pages/home_data_viewer.dart";
-import "package:lighthouse/pages/home_scouter.dart";
 import "package:lighthouse/constants.dart";
+import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/pages/rebuilt/aryav_data_viewer.dart";
+import "package:lighthouse/pages/game_agnostic/home_data_viewer.dart";
+import "package:lighthouse/pages/game_agnostic/home_scouter.dart";
+import "package:lighthouse/pages/game_agnostic/saved_data.dart";
+import "package:lighthouse/pages/game_agnostic/settings.dart";
+import "package:lighthouse/pages/game_agnostic/sync.dart";
+import "package:lighthouse/pages/game_agnostic/testing_ground.dart";
 import "package:lighthouse/pages/rebuilt/atlas.dart";
 import "package:lighthouse/pages/rebuilt/pit_scout.dart";
-import "package:lighthouse/pages/saved_data.dart";
-import "package:lighthouse/pages/settings.dart";
-import "package:lighthouse/pages/sync.dart";
-import "package:lighthouse/pages/testing_ground.dart";
 import "package:lighthouse/themes.dart";
 
 void main() async {
@@ -35,7 +35,8 @@ class MainWidget extends StatelessWidget {
         return MaterialApp(
           theme: ThemeData(
             extensions: <ThemeExtension<dynamic>>[
-              LightHouseThemes.themes[value] ?? LightHouseThemes.themes.values.first,
+              LightHouseThemes.themes[value] ??
+                  LightHouseThemes.themes.values.first,
             ],
             textTheme: TextTheme(
               bodyLarge: comfortaaBold(18, color: Colors.black),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/device_id.dart';
 import 'package:lighthouse/filemgr.dart';
-import 'package:lighthouse/pages/sync.dart';
+import 'package:lighthouse/pages/game_agnostic/sync.dart';
 import 'package:lighthouse/themes.dart';
 
 class DataViewerHome extends StatelessWidget {

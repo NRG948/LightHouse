@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
-import 'package:lighthouse/pages/data_entry_page.dart';
-import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/pages/game_agnostic/data_entry_page.dart';
+import 'package:lighthouse/pages/game_agnostic/data_entry_sub_page.dart';
 import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
 import 'package:lighthouse/widgets/game_agnostic/comment_box.dart';

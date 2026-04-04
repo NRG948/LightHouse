@@ -6,6 +6,7 @@ import "package:collection/collection.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
+import "package:lighthouse/data_parser.dart";
 import "package:lighthouse/filemgr.dart";
 import "package:lighthouse/apis/statbotics_api.dart";
 import "package:lighthouse/themes.dart";
@@ -636,6 +637,20 @@ class MetricMatch {
   const MetricMatch({required this.match, required this.metric});
 }
 
+class MetricResult {
+  final List<MetricMatch> matches;
+  final double totalMetric;
+  final double percentage;
+  final String metricString;
+
+  MetricResult({
+    required this.matches,
+    required this.totalMetric,
+    required this.percentage,
+    required this.metricString,
+  });
+}
+
 class ScoringLocationViewer extends StatefulWidget {
   final double margin;
   final Map<String, double?> accuracyColors;
@@ -885,94 +900,28 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   double? _teleopEpa;
   double? _endgameEpa;
 
-  int? _toInt(dynamic value) {
-    if (value == null) return null;
+  // Constants
+  static const List<String> _scoringRegions = [
+    "depot_corner",
+    "depot_trench",
+    "depot_wall",
+    "depot_bump",
+    "tower",
+    "hub",
+    "outpost_wall",
+    "outpost_bump",
+    "outpost_corner",
+    "outpost_trench",
+  ];
 
-    String cleanValue = value.toString().replaceAll(RegExp(r'\s+'), '');
+  static const double _greatThreshold = 0.34;
+  static const double _normalizedOffset = 1.0;
+  static const double _normalizedScale = 2.0;
+  static const double _percentageDivisor = 3.0;
 
-    if (cleanValue.isEmpty) return null;
-
-    return double.tryParse(cleanValue)?.toInt();
-  }
-
-  double? _toDouble(dynamic value) {
-    if (value == null) return null;
-
-    String cleanValue = value.toString().replaceAll(' ', '');
-
-    if (cleanValue.isEmpty) return null;
-
-    bool isPercent = cleanValue.endsWith('%');
-
-    if (isPercent) {
-      cleanValue = cleanValue.replaceAll('%', '');
-      double? parsed = double.tryParse(cleanValue);
-
-      return (parsed != null) ? parsed / 100 : null;
-    }
-
-    return double.tryParse(cleanValue);
-  }
-
-  List<dynamic>? _toList(dynamic value) {
-    if (value is List) return value;
-    if (value is Iterable) return value.toList();
-    if (value is String) {
-      try {
-        final decoded = jsonDecode(value);
-        if (decoded is List) return decoded;
-      } catch (_) {
-        return null;
-      }
-    }
-    return null;
-  }
-
-  String _toString(dynamic value) {
-    if (value == null) return "";
-
-    String result = value.toString();
-    if (result.toLowerCase() == "null") return "";
-
-    return result;
-  }
-
-  bool? _toBool(dynamic value) {
-    if (value is bool) return value;
-    if (value is num) return value != 0;
-    if (value is String) {
-      switch (value) {
-        case "true":
-          return true;
-        case "false":
-          return false;
-        default:
-          double? possibleDouble = double.tryParse(value);
-          return possibleDouble == null ? null : possibleDouble != 0;
-      }
-    }
-    return null;
-  }
-
-  bool _isEmpty(dynamic value) {
-    if (value == null) return true;
-    if (value is String) return value.trim().isEmpty;
-    if (value is Iterable) return value.isEmpty;
-    if (value is Map) return value.isEmpty;
-
-    return false;
-  }
-
-  Map<String, dynamic>? _toMap(dynamic value) {
-    if (value is Map) {
-      try {
-        return Map<String, dynamic>.from(value);
-      } catch (e) {
-        return null;
-      }
-    }
-    return null;
-  }
+  static const int _qualifierOffset = 1000;
+  static const int _playoffOffset = 2000;
+  static const int _finalOffset = 3000;
 
   String _shortenMatch(String matchType, int matchNumber) {
     if (matchType.isEmpty) {
@@ -996,11 +945,11 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   }
 
   double _accuracyMetricToNormalized(double accuracy) {
-    return (accuracy - 1) / 2;
+    return (accuracy - _normalizedOffset) / _normalizedScale;
   }
 
   double _accuracyMetricToPercentage(double accuracy) {
-    return accuracy / 3;
+    return accuracy / _percentageDivisor;
   }
 
   double zeroSafeDivision(double dividend, double divisor) {
@@ -1021,9 +970,9 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   }
 
   String _valueToMetric(double value) {
-    if (value > 0.34) {
+    if (value > _greatThreshold) {
       return "Great";
-    } else if (value < -0.34) {
+    } else if (value < -_greatThreshold) {
       return "Poor";
     } else {
       return "Decent";
@@ -1077,7 +1026,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     try {
       matchData = Map<String, dynamic>.from(jsonDecode(content));
 
-      if ((_toBool(configData["downloadTheBlueAllianceInfo"]) ?? false) &&
+      if ((DataParser.toBool(configData["downloadTheBlueAllianceInfo"]) ??
+              false) &&
           matchData != []) {
         debugPrint(matchData.toString());
         setState(() {
@@ -1131,19 +1081,19 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     int value = 0;
     switch (shortenedMatch[0]) {
       case "Q":
-        value += 1000;
+        value += _qualifierOffset;
         break;
       case "P":
         if (shortenedMatch == "Pit") break;
-        value += 2000;
+        value += _playoffOffset;
         break;
       case "F":
-        value += 3000;
+        value += _finalOffset;
         break;
       default:
         break;
     }
-    value += _toInt(shortenedMatch.substring(1)) ?? 0;
+    value += DataParser.toInt(shortenedMatch.substring(1)) ?? 0;
     return value;
   }
 
@@ -1151,9 +1101,42 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return _matchToIdentifier(a).compareTo(_matchToIdentifier(b));
   }
 
+  MetricResult _processMetric({
+    required Map<String, dynamic>? entry,
+    required String fieldName,
+    required String shortenedMatch,
+    required int matchCount,
+  }) {
+    List<MetricMatch> matches = [];
+    double totalMetric = 0;
+
+    final temp = DataParser.toMap(entry?[fieldName]);
+    if (temp?["isChecked"] == true) {
+      matches.add(MetricMatch(
+        match: shortenedMatch,
+        metric: DataParser.asString(temp?["selection"]),
+      ));
+      totalMetric += _metricToValue(DataParser.asString(temp?["selection"]));
+    }
+
+    double percentage =
+        zeroSafeDivision(matches.length.toDouble(), matchCount.toDouble());
+    String metricString = matches.isEmpty
+        ? "No Data"
+        : _valueToMetric(
+            zeroSafeDivision(totalMetric, matches.length.toDouble()));
+
+    return MetricResult(
+      matches: matches,
+      totalMetric: totalMetric,
+      percentage: percentage,
+      metricString: metricString,
+    );
+  }
+
   bool _loadData(int team) {
-    _atlasData = _getDataAsMapFromSavedMatches("Atlas");
-    _pitData = _getDataAsMapFromSavedMatches("Pit");
+    _atlasData = _getDataAsMapFromDatabase("Atlas");
+    _pitData = _getDataAsMapFromDatabase("Pit");
     _teams = _getTeamsInDatabase();
 
     _matches = 0;
@@ -1261,38 +1244,41 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     _setEpasWithTeamNumber(team);
 
     for (Map<String, dynamic> entry in _pitData) {
-      int? curTeam = _toInt(entry["teamNumber"]);
+      int? curTeam = DataParser.toInt(entry["teamNumber"]);
       if (curTeam == null) continue;
 
       if (team == curTeam) {
         // Misc Pit Data
-        _capacity = _toInt(entry["fuelCapacity"]) ?? -1;
-        _shooterType = _toString(entry["shooterType"]);
-        _accessType =
-            ["able", "preferred"].contains(_toString(entry["canGoTrench"]))
-                ? "Trench"
-                : "Bump";
-        _drivetrain = _toString(entry["drivetrain"]);
-        _weight = _toDouble(entry["weight"]) ?? 0;
+        _capacity = DataParser.toInt(entry["fuelCapacity"]) ?? -1;
+        _shooterType = DataParser.asString(entry["shooterType"]);
+        _accessType = ["able", "preferred"]
+                .contains(DataParser.asString(entry["canGoTrench"]))
+            ? "Trench"
+            : "Bump";
+        _drivetrain = DataParser.asString(entry["drivetrain"]);
+        _weight = DataParser.toDouble(entry["weight"]) ?? 0;
 
         // Pit Autos
         int i = 1;
         while (true) {
-          if (!_isEmpty(entry["autoPath$i"]) &&
+          if (!DataParser.isEmpty(entry["autoPath$i"]) &&
               entry["autoPath$i"] is Map<String, dynamic> &&
-              !_isEmpty(entry["autoPath$i"]!["path"])) {
+              !DataParser.isEmpty(entry["autoPath$i"]!["path"])) {
             _autos.add(Auto(
                 scouterName: "",
                 rating: 0,
                 match: "Pit",
                 attemptedClimb:
-                    _toBool(entry["autoPath$i"]!["attemptedClimb"]) ?? false,
+                    DataParser.toBool(entry["autoPath$i"]!["attemptedClimb"]) ??
+                        false,
                 climbSuccessful: false,
-                path: _toList(entry["autoPath$i"]!["path"]) ?? [],
-                crossCenter: _toBool(entry["autoCrossedMidline$i"]) ?? false,
+                path: DataParser.toList(entry["autoPath$i"]!["path"]) ?? [],
+                crossCenter:
+                    DataParser.toBool(entry["autoCrossedMidline$i"]) ?? false,
                 scorePreload:
-                    _toBool(entry["autoPath$i"]!["shotPreload"]) ?? false,
-                amountScored: _toInt(entry["autoFuelScored$i"]) ?? 0,
+                    DataParser.toBool(entry["autoPath$i"]!["shotPreload"]) ??
+                        false,
+                amountScored: DataParser.toInt(entry["autoFuelScored$i"]) ?? 0,
                 pit: true));
             i++;
           } else {
@@ -1301,11 +1287,11 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         }
 
         // Pit Comments
-        if (!_isEmpty(entry["comments"])) {
+        if (!DataParser.isEmpty(entry["comments"])) {
           _comments.add(Comment(
-            author: _toString(entry["scouterName"]),
+            author: DataParser.asString(entry["scouterName"]),
             rating: 0,
-            body: _toString(entry["comments"]),
+            body: DataParser.asString(entry["comments"]),
             match: "Pit",
             pit: true,
           ));
@@ -1314,18 +1300,19 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     }
 
     for (Map<String, dynamic> entry in _atlasData) {
-      int? curTeam = _toInt(entry["teamNumber"]);
+      int? curTeam = DataParser.toInt(entry["teamNumber"]);
       if (curTeam == null) continue;
 
       if (team == curTeam) {
         String shortenedMatch = _shortenMatch(
-            _toString(entry["matchType"]), _toInt(entry["matchNumber"]) ?? 0);
+            DataParser.asString(entry["matchType"]),
+            DataParser.toInt(entry["matchNumber"]) ?? 0);
 
         _matches++;
 
         // Tags
         if (entry["tags"] != null) {
-          List<dynamic> curTags = _toList(entry["tags"])!;
+          List<dynamic> curTags = DataParser.toList(entry["tags"])!;
           for (dynamic tag in curTags) {
             if (tag is! String) continue;
 
@@ -1335,30 +1322,34 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         }
 
         // Comments
-        if (!_isEmpty(entry["comments"])) {
+        if (!DataParser.isEmpty(entry["comments"])) {
           _comments.add(Comment(
-            author: _toString(entry["scouterName"]),
-            rating: _toDouble(entry["dataQuality"]) ?? 0,
-            body: _toString(entry["comments"]),
+            author: DataParser.asString(entry["scouterName"]),
+            rating: DataParser.toDouble(entry["dataQuality"]) ?? 0,
+            body: DataParser.asString(entry["comments"]),
             match: shortenedMatch,
             pit: false,
           ));
         }
 
         // Auto
-        if (!_isEmpty(entry["autoPath"]) &&
+        if (!DataParser.isEmpty(entry["autoPath"]) &&
             entry["autoPath"] is Map<String, dynamic>) {
           _autos.add(Auto(
-              scouterName: _toString(entry["scouterName"]),
-              rating: _toDouble(entry["dataQuality"]) ?? 0,
+              scouterName: DataParser.asString(entry["scouterName"]),
+              rating: DataParser.toDouble(entry["dataQuality"]) ?? 0,
               match: shortenedMatch,
               attemptedClimb:
-                  _toBool(entry["autoPath"]!["attemptedClimb"]) ?? false,
+                  DataParser.toBool(entry["autoPath"]!["attemptedClimb"]) ??
+                      false,
               climbSuccessful:
-                  _toBool(entry["autoPath"]!["climbSuccessful"]) ?? false,
-              path: _toList(entry["autoPath"]!["path"]) ?? [],
-              crossCenter: _toBool(entry["autoCrossedMidline"]) ?? false,
-              scorePreload: _toBool(entry["autoPath"]!["shotPreload"]) ?? false,
+                  DataParser.toBool(entry["autoPath"]!["climbSuccessful"]) ??
+                      false,
+              path: DataParser.toList(entry["autoPath"]!["path"]) ?? [],
+              crossCenter:
+                  DataParser.toBool(entry["autoCrossedMidline"]) ?? false,
+              scorePreload:
+                  DataParser.toBool(entry["autoPath"]!["shotPreload"]) ?? false,
               amountScored: 0,
               pit: false));
 
@@ -1372,23 +1363,24 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         }
 
         // Climb
-        if (!_isEmpty(entry["climb"]) &&
+        if (!DataParser.isEmpty(entry["climb"]) &&
             entry["climb"] is Map<String, dynamic> &&
             entry["climb"]!["attempted"] == true) {
           _climbs.add(Climb(
               level: ClimbLevelExtension.getLevelFromName(
                   entry["climb"]!["level"]),
-              time: _toDouble(entry["climb"]!["startTime"])));
+              time: DataParser.toDouble(entry["climb"]!["startTime"])));
         }
 
         // Accuracy & Frequency Maps
-        if (!_isEmpty(entry["scoringLocations"]) &&
+        if (!DataParser.isEmpty(entry["scoringLocations"]) &&
             entry["scoringLocations"] is Map<String, dynamic>) {
           for (String region in scoringRegions) {
             if (entry["scoringLocations"]![region] is! List<dynamic>) continue;
             for (dynamic item
-                in _toList(entry["scoringLocations"]![region]) ?? []) {
-              double? value = _toDouble(item);
+                in DataParser.toList(entry["scoringLocations"]![region]) ??
+                    []) {
+              double? value = DataParser.toDouble(item);
               if (value != null) {
                 accuracyPerRegion[region]!
                     .add(_accuracyMetricToNormalized(value));
@@ -1408,61 +1400,77 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         Map<String, dynamic>? temp;
 
         // Feeding
-        if (_toMap(entry["isHerding"])?["isChecked"] == true ||
-            _toMap(entry["isFeeding"])?["isChecked"] == true) {
+        if (DataParser.toMap(entry["isHerding"])?["isChecked"] == true ||
+            DataParser.toMap(entry["isFeeding"])?["isChecked"] == true) {
           feedingCount++;
         }
 
-        temp = _toMap(entry["isHerding"]);
+        temp = DataParser.toMap(entry["isHerding"]);
         if (temp?["isChecked"] == true) {
           _herdingMatches.add(MetricMatch(
-              match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalHerdingMetric += _metricToValue(_toString(temp?["selection"]));
+              match: shortenedMatch,
+              metric: DataParser.asString(temp?["selection"])));
+          totalHerdingMetric +=
+              _metricToValue(DataParser.asString(temp?["selection"]));
         }
 
-        temp = _toMap(entry["isFeeding"]);
+        temp = DataParser.toMap(entry["isFeeding"]);
         if (temp?["isChecked"] == true) {
           _shootingMatches.add(MetricMatch(
-              match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalShootingMetric += _metricToValue(_toString(temp?["selection"]));
+              match: shortenedMatch,
+              metric: DataParser.asString(temp?["selection"])));
+          totalShootingMetric +=
+              _metricToValue(DataParser.asString(temp?["selection"]));
         }
 
         totalFeedingMetric = totalHerdingMetric + totalShootingMetric;
 
         // Defense
-        if (_toMap(entry["isAccessDefending"])?["isChecked"] == true ||
-            _toMap(entry["isCenterDefending"])?["isChecked"] == true ||
-            _toMap(entry["isAllianceDefending"])?["isChecked"] == true ||
-            _toMap(entry["isStealing"])?["isChecked"] == true) {
+        if (DataParser.toMap(
+                    entry["isAccessDefending"])?["isChecked"] ==
+                true ||
+            DataParser.toMap(entry["isCenterDefending"])?["isChecked"] ==
+                true ||
+            DataParser.toMap(entry["isAllianceDefending"])?["isChecked"] ==
+                true ||
+            DataParser.toMap(entry["isStealing"])?["isChecked"] == true) {
           defenseCount++;
         }
 
-        temp = _toMap(entry["isAccessDefending"]);
+        temp = DataParser.toMap(entry["isAccessDefending"]);
         if (temp?["isChecked"] == true) {
           _accessMatches.add(MetricMatch(
-              match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalAccessMetric += _metricToValue(_toString(temp?["selection"]));
+              match: shortenedMatch,
+              metric: DataParser.asString(temp?["selection"])));
+          totalAccessMetric +=
+              _metricToValue(DataParser.asString(temp?["selection"]));
         }
 
-        temp = _toMap(entry["isCenterDefending"]);
+        temp = DataParser.toMap(entry["isCenterDefending"]);
         if (temp?["isChecked"] == true) {
           _centerMatches.add(MetricMatch(
-              match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalCenterMetric += _metricToValue(_toString(temp?["selection"]));
+              match: shortenedMatch,
+              metric: DataParser.asString(temp?["selection"])));
+          totalCenterMetric +=
+              _metricToValue(DataParser.asString(temp?["selection"]));
         }
 
-        temp = _toMap(entry["isAllianceDefending"]);
+        temp = DataParser.toMap(entry["isAllianceDefending"]);
         if (temp?["isChecked"] == true) {
           _allianceMatches.add(MetricMatch(
-              match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalAllianceMetric += _metricToValue(_toString(temp?["selection"]));
+              match: shortenedMatch,
+              metric: DataParser.asString(temp?["selection"])));
+          totalAllianceMetric +=
+              _metricToValue(DataParser.asString(temp?["selection"]));
         }
 
-        temp = _toMap(entry["isStealing"]);
+        temp = DataParser.toMap(entry["isStealing"]);
         if (temp?["isChecked"] == true) {
           _stealingMatches.add(MetricMatch(
-              match: shortenedMatch, metric: _toString(temp?["selection"])));
-          totalStealingMetric += _metricToValue(_toString(temp?["selection"]));
+              match: shortenedMatch,
+              metric: DataParser.asString(temp?["selection"])));
+          totalStealingMetric +=
+              _metricToValue(DataParser.asString(temp?["selection"]));
         }
 
         totalDefenseMetric = totalAccessMetric +
@@ -1609,8 +1617,9 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                           options: _teams.map((x) => "$x").toList(),
                           color: context.colors.accent2,
                           onChanged: (value) {
-                            _loadData(
-                                _toInt(value) ?? _teams.firstOrNull ?? -1);
+                            _loadData(DataParser.toInt(value) ??
+                                _teams.firstOrNull ??
+                                -1);
                           },
                         ),
                       ),

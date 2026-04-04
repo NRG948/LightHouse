@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/filemgr.dart';
-import 'package:lighthouse/pages/data_entry_sub_page.dart';
+import 'package:lighthouse/pages/game_agnostic/data_entry_sub_page.dart';
 import 'package:lighthouse/themes.dart';
 
 class DataEntryPage extends StatefulWidget {
