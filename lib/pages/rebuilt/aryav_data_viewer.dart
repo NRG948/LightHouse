@@ -1129,23 +1129,6 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     }
   }
 
-  void _calculateMetricData(
-      MetricData target, double totalValue, int matchCount,
-      {bool isCount = false}) {
-    target.percentage =
-        zeroSafeDivision(matchCount.toDouble(), _matches.toDouble());
-    target.totalValue = totalValue;
-    if (matchCount == 0) {
-      target.metric = "No Data";
-    } else if (isCount) {
-      target.metric =
-          _valueToMetric(zeroSafeDivision(totalValue, matchCount.toDouble()));
-    } else {
-      target.metric =
-          _valueToMetric(zeroSafeDivision(target.percentage * 100, 100));
-    }
-  }
-
   // ignore: unused_element
   List<Map<String, dynamic>> _getDataAsMapFromSavedMatches(String layout) {
     assert(configData["eventKey"] != null);
@@ -1245,39 +1228,6 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     return _matchToIdentifier(a).compareTo(_matchToIdentifier(b));
   }
 
-  MetricResult _processMetric({
-    required Map<String, dynamic>? entry,
-    required String fieldName,
-    required String shortenedMatch,
-    required int matchCount,
-  }) {
-    List<MetricMatch> matches = [];
-    double totalMetric = 0;
-
-    final temp = DataParser.toMap(entry?[fieldName]);
-    if (temp?["isChecked"] == true) {
-      matches.add(MetricMatch(
-        match: shortenedMatch,
-        metric: DataParser.asString(temp?["selection"]),
-      ));
-      totalMetric += _metricToValue(DataParser.asString(temp?["selection"]));
-    }
-
-    double percentage =
-        zeroSafeDivision(matches.length.toDouble(), matchCount.toDouble());
-    String metricString = matches.isEmpty
-        ? "No Data"
-        : _valueToMetric(
-            zeroSafeDivision(totalMetric, matches.length.toDouble()));
-
-    return MetricResult(
-      matches: matches,
-      totalMetric: totalMetric,
-      percentage: percentage,
-      metricString: metricString,
-    );
-  }
-
   bool _loadData(int team) {
     _atlasData = _getDataAsMapFromDatabase("Atlas");
     _pitData = _getDataAsMapFromDatabase("Pit");
@@ -1333,22 +1283,10 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
     _tbaData = TbaData();
 
-    List<String> scoringRegions = [
-      "depot_corner",
-      "depot_trench",
-      "depot_wall",
-      "depot_bump",
-      "tower",
-      "hub",
-      "outpost_wall",
-      "outpost_bump",
-      "outpost_corner",
-      "outpost_trench",
-    ];
     Map<String, List<double>> accuracyPerRegion = {
-      for (var e in scoringRegions) e: []
+      for (var e in _scoringRegions) e: []
     };
-    Map<String, int> frequencyPerRegion = {for (var e in scoringRegions) e: 0};
+    Map<String, int> frequencyPerRegion = {for (var e in _scoringRegions) e: 0};
 
     if (!_teams.contains(team)) return false;
 
@@ -1488,7 +1426,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         // Accuracy & Frequency Maps
         if (!DataParser.isEmpty(entry["scoringLocations"]) &&
             entry["scoringLocations"] is Map<String, dynamic>) {
-          for (String region in scoringRegions) {
+          for (String region in _scoringRegions) {
             if (entry["scoringLocations"]![region] is! List<dynamic>) continue;
             for (dynamic item
                 in DataParser.toList(entry["scoringLocations"]![region]) ??
