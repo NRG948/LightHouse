@@ -1090,8 +1090,8 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   }
 
   Future<void> _setEpasWithTeamNumber(int teamNumber) async {
-    Map<String, double> data =
-        await getTeamEPAFromEvent(teamNumber, configData["eventKey"]!);
+    Map<String, double> data = await StatboticsApi.getTeamEPAFromEvent(
+        teamNumber, configData["eventKey"]!);
     setState(() {
       _totalEpa = data["total_points"] ?? 0;
       _autoEpa = data["auto_points"] ?? 0;
