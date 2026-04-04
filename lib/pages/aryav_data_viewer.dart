@@ -7,7 +7,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
-import "package:lighthouse/statbotics_api.dart";
+import "package:lighthouse/apis/statbotics_api.dart";
 import "package:lighthouse/themes.dart";
 import "package:lighthouse/widgets/game_agnostic/default_container.dart";
 import "package:lighthouse/widgets/game_agnostic/dropdown.dart";
