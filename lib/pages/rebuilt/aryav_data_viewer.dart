@@ -229,7 +229,7 @@ class Auto {
   String match;
   bool attemptedClimb;
   bool climbSuccessful;
-  List<dynamic> path; // either String or List<num> of length 2.
+  List<dynamic> path;
   bool crossCenter;
   bool scorePreload;
   int amountScored;
@@ -247,6 +247,29 @@ class Auto {
     required this.amountScored,
     required this.pit,
   });
+}
+
+class MetricData {
+  double percentage = 0;
+  String metric = "";
+  List<MetricMatch> matches = [];
+  double totalValue = 0;
+}
+
+class PitData {
+  double weight = 0;
+  int capacity = 0;
+  String shooterType = "";
+  String accessType = "";
+  String drivetrain = "";
+}
+
+class TbaData {
+  double? opr;
+  double? total;
+  double? auto;
+  double? teleop;
+  double? endgame;
 }
 
 class AutoPreview extends StatefulWidget {
@@ -818,6 +841,172 @@ class _PopupInfoBoxState extends State<PopupInfoBox> {
   }
 }
 
+class TeamSelectorCard extends StatelessWidget {
+  final Set<int> teams;
+  final String? teamName;
+  final double margin;
+  final void Function(int) onTeamChanged;
+
+  const TeamSelectorCard({
+    super.key,
+    required this.teams,
+    required this.teamName,
+    required this.margin,
+    required this.onTeamChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60,
+      child: Row(
+        spacing: margin,
+        children: [
+          Expanded(
+            flex: 4,
+            child: DefaultContainer(
+              expandVertical: true,
+              margin: margin,
+              child: CustomDropdown(
+                options: teams.map((x) => "$x").toList(),
+                color: context.colors.accent2,
+                onChanged: (value) {
+                  onTeamChanged(
+                      DataParser.toInt(value) ?? teams.firstOrNull ?? -1);
+                },
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 9,
+            child: DefaultContainer(
+              expandVertical: true,
+              margin: margin,
+              child: Center(
+                child: AutoSizeText(
+                  teamName ?? "No team found",
+                  textAlign: TextAlign.left,
+                  maxLines: 2,
+                  style: comfortaaBold(17, color: context.colors.containerText),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class StatsBar extends StatelessWidget {
+  final TbaData epaData;
+  final double margin;
+
+  const StatsBar({
+    super.key,
+    required this.epaData,
+    required this.margin,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Row(
+        spacing: margin,
+        children: [
+          Expanded(
+            child: MiniInfoBox(
+              title: "OPR",
+              info: epaData.opr?.toStringAsFixed(2) ?? "...",
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: DefaultContainer(
+              margin: margin,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: MiniInfoBox(
+                      margin: 0,
+                      title: "EPA",
+                      info: epaData.total?.toStringAsFixed(2) ?? "loading",
+                    ),
+                  ),
+                  Expanded(
+                    child: MiniInfoBox(
+                      margin: 0,
+                      title: "Auto",
+                      info: epaData.auto?.toStringAsFixed(2) ?? "...",
+                    ),
+                  ),
+                  Expanded(
+                    child: MiniInfoBox(
+                      margin: 0,
+                      title: "Teleop",
+                      info: epaData.teleop?.toStringAsFixed(2) ?? "...",
+                    ),
+                  ),
+                  Expanded(
+                    child: MiniInfoBox(
+                      margin: 0,
+                      title: "Endgame",
+                      info: epaData.endgame?.toStringAsFixed(2) ?? "...",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MatchChipsFactory {
+  static Widget build(
+      List<MetricMatch> matches, double margin, LightHouseColorScheme colors) {
+    return Wrap(
+      spacing: margin,
+      runSpacing: margin,
+      children: matches
+          .map(
+            (match) => DefaultContainer(
+              margin: margin,
+              color: match.metric == "Great"
+                  ? colors.good
+                  : (match.metric == "Decent" ? colors.neutral : colors.bad),
+              child: Text(
+                match.match,
+                style: comfortaaBold(17, color: colors.containerText),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
+}
+
+class MetricWidgetFactory {
+  static String percentageString(double value) {
+    return "${(value * 100).toStringAsFixed(2)}%";
+  }
+
+  static Widget buildInfoGrid(
+      List<Widget> children, double spacing, double aspectRatio) {
+    return GridView.count(
+      shrinkWrap: true,
+      crossAxisCount: 2,
+      crossAxisSpacing: spacing,
+      mainAxisSpacing: spacing,
+      childAspectRatio: aspectRatio,
+      children: children,
+    );
+  }
+}
+
 class AryavDataViewer extends StatefulWidget {
   const AryavDataViewer({super.key});
 
@@ -831,74 +1020,35 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   List<Map<String, dynamic>> _atlasData = [];
   List<Map<String, dynamic>> _pitData = [];
 
-  // General
   String? _teamName;
   int _matches = 0;
 
-  // Tags
   Map<String, List<String>> _tags = {};
 
-  // Pit
-  double _weight = 0;
-  int _capacity = 0;
-  String _shooterType = "";
-  String _accessType = "";
-  String _drivetrain = "";
+  PitData _pitDataGrouped = PitData();
 
-  // Accuracy
   double _averageAccuracy = 0;
-
   double _averageDefendedAccuracy = 0;
 
-  // Feeding
-  double _feedingPercentage = 0;
-  String _feedingMetric = "";
+  MetricData _feeding = MetricData();
+  MetricData _shooting = MetricData();
+  MetricData _herding = MetricData();
 
-  double _shootingPercentage = 0;
-  String _shootingMetric = "";
-  List<MetricMatch> _shootingMatches = [];
+  MetricData _defense = MetricData();
+  MetricData _access = MetricData();
+  MetricData _center = MetricData();
+  MetricData _alliance = MetricData();
+  MetricData _stealing = MetricData();
 
-  double _herdingPercentage = 0;
-  String _herdingMetric = "";
-  List<MetricMatch> _herdingMatches = [];
-
-  // Defense
-  double _defensePercentage = 0;
-  String _defenseMetric = "";
-
-  double _accessPercentage = 0;
-  String _accessMetric = "";
-  List<MetricMatch> _accessMatches = [];
-
-  double _centerPercentage = 0;
-  String _centerMetric = "";
-  List<MetricMatch> _centerMatches = [];
-
-  double _alliancePercentage = 0;
-  String _allianceMetric = "";
-  List<MetricMatch> _allianceMatches = [];
-
-  double _stealingPercentage = 0;
-  String _stealingMetric = "";
-  List<MetricMatch> _stealingMatches = [];
-
-  // Autos
   List<Auto> _autos = [];
 
-  // Endgame
   List<Climb> _climbs = [];
   List<Comment> _comments = [];
 
-  // Mappings
   Map<String, double?> _accuracyMappings = {};
   Map<String, double?> _frequencyMappings = {};
 
-  // APIs
-  double? _opr;
-  double? _totalEpa;
-  double? _autoEpa;
-  double? _teleopEpa;
-  double? _endgameEpa;
+  TbaData _tbaData = TbaData();
 
   // Constants
   static const List<String> _scoringRegions = [
@@ -979,6 +1129,23 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     }
   }
 
+  void _calculateMetricData(
+      MetricData target, double totalValue, int matchCount,
+      {bool isCount = false}) {
+    target.percentage =
+        zeroSafeDivision(matchCount.toDouble(), _matches.toDouble());
+    target.totalValue = totalValue;
+    if (matchCount == 0) {
+      target.metric = "No Data";
+    } else if (isCount) {
+      target.metric =
+          _valueToMetric(zeroSafeDivision(totalValue, matchCount.toDouble()));
+    } else {
+      target.metric =
+          _valueToMetric(zeroSafeDivision(target.percentage * 100, 100));
+    }
+  }
+
   // ignore: unused_element
   List<Map<String, dynamic>> _getDataAsMapFromSavedMatches(String layout) {
     assert(configData["eventKey"] != null);
@@ -1031,7 +1198,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           matchData != []) {
         debugPrint(matchData.toString());
         setState(() {
-          _opr = matchData["oprs"]["frc$teamNumber"];
+          _tbaData.opr = matchData["oprs"]["frc$teamNumber"];
         });
       }
     } catch (e) {
@@ -1043,38 +1210,15 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     Map<String, double> data = await StatboticsApi.getTeamEPAFromEvent(
         teamNumber, configData["eventKey"]!);
     setState(() {
-      _totalEpa = data["total_points"] ?? 0;
-      _autoEpa = data["auto_points"] ?? 0;
-      _teleopEpa = data["teleop_points"] ?? 0;
-      _endgameEpa = data["endgame_points"] ?? 0;
+      _tbaData.total = data["total_points"] ?? 0;
+      _tbaData.auto = data["auto_points"] ?? 0;
+      _tbaData.teleop = data["teleop_points"] ?? 0;
+      _tbaData.endgame = data["endgame_points"] ?? 0;
     });
   }
 
   Widget _getMatchesWidgetList(List<MetricMatch> matches) {
-    return Wrap(
-      spacing: _margin,
-      runSpacing: _margin,
-      children: matches
-          .map(
-            (match) => DefaultContainer(
-              margin: _margin,
-              color: match.metric == "Great"
-                  ? context.colors.good
-                  : (match.metric == "Decent"
-                      ? context.colors.neutral
-                      : context.colors.bad),
-              child: Text(
-                match.match,
-                style: comfortaaBold(17, color: context.colors.containerText),
-              ),
-            ),
-          )
-          .toList(),
-    );
-  }
-
-  String _doubleToPercentageString(double value) {
-    return "${(value * 100).toStringAsFixed(2)}%";
+    return MatchChipsFactory.build(matches, _margin, context.colors);
   }
 
   int _matchToIdentifier(String shortenedMatch) {
@@ -1141,17 +1285,10 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
     _matches = 0;
 
-    // Tags
     _tags = {};
 
-    // Pit
-    _weight = 0;
-    _capacity = 0;
-    _shooterType = "";
-    _accessType = "";
-    _drivetrain = "";
+    _pitDataGrouped = PitData();
 
-    // Accuracy
     _averageAccuracy = 0;
     double totalAccuracy = 0;
     int accuracyMeasureCount = 0;
@@ -1160,65 +1297,41 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     double totalDefendedAccuracy = 0;
     int defendedAccuracyCount = 0;
 
-    // Feeding
-    _feedingPercentage = 0;
-    _feedingMetric = "";
+    _feeding = MetricData();
     int feedingCount = 0;
     double totalFeedingMetric = 0;
 
-    _shootingPercentage = 0;
-    _shootingMetric = "";
-    _shootingMatches = [];
+    _shooting = MetricData();
     double totalShootingMetric = 0;
 
-    _herdingPercentage = 0;
-    _herdingMetric = "";
-    _herdingMatches = [];
+    _herding = MetricData();
     double totalHerdingMetric = 0;
 
-    // Defense
-    _defensePercentage = 0;
-    _defenseMetric = "";
+    _defense = MetricData();
     int defenseCount = 0;
     double totalDefenseMetric = 0;
 
-    _accessPercentage = 0;
-    _accessMetric = "";
-    _accessMatches = [];
+    _access = MetricData();
     double totalAccessMetric = 0;
 
-    _centerPercentage = 0;
-    _centerMetric = "";
-    _centerMatches = [];
+    _center = MetricData();
     double totalCenterMetric = 0;
 
-    _alliancePercentage = 0;
-    _allianceMetric = "";
-    _allianceMatches = [];
+    _alliance = MetricData();
     double totalAllianceMetric = 0;
 
-    _stealingPercentage = 0;
-    _stealingMetric = "";
-    _stealingMatches = [];
+    _stealing = MetricData();
     double totalStealingMetric = 0;
 
-    // Autos
     _autos = [];
 
-    // Endgame
     _climbs = [];
     _comments = [];
 
-    // Mappings
     _accuracyMappings = {};
     _frequencyMappings = {};
 
-    // APIs
-    _opr = null;
-    _totalEpa = null;
-    _autoEpa = null;
-    _teleopEpa = null;
-    _endgameEpa = null;
+    _tbaData = TbaData();
 
     List<String> scoringRegions = [
       "depot_corner",
@@ -1248,15 +1361,15 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
       if (curTeam == null) continue;
 
       if (team == curTeam) {
-        // Misc Pit Data
-        _capacity = DataParser.toInt(entry["fuelCapacity"]) ?? -1;
-        _shooterType = DataParser.asString(entry["shooterType"]);
-        _accessType = ["able", "preferred"]
+        _pitDataGrouped.capacity =
+            DataParser.toInt(entry["fuelCapacity"]) ?? -1;
+        _pitDataGrouped.shooterType = DataParser.asString(entry["shooterType"]);
+        _pitDataGrouped.accessType = ["able", "preferred"]
                 .contains(DataParser.asString(entry["canGoTrench"]))
             ? "Trench"
             : "Bump";
-        _drivetrain = DataParser.asString(entry["drivetrain"]);
-        _weight = DataParser.toDouble(entry["weight"]) ?? 0;
+        _pitDataGrouped.drivetrain = DataParser.asString(entry["drivetrain"]);
+        _pitDataGrouped.weight = DataParser.toDouble(entry["weight"]) ?? 0;
 
         // Pit Autos
         int i = 1;
@@ -1407,7 +1520,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
         temp = DataParser.toMap(entry["isHerding"]);
         if (temp?["isChecked"] == true) {
-          _herdingMatches.add(MetricMatch(
+          _herding.matches.add(MetricMatch(
               match: shortenedMatch,
               metric: DataParser.asString(temp?["selection"])));
           totalHerdingMetric +=
@@ -1416,7 +1529,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
         temp = DataParser.toMap(entry["isFeeding"]);
         if (temp?["isChecked"] == true) {
-          _shootingMatches.add(MetricMatch(
+          _shooting.matches.add(MetricMatch(
               match: shortenedMatch,
               metric: DataParser.asString(temp?["selection"])));
           totalShootingMetric +=
@@ -1439,7 +1552,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
         temp = DataParser.toMap(entry["isAccessDefending"]);
         if (temp?["isChecked"] == true) {
-          _accessMatches.add(MetricMatch(
+          _access.matches.add(MetricMatch(
               match: shortenedMatch,
               metric: DataParser.asString(temp?["selection"])));
           totalAccessMetric +=
@@ -1448,7 +1561,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
         temp = DataParser.toMap(entry["isCenterDefending"]);
         if (temp?["isChecked"] == true) {
-          _centerMatches.add(MetricMatch(
+          _center.matches.add(MetricMatch(
               match: shortenedMatch,
               metric: DataParser.asString(temp?["selection"])));
           totalCenterMetric +=
@@ -1457,7 +1570,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
         temp = DataParser.toMap(entry["isAllianceDefending"]);
         if (temp?["isChecked"] == true) {
-          _allianceMatches.add(MetricMatch(
+          _alliance.matches.add(MetricMatch(
               match: shortenedMatch,
               metric: DataParser.asString(temp?["selection"])));
           totalAllianceMetric +=
@@ -1466,7 +1579,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
 
         temp = DataParser.toMap(entry["isStealing"]);
         if (temp?["isChecked"] == true) {
-          _stealingMatches.add(MetricMatch(
+          _stealing.matches.add(MetricMatch(
               match: shortenedMatch,
               metric: DataParser.asString(temp?["selection"])));
           totalStealingMetric +=
@@ -1493,62 +1606,62 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         totalDefendedAccuracy, defendedAccuracyCount.toDouble());
 
     // % Defense
-    _defensePercentage =
+    _defense.percentage =
         zeroSafeDivision(defenseCount.toDouble(), _matches.toDouble());
-    _defenseMetric = defenseCount == 0
+    _defense.metric = defenseCount == 0
         ? "No Data"
         : _valueToMetric(
             zeroSafeDivision(totalDefenseMetric, defenseCount.toDouble()));
 
-    _stealingPercentage = zeroSafeDivision(
-        _stealingMatches.length.toDouble(), _matches.toDouble());
-    _stealingMetric = _stealingMatches.isEmpty
+    _stealing.percentage = zeroSafeDivision(
+        _stealing.matches.length.toDouble(), _matches.toDouble());
+    _stealing.metric = _stealing.matches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalStealingMetric, _stealingMatches.length.toDouble()));
+            totalStealingMetric, _stealing.matches.length.toDouble()));
 
-    _centerPercentage =
-        zeroSafeDivision(_centerMatches.length.toDouble(), _matches.toDouble());
-    _centerMetric = _centerMatches.isEmpty
+    _center.percentage = zeroSafeDivision(
+        _center.matches.length.toDouble(), _matches.toDouble());
+    _center.metric = _center.matches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalCenterMetric, _centerMatches.length.toDouble()));
+            totalCenterMetric, _center.matches.length.toDouble()));
 
-    _alliancePercentage = zeroSafeDivision(
-        _allianceMatches.length.toDouble(), _matches.toDouble());
-    _allianceMetric = _allianceMatches.isEmpty
+    _alliance.percentage = zeroSafeDivision(
+        _alliance.matches.length.toDouble(), _matches.toDouble());
+    _alliance.metric = _alliance.matches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalAllianceMetric, _allianceMatches.length.toDouble()));
+            totalAllianceMetric, _alliance.matches.length.toDouble()));
 
-    _accessPercentage =
-        zeroSafeDivision(_accessMatches.length.toDouble(), _matches.toDouble());
-    _accessMetric = _accessMatches.isEmpty
+    _access.percentage = zeroSafeDivision(
+        _access.matches.length.toDouble(), _matches.toDouble());
+    _access.metric = _access.matches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalAccessMetric, _accessMatches.length.toDouble()));
+            totalAccessMetric, _access.matches.length.toDouble()));
 
     // % Feeding
-    _feedingPercentage =
+    _feeding.percentage =
         zeroSafeDivision(feedingCount.toDouble(), _matches.toDouble());
-    _feedingMetric = feedingCount == 0
+    _feeding.metric = feedingCount == 0
         ? "No Data"
         : _valueToMetric(
             zeroSafeDivision(totalFeedingMetric, feedingCount.toDouble()));
 
-    _shootingPercentage = zeroSafeDivision(
-        _shootingMatches.length.toDouble(), _matches.toDouble());
-    _shootingMetric = _shootingMatches.isEmpty
+    _shooting.percentage = zeroSafeDivision(
+        _shooting.matches.length.toDouble(), _matches.toDouble());
+    _shooting.metric = _shooting.matches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalShootingMetric, _shootingMatches.length.toDouble()));
+            totalShootingMetric, _shooting.matches.length.toDouble()));
 
-    _herdingPercentage = zeroSafeDivision(
-        _herdingMatches.length.toDouble(), _matches.toDouble());
-    _herdingMetric = _herdingMatches.isEmpty
+    _herding.percentage = zeroSafeDivision(
+        _herding.matches.length.toDouble(), _matches.toDouble());
+    _herding.metric = _herding.matches.isEmpty
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
-            totalHerdingMetric, _herdingMatches.length.toDouble()));
+            totalHerdingMetric, _herding.matches.length.toDouble()));
 
     // Accuracy & Frequency Maps
     _accuracyMappings = accuracyPerRegion.map(
@@ -1603,102 +1716,20 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           child: Column(
             spacing: _margin,
             children: [
-              SizedBox(
-                height: 60,
-                child: Row(
-                  spacing: _margin,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: DefaultContainer(
-                        expandVertical: true,
-                        margin: _margin,
-                        child: CustomDropdown(
-                          options: _teams.map((x) => "$x").toList(),
-                          color: context.colors.accent2,
-                          onChanged: (value) {
-                            _loadData(DataParser.toInt(value) ??
-                                _teams.firstOrNull ??
-                                -1);
-                          },
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 9,
-                      child: DefaultContainer(
-                        expandVertical: true,
-                        margin: _margin,
-                        child: Center(
-                          child: AutoSizeText(
-                            _teamName ?? "No team found",
-                            textAlign: TextAlign.left,
-                            maxLines: 2,
-                            style: comfortaaBold(17,
-                                color: context.colors.containerText),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              TeamSelectorCard(
+                teams: _teams,
+                teamName: _teamName,
+                margin: _margin,
+                onTeamChanged: _loadData,
               ),
               TagViewer(
                 tags: _tags,
                 margin: _margin,
                 initialHeight: 90,
               ),
-              SizedBox(
-                height: 50,
-                child: Row(
-                  spacing: _margin,
-                  children: [
-                    Expanded(
-                      child: MiniInfoBox(
-                        title: "OPR",
-                        info: _opr?.toStringAsFixed(2) ?? "...",
-                      ),
-                    ),
-                    Expanded(
-                      flex: 5,
-                      child: DefaultContainer(
-                        margin: _margin,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: MiniInfoBox(
-                                margin: 0,
-                                title: "EPA",
-                                info: _totalEpa?.toStringAsFixed(2) ?? "...",
-                              ),
-                            ),
-                            Expanded(
-                              child: MiniInfoBox(
-                                margin: 0,
-                                title: "Auto",
-                                info: _autoEpa?.toStringAsFixed(2) ?? "...",
-                              ),
-                            ),
-                            Expanded(
-                              child: MiniInfoBox(
-                                margin: 0,
-                                title: "Teleop",
-                                info: _teleopEpa?.toStringAsFixed(2) ?? "...",
-                              ),
-                            ),
-                            Expanded(
-                              child: MiniInfoBox(
-                                margin: 0,
-                                title: "Endgame",
-                                info: _endgameEpa?.toStringAsFixed(2) ?? "...",
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              StatsBar(
+                epaData: _tbaData,
+                margin: _margin,
               ),
               SizedBox(
                 height: 100,
@@ -1708,7 +1739,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                     Expanded(
                       child: PopupInfoBox(
                         title: "Weight (lb)",
-                        info: _weight.toStringAsFixed(1),
+                        info: _pitDataGrouped.weight.toStringAsFixed(1),
                         subInfo: "with bumpers",
                         child: GridView.count(
                           shrinkWrap: true,
@@ -1717,16 +1748,24 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                           mainAxisSpacing: _margin,
                           childAspectRatio: 1.4,
                           children: [
-                            InfoBox(info: _shooterType, title: "Shooter Type"),
-                            InfoBox(info: "$_capacity", title: "Capacity"),
-                            InfoBox(info: _accessType, title: "Neutral Access"),
-                            InfoBox(info: _drivetrain, title: "Drivetrain"),
                             InfoBox(
-                                info:
-                                    _doubleToPercentageString(_averageAccuracy),
+                                info: _pitDataGrouped.shooterType,
+                                title: "Shooter Type"),
+                            InfoBox(
+                                info: "${_pitDataGrouped.capacity}",
+                                title: "Capacity"),
+                            InfoBox(
+                                info: _pitDataGrouped.accessType,
+                                title: "Neutral Access"),
+                            InfoBox(
+                                info: _pitDataGrouped.drivetrain,
+                                title: "Drivetrain"),
+                            InfoBox(
+                                info: MetricWidgetFactory.percentageString(
+                                    _averageAccuracy),
                                 title: "Avg. Accuracy"),
                             InfoBox(
-                                info: _doubleToPercentageString(
+                                info: MetricWidgetFactory.percentageString(
                                     _averageDefendedAccuracy),
                                 title: "Defended Avg. Acc"),
                           ],
@@ -1736,8 +1775,9 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                     Expanded(
                       child: PopupInfoBox(
                         title: "% Feeding",
-                        info: _doubleToPercentageString(_feedingPercentage),
-                        subInfo: _feedingMetric,
+                        info: MetricWidgetFactory.percentageString(
+                            _feeding.percentage),
+                        subInfo: _feeding.metric,
                         child: GridView.count(
                           shrinkWrap: true,
                           crossAxisCount: 2,
@@ -1746,18 +1786,18 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                           childAspectRatio: 1.4,
                           children: [
                             PopupInfoBox(
-                              info: _doubleToPercentageString(
-                                  _shootingPercentage),
+                              info: MetricWidgetFactory.percentageString(
+                                  _shooting.percentage),
                               title: "Shooting",
-                              subInfo: _shootingMetric,
-                              child: _getMatchesWidgetList(_shootingMatches),
+                              subInfo: _shooting.metric,
+                              child: _getMatchesWidgetList(_shooting.matches),
                             ),
                             PopupInfoBox(
-                              info:
-                                  _doubleToPercentageString(_herdingPercentage),
+                              info: MetricWidgetFactory.percentageString(
+                                  _herding.percentage),
                               title: "Herding",
-                              subInfo: _herdingMetric,
-                              child: _getMatchesWidgetList(_herdingMatches),
+                              subInfo: _herding.metric,
+                              child: _getMatchesWidgetList(_herding.matches),
                             ),
                           ],
                         ),
@@ -1766,8 +1806,9 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                     Expanded(
                       child: PopupInfoBox(
                         title: "% Defending",
-                        info: _doubleToPercentageString(_defensePercentage),
-                        subInfo: _defenseMetric,
+                        info: MetricWidgetFactory.percentageString(
+                            _defense.percentage),
+                        subInfo: _defense.metric,
                         child: GridView.count(
                           shrinkWrap: true,
                           crossAxisCount: 2,
@@ -1776,32 +1817,32 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                           childAspectRatio: 1.4,
                           children: [
                             PopupInfoBox(
-                              info:
-                                  _doubleToPercentageString(_accessPercentage),
+                              info: MetricWidgetFactory.percentageString(
+                                  _access.percentage),
                               title: "Trench / Bump",
-                              subInfo: _accessMetric,
-                              child: _getMatchesWidgetList(_accessMatches),
+                              subInfo: _access.metric,
+                              child: _getMatchesWidgetList(_access.matches),
                             ),
                             PopupInfoBox(
-                              info:
-                                  _doubleToPercentageString(_centerPercentage),
+                              info: MetricWidgetFactory.percentageString(
+                                  _center.percentage),
                               title: "Neutral Zone",
-                              subInfo: _centerMetric,
-                              child: _getMatchesWidgetList(_centerMatches),
+                              subInfo: _center.metric,
+                              child: _getMatchesWidgetList(_center.matches),
                             ),
                             PopupInfoBox(
-                              info: _doubleToPercentageString(
-                                  _alliancePercentage),
+                              info: MetricWidgetFactory.percentageString(
+                                  _alliance.percentage),
                               title: "Alliance Zone",
-                              subInfo: _allianceMetric,
-                              child: _getMatchesWidgetList(_allianceMatches),
+                              subInfo: _alliance.metric,
+                              child: _getMatchesWidgetList(_alliance.matches),
                             ),
                             PopupInfoBox(
-                              info: _doubleToPercentageString(
-                                  _stealingPercentage),
+                              info: MetricWidgetFactory.percentageString(
+                                  _stealing.percentage),
                               title: "Stealing",
-                              subInfo: _stealingMetric,
-                              child: _getMatchesWidgetList(_stealingMatches),
+                              subInfo: _stealing.metric,
+                              child: _getMatchesWidgetList(_stealing.matches),
                             ),
                           ],
                         ),
