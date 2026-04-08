@@ -1039,6 +1039,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   MetricData _center = MetricData();
   MetricData _alliance = MetricData();
   MetricData _stealing = MetricData();
+  MetricData _counter = MetricData();
 
   List<Auto> _autos = [];
 
@@ -1273,6 +1274,9 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     _stealing = MetricData();
     double totalStealingMetric = 0;
 
+    _counter = MetricData();
+    double totalCounterMetric = 0;
+
     _autos = [];
 
     _climbs = [];
@@ -1316,7 +1320,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
               entry["autoPath$i"] is Map<String, dynamic> &&
               !DataParser.isEmpty(entry["autoPath$i"]!["path"])) {
             _autos.add(Auto(
-                scouterName: "",
+                scouterName: DataParser.asString(entry["scouterName"]),
                 rating: 0,
                 match: "Pit",
                 attemptedClimb:
@@ -1484,7 +1488,9 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                 true ||
             DataParser.toMap(entry["isAllianceDefending"])?["isChecked"] ==
                 true ||
-            DataParser.toMap(entry["isStealing"])?["isChecked"] == true) {
+            DataParser.toMap(entry["isStealing"])?["isChecked"] == true ||
+            DataParser.toMap(entry["isCounterDefending"])?["isChecked"] ==
+                true) {
           defenseCount++;
         }
 
@@ -1524,10 +1530,20 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
               _metricToValue(DataParser.asString(temp?["selection"]));
         }
 
+        temp = DataParser.toMap(entry["isCounterDefending"]);
+        if (temp?["isChecked"] == true) {
+          _counter.matches.add(MetricMatch(
+              match: shortenedMatch,
+              metric: DataParser.asString(temp?["selection"])));
+          totalCounterMetric +=
+              _metricToValue(DataParser.asString(temp?["selection"]));
+        }
+
         totalDefenseMetric = totalAccessMetric +
             totalCenterMetric +
             totalAllianceMetric +
-            totalStealingMetric;
+            totalStealingMetric +
+            totalCounterMetric;
       }
     }
 
@@ -1578,6 +1594,13 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         ? "No Data"
         : _valueToMetric(zeroSafeDivision(
             totalAccessMetric, _access.matches.length.toDouble()));
+
+    _counter.percentage = zeroSafeDivision(
+        _counter.matches.length.toDouble(), _matches.toDouble());
+    _counter.metric = _counter.matches.isEmpty
+        ? "No Data"
+        : _valueToMetric(zeroSafeDivision(
+            totalCounterMetric, _counter.matches.length.toDouble()));
 
     // % Feeding
     _feeding.percentage =
@@ -1781,6 +1804,13 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                               title: "Stealing",
                               subInfo: _stealing.metric,
                               child: _getMatchesWidgetList(_stealing.matches),
+                            ),
+                            PopupInfoBox(
+                              info: MetricWidgetFactory.percentageString(
+                                  _counter.percentage),
+                              title: "Counter Defense",
+                              subInfo: _counter.metric,
+                              child: _getMatchesWidgetList(_counter.matches),
                             ),
                           ],
                         ),

@@ -126,6 +126,13 @@ class AtlasState extends State<Atlas> {
                   ),
                 ),
               ),
+              Metric(
+                checkboxTitle: "Counter Defense",
+                selectOptions: ["Poor", "Decent", "Great"],
+                height: 80,
+                optionColor: context.colors.accent2,
+                jsonKey: "isCounterDefending",
+              ),
               DefaultContainer(
                 expandHorizontal: true,
                 margin: margin,
@@ -158,13 +165,6 @@ class AtlasState extends State<Atlas> {
                 height: 80,
                 optionColor: context.colors.accent1,
                 jsonKey: "isFeeding",
-              ),
-              Metric(
-                checkboxTitle: "Counter Defense",
-                selectOptions: ["Poor", "Decent", "Great"],
-                height: 80,
-                optionColor: context.colors.accent1,
-                jsonKey: "isCounterDefending",
               ),
             ],
           ),
