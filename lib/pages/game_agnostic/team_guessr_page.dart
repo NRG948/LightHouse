@@ -2,23 +2,26 @@ import "package:flutter/material.dart";
 import "package:lighthouse/themes.dart";
 import "package:lighthouse/widgets/game_agnostic/team_guessr.dart";
 
-class TestingGroundPage extends StatefulWidget {
-  const TestingGroundPage({super.key});
+class TeamGuessrPage extends StatefulWidget {
+  const TeamGuessrPage({super.key});
 
   @override
-  State<TestingGroundPage> createState() => _TestingGroundPageState();
+  State<TeamGuessrPage> createState() => _TeamGuessrPageState();
 }
 
-class _TestingGroundPageState extends State<TestingGroundPage> {
+class _TeamGuessrPageState extends State<TeamGuessrPage> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: context.colors.backgroundPrimary,
       appBar: AppBar(
         backgroundColor: context.colors.backgroundPrimary,
         title: Text(
-          "Testing Ground",
+          "Team Guessr",
           style: TextStyle(
               fontFamily: "Comfortaa",
               fontWeight: FontWeight.w900,
@@ -27,17 +30,20 @@ class _TestingGroundPageState extends State<TestingGroundPage> {
         centerTitle: true,
         leading: IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, "/home-scouter");
+              Navigator.pushNamed(context, "/playground");
             },
             icon: Icon(
               Icons.home,
               color: context.colors.titleText,
             )),
       ),
-      body: Center(
-          child: Padding(
-              padding: EdgeInsets.all(10),
-              child: TeamGuessr())),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        width: screenWidth,
+        height: screenHeight,
+        decoration: context.backgroundDecoration,
+        child: TeamGuessr(),
+      ),
     );
   }
 }

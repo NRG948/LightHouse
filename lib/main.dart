@@ -2,13 +2,15 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/pages/game_agnostic/predictions_page.dart";
+import "package:lighthouse/pages/game_agnostic/team_guessr_page.dart";
 import "package:lighthouse/pages/rebuilt/aryav_data_viewer.dart";
 import "package:lighthouse/pages/game_agnostic/home_data_viewer.dart";
 import "package:lighthouse/pages/game_agnostic/home_scouter.dart";
 import "package:lighthouse/pages/game_agnostic/saved_data.dart";
 import "package:lighthouse/pages/game_agnostic/settings.dart";
 import "package:lighthouse/pages/game_agnostic/sync.dart";
-import "package:lighthouse/pages/game_agnostic/testing_ground.dart";
+import "package:lighthouse/pages/game_agnostic/playground_page.dart";
 import "package:lighthouse/pages/rebuilt/atlas.dart";
 import "package:lighthouse/pages/rebuilt/pit_scout.dart";
 import "package:lighthouse/themes.dart";
@@ -56,8 +58,10 @@ class MainWidget extends StatelessWidget {
             "/saved_data": (context) => SavedData(),
             "/home-data-viewer": (context) => DataViewerHome(),
             "/sync": (context) => SyncPage(),
-            "/testing-ground": (context) => TestingGroundPage(),
+            "/playground": (context) => PlaygroundPage(),
             "/data-viewer-aryav": (context) => AryavDataViewer(),
+            "/team-guessr": (context) => TeamGuessrPage(),
+            "/prediction": (context) => PredictionsPage(),
             // TODO: add these again:
             // "/data-viewer-amongview": (context) => DataViewerAmongView(),
             // "/amongview-individual": (context) => AmongViewIndividual()

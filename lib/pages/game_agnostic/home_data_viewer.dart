@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/device_id.dart';
 import 'package:lighthouse/filemgr.dart';
@@ -13,10 +14,9 @@ class DataViewerHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width; // gets screen width
+    final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight =
-        MediaQuery.of(context).size.height; // gets screen height
-//calculate scaling factor based on height
+        MediaQuery.of(context).size.height;
     debugPrint((screenWidth * 0.85).toString());
     debugPrint((screenHeight * 0.15).toString());
     return PopScope(
@@ -53,6 +53,7 @@ class DataViewerHome extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  HapticFeedback.mediumImpact();
                   Navigator.pushNamed(context,
                       "/data-viewer-aryav"); // Navigates to Aryav's Data Viewer Page.
                 },
@@ -85,6 +86,7 @@ class DataViewerHome extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  HapticFeedback.mediumImpact();
                   Navigator.pushNamed(context, "/data-viewer-amongview");
                 },
                 child: Container(
@@ -194,6 +196,7 @@ class DataViewerHome extends StatelessWidget {
                       style: comfortaaBold(18,
                           color: context.colors.containerText)),
                   onTap: () {
+                    HapticFeedback.mediumImpact();
                     Navigator.pushNamed(context, "/home-scouter");
                   }),
               ListTile(
@@ -205,6 +208,7 @@ class DataViewerHome extends StatelessWidget {
                       style: comfortaaBold(18,
                           color: context.colors.containerText)),
                   onTap: () {
+                    HapticFeedback.mediumImpact();
                     Navigator.pop(
                         context); // Closes the drawer, since the user is already on this page.
                   }),
@@ -213,11 +217,12 @@ class DataViewerHome extends StatelessWidget {
                     Icons.grid_3x3,
                     color: context.colors.containerText,
                   ),
-                  title: Text("Testing Ground",
+                  title: Text("Playground",
                       style: comfortaaBold(18,
                           color: context.colors.containerText)),
                   onTap: () async {
-                    Navigator.pushNamed(context, "/testing-ground");
+                    HapticFeedback.mediumImpact();
+                    Navigator.pushNamed(context, "/playground");
                   })
             ],
           ),

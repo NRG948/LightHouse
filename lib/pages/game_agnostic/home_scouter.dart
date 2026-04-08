@@ -35,7 +35,7 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
         route: "/atlas",
         color: context.colors.accent1));
     enabledLaunchers.add(Launcher(
-        icon: Icons.analytics_rounded,
+        icon: Icons.assignment_rounded,
         title: "Pit",
         route: "/pit",
         color: context.colors.accent2));
@@ -121,12 +121,12 @@ class _ScouterHomePageState extends State<ScouterHomePage> {
                           Icons.grid_3x3,
                           color: context.colors.containerText,
                         ),
-                        title: Text("Testing Ground",
+                        title: Text("Playground",
                             style: comfortaaBold(18,
                                 color: context.colors.containerText)),
                         onTap: () async {
                           HapticFeedback.mediumImpact();
-                          Navigator.pushNamed(context, "/testing-ground");
+                          Navigator.pushNamed(context, "/playground");
                         })
                   ],
                 ),
