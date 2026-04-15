@@ -1663,6 +1663,7 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         centerTitle: true,
         leading: IconButton(
             onPressed: () {
+              HapticFeedback.mediumImpact();
               Navigator.pushNamed(context, "/home-data-viewer");
             },
             icon: Icon(
