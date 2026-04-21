@@ -152,6 +152,8 @@ class AutoPathSelector extends StatefulWidget {
   /// The scaling factor of the field map.
   final double imageScalingFactor;
 
+  final double nodeScalingFactor;
+
   /// The output of [converter] when the pixel offsets of the nodes are passed in is saved to [DataEntry].
   final Offset Function(Offset position, {bool inverse})? converter;
 
@@ -187,6 +189,7 @@ class AutoPathSelector extends StatefulWidget {
     this.converter,
     this.viewOnly = false,
     this.imageScalingFactor = 1,
+    this.nodeScalingFactor = 1,
     this.initialPath,
   });
 
@@ -251,6 +254,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   double get _nodeRadius => _imageWidth / 17;
   double get _nodeBorderWidth => _width / 100;
+  double get _nodeScalingFactor => widget.nodeScalingFactor;
   int get _maximumGroupSize => widget.maximumGroupSize;
 
   Offset Function(Offset pixelPosition, {bool inverse})? get _converter =>
@@ -374,7 +378,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
           .length;
       for (NodeData node in _nodeStack
           .where((final NodeData node) => node.groupLabel == zone.id)) {
-        node.radius = _nodeRadius -
+        node.radius = _nodeRadius * _nodeScalingFactor -
             ((numNodes - 1) * 1.5); // TODO: tweak based on testing
 
         final scaledLeft = zone.left * _scaleFactor;
@@ -476,8 +480,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                           localPosition + Offset(node.radius, node.radius) / 2;
 
                       if (_flipField) {
-                        newPosition = Offset(
-                            _imageWidth - newPosition.dx, newPosition.dy);
+                        newPosition = Offset(_imageWidth - newPosition.dx,
+                            _imageHeight - newPosition.dy);
                       }
 
                       _history.add(UserAction(
@@ -517,7 +521,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   NodeData addNodeFromRegion(String groupLabel) {
     NodeData newNode = NodeData(
       groupLabel: groupLabel,
-      radius: _nodeRadius,
+      radius: _nodeRadius * _nodeScalingFactor,
       draggable: false,
       color: _regionNodeColor ?? context.colors.accent4,
     );
@@ -533,7 +537,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   NodeData addNodeFromMap(Offset position) {
     NodeData newNode = NodeData(
         position: position,
-        radius: _nodeRadius,
+        radius: _nodeRadius * _nodeScalingFactor,
         draggable: true,
         color: _nodeStack.isEmpty
             ? _startNodeColor ?? context.colors.confirm

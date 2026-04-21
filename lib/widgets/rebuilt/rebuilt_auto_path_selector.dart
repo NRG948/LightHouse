@@ -10,6 +10,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
   final bool viewOnly;
   final List<dynamic>? initialPath;
   final bool pit;
+  final double nodeScalingFactor;
 
   const RebuiltAutoPathSelector(
       {super.key,
@@ -19,7 +20,8 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       this.viewOnly = false,
       this.initialPath,
       this.pit = false,
-      this.jsonKey});
+      this.jsonKey,
+      this.nodeScalingFactor = 1});
 
   List<Zone> getZones() {
     return [
@@ -47,9 +49,9 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       pit: pit,
       jsonKey: jsonKey ?? "autoPath",
       flipField: flipField,
-      imageScalingFactor: 1,
       viewOnly: viewOnly,
       initialPath: initialPath,
+      nodeScalingFactor: nodeScalingFactor,
       converter: AutoPathSelector.getConverterFromPoints(
           Offset(52, 617), // Bottom left corner
           Offset(0, 0),
