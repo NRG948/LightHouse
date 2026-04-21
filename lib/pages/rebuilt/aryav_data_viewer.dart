@@ -302,6 +302,7 @@ class _AutoPreviewState extends State<AutoPreview> {
               margin: 0,
               viewOnly: true,
               initialPath: auto.path,
+              nodeScalingFactor: 0.9,
             ),
           ),
           Expanded(

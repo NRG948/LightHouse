@@ -177,6 +177,7 @@ class PitScoutState extends State<PitScout> {
                       margin: 7,
                       jsonKey: "autoPath${(index + 1)}",
                       pit: true,
+                      nodeScalingFactor: 0.7,
                     ),
                     buildPitTextBox(
                         numeric: true,

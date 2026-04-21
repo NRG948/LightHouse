@@ -89,6 +89,7 @@ class AtlasState extends State<Atlas> {
                 margin: margin,
                 flipField: flipField,
                 pit: false,
+                nodeScalingFactor: 0.7,
               ),
               DefaultContainer(
                 color: context.colors.container,
