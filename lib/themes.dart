@@ -179,6 +179,7 @@ extension LightHouseDecorations on BuildContext {
         image: DecorationImage(
           image: const AssetImage("assets/images/background.png"),
           fit: BoxFit.cover,
+          alignment: Alignment.topCenter,
           colorFilter: ColorFilter.mode(
             colors.backgroundSecondary,
             BlendMode.srcIn,
