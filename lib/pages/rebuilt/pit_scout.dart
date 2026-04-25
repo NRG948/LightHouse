@@ -278,6 +278,7 @@ class PitScoutState extends State<PitScout> {
                   TowerLocationSelector(
                     margin: 10,
                     jsonKey: "climb",
+                    selectMultiple: true,
                   ),
                   NRGMultiThreeStageCheckbox(
                     title: "Shooting",

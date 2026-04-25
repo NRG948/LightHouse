@@ -56,6 +56,7 @@ class TowerLocationSelector extends StatefulWidget {
   final Color? lockedColor;
   final double? margin;
   final String? jsonKey;
+  final bool selectMultiple;
 
   const TowerLocationSelector({
     super.key,
@@ -65,6 +66,7 @@ class TowerLocationSelector extends StatefulWidget {
     this.lockedColor,
     this.margin,
     this.jsonKey,
+    this.selectMultiple = false,
   });
 
   @override
@@ -93,13 +95,14 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
   late final AssetImage _towerImage;
   String get _towerImagePath => "assets/images/tower.png";
 
+  bool get _selectMultiple => widget.selectMultiple;
+
   String _selectedId = "";
+  final Set<String> _selectedIds = {};
 
   bool _isLocked = true;
 
-  // ignore: unused_field
   String _startTime = "";
-  // ignore: unused_field
   ClimbLevel _climbLevel = ClimbLevel.none;
 
   @override
@@ -114,7 +117,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
     Map<String, dynamic> data = {
       "attempted": !_isLocked,
       "startTime": _startTime,
-      "region": _selectedId,
+      "region": _selectMultiple ? _selectedIds.toList() : _selectedId,
       "level": _climbLevel.name,
     };
 
@@ -125,7 +128,7 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
     return Expanded(
       flex: flex,
       child: Container(
-        color: _selectedId == id
+        color: (_selectMultiple ? _selectedIds.contains(id) : _selectedId == id)
             ? Color.fromARGB(100, 0, 230, 200)
             : Color.fromARGB(1, 255, 255, 255),
         child: AbsorbPointer(
@@ -133,7 +136,15 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
           child: GestureDetector(onTapUp: (details) {
             setState(() {
               HapticFeedback.mediumImpact();
-              _selectedId = _selectedId == id ? "" : id;
+              if (_selectMultiple) {
+                if (_selectedIds.contains(id)) {
+                  _selectedIds.remove(id);
+                } else {
+                  _selectedIds.add(id);
+                }
+              } else {
+                _selectedId = _selectedId == id ? "" : id;
+              }
               _serializeData();
             });
           }),
@@ -173,7 +184,10 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                           onToggle: (value) {
                             setState(() {
                               _isLocked = !value;
-                              if (_isLocked) _selectedId = "";
+                              if (_isLocked) {
+                                _selectedId = "";
+                                _selectedIds.clear;
+                              }
                               _serializeData();
                             });
                           },
@@ -197,9 +211,10 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                 Expanded(
                   flex: 20,
                   child: Container(
-                    //height: _height - _bottomOffset - _topOffset - 2.1 * _margin, // 2.1 to prevent overflow due to rounding error
                     decoration: BoxDecoration(
-                      color: _isLocked ? _lockedColor ?? context.colors.locked : _mainColor ?? context.colors.accent1,
+                      color: _isLocked
+                          ? _lockedColor ?? context.colors.locked
+                          : _mainColor ?? context.colors.accent1,
                       borderRadius: BorderRadius.circular(_margin),
                     ),
                     child: Stack(
@@ -214,7 +229,9 @@ class _TowerLocationSelectorState extends State<TowerLocationSelector> {
                                 image: _towerImage,
                                 fit: BoxFit.fill,
                                 colorFilter: ColorFilter.mode(
-                                    _backgroundColor ?? context.colors.container, BlendMode.modulate),
+                                    _backgroundColor ??
+                                        context.colors.container,
+                                    BlendMode.modulate),
                               ),
                             ),
                           ),
