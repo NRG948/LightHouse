@@ -864,7 +864,7 @@ class TeamSelectorCard extends StatelessWidget {
         spacing: margin,
         children: [
           Expanded(
-            flex: 4,
+            flex: 5,
             child: DefaultContainer(
               expandVertical: true,
               margin: margin,
