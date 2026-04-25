@@ -51,8 +51,6 @@ class DataEntryPageState extends State<DataEntryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     DataEntry.activeConfig =
         (ModalRoute.of(context)?.settings.arguments as String?)!;
 
@@ -134,44 +132,49 @@ class DataEntryPageState extends State<DataEntryPage> {
               ],
             ),
             bottomNavigationBar: buildBottomNavBar(_pages),
-            body: Container(
-              height: screenHeight,
-              width: screenWidth,
-              decoration: context.backgroundDecoration,
-              child: NotificationListener<OverscrollNotification>(
-                onNotification: (notification) {
-                  if (notification.metrics.axis == Axis.vertical) {
-                    return true;
-                  }
-                  debugPrint(notification.overscroll.toString());
-                  if (notification.overscroll < -25) {
-                    showReturnDialog(context);
-                  }
-                  if (notification.overscroll > 25) {
-                    saveJson(context);
-                  }
-                  return true;
-                },
-                child: ScrollConfiguration(
-                  behavior: ScrollBehavior().copyWith(overscroll: false),
-                  child: PageView.builder(
-                    controller: controller,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _pages.values.toList().length,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return SingleChildScrollView(
-                        child: _pages.values.toList()[index],
-                      );
+            body: Stack(
+              children: [
+                Positioned.fill(
+                  child: Container(decoration: context.backgroundDecoration),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: NotificationListener<OverscrollNotification>(
+                    onNotification: (notification) {
+                      if (notification.metrics.axis == Axis.vertical) {
+                        return true;
+                      }
+                      debugPrint(notification.overscroll.toString());
+                      if (notification.overscroll < -25) {
+                        showReturnDialog(context);
+                      }
+                      if (notification.overscroll > 25) {
+                        saveJson(context);
+                      }
+                      return true;
                     },
-                    onPageChanged: (index) {
-                      setState(() {
-                        currentPage = index;
-                      });
-                    },
+                    child: ScrollConfiguration(
+                      behavior: ScrollBehavior().copyWith(overscroll: false),
+                      child: PageView.builder(
+                        controller: controller,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _pages.values.toList().length,
+                        physics: ClampingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return SingleChildScrollView(
+                            child: _pages.values.toList()[index],
+                          );
+                        },
+                        onPageChanged: (index) {
+                          setState(() {
+                            currentPage = index;
+                          });
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             )),
       ),
     );
