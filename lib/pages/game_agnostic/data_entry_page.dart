@@ -137,40 +137,51 @@ class DataEntryPageState extends State<DataEntryPage> {
                 Positioned.fill(
                   child: Container(decoration: context.backgroundDecoration),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: NotificationListener<OverscrollNotification>(
-                    onNotification: (notification) {
-                      if (notification.metrics.axis == Axis.vertical) {
-                        return true;
-                      }
-                      debugPrint(notification.overscroll.toString());
-                      if (notification.overscroll < -25) {
-                        showReturnDialog(context);
-                      }
-                      if (notification.overscroll > 25) {
-                        saveJson(context);
-                      }
-                      return true;
-                    },
-                    child: ScrollConfiguration(
-                      behavior: ScrollBehavior().copyWith(overscroll: false),
-                      child: PageView.builder(
-                        controller: controller,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _pages.values.toList().length,
-                        physics: ClampingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return SingleChildScrollView(
-                            child: _pages.values.toList()[index],
-                          );
-                        },
-                        onPageChanged: (index) {
-                          setState(() {
-                            currentPage = index;
-                          });
-                        },
-                      ),
+                Positioned.fill(
+                  child: SafeArea(
+                    bottom: false,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: NotificationListener<OverscrollNotification>(
+                            onNotification: (notification) {
+                              if (notification.metrics.axis == Axis.vertical) {
+                                return true;
+                              }
+                              debugPrint(notification.overscroll.toString());
+                              if (notification.overscroll < -25) {
+                                showReturnDialog(context);
+                              }
+                              if (notification.overscroll > 25) {
+                                saveJson(context);
+                              }
+                              return true;
+                            },
+                            child: ScrollConfiguration(
+                              behavior:
+                                  ScrollBehavior().copyWith(overscroll: false),
+                              child: PageView.builder(
+                                controller: controller,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _pages.values.toList().length,
+                                physics: ClampingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return SingleChildScrollView(
+                                    child: _pages.values.toList()[index],
+                                  );
+                                },
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    currentPage = index;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).viewInsets.bottom),
+                      ],
                     ),
                   ),
                 ),
