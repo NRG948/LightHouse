@@ -69,7 +69,8 @@ class _CycleListCounterState extends State<CycleListCounter> {
               child: ListView.builder(
                 itemCount: _selectorsData.length,
                 itemBuilder: (context, index) {
-                  final item = _selectorsData[index];
+                  final trueIndex = _selectorsData.length - 1 - index;
+                  final item = _selectorsData[trueIndex];
                   return Row(
                     key: ValueKey(item.id),
                     children: [
@@ -102,7 +103,7 @@ class _CycleListCounterState extends State<CycleListCounter> {
                                 : context.colors.delete,
                           ),
                           iconSize: _removeIconSize,
-                          onPressed: () => _removeSelector(index),
+                          onPressed: () => _removeSelector(trueIndex),
                         ),
                       ),
                     ],
