@@ -11,6 +11,7 @@ import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 import 'package:lighthouse/widgets/game_agnostic/match_info.dart';
 import 'package:lighthouse/widgets/game_agnostic/match_prediction.dart';
 import 'package:lighthouse/widgets/game_agnostic/rating.dart';
+import 'package:lighthouse/widgets/game_agnostic/single_choice_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/textbox.dart';
 import 'package:lighthouse/widgets/rebuilt/metric.dart';
 import 'package:lighthouse/widgets/rebuilt/rebuilt_auto_path_selector.dart';
@@ -240,6 +241,38 @@ class AtlasState extends State<Atlas> {
               TowerLocationSelector(
                 margin: margin,
                 jsonKey: "climb",
+              ),
+              SizedBox(
+                height: 100,
+                child: DefaultContainer(
+                  margin: margin,
+                  child: Column(
+                    spacing: margin,
+                    children: <Widget>[
+                      DefaultContainer(
+                        color: context.colors.muted,
+                        margin: margin / 2,
+                        child: Text(
+                          "Scoring",
+                          textAlign: TextAlign.center,
+                          style: comfortaaBold(
+                            17,
+                            color: context.colors.container,
+                            customFontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                      AspectRatio(
+                        aspectRatio: 12,
+                        child: SingleChoiceSelector(
+                          choices: ["1", "2", "3", "4", "5"],
+                          spacing: 10,
+                          jsonKey: "scoring",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               NRGRating(
                   title: "Data Quality",

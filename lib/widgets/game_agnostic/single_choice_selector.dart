@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
+import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/themes.dart';
 
 class SingleChoiceSelector extends StatefulWidget {
@@ -39,6 +40,8 @@ class SingleChoiceSelector extends StatefulWidget {
   /// The color of the input when [isLocked] is ```true```.
   final Color? lockedColor;
 
+  final String? jsonKey;
+
   /// Creates a single selection multiple choice widget.
   ///
   /// Either one selection is made or none are made.
@@ -50,13 +53,14 @@ class SingleChoiceSelector extends StatefulWidget {
     required this.choices,
     required this.spacing,
     this.onSelect = _noop,
-    required this.selectColor,
+    this.selectColor,
     this.initialValue,
     this.optionColor,
     this.textColor,
     this.lockedColor,
     this.isLocked = false,
     this.retainSelectionOnLock = true,
+    this.jsonKey,
   });
 
   static void _noop(String? choice) {}
@@ -78,6 +82,7 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
   Color? get _textColor => widget.textColor;
   bool get _isLocked => widget.isLocked;
   bool get _retainSelectionOnLock => widget.retainSelectionOnLock;
+  String? get _jsonKey => widget.jsonKey;
 
   String? _selectedChoice;
 
@@ -85,6 +90,12 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
   void initState() {
     super.initState();
     _selectedChoice = _initialValue;
+  }
+
+  void _serializeData() {
+    if (_jsonKey == null) return;
+
+    DataEntry.exportData[_jsonKey!] = _selectedChoice ?? "";
   }
 
   Widget getChoiceButtons(String choice) {
@@ -97,6 +108,7 @@ class _SingleChoiceSelectorState extends State<SingleChoiceSelector> {
             _selectedChoice = _selectedChoice == choice ? "" : choice;
           });
           HapticFeedback.mediumImpact();
+          _serializeData();
           _onSelect(_selectedChoice);
         },
         child: Container(
