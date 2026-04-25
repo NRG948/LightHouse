@@ -78,115 +78,97 @@ class DataEntryPageState extends State<DataEntryPage> {
         // Allows keyboard to be closed when anywhere else is clicked on screen
         onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
-            // Prevents background image from being resized when keyboard opens
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              backgroundColor: context.colors.backgroundPrimary,
-              title: FittedBox(
-                child: AutoSizeText(
-                  "$_name - ${createNavBar(_pages)[currentPage].label}",
-                  style: TextStyle(
-                      fontFamily: "Comfortaa",
-                      fontWeight: FontWeight.w900,
-                      color: context.colors.titleText),
-                  minFontSize: 4,
-                ),
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            backgroundColor: context.colors.backgroundPrimary,
+            title: FittedBox(
+              child: AutoSizeText(
+                "$_name - ${createNavBar(_pages)[currentPage].label}",
+                style: TextStyle(
+                    fontFamily: "Comfortaa",
+                    fontWeight: FontWeight.w900,
+                    color: context.colors.titleText),
+                minFontSize: 4,
               ),
-              centerTitle: true,
-              leading: IconButton(
-                  onPressed: () {
-                    showReturnDialog(context);
-                  },
-                  icon: Icon(Icons.home, color: context.colors.titleText)),
-              actions: [
-                if (configData["debugMode"] == "true")
-                  IconButton(
-                    icon:
-                        Icon(Icons.javascript, color: context.colors.titleText),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (builder) {
-                            return Dialog(
-                              backgroundColor: context.colors.container,
-                              child: Container(
-                                padding: EdgeInsets.all(15),
-                                child: Text(
-                                  jsonEncode(DataEntry.exportData),
-                                  style: comfortaaBold(15,
-                                      color: context.colors.containerText),
-                                ),
-                              ),
-                            );
-                          });
-                    },
-                  ),
-                IconButton(
-                    onPressed: () {
-                      saveJson(context);
-                    },
-                    icon: Icon(
-                      Icons.save,
-                      color: context.colors.titleText,
-                    ))
-              ],
             ),
-            bottomNavigationBar: buildBottomNavBar(_pages),
-            body: Stack(
-              children: [
-                Positioned.fill(
-                  child: Container(decoration: context.backgroundDecoration),
-                ),
-                Positioned.fill(
-                  child: SafeArea(
-                    bottom: false,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: NotificationListener<OverscrollNotification>(
-                            onNotification: (notification) {
-                              if (notification.metrics.axis == Axis.vertical) {
-                                return true;
-                              }
-                              debugPrint(notification.overscroll.toString());
-                              if (notification.overscroll < -25) {
-                                showReturnDialog(context);
-                              }
-                              if (notification.overscroll > 25) {
-                                saveJson(context);
-                              }
-                              return true;
-                            },
-                            child: ScrollConfiguration(
-                              behavior:
-                                  ScrollBehavior().copyWith(overscroll: false),
-                              child: PageView.builder(
-                                controller: controller,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _pages.values.toList().length,
-                                physics: ClampingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return SingleChildScrollView(
-                                    child: _pages.values.toList()[index],
-                                  );
-                                },
-                                onPageChanged: (index) {
-                                  setState(() {
-                                    currentPage = index;
-                                  });
-                                },
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () {
+                  showReturnDialog(context);
+                },
+                icon: Icon(Icons.home, color: context.colors.titleText)),
+            actions: [
+              if (configData["debugMode"] == "true")
+                IconButton(
+                  icon: Icon(Icons.javascript, color: context.colors.titleText),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (builder) {
+                          return Dialog(
+                            backgroundColor: context.colors.container,
+                            child: Container(
+                              padding: EdgeInsets.all(15),
+                              child: Text(
+                                jsonEncode(DataEntry.exportData),
+                                style: comfortaaBold(15,
+                                    color: context.colors.containerText),
                               ),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).viewInsets.bottom),
-                      ],
-                    ),
-                  ),
+                          );
+                        });
+                  },
                 ),
-              ],
-            )),
+              IconButton(
+                  onPressed: () {
+                    saveJson(context);
+                  },
+                  icon: Icon(
+                    Icons.save,
+                    color: context.colors.titleText,
+                  ))
+            ],
+          ),
+          bottomNavigationBar: buildBottomNavBar(_pages),
+          body: NotificationListener<OverscrollNotification>(
+            onNotification: (notification) {
+              if (notification.metrics.axis == Axis.vertical) {
+                return true;
+              }
+              debugPrint(notification.overscroll.toString());
+              if (notification.overscroll < -25) {
+                showReturnDialog(context);
+              }
+              if (notification.overscroll > 25) {
+                saveJson(context);
+              }
+              return true;
+            },
+            child: Container(
+              constraints: const BoxConstraints.expand(),
+              decoration: context.backgroundDecoration,
+              child: ScrollConfiguration(
+                behavior: ScrollBehavior().copyWith(overscroll: false),
+                child: PageView.builder(
+                  controller: controller,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _pages.values.toList().length,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return SingleChildScrollView(
+                      child: _pages.values.toList()[index],
+                    );
+                  },
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentPage = index;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
