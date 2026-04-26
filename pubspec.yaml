@@ -140,6 +140,8 @@ flutter:
       - assets/text/teams9500-10000.txt
       - assets/text/teams10000-10500.txt
       - assets/text/teams10500-11000.txt
+      - assets/text/teams11000-11500.txt
+      - assets/text/teams11500-12000.txt
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

@@ -1,0 +1,56 @@
+[
+    {
+        "city": "Williams",
+        "country": "USA",
+        "key": "frc11501",
+        "name": "Williams Junior/Senior High",
+        "nickname": "Jackets",
+        "state_prov": "California",
+        "team_number": 11501
+    },
+    {
+        "city": "Clarkston",
+        "country": "USA",
+        "key": "frc11503",
+        "name": "Molex/Hill Brown and Reigle/Foot Master/Elton Brown and Reigle/American Water Company/American Water Company/Parrish Custom Tile and Marble&Springfield Christian Academy",
+        "nickname": "TALONS",
+        "state_prov": "Michigan",
+        "team_number": 11503
+    },
+    {
+        "city": "Lakeland",
+        "country": "USA",
+        "key": "frc11505",
+        "name": "Kensington Woods Schools",
+        "nickname": "Kensington Woods Robotics",
+        "state_prov": "Michigan",
+        "team_number": 11505
+    },
+    {
+        "city": "Litchfield",
+        "country": "USA",
+        "key": "frc11511",
+        "name": "Tribal Manufacturing/Luxwall/Classy Canine/Trenary Family&Litchfield High School",
+        "nickname": "CRTechnic",
+        "state_prov": "Michigan",
+        "team_number": 11511
+    },
+    {
+        "city": "Grand Rapids",
+        "country": "USA",
+        "key": "frc11522",
+        "name": "Union High School",
+        "nickname": "Union HS",
+        "state_prov": "Michigan",
+        "team_number": 11522
+    },
+    {
+        "city": "Flint",
+        "country": "USA",
+        "key": "frc11527",
+        "name": "Flint Cultural Center Academy",
+        "nickname": "FCCA Chrome Crew",
+        "state_prov": "Michigan",
+        "team_number": 11527
+    }
+]
