@@ -289,6 +289,15 @@ class PitScoutState extends State<PitScout> {
                       ["Shoot during Endgame"]
                     ],
                   ),
+                  buildPitTextBox(
+                    numeric: false,
+                    title: "Ideal Alliance Partner",
+                    jsonKey: "idealPartner",
+                    height: 150,
+                    width: double.infinity,
+                    fontSize: 20,
+                    maxLines: 20, // totally random guess
+                  ),
                   NRGCommentBox(
                     title: "Comments",
                     jsonKey: "comments",
