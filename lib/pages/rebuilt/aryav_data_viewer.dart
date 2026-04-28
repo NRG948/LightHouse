@@ -262,6 +262,9 @@ class PitData {
   String shooterType = "";
   String accessType = "";
   String drivetrain = "";
+  String climbLevel = "";
+  String idealAlliancePartner = "";
+  String mechanisms = "";
 }
 
 class TbaData {
@@ -1031,6 +1034,9 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
   double _averageAccuracy = 0;
   double _averageDefendedAccuracy = 0;
 
+  double _scoringPrecent = 0;
+  double _scoringRating = 0;
+
   MetricData _feeding = MetricData();
   MetricData _shooting = MetricData();
   MetricData _herding = MetricData();
@@ -1249,6 +1255,11 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     double totalDefendedAccuracy = 0;
     int defendedAccuracyCount = 0;
 
+    _scoringRating = 0;
+    _scoringPrecent = 0;
+    int scoringCount = 0;
+    double totalOffenseRating = 0;
+
     _feeding = MetricData();
     int feedingCount = 0;
     double totalFeedingMetric = 0;
@@ -1313,6 +1324,18 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
             : "Bump";
         _pitDataGrouped.drivetrain = DataParser.asString(entry["drivetrain"]);
         _pitDataGrouped.weight = DataParser.toDouble(entry["weight"]) ?? 0;
+        if (!DataParser.isEmpty(entry["climb"]) &&
+            entry["climb"] is Map<String, dynamic> &&
+            (DataParser.toBool(entry["climb"]!["attempted"]) ?? false) &&
+            !DataParser.isEmpty(entry["climb"]!["level"])) {
+          _pitDataGrouped.climbLevel =
+              DataParser.asString(entry["climb"]!["level"]);
+        } else {
+          _pitDataGrouped.climbLevel = "None";
+        }
+        _pitDataGrouped.idealAlliancePartner =
+            DataParser.asString(entry["idealPartner"]);
+        _pitDataGrouped.mechanisms = DataParser.asString(entry["mechanisms"]);
 
         // Pit Autos
         int i = 1;
@@ -1453,6 +1476,13 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
           }
         }
 
+        // Offense
+        int? scoring = DataParser.toInt(entry["scoring"]);
+        if (scoring != null) {
+          scoringCount++;
+          totalOffenseRating += scoring;
+        }
+
         Map<String, dynamic>? temp;
 
         // Feeding
@@ -1553,6 +1583,12 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
     _comments.sort((a, b) => _compareMatches(b.match, a.match));
 
     // TODO: Holy copy paste code. I will make this better when I have time.
+
+    // Offense
+    _scoringRating =
+        zeroSafeDivision(totalOffenseRating, scoringCount.toDouble());
+    _scoringPrecent =
+        zeroSafeDivision(scoringCount.toDouble(), _matches.toDouble());
 
     // Accuracy & Defended accuracy
     _averageAccuracy =
@@ -1701,37 +1737,65 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                   children: [
                     Expanded(
                       child: PopupInfoBox(
-                        title: "Weight (lb)",
-                        info: _pitDataGrouped.weight.toStringAsFixed(1),
-                        subInfo: "with bumpers",
-                        child: GridView.count(
-                          shrinkWrap: true,
-                          crossAxisCount: 2,
-                          crossAxisSpacing: _margin,
-                          mainAxisSpacing: _margin,
-                          childAspectRatio: 1.4,
-                          children: [
-                            InfoBox(
-                                info: _pitDataGrouped.shooterType,
-                                title: "Shooter Type"),
-                            InfoBox(
-                                info: "${_pitDataGrouped.capacity}",
-                                title: "Capacity"),
-                            InfoBox(
-                                info: _pitDataGrouped.accessType,
-                                title: "Neutral Access"),
-                            InfoBox(
-                                info: _pitDataGrouped.drivetrain,
-                                title: "Drivetrain"),
-                            InfoBox(
-                                info: MetricWidgetFactory.percentageString(
-                                    _averageAccuracy),
-                                title: "Avg. Accuracy"),
-                            InfoBox(
-                                info: MetricWidgetFactory.percentageString(
-                                    _averageDefendedAccuracy),
-                                title: "Defended Avg. Acc"),
-                          ],
+                        title: "% Scoring",
+                        info: MetricWidgetFactory.percentageString(
+                            _scoringPrecent),
+                        subInfo: _scoringRating.toStringAsFixed(2),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            spacing: _margin,
+                            children: [
+                              GridView.count(
+                                shrinkWrap: true,
+                                crossAxisCount: 2,
+                                crossAxisSpacing: _margin,
+                                mainAxisSpacing: _margin,
+                                childAspectRatio: 1.4,
+                                physics: NeverScrollableScrollPhysics(),
+                                children: [
+                                  InfoBox(
+                                      info: MetricWidgetFactory.percentageString(
+                                          _averageAccuracy),
+                                      title: "Avg. Accuracy"),
+                                  InfoBox(
+                                      info: MetricWidgetFactory.percentageString(
+                                          _averageDefendedAccuracy),
+                                      title: "Defended Avg. Acc"),
+                                  InfoBox(
+                                      info: _pitDataGrouped.weight
+                                          .toStringAsFixed(1),
+                                      title: "Weight (lb)"),
+                                  InfoBox(
+                                      info: _pitDataGrouped.shooterType,
+                                      title: "Shooter Type"),
+                                  InfoBox(
+                                      info: "${_pitDataGrouped.capacity}",
+                                      title: "Capacity"),
+                                  InfoBox(
+                                      info: _pitDataGrouped.accessType,
+                                      title: "Neutral Access"),
+                                  InfoBox(
+                                      info: _pitDataGrouped.drivetrain,
+                                      title: "Drivetrain"),
+                                  InfoBox(
+                                      info: _pitDataGrouped.climbLevel,
+                                      title: "Climb Level"),
+                                ],
+                              ),
+                              AspectRatio(
+                                aspectRatio: 3,
+                                child: InfoBox(
+                                    title: "Mechanisms",
+                                    info: _pitDataGrouped.mechanisms),
+                              ),
+                              AspectRatio(
+                                aspectRatio: 3,
+                                child: InfoBox(
+                                    title: "Ideal Alliance Partner",
+                                    info: _pitDataGrouped.idealAlliancePartner),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
