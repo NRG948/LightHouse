@@ -30,7 +30,6 @@ class AtlasData implements ScoutingData {
 
   // auto
   AutoPathData autoPath;
-  bool? crossedMidline;
 
   // offense
   LocationTrackerData? locations;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/models/general/point_data.dart';
 
 class Zone {
-  String id;
+  AutoZone id;
   double top;
   double left;
   double width;
@@ -16,7 +17,7 @@ class Zone {
 }
 
 class BoxRegion extends StatefulWidget {
-  final String id;
+  final AutoZone id;
   final double width;
   final double height;
   final double top;
@@ -24,7 +25,7 @@ class BoxRegion extends StatefulWidget {
   final Color color;
   final bool borderOnly;
   final double borderWidth;
-  final Function(String id, Offset center) onTap;
+  final Function(AutoZone id, Offset center) onTap;
 
   const BoxRegion(
       {super.key,
@@ -38,7 +39,7 @@ class BoxRegion extends StatefulWidget {
       this.color = const Color.fromARGB(1, 255, 255, 255),
       this.onTap = _noop});
 
-  static void _noop(String _, Offset __) {}
+  static void _noop(AutoZone _, Offset __) {}
 
   @override
   State<BoxRegion> createState() => _BoxRegionState();
@@ -48,7 +49,7 @@ class BoxRegion extends StatefulWidget {
 }
 
 class _BoxRegionState extends State<BoxRegion> {
-  String get _id => widget.id;
+  AutoZone get _id => widget.id;
   double get _width => widget.width;
   double get _height => widget.height;
   double get _top => widget.top;
@@ -56,7 +57,7 @@ class _BoxRegionState extends State<BoxRegion> {
   Color get _color => widget.color;
   bool get _borderOnly => widget.borderOnly;
   double get _borderWidth => widget.borderWidth;
-  Function(String id, Offset center) get _onTap => widget.onTap;
+  Function(AutoZone id, Offset center) get _onTap => widget.onTap;
 
   Offset getCenter() => Offset(_left + _width / 2, _top + _height / 2);
 
@@ -76,10 +77,12 @@ class _BoxRegionState extends State<BoxRegion> {
               height: _height,
               decoration: BoxDecoration(
                 color: _borderOnly ? Colors.transparent : _color,
-                border: _borderOnly ? Border.all(
-                  color: _color,
-                  width: _borderWidth,
-                ) : null,
+                border: _borderOnly
+                    ? Border.all(
+                        color: _color,
+                        width: _borderWidth,
+                      )
+                    : null,
               ),
             ),
           ),

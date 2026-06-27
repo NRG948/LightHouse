@@ -10,8 +10,10 @@ class AutoPathData {
   bool? climbSuccessful;
   bool? crossedMidline;
 
-  AutoPathData({List<PointData>? path, this.attemptedClimb = false}) : path = path ?? [];
+  AutoPathData({List<PointData>? path, this.attemptedClimb = false})
+      : path = path ?? [];
 
-  factory AutoPathData.fromJson(Map<String, dynamic> json) => _$AutoPathDataFromJson(json);
+  factory AutoPathData.fromJson(Map<String, dynamic> json) =>
+      _$AutoPathDataFromJson(json);
   Map<String, dynamic> toJson() => _$AutoPathDataToJson(this);
 }

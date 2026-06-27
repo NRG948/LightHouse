@@ -18,7 +18,6 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
       : MatchPrediction.fromJson(
           json['matchPrediction'] as Map<String, dynamic>)
   ..autoPath = AutoPathData.fromJson(json['autoPath'] as Map<String, dynamic>)
-  ..crossedMidline = json['crossedMidline'] as bool?
   ..locations = json['locations'] == null
       ? null
       : LocationTrackerData.fromJson(json['locations'] as Map<String, dynamic>)
@@ -61,7 +60,6 @@ Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'driverStation': instance.driverStation,
       'matchPrediction': instance.matchPrediction,
       'autoPath': instance.autoPath,
-      'crossedMidline': instance.crossedMidline,
       'locations': instance.locations,
       'isDefended': instance.isDefended,
       'isShoveling': instance.isShoveling,

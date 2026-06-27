@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:lighthouse/models/general/auto_path_data.dart';
+import 'package:lighthouse/models/general/point_data.dart';
 import 'package:lighthouse/widgets/game_agnostic/auto_path_selector.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 
 class RebuiltAutoPathSelector extends StatelessWidget {
   final bool debug;
-  final String? jsonKey;
+  final AutoPathData data;
   final double? margin;
   final bool flipField;
   final bool viewOnly;
-  final List<dynamic>? initialPath;
+  final List<PointData>? initialPath;
   final bool pit;
   final double nodeScalingFactor;
 
@@ -20,18 +22,29 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       this.viewOnly = false,
       this.initialPath,
       this.pit = false,
-      this.jsonKey,
+      required this.data,
       this.nodeScalingFactor = 1});
 
   List<Zone> getZones() {
     return [
-      Zone(id: "depot", top: 148, left: 14, width: 86, height: 78),
-      Zone(id: "outpost", top: 527, left: 0, width: 110, height: 71),
-      Zone(id: "tower", top: 302, left: 14, width: 140, height: 87),
-      Zone(id: "trench_depot", top: 34, left: 337, width: 91, height: 108),
-      Zone(id: "bump_depot", top: 142, left: 337, width: 91, height: 136),
-      Zone(id: "bump_outpost", top: 369, left: 337, width: 91, height: 136),
-      Zone(id: "trench_outpost", top: 506, left: 337, width: 91, height: 109),
+      Zone(id: AutoZone.depot, top: 148, left: 14, width: 86, height: 78),
+      Zone(id: AutoZone.outpost, top: 527, left: 0, width: 110, height: 71),
+      Zone(id: AutoZone.tower, top: 302, left: 14, width: 140, height: 87),
+      Zone(
+          id: AutoZone.trenchDepot, top: 34, left: 337, width: 91, height: 108),
+      Zone(id: AutoZone.bumpDepot, top: 142, left: 337, width: 91, height: 136),
+      Zone(
+          id: AutoZone.bumpOutpost,
+          top: 369,
+          left: 337,
+          width: 91,
+          height: 136),
+      Zone(
+          id: AutoZone.trenchOutpost,
+          top: 506,
+          left: 337,
+          width: 91,
+          height: 109),
     ];
   }
 
@@ -47,7 +60,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       zones: getZones(),
       showDetails: true,
       pit: pit,
-      jsonKey: jsonKey ?? "autoPath",
+      data: data,
       flipField: flipField,
       viewOnly: viewOnly,
       initialPath: initialPath,

@@ -2,11 +2,14 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/models/general/scouting_data.dart";
 import "package:lighthouse/themes.dart";
 
 // used by all active widgets to save data short-term, before serialization to json
 class DataEntry {
-  static final Map<String, dynamic> exportData = {};
+  static final Map<String, dynamic> exportData =
+      {}; // kept here while migrating. Remove when done.
+  late ScoutingData data;
   static late String activeConfig;
 }
 
