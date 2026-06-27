@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:lighthouse/models/general/match_prediction.dart';
 import 'package:lighthouse/models/general/three_stage_checkbox_data.dart';
 import 'package:lighthouse/models/rebuilt/climb_data.dart';
 import 'package:lighthouse/models/rebuilt/pit_auto_data.dart';
@@ -25,6 +26,7 @@ class AtlasData implements ScoutingData {
   bool? isReplay;
   String? matchType;
   String? driverStation;
+  MatchPrediction? matchPrediction;
 
   // auto
   AutoPathData autoPath;
@@ -34,7 +36,7 @@ class AtlasData implements ScoutingData {
   LocationTrackerData? locations;
   bool? isDefended;
   MetricData? isShoveling;
-  MetricData? isFeeding;
+  MetricData? isShootingOver;
 
   // defense
   MetricData? isDefendingTrenchOrBump;
@@ -42,9 +44,11 @@ class AtlasData implements ScoutingData {
   MetricData? isDefendingAllianceZone;
   MetricData? isStealing;
 
+  // endgame
   List<String>? tags;
   ClimbData? climb;
-  double? rating;
+  int? scoring;
+  double? dataQuality;
   String? comments;
 
   AtlasData() : autoPath = AutoPathData();
@@ -57,6 +61,7 @@ class AtlasData implements ScoutingData {
 @JsonSerializable()
 class PitData implements ScoutingData {
   // setup
+  String? scouterName;
   int? teamNumber;
   String? teamName;
 

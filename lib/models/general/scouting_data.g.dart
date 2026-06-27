@@ -13,6 +13,10 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
   ..isReplay = json['isReplay'] as bool?
   ..matchType = json['matchType'] as String?
   ..driverStation = json['driverStation'] as String?
+  ..matchPrediction = json['matchPrediction'] == null
+      ? null
+      : MatchPrediction.fromJson(
+          json['matchPrediction'] as Map<String, dynamic>)
   ..autoPath = AutoPathData.fromJson(json['autoPath'] as Map<String, dynamic>)
   ..crossedMidline = json['crossedMidline'] as bool?
   ..locations = json['locations'] == null
@@ -22,9 +26,9 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
   ..isShoveling = json['isShoveling'] == null
       ? null
       : MetricData.fromJson(json['isShoveling'] as Map<String, dynamic>)
-  ..isFeeding = json['isFeeding'] == null
+  ..isShootingOver = json['isShootingOver'] == null
       ? null
-      : MetricData.fromJson(json['isFeeding'] as Map<String, dynamic>)
+      : MetricData.fromJson(json['isShootingOver'] as Map<String, dynamic>)
   ..isDefendingTrenchOrBump = json['isDefendingTrenchOrBump'] == null
       ? null
       : MetricData.fromJson(
@@ -44,7 +48,8 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
   ..climb = json['climb'] == null
       ? null
       : ClimbData.fromJson(json['climb'] as Map<String, dynamic>)
-  ..rating = (json['rating'] as num?)?.toDouble()
+  ..scoring = (json['scoring'] as num?)?.toInt()
+  ..dataQuality = (json['dataQuality'] as num?)?.toDouble()
   ..comments = json['comments'] as String?;
 
 Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
@@ -54,23 +59,26 @@ Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'isReplay': instance.isReplay,
       'matchType': instance.matchType,
       'driverStation': instance.driverStation,
+      'matchPrediction': instance.matchPrediction,
       'autoPath': instance.autoPath,
       'crossedMidline': instance.crossedMidline,
       'locations': instance.locations,
       'isDefended': instance.isDefended,
       'isShoveling': instance.isShoveling,
-      'isFeeding': instance.isFeeding,
+      'isShootingOver': instance.isShootingOver,
       'isDefendingTrenchOrBump': instance.isDefendingTrenchOrBump,
       'isDefendingNeutralZone': instance.isDefendingNeutralZone,
       'isDefendingAllianceZone': instance.isDefendingAllianceZone,
       'isStealing': instance.isStealing,
       'tags': instance.tags,
       'climb': instance.climb,
-      'rating': instance.rating,
+      'scoring': instance.scoring,
+      'dataQuality': instance.dataQuality,
       'comments': instance.comments,
     };
 
 PitData _$PitDataFromJson(Map<String, dynamic> json) => PitData()
+  ..scouterName = json['scouterName'] as String?
   ..teamNumber = (json['teamNumber'] as num?)?.toInt()
   ..teamName = json['teamName'] as String?
   ..shooterType = json['shooterType'] as String?
@@ -141,6 +149,7 @@ PitData _$PitDataFromJson(Map<String, dynamic> json) => PitData()
           json['canShootEndgame'] as Map<String, dynamic>);
 
 Map<String, dynamic> _$PitDataToJson(PitData instance) => <String, dynamic>{
+      'scouterName': instance.scouterName,
       'teamNumber': instance.teamNumber,
       'teamName': instance.teamName,
       'shooterType': instance.shooterType,
