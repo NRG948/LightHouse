@@ -250,7 +250,10 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _scaleFactor => _imageWidth / _rawImageWidth;
 
   double get _margin => widget.margin ?? _width / 25;
-  double get _bottomOffset => _pit ? _width * 0.225 : _width * 0.35;
+  double get _undoButtonHeight => _width * 0.13;
+  double get _autoDetailsHeight => _pit ? _width * 0.19 : _width * 0.26;
+  double get _bottomOffset =>
+      _undoButtonHeight + 2 * _margin + _autoDetailsHeight;
 
   double get _nodeRadius => _imageWidth / 17;
   double get _nodeBorderWidth => _width / 100;
@@ -261,10 +264,6 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
       widget.converter;
 
   List<dynamic>? get _initialPath => widget.initialPath;
-
-  double get _buttonSize =>
-      _bottomOffset -
-      _margin; // TODO: make in terms of height AND width, to make sure no overflow
 
   final List<NodeData> _nodeStack = [];
   final List<UserAction> _history = [];
@@ -615,8 +614,8 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     }
 
     return SizedBox(
-      width: _width - _buttonSize - _margin * 3,
-      height: _buttonSize,
+      width: double.infinity,
+      height: _autoDetailsHeight,
       child: Column(
         children: [
           Expanded(
@@ -731,38 +730,29 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
                     ),
                   ),
                   if (!_viewOnly)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      spacing: _margin,
-                      children: [
-                        _getAutoDetails(),
-                        Container(
-                          width: _buttonSize,
-                          height: _buttonSize,
-                          decoration: BoxDecoration(
-                              color: context.colors.delete,
-                              borderRadius:
-                                  BorderRadius.circular(_buttonSize / 4)),
-                          child: IconButton(
-                            padding: EdgeInsets.all(_buttonSize / 8),
-                            onPressed: () {
-                              setState(() {
-                                if (_nodeStack.isNotEmpty) {
-                                  undo();
-                                }
-                              });
-                            },
-                            iconSize: _buttonSize * 0.7,
-                            color: _backgroundColor,
-                            highlightColor: context.colors.delete,
-                            icon: Icon(
-                              Icons.undo_rounded,
-                              color: context.colors.container,
+                    SizedBox(
+                      width: double.infinity,
+                      height: _undoButtonHeight,
+                      child: TextButton(
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.all(0.0),
+                            backgroundColor: context.colors.delete,
+                            foregroundColor: context.colors.container,
+                            disabledBackgroundColor: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                        ),
-                      ],
-                    )
+                          onPressed: _nodeStack.isEmpty
+                              ? null
+                              : () {
+                                  setState(() {
+                                    undo();
+                                  });
+                                },
+                          child: Icon(Icons.undo_rounded)),
+                    ),
+                  if (!_viewOnly) _getAutoDetails(),
                 ],
               ),
             ),
