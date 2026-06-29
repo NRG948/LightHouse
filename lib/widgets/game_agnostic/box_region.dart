@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/models/general/point_data.dart';
-import 'package:lighthouse/models/rebuilt/zone_data.dart';
+import 'package:lighthouse/models/rebuilt/location_tracker_data.dart';
 
 // okay...!
 //

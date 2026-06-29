@@ -32,7 +32,7 @@ class _CycleListCounterState extends State<CycleListCounter> {
   void Function(dynamic data) get _onUpdate => widget.onUpdate;
 
   final List<SelectorItem> _selectorsData = [];
-  final List<String> _options = ["1", "2", "3"];
+  final List<int> _options = [1, 2, 3];
 
   double get _selectorHeight => _width * 0.15;
   double get _removeIconSize => _width * 0.12;
@@ -83,13 +83,14 @@ class _CycleListCounterState extends State<CycleListCounter> {
                           textColor: context.colors.containerText,
                           lockedColor: context.colors.locked,
                           isLocked: _isLocked,
-                          choices: _options,
+                          choices: _options.map((e) => e.toString()).toList(),
                           spacing: _selectorSpacing,
                           onSelect: (choice) {
                             setState(() {
                               item.value = choice;
                             });
-                            _onUpdate(_selectorsData.map((e) => e.value).toList());
+                            _onUpdate(
+                                _selectorsData.map((e) => e.value).toList());
                           },
                         ),
                       ),
@@ -117,7 +118,9 @@ class _CycleListCounterState extends State<CycleListCounter> {
                 icon: Icon(
                   Icons.add_circle,
                   size: _addIconSize,
-                  color: _isLocked ? context.colors.locked : context.colors.accent2,
+                  color: _isLocked
+                      ? context.colors.locked
+                      : context.colors.accent2,
                 ),
                 onPressed: _addSelector,
               ),

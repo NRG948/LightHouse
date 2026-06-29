@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/data_entry.dart';
-import 'package:lighthouse/models/rebuilt/zone_data.dart';
+import 'package:lighthouse/models/rebuilt/location_tracker_data.dart';
 import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 
 class LocationTracker extends StatefulWidget {
-  final String? jsonKey;
+  final LocationTrackerData data;
   final String imageFilePath;
   final double rawImageWidth;
   final double rawImageHeight;
@@ -26,7 +26,7 @@ class LocationTracker extends StatefulWidget {
 
   const LocationTracker({
     super.key,
-    this.jsonKey,
+    required this.data,
     required this.imageFilePath,
     required this.rawImageWidth,
     required this.rawImageHeight,
@@ -49,7 +49,7 @@ class _LocationTrackerState extends State<LocationTracker>
   @override
   bool get wantKeepAlive => true;
 
-  String? get _jsonKey => widget.jsonKey;
+  LocationTrackerData? get _data => widget.data;
   bool get _viewOnly => widget.viewOnly;
 
   bool get _flipField => widget.flipField;

@@ -8,13 +8,28 @@ part of 'location_tracker_data.dart';
 
 LocationTrackerData _$LocationTrackerDataFromJson(Map<String, dynamic> json) =>
     LocationTrackerData(
-      zones: (json['zones'] as List<dynamic>?)
-          ?.map((e) => LocationZoneData.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      zones: (json['zones'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry($enumDecode(_$LocationZoneIdEnumMap, k),
+            (e as List<dynamic>).map((e) => (e as num).toInt()).toList()),
+      ),
     );
 
 Map<String, dynamic> _$LocationTrackerDataToJson(
         LocationTrackerData instance) =>
     <String, dynamic>{
-      'zones': instance.zones,
+      'zones': instance.zones
+          .map((k, e) => MapEntry(_$LocationZoneIdEnumMap[k]!, e)),
     };
+
+const _$LocationZoneIdEnumMap = {
+  LocationZoneId.depotCorner: 'depotCorner',
+  LocationZoneId.depotTrench: 'depotTrench',
+  LocationZoneId.depotWall: 'depotWall',
+  LocationZoneId.depotBump: 'depotBump',
+  LocationZoneId.tower: 'tower',
+  LocationZoneId.hub: 'hub',
+  LocationZoneId.outpostWall: 'outpostWall',
+  LocationZoneId.outpostBump: 'outpostBump',
+  LocationZoneId.outpostCorner: 'outpostCorner',
+  LocationZoneId.outpostTrench: 'outpostTrench',
+};
