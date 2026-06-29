@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/data_entry.dart';
+import 'package:lighthouse/models/rebuilt/zone_data.dart';
 import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
@@ -13,14 +14,14 @@ class LocationTracker extends StatefulWidget {
   final double rawImageWidth;
   final double rawImageHeight;
   final double? margin;
-  final List<Zone> zones;
+  final List<LocationTrackerZone> zones;
   final Map<String, Color>? assignedColors;
   final bool viewOnly;
   final Color? mainColor;
   final Color? backgroundColor;
   final bool flipField;
 
-  final Widget Function(BuildContext context, String? regionId,
+  final Widget Function(BuildContext context, LocationZoneId? regionId,
       void Function(dynamic data) onUpdate) childBuilder;
 
   const LocationTracker({
@@ -54,7 +55,7 @@ class _LocationTrackerState extends State<LocationTracker>
   bool get _flipField => widget.flipField;
 
   late double _width;
-  String? _selectedId;
+  LocationZoneId? _selectedId;
 
   final Map<String?, dynamic> _compiledData = {};
 
@@ -71,7 +72,7 @@ class _LocationTrackerState extends State<LocationTracker>
     return index != -1 ? index + 1 : 0;
   }
 
-  void _onChildUpdate(String? regionId, dynamic data) {
+  void _onChildUpdate(LocationZoneId? regionId, dynamic data) {
     _compiledData[regionId] = data;
     _serializeData();
   }
@@ -90,11 +91,20 @@ class _LocationTrackerState extends State<LocationTracker>
         color: color,
         borderOnly: _selectedId != zone.id && !_viewOnly,
         borderWidth: _margin / 5,
-        onTap: (id, _) {
-          HapticFeedback.mediumImpact();
-          setState(() {
-            _selectedId = (_selectedId == id) ? null : id;
-          });
+        onTap: (zone, _) {
+          switch (zone) {
+            case LocationTrackerZone(id: var id):
+              {
+                HapticFeedback.mediumImpact();
+                setState(() {
+                  _selectedId = (_selectedId == id) ? null : id;
+                });
+              }
+            default:
+              {
+                print("zone is not location tracker zone! ");
+              }
+          }
         },
       );
     }).toList();
