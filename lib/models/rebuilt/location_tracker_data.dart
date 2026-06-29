@@ -5,9 +5,9 @@ part "location_tracker_data.g.dart";
 
 @JsonSerializable()
 class LocationTrackerData {
-  List<ZoneData> zones;
+  List<LocationZoneData> zones;
 
-  LocationTrackerData({List<ZoneData>? zones}) : zones = zones ?? [];
+  LocationTrackerData({List<LocationZoneData>? zones}) : zones = zones ?? [];
 
   factory LocationTrackerData.fromJson(Map<String, dynamic> json) =>
       _$LocationTrackerDataFromJson(json);

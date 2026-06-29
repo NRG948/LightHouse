@@ -27,20 +27,29 @@ class RebuiltAutoPathSelector extends StatelessWidget {
 
   List<Zone> getZones() {
     return [
-      Zone(id: AutoZone.depot, top: 148, left: 14, width: 86, height: 78),
-      Zone(id: AutoZone.outpost, top: 527, left: 0, width: 110, height: 71),
-      Zone(id: AutoZone.tower, top: 302, left: 14, width: 140, height: 87),
+      Zone(id: AutoZoneId.depot, top: 148, left: 14, width: 86, height: 78),
+      Zone(id: AutoZoneId.outpost, top: 527, left: 0, width: 110, height: 71),
+      Zone(id: AutoZoneId.tower, top: 302, left: 14, width: 140, height: 87),
       Zone(
-          id: AutoZone.trenchDepot, top: 34, left: 337, width: 91, height: 108),
-      Zone(id: AutoZone.bumpDepot, top: 142, left: 337, width: 91, height: 136),
+          id: AutoZoneId.trenchDepot,
+          top: 34,
+          left: 337,
+          width: 91,
+          height: 108),
       Zone(
-          id: AutoZone.bumpOutpost,
+          id: AutoZoneId.bumpDepot,
+          top: 142,
+          left: 337,
+          width: 91,
+          height: 136),
+      Zone(
+          id: AutoZoneId.bumpOutpost,
           top: 369,
           left: 337,
           width: 91,
           height: 136),
       Zone(
-          id: AutoZone.trenchOutpost,
+          id: AutoZoneId.trenchOutpost,
           top: 506,
           left: 337,
           width: 91,

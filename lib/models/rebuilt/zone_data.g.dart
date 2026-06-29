@@ -6,27 +6,27 @@ part of 'zone_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-ZoneData _$ZoneDataFromJson(Map<String, dynamic> json) => ZoneData(
-      zoneId: $enumDecode(_$ZoneEnumMap, json['zoneId']),
+LocationZoneData _$ZoneDataFromJson(Map<String, dynamic> json) => LocationZoneData(
+      zoneId: $enumDecode(_$ZoneIdEnumMap, json['zoneId']),
       data: (json['data'] as List<dynamic>?)
           ?.map((e) => (e as num).toInt())
           .toList(),
     );
 
-Map<String, dynamic> _$ZoneDataToJson(ZoneData instance) => <String, dynamic>{
-      'zoneId': _$ZoneEnumMap[instance.zoneId]!,
+Map<String, dynamic> _$ZoneDataToJson(LocationZoneData instance) => <String, dynamic>{
+      'zoneId': _$ZoneIdEnumMap[instance.zoneId]!,
       'data': instance.data,
     };
 
-const _$ZoneEnumMap = {
-  Zone.depotCorner: 'depotCorner',
-  Zone.depotTrench: 'depotTrench',
-  Zone.depotWall: 'depotWall',
-  Zone.depotBump: 'depotBump',
-  Zone.tower: 'tower',
-  Zone.hub: 'hub',
-  Zone.outpostWall: 'outpostWall',
-  Zone.outpostBump: 'outpostBump',
-  Zone.outpostCorner: 'outpostCorner',
-  Zone.outpostTrench: 'outpostTrench',
+const _$ZoneIdEnumMap = {
+  LocationZoneId.depotCorner: 'depotCorner',
+  LocationZoneId.depotTrench: 'depotTrench',
+  LocationZoneId.depotWall: 'depotWall',
+  LocationZoneId.depotBump: 'depotBump',
+  LocationZoneId.tower: 'tower',
+  LocationZoneId.hub: 'hub',
+  LocationZoneId.outpostWall: 'outpostWall',
+  LocationZoneId.outpostBump: 'outpostBump',
+  LocationZoneId.outpostCorner: 'outpostCorner',
+  LocationZoneId.outpostTrench: 'outpostTrench',
 };

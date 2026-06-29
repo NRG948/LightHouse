@@ -9,7 +9,7 @@ part of 'location_tracker_data.dart';
 LocationTrackerData _$LocationTrackerDataFromJson(Map<String, dynamic> json) =>
     LocationTrackerData(
       zones: (json['zones'] as List<dynamic>?)
-          ?.map((e) => ZoneData.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => LocationZoneData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

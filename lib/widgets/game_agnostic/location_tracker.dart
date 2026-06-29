@@ -60,7 +60,8 @@ class _LocationTrackerState extends State<LocationTracker>
 
   double get _margin => widget.margin ?? _width / 20;
   double get _availableWidth => _width - 2 * _margin;
-  double get _imageWidth => _viewOnly ? _availableWidth : 0.5 * (_availableWidth - _margin);
+  double get _imageWidth =>
+      _viewOnly ? _availableWidth : 0.5 * (_availableWidth - _margin);
   double get _scaleFactor => _imageWidth / widget.rawImageWidth;
   double get _imageHeight => widget.rawImageHeight * _scaleFactor;
 
@@ -84,11 +85,8 @@ class _LocationTrackerState extends State<LocationTracker>
           : const Color.fromARGB(40, 255, 255, 255);
 
       return BoxRegion(
-        id: zone.id,
-        top: zone.top * _scaleFactor,
-        left: zone.left * _scaleFactor,
-        width: zone.width * _scaleFactor,
-        height: zone.height * _scaleFactor,
+        zone: zone,
+        scaleFactor: _scaleFactor,
         color: color,
         borderOnly: _selectedId != zone.id && !_viewOnly,
         borderWidth: _margin / 5,
@@ -142,7 +140,8 @@ class _LocationTrackerState extends State<LocationTracker>
                                 image: AssetImage(widget.imageFilePath),
                                 fit: BoxFit.fill,
                                 colorFilter: ColorFilter.mode(
-                                  widget.backgroundColor ?? context.colors.container,
+                                  widget.backgroundColor ??
+                                      context.colors.container,
                                   BlendMode.modulate,
                                 ),
                               ),
@@ -153,25 +152,26 @@ class _LocationTrackerState extends State<LocationTracker>
                       ),
                     ),
                   ),
-                  if (!_viewOnly) Expanded(
-                    child: IndexedStack(
-                      index: _selectedIndex,
-                      children: [
-                        widget.childBuilder(
-                          context,
-                          null,
-                          (data) => _onChildUpdate(null, data),
-                        ),
-                        ...widget.zones.map(
-                          (zone) => widget.childBuilder(
+                  if (!_viewOnly)
+                    Expanded(
+                      child: IndexedStack(
+                        index: _selectedIndex,
+                        children: [
+                          widget.childBuilder(
                             context,
-                            zone.id,
-                            (data) => _onChildUpdate(zone.id, data),
+                            null,
+                            (data) => _onChildUpdate(null, data),
                           ),
-                        ),
-                      ],
+                          ...widget.zones.map(
+                            (zone) => widget.childBuilder(
+                              context,
+                              zone.id,
+                              (data) => _onChildUpdate(zone.id, data),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

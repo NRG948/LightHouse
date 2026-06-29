@@ -4,19 +4,19 @@ import 'package:json_annotation/json_annotation.dart';
 class PointData {
   double x;
   double y;
-  AutoZone? autoZone;
+  AutoZoneId? autoZone;
 
   PointData({required this.x, required this.y, this.autoZone});
 
   /*
    * This one requires non-generated custom fromJson and toJson
-   * functions because there's two possible data types it 
+   * functions because there's two possible data types it
    * can export ;-;
   */
 
   factory PointData.fromJson(Map<String, dynamic> json) {
     if (json["autoZone"] != null) {
-      AutoZone? zone;
+      AutoZoneId? zone;
       for (var entry in autoZoneEnumMap.entries) {
         if (entry.value == json["autoZone"]) {
           zone = entry.key;
@@ -39,7 +39,7 @@ class PointData {
   }
 }
 
-enum AutoZone {
+enum AutoZoneId {
   depot,
   outpost,
   tower,
@@ -49,14 +49,16 @@ enum AutoZone {
   trenchOutpost,
 }
 
-// As explained above, custom serialization logic is needed,
-// and this is part of it
+/// As explained above, custom serialization logic is needed,
+/// and this is part of it.
+///
+/// Make sure to update for each season!!!
 const autoZoneEnumMap = {
-  AutoZone.bumpDepot: "bumpDepot",
-  AutoZone.bumpOutpost: "bumpOutpost",
-  AutoZone.depot: "depot",
-  AutoZone.outpost: "outpost",
-  AutoZone.tower: "tower",
-  AutoZone.trenchDepot: "trenchDepot",
-  AutoZone.trenchOutpost: "trenchOutpost",
+  AutoZoneId.bumpDepot: "bumpDepot",
+  AutoZoneId.bumpOutpost: "bumpOutpost",
+  AutoZoneId.depot: "depot",
+  AutoZoneId.outpost: "outpost",
+  AutoZoneId.tower: "tower",
+  AutoZoneId.trenchDepot: "trenchDepot",
+  AutoZoneId.trenchOutpost: "trenchOutpost",
 };

@@ -7,6 +7,7 @@ import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
 import 'package:lighthouse/models/general/auto_path_data.dart';
 import 'package:lighthouse/models/general/point_data.dart';
+import 'package:lighthouse/pages/rebuilt/aryav_data_viewer.dart';
 import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -67,22 +68,22 @@ class VisualNode extends StatelessWidget {
 }
 
 class NodeData {
-  /// note that [autoZone] *always* takes precedence over this.
-  /// if [autoZone] exists, position **should not** be serialized.
+  /// note that [autoZoneId] *always* takes precedence over this.
+  /// if [autoZoneId] exists, position **should not** be serialized.
   /// (if it's part of a group, position is used for display position *inside* that zone,
   /// meaning it's absolutely useless for export)
   Offset? position;
   Color color;
   bool draggable;
   double radius;
-  AutoZone? autoZone;
+  AutoZoneId? autoZoneId;
 
   NodeData(
       {this.position,
       required this.color,
       required this.radius,
       required this.draggable,
-      this.autoZone});
+      this.autoZoneId});
 }
 
 class UserAction {
@@ -114,7 +115,7 @@ class AutoPathSelector extends StatefulWidget {
 
   final double? margin;
 
-  final List<Zone> zones;
+  final List<AutoZone> zones;
 
   final Color? mainColor;
   final Color? backgroundColor;
@@ -291,7 +292,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   bool get _viewOnly => widget.viewOnly;
 
-  List<Zone> get _zones => widget.zones;
+  List<AutoZone> get _zones => widget.zones;
 
   @override
   void initState() {
@@ -362,7 +363,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
         x: convertedOffset.dx,
         y: convertedOffset.dy,
         autoZone: node
-            .autoZone, // remember that both the parameter and argument can be null
+            .autoZoneId, // remember that both the parameter and argument can be null
       ));
     }
 
@@ -371,13 +372,13 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   }
 
   void setPositionsForGroupedNodes() {
-    for (Zone zone in _zones) {
+    for (AutoZone zone in _zones) {
       int i = 0;
       int numNodes = _nodeStack
-          .where((final NodeData node) => node.autoZone == zone.id)
+          .where((final NodeData node) => node.autoZoneId == zone.id)
           .length;
       for (NodeData node in _nodeStack
-          .where((final NodeData node) => node.autoZone == zone.id)) {
+          .where((final NodeData node) => node.autoZoneId == zone.id)) {
         node.radius = _nodeRadius * _nodeScalingFactor -
             ((numNodes - 1) * 1.5); // TODO: tweak based on testing
 
@@ -518,9 +519,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     });
   }
 
-  NodeData addNodeFromRegion(AutoZone autoZone) {
+  NodeData addNodeFromRegion(AutoZoneId autoZone) {
     NodeData newNode = NodeData(
-      autoZone: autoZone,
+      autoZoneId: autoZone,
       radius: _nodeRadius * _nodeScalingFactor,
       draggable: false,
       color: _regionNodeColor ?? context.colors.accent4,
@@ -552,28 +553,34 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   List<BoxRegion> _getRegions() {
     List<BoxRegion> regions = [];
-    for (Zone zone in _zones) {
+    for (AutoZone zone in _zones) {
       regions.add(BoxRegion(
-        id: zone.id,
-        top: zone.top * _scaleFactor,
-        left: zone.left * _scaleFactor,
-        width: zone.width * _scaleFactor,
-        height: zone.height * _scaleFactor,
+        zone: zone,
+        scaleFactor: _scaleFactor,
         color: _debug
             ? Color.fromARGB(99, 67, 189, 155)
             : Color.fromARGB(1, 255, 255, 255),
-        onTap: (autoZone, center) {
-          if (!_canStartInZone && _nodeStack.isEmpty) return;
-          HapticFeedback.mediumImpact();
-          int sameIdNodeCount = _nodeStack
-              .where((final NodeData node) => node.autoZone == autoZone)
-              .length;
+        onTap: (zone, center) {
+          switch (zone) {
+            case AutoZone(id: var id):
+              {
+                if (!_canStartInZone && _nodeStack.isEmpty) return;
+                HapticFeedback.mediumImpact();
+                int sameIdNodeCount = _nodeStack
+                    .where((final NodeData node) => node.autoZoneId == id)
+                    .length;
 
-          if (sameIdNodeCount >= _maximumGroupSize) return;
+                if (sameIdNodeCount >= _maximumGroupSize) return;
 
-          setState(() {
-            addNodeFromRegion(autoZone);
-          });
+                setState(() {
+                  addNodeFromRegion(id);
+                });
+              }
+            default:
+              {
+                print("Zone is not autozone! wha...?");
+              }
+          }
         },
       ));
     }
