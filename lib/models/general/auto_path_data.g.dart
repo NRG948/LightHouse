@@ -17,7 +17,7 @@ AutoPathData _$AutoPathDataFromJson(Map<String, dynamic> json) => AutoPathData(
 
 Map<String, dynamic> _$AutoPathDataToJson(AutoPathData instance) =>
     <String, dynamic>{
-      'path': instance.path,
+      'path': instance.path.map((e) => e.toJson()).toList(),
       'attemptedClimb': instance.attemptedClimb,
       'climbSuccessful': instance.climbSuccessful,
       'crossedMidline': instance.crossedMidline,

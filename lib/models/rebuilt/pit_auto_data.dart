@@ -3,13 +3,16 @@ import 'package:lighthouse/models/general/auto_path_data.dart';
 
 part "pit_auto_data.g.dart";
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PitAutoData {
   AutoPathData path;
-  int fuelScored; 
+  int fuelScored;
   bool crossedMidline;
 
-  PitAutoData({required this.path, required this.fuelScored, required this.crossedMidline});
+  PitAutoData(
+      {required this.path,
+      required this.fuelScored,
+      required this.crossedMidline});
 
   factory PitAutoData.fromJson(Map<String, dynamic> json) =>
       _$PitAutoDataFromJson(json);

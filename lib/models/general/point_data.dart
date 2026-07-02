@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PointData {
   double x;
   double y;

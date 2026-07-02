@@ -9,7 +9,7 @@ import 'package:lighthouse/models/general/metric_data.dart';
 
 part 'atlas_data.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AtlasData {
   // setup
   String? scouterName;

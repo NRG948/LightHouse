@@ -3,7 +3,7 @@ import 'package:lighthouse/models/general/point_data.dart';
 
 part "auto_path_data.g.dart";
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class AutoPathData {
   List<PointData> path;
   bool attemptedClimb;

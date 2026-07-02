@@ -14,7 +14,7 @@ PitAutoData _$PitAutoDataFromJson(Map<String, dynamic> json) => PitAutoData(
 
 Map<String, dynamic> _$PitAutoDataToJson(PitAutoData instance) =>
     <String, dynamic>{
-      'path': instance.path,
+      'path': instance.path.toJson(),
       'fuelScored': instance.fuelScored,
       'crossedMidline': instance.crossedMidline,
     };

@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part "location_tracker_data.g.dart";
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class LocationTrackerData {
   Map<LocationZoneId, List<int>> zones;
 

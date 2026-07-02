@@ -2,11 +2,11 @@ import 'package:json_annotation/json_annotation.dart';
 
 part "climb_data.g.dart";
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ClimbData {
   bool attempted;
   int? startTime;
-  String? region; 
+  String? region;
   ClimbLevelType level;
   ClimbData({
     this.attempted = false,

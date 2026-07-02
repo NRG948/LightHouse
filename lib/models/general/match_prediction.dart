@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part "match_prediction.g.dart";
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class MatchPrediction {
   Alliance? alliance;
 
