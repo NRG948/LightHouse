@@ -12,4 +12,5 @@ class MatchPrediction {
   Map<String, dynamic> toJson() => _$MatchPredictionToJson(this);
 }
 
+@JsonEnum()
 enum Alliance { red, blue }

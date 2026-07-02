@@ -13,6 +13,7 @@ class ThreeStageCheckboxData {
   Map<String, dynamic> toJson() => _$ThreeStageCheckboxDataToJson(this);
 }
 
+@JsonEnum()
 enum CheckboxStage {
   able,
   unable,

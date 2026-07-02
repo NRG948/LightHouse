@@ -14,6 +14,7 @@ class LocationTrackerData {
   Map<String, dynamic> toJson() => _$LocationTrackerDataToJson(this);
 }
 
+@JsonEnum()
 enum LocationZoneId {
   depotCorner,
   depotTrench,

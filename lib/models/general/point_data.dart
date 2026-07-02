@@ -39,6 +39,7 @@ class PointData {
   }
 }
 
+@JsonEnum()
 enum AutoZoneId {
   depot,
   outpost,

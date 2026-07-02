@@ -13,6 +13,7 @@ class MetricData {
   Map<String, dynamic> toJson() => _$MetricDataToJson(this);
 }
 
+@JsonEnum()
 enum Selection {
   poor,
   decent,

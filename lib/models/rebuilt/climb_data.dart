@@ -19,4 +19,5 @@ class ClimbData {
   Map<String, dynamic> toJson() => _$ClimbDataToJson(this);
 }
 
+@JsonEnum()
 enum ClimbLevelType { none, l1, l2, l3 }
