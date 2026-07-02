@@ -7,58 +7,10 @@ import 'package:lighthouse/models/general/auto_path_data.dart';
 import 'package:lighthouse/models/rebuilt/location_tracker_data.dart';
 import 'package:lighthouse/models/general/metric_data.dart';
 
-part 'scouting_data.g.dart';
-
-// @JsonSerializable()
-// abstract class PageData {
-//   Map<String, dynamic> toJson();
-// }
-
-/// this allows for tagged union-like behaviour, which IMO is great for this use case.
-sealed class ScoutingData {}
+part 'pit_data.g.dart';
 
 @JsonSerializable()
-class AtlasData implements ScoutingData {
-  // setup
-  String? scouterName;
-  int? teamNumber;
-  int? matchNumber;
-  bool? isReplay;
-  String? matchType;
-  String? driverStation;
-  MatchPrediction? matchPrediction;
-
-  // auto
-  AutoPathData autoPath;
-
-  // offense
-  LocationTrackerData? locations;
-  bool? isDefended;
-  MetricData? isShoveling;
-  MetricData? isShootingOver;
-
-  // defense
-  MetricData? isDefendingTrenchOrBump;
-  MetricData? isDefendingNeutralZone;
-  MetricData? isDefendingAllianceZone;
-  MetricData? isStealing;
-
-  // endgame
-  List<String>? tags;
-  ClimbData? climb;
-  int? scoring;
-  double? dataQuality;
-  String? comments;
-
-  AtlasData() : autoPath = AutoPathData();
-
-  factory AtlasData.fromJson(Map<String, dynamic> json) =>
-      _$AtlasDataFromJson(json);
-  Map<String, dynamic> toJson() => _$AtlasDataToJson(this);
-}
-
-@JsonSerializable()
-class PitData implements ScoutingData {
+class PitData {
   // setup
   String? scouterName;
   int? teamNumber;
