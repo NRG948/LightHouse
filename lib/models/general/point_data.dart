@@ -1,5 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
+/// This is an exception to the "game agnostic code never depends on game-specific code"
+/// convention. I just can't think of a better way.
+import 'package:lighthouse/models/rebuilt/auto_zone_id.dart';
+
 @JsonSerializable(explicitToJson: true)
 class PointData {
   double x;
@@ -38,28 +42,3 @@ class PointData {
     }
   }
 }
-
-@JsonEnum()
-enum AutoZoneId {
-  depot,
-  outpost,
-  tower,
-  trenchDepot,
-  bumpDepot,
-  bumpOutpost,
-  trenchOutpost,
-}
-
-/// As explained above, custom serialization logic is needed,
-/// and this is part of it.
-///
-/// Make sure to update for each season!!!
-const autoZoneEnumMap = {
-  AutoZoneId.bumpDepot: "bumpDepot",
-  AutoZoneId.bumpOutpost: "bumpOutpost",
-  AutoZoneId.depot: "depot",
-  AutoZoneId.outpost: "outpost",
-  AutoZoneId.tower: "tower",
-  AutoZoneId.trenchDepot: "trenchDepot",
-  AutoZoneId.trenchOutpost: "trenchOutpost",
-};
