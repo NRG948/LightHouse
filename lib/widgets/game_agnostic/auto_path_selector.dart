@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/data_entry.dart';
-import 'package:lighthouse/models/general/auto_path_data.dart';
-import 'package:lighthouse/models/general/point_data.dart';
-import 'package:lighthouse/pages/rebuilt/aryav_data_viewer.dart';
 import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/checkbox.dart';
@@ -68,22 +65,22 @@ class VisualNode extends StatelessWidget {
 }
 
 class NodeData {
-  /// note that [autoZoneId] *always* takes precedence over this.
-  /// if [autoZoneId] exists, position **should not** be serialized.
+  /// note that [groupLabel] *always* takes precedence over this.
+  /// if [groupLabel] exists, position **should not** be serialized.
   /// (if it's part of a group, position is used for display position *inside* that zone,
   /// meaning it's absolutely useless for export)
   Offset? position;
   Color color;
   bool draggable;
   double radius;
-  AutoZoneId? autoZoneId;
+  String? groupLabel;
 
   NodeData(
       {this.position,
       required this.color,
       required this.radius,
       required this.draggable,
-      this.autoZoneId});
+      this.groupLabel});
 }
 
 class UserAction {
@@ -111,11 +108,11 @@ class AutoPathSelector extends StatefulWidget {
   final double rawImageHeight;
   final int maximumGroupSize;
 
-  final AutoPathData data;
+  final String? jsonKey;
 
   final double? margin;
 
-  final List<AutoZone> zones;
+  final List<Zone> zones;
 
   final Color? mainColor;
   final Color? backgroundColor;
@@ -163,8 +160,8 @@ class AutoPathSelector extends StatefulWidget {
   /// The initial path displayed.
   ///
   /// This is often used in tandum with [viewOnly].
-  /// It is a list of [PointData].
-  final List<PointData>? initialPath;
+  /// It is a list of [String] and [List\<num\>] representing region IDs and coordinates respectively.
+  final List<dynamic>? initialPath;
 
   const AutoPathSelector({
     super.key,
@@ -172,7 +169,8 @@ class AutoPathSelector extends StatefulWidget {
     required this.rawImageWidth,
     required this.rawImageHeight,
     required this.zones,
-    required this.data,
+    exportLocation,
+    this.jsonKey,
     this.margin,
     this.debug = false,
     this.canStartInZone = false,
@@ -237,7 +235,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _rawImageWidth => widget.rawImageWidth;
   double get _rawImageHeight => widget.rawImageHeight;
 
-  AutoPathData get _data => widget.data;
+  String? get _jsonKey => widget.jsonKey;
 
   late double _width;
   double get _height =>
@@ -265,7 +263,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   Offset Function(Offset pixelPosition, {bool inverse})? get _converter =>
       widget.converter;
 
-  List<PointData>? get _initialPath => widget.initialPath;
+  List<dynamic>? get _initialPath => widget.initialPath;
 
   final List<NodeData> _nodeStack = [];
   final List<UserAction> _history = [];
@@ -292,7 +290,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   bool get _viewOnly => widget.viewOnly;
 
-  List<AutoZone> get _zones => widget.zones;
+  List<Zone> get _zones => widget.zones;
 
   @override
   void initState() {
@@ -313,72 +311,72 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     _serializeData();
   }
 
-  /// Resets the selector to its state **before** any user input.
-  ///
-  /// If selector is in data entry, the path is... nothing.
-  ///
-  /// If the selector is in data viewer, a path is displayed.
   void _resetToInitialPath() {
     while (_nodeStack.isNotEmpty) {
       _nodeStack.removeLast();
       _history.removeLast();
     }
     if (_initialPath != null) {
-      for (PointData point in _initialPath!) {
-        if (point.autoZone == null) {
-          Offset pixelPosition = Offset(point.x, point.y);
-          addNodeFromMap((_converter == null
-                  ? pixelPosition
-                  : _converter!(pixelPosition, inverse: true)) *
-              _scaleFactor);
-        } else {
-          addNodeFromRegion(point.autoZone!);
+      for (dynamic node in _initialPath!) {
+        switch (node) {
+          case [num x, num y]:
+            Offset pixelPosition = Offset(x.toDouble(), y.toDouble());
+            addNodeFromMap((_converter == null
+                    ? pixelPosition
+                    : _converter!(pixelPosition, inverse: true)) *
+                _scaleFactor);
+
+          case String region:
+            addNodeFromRegion(region);
+
+          default:
+            break;
         }
       }
     }
   }
 
-  /// Most of the time, widgets should directly work with data from the model object.
-  /// Because of 1) the complexity of this widget and 2) the undo functionality, this selector
-  /// maintains its own data and updates the model update with a "stripped" version
-  /// of its own data in this function.
   void _serializeData() {
-    if (_viewOnly) return;
+    if (_jsonKey == null || _viewOnly) return;
 
+    Map<String, dynamic> data = {};
+
+    // each element can either be a string or another list for x-y coords
+    List<dynamic> positions = List.empty(growable: true);
     for (NodeData node in _nodeStack) {
-      //   if (node.groupLabel != null) {
-      //     positions.add(node.groupLabel);
-      //   } else {
-      double pixelX = node.position!.dx / _scaleFactor;
-      double pixelY = node.position!.dy / _scaleFactor;
-
-      late final Offset convertedOffset;
-      if (_converter == null) {
-        convertedOffset = Offset(pixelX, pixelY);
+      if (node.groupLabel != null) {
+        positions.add(node.groupLabel);
       } else {
-        convertedOffset = _converter!(Offset(pixelX, pixelY), inverse: false);
-      }
+        double pixelX = node.position!.dx / _scaleFactor;
+        double pixelY = node.position!.dy / _scaleFactor;
 
-      _data.path.add(PointData(
-        x: convertedOffset.dx,
-        y: convertedOffset.dy,
-        autoZone: node
-            .autoZoneId, // remember that both the parameter and argument can be null
-      ));
+        if (_converter == null) {
+          positions.add([pixelX, pixelY]);
+        } else {
+          Offset convertedOffset =
+              _converter!(Offset(pixelX, pixelY), inverse: false);
+          positions.add([convertedOffset.dx, convertedOffset.dy]);
+        }
+      }
     }
 
-    _data.attemptedClimb = _attemptedClimb;
-    _data.climbSuccessful = _climbSuccessful;
+    data["path"] = positions;
+    data["attemptedClimb"] = _attemptedClimb;
+    data["climbSuccessful"] = _climbSuccessful;
+    data["climbLevel"] = _climbLevel;
+    data["shotPreload"] = _shotPreload;
+
+    DataEntry.exportData[_jsonKey!] = data;
   }
 
   void setPositionsForGroupedNodes() {
-    for (AutoZone zone in _zones) {
+    for (Zone zone in _zones) {
       int i = 0;
       int numNodes = _nodeStack
-          .where((final NodeData node) => node.autoZoneId == zone.id)
+          .where((final NodeData node) => node.groupLabel == zone.id)
           .length;
       for (NodeData node in _nodeStack
-          .where((final NodeData node) => node.autoZoneId == zone.id)) {
+          .where((final NodeData node) => node.groupLabel == zone.id)) {
         node.radius = _nodeRadius * _nodeScalingFactor -
             ((numNodes - 1) * 1.5); // TODO: tweak based on testing
 
@@ -519,9 +517,9 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     });
   }
 
-  NodeData addNodeFromRegion(AutoZoneId autoZone) {
+  NodeData addNodeFromRegion(String groupLabel) {
     NodeData newNode = NodeData(
-      autoZoneId: autoZone,
+      groupLabel: groupLabel,
       radius: _nodeRadius * _nodeScalingFactor,
       draggable: false,
       color: _regionNodeColor ?? context.colors.accent4,
@@ -553,34 +551,28 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
 
   List<BoxRegion> _getRegions() {
     List<BoxRegion> regions = [];
-    for (AutoZone zone in _zones) {
+    for (Zone zone in _zones) {
       regions.add(BoxRegion(
-        zone: zone,
-        scaleFactor: _scaleFactor,
+        id: zone.id,
+        top: zone.top * _scaleFactor,
+        left: zone.left * _scaleFactor,
+        width: zone.width * _scaleFactor,
+        height: zone.height * _scaleFactor,
         color: _debug
             ? Color.fromARGB(99, 67, 189, 155)
             : Color.fromARGB(1, 255, 255, 255),
-        onTap: (zone, center) {
-          switch (zone) {
-            case AutoZone(id: var id):
-              {
-                if (!_canStartInZone && _nodeStack.isEmpty) return;
-                HapticFeedback.mediumImpact();
-                int sameIdNodeCount = _nodeStack
-                    .where((final NodeData node) => node.autoZoneId == id)
-                    .length;
+        onTap: (groupLabel, center) {
+          if (!_canStartInZone && _nodeStack.isEmpty) return;
+          HapticFeedback.mediumImpact();
+          int sameIdNodeCount = _nodeStack
+              .where((final NodeData node) => node.groupLabel == groupLabel)
+              .length;
 
-                if (sameIdNodeCount >= _maximumGroupSize) return;
+          if (sameIdNodeCount >= _maximumGroupSize) return;
 
-                setState(() {
-                  addNodeFromRegion(id);
-                });
-              }
-            default:
-              {
-                print("Zone is not autozone! wha...?");
-              }
-          }
+          setState(() {
+            addNodeFromRegion(groupLabel);
+          });
         },
       ));
     }

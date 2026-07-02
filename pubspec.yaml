@@ -48,9 +48,6 @@ dependencies:
   image_size_getter: ^2.3.0
   just_the_tooltip: ^0.0.12
   animated_text_kit: ^4.2.2
-  json_serializable: ^6.14.0
-  json_annotation: ^4.12.0
-  build_runner: ^2.15.0
 
 
 

@@ -3,30 +3,29 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lighthouse/data_entry.dart';
-import 'package:lighthouse/models/rebuilt/location_tracker_data.dart';
 import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/default_container.dart';
 
 class LocationTracker extends StatefulWidget {
-  final LocationTrackerData data;
+  final String? jsonKey;
   final String imageFilePath;
   final double rawImageWidth;
   final double rawImageHeight;
   final double? margin;
-  final List<LocationTrackerZone> zones;
+  final List<Zone> zones;
   final Map<String, Color>? assignedColors;
   final bool viewOnly;
   final Color? mainColor;
   final Color? backgroundColor;
   final bool flipField;
 
-  final Widget Function(BuildContext context, LocationZoneId? regionId,
+  final Widget Function(BuildContext context, String? regionId,
       void Function(dynamic data) onUpdate) childBuilder;
 
   const LocationTracker({
     super.key,
-    required this.data,
+    this.jsonKey,
     required this.imageFilePath,
     required this.rawImageWidth,
     required this.rawImageHeight,
@@ -49,20 +48,19 @@ class _LocationTrackerState extends State<LocationTracker>
   @override
   bool get wantKeepAlive => true;
 
-  LocationTrackerData? get _data => widget.data;
+  String? get _jsonKey => widget.jsonKey;
   bool get _viewOnly => widget.viewOnly;
 
   bool get _flipField => widget.flipField;
 
   late double _width;
-  LocationZoneId? _selectedId;
+  String? _selectedId;
 
   final Map<String?, dynamic> _compiledData = {};
 
   double get _margin => widget.margin ?? _width / 20;
   double get _availableWidth => _width - 2 * _margin;
-  double get _imageWidth =>
-      _viewOnly ? _availableWidth : 0.5 * (_availableWidth - _margin);
+  double get _imageWidth => _viewOnly ? _availableWidth : 0.5 * (_availableWidth - _margin);
   double get _scaleFactor => _imageWidth / widget.rawImageWidth;
   double get _imageHeight => widget.rawImageHeight * _scaleFactor;
 
@@ -72,7 +70,7 @@ class _LocationTrackerState extends State<LocationTracker>
     return index != -1 ? index + 1 : 0;
   }
 
-  void _onChildUpdate(LocationZoneId? regionId, dynamic data) {
+  void _onChildUpdate(String? regionId, dynamic data) {
     _compiledData[regionId] = data;
     _serializeData();
   }
@@ -86,25 +84,19 @@ class _LocationTrackerState extends State<LocationTracker>
           : const Color.fromARGB(40, 255, 255, 255);
 
       return BoxRegion(
-        zone: zone,
-        scaleFactor: _scaleFactor,
+        id: zone.id,
+        top: zone.top * _scaleFactor,
+        left: zone.left * _scaleFactor,
+        width: zone.width * _scaleFactor,
+        height: zone.height * _scaleFactor,
         color: color,
         borderOnly: _selectedId != zone.id && !_viewOnly,
         borderWidth: _margin / 5,
-        onTap: (zone, _) {
-          switch (zone) {
-            case LocationTrackerZone(id: var id):
-              {
-                HapticFeedback.mediumImpact();
-                setState(() {
-                  _selectedId = (_selectedId == id) ? null : id;
-                });
-              }
-            default:
-              {
-                print("zone is not location tracker zone! ");
-              }
-          }
+        onTap: (id, _) {
+          HapticFeedback.mediumImpact();
+          setState(() {
+            _selectedId = (_selectedId == id) ? null : id;
+          });
         },
       );
     }).toList();
@@ -150,8 +142,7 @@ class _LocationTrackerState extends State<LocationTracker>
                                 image: AssetImage(widget.imageFilePath),
                                 fit: BoxFit.fill,
                                 colorFilter: ColorFilter.mode(
-                                  widget.backgroundColor ??
-                                      context.colors.container,
+                                  widget.backgroundColor ?? context.colors.container,
                                   BlendMode.modulate,
                                 ),
                               ),
@@ -162,26 +153,25 @@ class _LocationTrackerState extends State<LocationTracker>
                       ),
                     ),
                   ),
-                  if (!_viewOnly)
-                    Expanded(
-                      child: IndexedStack(
-                        index: _selectedIndex,
-                        children: [
-                          widget.childBuilder(
+                  if (!_viewOnly) Expanded(
+                    child: IndexedStack(
+                      index: _selectedIndex,
+                      children: [
+                        widget.childBuilder(
+                          context,
+                          null,
+                          (data) => _onChildUpdate(null, data),
+                        ),
+                        ...widget.zones.map(
+                          (zone) => widget.childBuilder(
                             context,
-                            null,
-                            (data) => _onChildUpdate(null, data),
+                            zone.id,
+                            (data) => _onChildUpdate(zone.id, data),
                           ),
-                          ...widget.zones.map(
-                            (zone) => widget.childBuilder(
-                              context,
-                              zone.id,
-                              (data) => _onChildUpdate(zone.id, data),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                  ),
                 ],
               ),
             ),

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
-import 'package:lighthouse/models/rebuilt/location_tracker_data.dart';
 import 'package:lighthouse/themes.dart';
 import 'package:lighthouse/widgets/game_agnostic/box_region.dart';
 import 'package:lighthouse/widgets/game_agnostic/location_tracker.dart';
 import 'package:lighthouse/widgets/rebuilt/cycle_list_counter.dart';
 
 class RebuiltLocationTracker extends StatelessWidget {
-  final LocationTrackerData data;
+  final String? jsonKey;
   final double? margin;
   final bool viewOnly;
   final Map<String, Color>? assignedColors;
@@ -16,7 +15,7 @@ class RebuiltLocationTracker extends StatelessWidget {
 
   const RebuiltLocationTracker({
     super.key,
-    required this.data,
+    this.jsonKey,
     this.margin,
     this.viewOnly = false,
     this.assignedColors,
@@ -24,67 +23,25 @@ class RebuiltLocationTracker extends StatelessWidget {
     this.flipField = false,
   });
 
-  List<LocationTrackerZone> getZones() {
+  List<Zone> getZones() {
     return [
-      LocationTrackerZone(
-          id: LocationZoneId.depotCorner,
-          top: 34,
-          left: 45,
-          width: 200,
-          height: 108),
-      LocationTrackerZone(
-          id: LocationZoneId.depotTrench,
-          top: 34,
-          left: 245,
-          width: 140,
-          height: 108),
-      LocationTrackerZone(
-          id: LocationZoneId.depotWall,
-          top: 142,
-          left: 45,
-          width: 160,
-          height: 168),
-      LocationTrackerZone(
-          id: LocationZoneId.depotBump,
-          top: 142,
-          left: 205,
-          width: 132,
-          height: 137),
-      LocationTrackerZone(
-          id: LocationZoneId.tower, top: 310, left: 124, width: 81, height: 71),
-      LocationTrackerZone(
-          id: LocationZoneId.hub, top: 279, left: 205, width: 132, height: 102),
-      LocationTrackerZone(
-          id: LocationZoneId.outpostWall,
-          top: 381,
-          left: 45,
-          width: 160,
-          height: 126),
-      LocationTrackerZone(
-          id: LocationZoneId.outpostBump,
-          top: 381,
-          left: 205,
-          width: 132,
-          height: 126),
-      LocationTrackerZone(
-          id: LocationZoneId.outpostCorner,
-          top: 507,
-          left: 45,
-          width: 200,
-          height: 118),
-      LocationTrackerZone(
-          id: LocationZoneId.outpostTrench,
-          top: 507,
-          left: 245,
-          width: 140,
-          height: 118),
+      Zone(id: "depot_corner", top: 34, left: 45, width: 200, height: 108),
+      Zone(id: "depot_trench", top: 34, left: 245, width: 140, height: 108),
+      Zone(id: "depot_wall", top: 142, left: 45, width: 160, height: 168),
+      Zone(id: "depot_bump", top: 142, left: 205, width: 132, height: 137),
+      Zone(id: "tower", top: 310, left: 124, width: 81, height: 71),
+      Zone(id: "hub", top: 279, left: 205, width: 132, height: 102),
+      Zone(id: "outpost_wall", top: 381, left: 45, width: 160, height: 126),
+      Zone(id: "outpost_bump", top: 381, left: 205, width: 132, height: 126),
+      Zone(id: "outpost_corner", top: 507, left: 45, width: 200, height: 118),
+      Zone(id: "outpost_trench", top: 507, left: 245, width: 140, height: 118),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return LocationTracker(
-      data: data,
+      jsonKey: jsonKey,
       imageFilePath: "assets/images/rebuildFieldMap.png",
       rawImageWidth: 464,
       rawImageHeight: 647,
