@@ -2,7 +2,7 @@ name: lighthouse
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -48,13 +48,11 @@ dependencies:
   image_size_getter: ^2.3.0
   just_the_tooltip: ^0.0.12
   animated_text_kit: ^4.2.2
-  build_runner: ^2.15.0
   json_annotation: ^4.12.0
-  json_serializable: ^6.14.0
-
-
 
 dev_dependencies:
+  build_runner: ^2.15.0
+  json_serializable: ^6.14.0
   flutter_test:
     sdk: flutter
 
@@ -75,7 +73,6 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -86,65 +83,65 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   shaders:
-      - assets/shaders/stripes_shader.frag
+    - assets/shaders/stripes_shader.frag
 
   assets:
-      - assets/images/amongview_bg.png
-      - assets/images/auto_field_map.png
-      - assets/images/background.png
-      - assets/images/background-hires.png
-      - assets/images/background-hires-dark.png
-      - assets/images/background-hires-pink.png
-      - assets/images/background-hires-black.png
-      - assets/images/background-hires-blue.png
-      - assets/images/background-tony.jpg
-      - assets/images/background-aryav.jpg
-      - assets/images/download_bg.png
-      - assets/images/rebuiltFullField.png
-      - assets/images/startingLocationField.png
-      - assets/images/startPos.png
-      - assets/images/startPos_white.png
-      - assets/images/startPosWhiteLabel.png
-      - assets/images/startPosFSBlue.png
-      - assets/images/startPosFSRed.png
-      - assets/images/upload_bg.png
-      - assets/images/tba_lamp.png
-      - assets/images/unknown.png
-      - assets/images/loading.png
-      - assets/images/spritesheet.png
-      - assets/images/rebuildFieldMap.png
-      - assets/images/reef-chronos/AB.png
-      - assets/images/reef-chronos/CD.png
-      - assets/images/reef-chronos/EF.png
-      - assets/images/reef-chronos/GH.png
-      - assets/images/reef-chronos/IJ.png
-      - assets/images/reef-chronos/KL.png
-      - assets/images/tdv_bg.jpg
-      - assets/images/tower.png
-      - assets/text/teams0-500.txt
-      - assets/text/teams500-1000.txt
-      - assets/text/teams1000-1500.txt
-      - assets/text/teams1500-2000.txt
-      - assets/text/teams2000-2500.txt
-      - assets/text/teams2500-3000.txt
-      - assets/text/teams3000-3500.txt
-      - assets/text/teams3500-4000.txt
-      - assets/text/teams4000-4500.txt
-      - assets/text/teams4500-5000.txt
-      - assets/text/teams5000-5500.txt
-      - assets/text/teams5500-6000.txt
-      - assets/text/teams6000-6500.txt
-      - assets/text/teams6500-7000.txt
-      - assets/text/teams7000-7500.txt
-      - assets/text/teams7500-8000.txt
-      - assets/text/teams8000-8500.txt
-      - assets/text/teams8500-9000.txt
-      - assets/text/teams9000-9500.txt
-      - assets/text/teams9500-10000.txt
-      - assets/text/teams10000-10500.txt
-      - assets/text/teams10500-11000.txt
-      - assets/text/teams11000-11500.txt
-      - assets/text/teams11500-12000.txt
+    - assets/images/amongview_bg.png
+    - assets/images/auto_field_map.png
+    - assets/images/background.png
+    - assets/images/background-hires.png
+    - assets/images/background-hires-dark.png
+    - assets/images/background-hires-pink.png
+    - assets/images/background-hires-black.png
+    - assets/images/background-hires-blue.png
+    - assets/images/background-tony.jpg
+    - assets/images/background-aryav.jpg
+    - assets/images/download_bg.png
+    - assets/images/rebuiltFullField.png
+    - assets/images/startingLocationField.png
+    - assets/images/startPos.png
+    - assets/images/startPos_white.png
+    - assets/images/startPosWhiteLabel.png
+    - assets/images/startPosFSBlue.png
+    - assets/images/startPosFSRed.png
+    - assets/images/upload_bg.png
+    - assets/images/tba_lamp.png
+    - assets/images/unknown.png
+    - assets/images/loading.png
+    - assets/images/spritesheet.png
+    - assets/images/rebuildFieldMap.png
+    - assets/images/reef-chronos/AB.png
+    - assets/images/reef-chronos/CD.png
+    - assets/images/reef-chronos/EF.png
+    - assets/images/reef-chronos/GH.png
+    - assets/images/reef-chronos/IJ.png
+    - assets/images/reef-chronos/KL.png
+    - assets/images/tdv_bg.jpg
+    - assets/images/tower.png
+    - assets/text/teams0-500.txt
+    - assets/text/teams500-1000.txt
+    - assets/text/teams1000-1500.txt
+    - assets/text/teams1500-2000.txt
+    - assets/text/teams2000-2500.txt
+    - assets/text/teams2500-3000.txt
+    - assets/text/teams3000-3500.txt
+    - assets/text/teams3500-4000.txt
+    - assets/text/teams4000-4500.txt
+    - assets/text/teams4500-5000.txt
+    - assets/text/teams5000-5500.txt
+    - assets/text/teams5500-6000.txt
+    - assets/text/teams6000-6500.txt
+    - assets/text/teams6500-7000.txt
+    - assets/text/teams7000-7500.txt
+    - assets/text/teams7500-8000.txt
+    - assets/text/teams8000-8500.txt
+    - assets/text/teams8500-9000.txt
+    - assets/text/teams9000-9500.txt
+    - assets/text/teams9500-10000.txt
+    - assets/text/teams10000-10500.txt
+    - assets/text/teams10500-11000.txt
+    - assets/text/teams11000-11500.txt
+    - assets/text/teams11500-12000.txt
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -157,19 +154,19 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Comfortaa
-       fonts:
-         - asset: fonts/Comfortaa-Regular.ttf
-         - asset: fonts/Comfortaa-Regular.ttf
-           style: italic
-         - asset: fonts/Comfortaa-Bold.ttf
-           weight: 700
-     - family:  CustomIcons
-       fonts:
-         - asset: fonts/CustomIcons.ttf
-     - family: CoralAlgaeIcons
-       fonts:
-         - asset: fonts/CoralAlgaeIcons.ttf
+    - family: Comfortaa
+      fonts:
+        - asset: fonts/Comfortaa-Regular.ttf
+        - asset: fonts/Comfortaa-Regular.ttf
+          style: italic
+        - asset: fonts/Comfortaa-Bold.ttf
+          weight: 700
+    - family: CustomIcons
+      fonts:
+        - asset: fonts/CustomIcons.ttf
+    - family: CoralAlgaeIcons
+      fonts:
+        - asset: fonts/CoralAlgaeIcons.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

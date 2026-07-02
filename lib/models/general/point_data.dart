@@ -29,7 +29,7 @@ class PointData {
   }
   Map<String, dynamic> toJson() {
     if (autoZone != null) {
-      return {"autoZone": autoZone};
+      return {"autoZone": autoZoneEnumMap[autoZone]};
     } else {
       return {
         "x": x,
