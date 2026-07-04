@@ -157,6 +157,9 @@ class AutoPathSelector extends StatefulWidget {
   /// The output of [converter] when the pixel offsets of the nodes are passed in is saved to [DataEntry].
   final Offset Function(Offset position, {bool inverse})? converter;
 
+  /// If non-null, data is written to this map instead of [DataEntry.exportData].
+  final Map<String, dynamic>? dataMap;
+
   /// The initial path displayed.
   ///
   /// This is often used in tandum with [viewOnly].
@@ -191,6 +194,7 @@ class AutoPathSelector extends StatefulWidget {
     this.imageScalingFactor = 1,
     this.nodeScalingFactor = 1,
     this.initialPath,
+    this.dataMap,
   });
 
   /// Returns a conversion function that transforms coordinates between a Pixel system
@@ -236,6 +240,7 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
   double get _rawImageHeight => widget.rawImageHeight;
 
   String? get _jsonKey => widget.jsonKey;
+  Map<String, dynamic>? get _dataMap => widget.dataMap;
 
   late double _width;
   double get _height =>
@@ -366,7 +371,15 @@ class _AutoPathSelectorState extends State<AutoPathSelector>
     data["climbLevel"] = _climbLevel;
     data["shotPreload"] = _shotPreload;
 
-    DataEntry.exportData[_jsonKey!] = data;
+    if (_dataMap != null && _jsonKey != null) {
+      _dataMap!["path"] = positions;
+      _dataMap!["attemptedClimb"] = _attemptedClimb;
+      _dataMap!["climbSuccessful"] = _climbSuccessful;
+      _dataMap!["climbLevel"] = _climbLevel;
+      _dataMap!["shotPreload"] = _shotPreload;
+    } else {
+      DataEntry.exportData[_jsonKey!] = data;
+    }
   }
 
   void setPositionsForGroupedNodes() {

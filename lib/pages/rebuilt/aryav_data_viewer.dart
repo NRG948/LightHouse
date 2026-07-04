@@ -1338,30 +1338,58 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
         _pitDataGrouped.mechanisms = DataParser.asString(entry["mechanisms"]);
 
         // Pit Autos
-        int i = 1;
-        while (true) {
-          if (!DataParser.isEmpty(entry["autoPath$i"]) &&
-              entry["autoPath$i"] is Map<String, dynamic> &&
-              !DataParser.isEmpty(entry["autoPath$i"]!["path"])) {
-            _autos.add(Auto(
-                scouterName: DataParser.asString(entry["scouterName"]),
-                rating: 0,
-                match: "Pit",
-                attemptedClimb:
-                    DataParser.toBool(entry["autoPath$i"]!["attemptedClimb"]) ??
-                        false,
-                climbSuccessful: false,
-                path: DataParser.toList(entry["autoPath$i"]!["path"]) ?? [],
-                crossCenter:
-                    DataParser.toBool(entry["autoCrossedMidline$i"]) ?? false,
-                scorePreload:
-                    DataParser.toBool(entry["autoPath$i"]!["shotPreload"]) ??
-                        false,
-                amountScored: DataParser.toInt(entry["autoFuelScored$i"]) ?? 0,
-                pit: true));
-            i++;
-          } else {
-            break;
+        var autoPaths = entry["autoPaths"];
+        if (autoPaths is List && autoPaths.isNotEmpty) {
+          for (var autoPathEntry in autoPaths) {
+            if (autoPathEntry is Map<String, dynamic> &&
+                !DataParser.isEmpty(autoPathEntry["path"])) {
+              _autos.add(Auto(
+                  scouterName: DataParser.asString(entry["scouterName"]),
+                  rating: 0,
+                  match: "Pit",
+                  attemptedClimb:
+                      DataParser.toBool(autoPathEntry["attemptedClimb"]) ??
+                          false,
+                  climbSuccessful: false,
+                  path: DataParser.toList(autoPathEntry["path"]) ?? [],
+                  crossCenter:
+                      DataParser.toBool(autoPathEntry["crossedMidline"]) ??
+                          false,
+                  scorePreload:
+                      DataParser.toBool(autoPathEntry["shotPreload"]) ?? false,
+                  amountScored:
+                      DataParser.toInt(autoPathEntry["fuelScored"]) ?? 0,
+                  pit: true));
+            }
+          }
+        } else {
+          // Fallback flat key structure from legacy system.
+          int i = 1;
+          while (true) {
+            if (!DataParser.isEmpty(entry["autoPath$i"]) &&
+                entry["autoPath$i"] is Map<String, dynamic> &&
+                !DataParser.isEmpty(entry["autoPath$i"]!["path"])) {
+              _autos.add(Auto(
+                  scouterName: DataParser.asString(entry["scouterName"]),
+                  rating: 0,
+                  match: "Pit",
+                  attemptedClimb: DataParser.toBool(
+                          entry["autoPath$i"]!["attemptedClimb"]) ??
+                      false,
+                  climbSuccessful: false,
+                  path: DataParser.toList(entry["autoPath$i"]!["path"]) ?? [],
+                  crossCenter:
+                      DataParser.toBool(entry["autoCrossedMidline$i"]) ?? false,
+                  scorePreload:
+                      DataParser.toBool(entry["autoPath$i"]!["shotPreload"]) ??
+                          false,
+                  amountScored:
+                      DataParser.toInt(entry["autoFuelScored$i"]) ?? 0,
+                  pit: true));
+              i++;
+            } else {
+              break;
+            }
           }
         }
 
@@ -1754,12 +1782,14 @@ class _AryavDataViewerState extends State<AryavDataViewer> {
                                 physics: NeverScrollableScrollPhysics(),
                                 children: [
                                   InfoBox(
-                                      info: MetricWidgetFactory.percentageString(
-                                          _averageAccuracy),
+                                      info:
+                                          MetricWidgetFactory.percentageString(
+                                              _averageAccuracy),
                                       title: "Avg. Accuracy"),
                                   InfoBox(
-                                      info: MetricWidgetFactory.percentageString(
-                                          _averageDefendedAccuracy),
+                                      info:
+                                          MetricWidgetFactory.percentageString(
+                                              _averageDefendedAccuracy),
                                       title: "Defended Avg. Acc"),
                                   InfoBox(
                                       info: _pitDataGrouped.weight

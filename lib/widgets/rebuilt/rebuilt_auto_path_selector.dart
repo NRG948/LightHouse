@@ -11,6 +11,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
   final List<dynamic>? initialPath;
   final bool pit;
   final double nodeScalingFactor;
+  final Map<String, dynamic>? dataMap;
 
   const RebuiltAutoPathSelector(
       {super.key,
@@ -21,7 +22,8 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       this.initialPath,
       this.pit = false,
       this.jsonKey,
-      this.nodeScalingFactor = 1});
+      this.nodeScalingFactor = 1,
+      this.dataMap});
 
   List<Zone> getZones() {
     return [
@@ -52,6 +54,7 @@ class RebuiltAutoPathSelector extends StatelessWidget {
       viewOnly: viewOnly,
       initialPath: initialPath,
       nodeScalingFactor: nodeScalingFactor,
+      dataMap: dataMap,
       converter: AutoPathSelector.getConverterFromPoints(
           Offset(52, 617), // Bottom left corner
           Offset(0, 0),

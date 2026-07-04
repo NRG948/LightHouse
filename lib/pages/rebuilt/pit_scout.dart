@@ -35,6 +35,7 @@ class PitScoutState extends State<PitScout> {
     required int maxLines,
     String? autoFill,
     String? hintText,
+    Map<String, dynamic>? dataMap,
   }) {
     return Container(
       padding: EdgeInsets.all(10),
@@ -53,6 +54,7 @@ class PitScoutState extends State<PitScout> {
         maxLines: maxLines,
         autoFill: autoFill,
         hintText: hintText,
+        dataMap: dataMap,
       ),
     );
   }
@@ -169,20 +171,22 @@ class PitScoutState extends State<PitScout> {
             child: Column(spacing: 10, children: [
               PitAutoContainer(
                 height: 50,
-                jsonKeys: ["autoPath", "autoFuelScored", "autoCrossedMidline"],
-                childBuilder: (index) => Column(
+                listJsonKey: "autoPaths",
+                childBuilder: (index, dataMap) => Column(
                   spacing: 10,
                   children: [
                     RebuiltAutoPathSelector(
                       margin: 7,
-                      jsonKey: "autoPath${(index + 1)}",
+                      jsonKey: "path",
+                      dataMap: dataMap,
                       pit: true,
                       nodeScalingFactor: 0.7,
                     ),
                     buildPitTextBox(
+                        dataMap: dataMap,
                         numeric: true,
                         title: "Fuel Scored",
-                        jsonKey: "autoFuelScored${(index + 1)}",
+                        jsonKey: "fuelScored",
                         height: 60,
                         width: double.infinity,
                         fontSize: 20,
@@ -193,7 +197,8 @@ class PitScoutState extends State<PitScout> {
                           aspectRatio: 8,
                           child: CustomCheckbox(
                             title: "Crossed Midline",
-                            jsonKey: "autoCrossedMidline${(index + 1)}",
+                            jsonKey: "crossedMidline",
+                            dataMap: dataMap,
                             selectColor: context.colors.container,
                             optionColor: context.colors.accent1,
                           )),

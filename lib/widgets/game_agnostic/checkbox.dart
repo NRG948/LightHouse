@@ -35,6 +35,9 @@ class CustomCheckbox extends StatefulWidget {
   /// The key which stores the value of this widget in [DataEntry]
   final String? jsonKey;
 
+  /// If non-null, data is written to this map instead of [DataEntry.exportData].
+  final Map<String, dynamic>? dataMap;
+
   /// Creates a checkbox that registers clicks on the checkbox and the title text.
   const CustomCheckbox({
     super.key,
@@ -47,6 +50,7 @@ class CustomCheckbox extends StatefulWidget {
     this.lockedColor,
     this.isLocked = false,
     this.jsonKey,
+    this.dataMap,
   });
 
   static void _noop(bool value) {}
@@ -69,10 +73,10 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
   Color? get _lockedColor => widget.lockedColor;
 
   String? get _jsonKey => widget.jsonKey;
+  Map<String, dynamic>? get _dataMap => widget.dataMap;
 
   bool get _isLocked => widget.isLocked;
   bool currentValue = false;
-
 
   @override
   void initState() {
@@ -83,7 +87,11 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
 
   void _serializeData() {
     if (_jsonKey != null) {
-      DataEntry.exportData[_jsonKey!] = currentValue;
+      if (_dataMap != null) {
+        _dataMap![_jsonKey!] = currentValue;
+      } else {
+        DataEntry.exportData[_jsonKey!] = currentValue;
+      }
     }
   }
 
@@ -115,7 +123,9 @@ class _CustomCheckboxState extends State<CustomCheckbox> {
                     width: _height * 0.6,
                     height: _height * 0.6,
                     decoration: BoxDecoration(
-                      color: _isLocked ? _lockedColor ?? context.colors.locked : _optionColor ?? context.colors.accent2,
+                      color: _isLocked
+                          ? _lockedColor ?? context.colors.locked
+                          : _optionColor ?? context.colors.accent2,
                       borderRadius: BorderRadius.circular(_height * 0.2),
                     ),
                     child: FractionallySizedBox(
