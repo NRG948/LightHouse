@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:lighthouse/models/general/driver_station.dart';
 import 'package:lighthouse/models/general/match_prediction.dart';
+import 'package:lighthouse/models/general/match_type.dart';
 import 'package:lighthouse/models/general/three_stage_checkbox_data.dart';
 import 'package:lighthouse/models/rebuilt/climb_data.dart';
 import 'package:lighthouse/models/rebuilt/pit_auto_data.dart';
@@ -16,8 +18,8 @@ class AtlasData {
   int? teamNumber;
   int? matchNumber;
   bool? isReplay;
-  String? matchType;
-  String? driverStation;
+  MatchType? matchType;
+  DriverStation? driverStation;
   MatchPrediction? matchPrediction;
 
   // auto

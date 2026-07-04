@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lighthouse/constants.dart';
 import 'package:lighthouse/custom_icons.dart';
 import 'package:lighthouse/filemgr.dart';
+import 'package:lighthouse/models/rebuilt/atlas_data.dart';
 import 'package:lighthouse/pages/game_agnostic/data_entry_page.dart';
 import 'package:lighthouse/pages/game_agnostic/data_entry_sub_page.dart';
 import 'package:lighthouse/themes.dart';
@@ -27,6 +28,8 @@ class Atlas extends StatefulWidget {
 }
 
 class AtlasState extends State<Atlas> {
+  AtlasData data = AtlasData();
+
   double margin = 10;
   String? driverStation;
   bool get flipField =>

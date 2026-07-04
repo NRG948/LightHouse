@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:lighthouse/constants.dart";
 import "package:lighthouse/filemgr.dart";
+import "package:lighthouse/models/rebuilt/atlas_data.dart";
+import "package:lighthouse/models/rebuilt/pit_data.dart";
 import "package:lighthouse/themes.dart";
 
 // used by all active widgets to save data short-term, before serialization to json
@@ -10,7 +12,7 @@ class DataEntry {
   static late String activeConfig;
 }
 
-void saveJson(BuildContext context) async {
+void saveJson(Object model, BuildContext context) async {
   HapticFeedback.mediumImpact();
   showDialog(
       context: context,
@@ -31,7 +33,7 @@ void saveJson(BuildContext context) async {
             TextButton(
                 onPressed: () async {
                   HapticFeedback.mediumImpact();
-                  List<String> missingFields = dataVerification();
+                  List<String> missingFields = dataVerification(model);
                   if (missingFields.isEmpty) {
                     if (await saveExport() == 0) {
                       if (["Atlas", "Chronos", "Human Player"]
@@ -101,30 +103,53 @@ void saveJson(BuildContext context) async {
       });
 }
 
-List<String> dataVerification() {
+List<String> dataVerification(Object model) {
+  switch (model) {
+    case AtlasData data:
+      {
+        return verifyAtlasData(data);
+      }
+    case PitData data:
+      {
+        return verifyPitData(data);
+      }
+    default:
+      {
+        return [];
+      }
+  }
+}
+
+List<String> verifyAtlasData(AtlasData data) {
   List<String> missingFields = [];
-  for (String i in missingFieldMap[DataEntry.activeConfig]!) {
-    if (DataEntry.exportData[i] == null ||
-        DataEntry.exportData[i] == "" ||
-        DataEntry.exportData[i] == 0.0 ||
-        DataEntry.exportData[i] == 0) {
-      missingFields.add(i);
-    }
+  if (data.scouterName == null || data.scouterName!.isEmpty) {
+    missingFields.add("Scouter Name");
+  }
+  if (data.matchNumber == null || data.matchNumber == 0) {
+    missingFields.add("Match Number");
+  }
+  if (data.teamNumber == null || data.teamNumber == 0) {
+    missingFields.add("Team Number");
+  }
+  if (data.matchType == null) {
+    missingFields.add("Match Type");
+  }
+  if (data.driverStation == null) {
+    missingFields.add("Driver Station");
+  }
+  if (data.dataQuality == null || data.dataQuality == 0) {
+    missingFields.add("Data Quality");
   }
   return missingFields;
 }
 
-Map<String, List<String>> missingFieldMap = {
-  "Atlas": [
-    "scouterName",
-    "matchNumber",
-    "teamNumber",
-    "matchType",
-    "driverStation",
-    "dataQuality"
-  ],
-  "Pit": ["teamNumber"],
-};
+List<String> verifyPitData(PitData data) {
+  List<String> missingFields = [];
+  if (data.teamNumber == null || data.teamNumber == 0) {
+    missingFields.add("Team Number");
+  }
+  return missingFields;
+}
 
 void showReturnDialog(BuildContext context) {
   HapticFeedback.mediumImpact();

@@ -11,12 +11,11 @@ AtlasData _$AtlasDataFromJson(Map<String, dynamic> json) => AtlasData()
   ..teamNumber = (json['teamNumber'] as num?)?.toInt()
   ..matchNumber = (json['matchNumber'] as num?)?.toInt()
   ..isReplay = json['isReplay'] as bool?
-  ..matchType = json['matchType'] as String?
-  ..driverStation = json['driverStation'] as String?
-  ..matchPrediction = json['matchPrediction'] == null
-      ? null
-      : MatchPrediction.fromJson(
-          json['matchPrediction'] as Map<String, dynamic>)
+  ..matchType = $enumDecodeNullable(_$MatchTypeEnumMap, json['matchType'])
+  ..driverStation =
+      $enumDecodeNullable(_$DriverStationEnumMap, json['driverStation'])
+  ..matchPrediction =
+      $enumDecodeNullable(_$MatchPredictionEnumMap, json['matchPrediction'])
   ..autoPath = json['autoPath'] == null
       ? null
       : AutoPathData.fromJson(json['autoPath'] as Map<String, dynamic>)
@@ -58,9 +57,9 @@ Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'teamNumber': instance.teamNumber,
       'matchNumber': instance.matchNumber,
       'isReplay': instance.isReplay,
-      'matchType': instance.matchType,
-      'driverStation': instance.driverStation,
-      'matchPrediction': instance.matchPrediction?.toJson(),
+      'matchType': _$MatchTypeEnumMap[instance.matchType],
+      'driverStation': _$DriverStationEnumMap[instance.driverStation],
+      'matchPrediction': _$MatchPredictionEnumMap[instance.matchPrediction],
       'autoPath': instance.autoPath?.toJson(),
       'locations': instance.locations?.toJson(),
       'isDefended': instance.isDefended,
@@ -76,3 +75,23 @@ Map<String, dynamic> _$AtlasDataToJson(AtlasData instance) => <String, dynamic>{
       'dataQuality': instance.dataQuality,
       'comments': instance.comments,
     };
+
+const _$MatchTypeEnumMap = {
+  MatchType.qualification: 'qualification',
+  MatchType.playoff: 'playoff',
+  MatchType.finals: 'finals',
+};
+
+const _$DriverStationEnumMap = {
+  DriverStation.redOne: 'redOne',
+  DriverStation.redTwo: 'redTwo',
+  DriverStation.redThree: 'redThree',
+  DriverStation.blueOne: 'blueOne',
+  DriverStation.blueTwo: 'blueTwo',
+  DriverStation.blueThree: 'blueThree',
+};
+
+const _$MatchPredictionEnumMap = {
+  MatchPrediction.red: 'red',
+  MatchPrediction.blue: 'blue',
+};
