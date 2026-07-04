@@ -5,13 +5,13 @@ import 'package:lighthouse/themes.dart';
 
 class PitAutoContainer extends StatefulWidget {
   final double height;
-  final List<String> jsonKeys;
-  final Widget Function(int index) childBuilder;
+  final String listJsonKey;
+  final Widget Function(int index, Map<String, dynamic> dataMap) childBuilder;
 
   const PitAutoContainer({
     super.key,
     required this.height,
-    required this.jsonKeys,
+    required this.listJsonKey,
     required this.childBuilder,
   });
 
@@ -23,6 +23,7 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
   int _optionCount = 1;
   int _selectedOption = 0;
   late List<Widget> _children;
+  late List<Map<String, dynamic>> _autoData;
 
   double get _margin => 10;
 
@@ -30,12 +31,10 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
     setState(() {
       _optionCount++;
       _selectedOption = _optionCount - 1;
-      _children = List.generate(
-        _optionCount,
-        (int x) =>
-            KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
-      );
+      _autoData.add({});
+      _rebuildChildren();
     });
+    DataEntry.exportData[widget.listJsonKey] = _autoData;
   }
 
   void _removeOption() {
@@ -43,29 +42,33 @@ class _PitAutoContainerState extends State<PitAutoContainer> {
       setState(() {
         _optionCount--;
         _selectedOption = _optionCount - 1;
-        _children = List.generate(
-          _optionCount,
-          (int x) =>
-              KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
-        );
-        for (String jsonKey in widget.jsonKeys) {
-          DataEntry.exportData.remove("$jsonKey${_optionCount + 1}");
-        }
+        _autoData.removeLast();
+        _rebuildChildren();
       });
+      DataEntry.exportData[widget.listJsonKey] = _autoData;
     }
+  }
+
+  void _rebuildChildren() {
+    _children = List.generate(
+      _optionCount,
+      (int x) => KeyedSubtree(
+        key: ValueKey(x),
+        child: widget.childBuilder(x, _autoData[x]),
+      ),
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    _children = List.generate(
-      _optionCount,
-      (int x) => KeyedSubtree(key: ValueKey(x), child: widget.childBuilder(x)),
-    );
+    _autoData = [{}];
+    _rebuildChildren();
   }
 
   @override
   Widget build(BuildContext context) {
+    DataEntry.exportData[widget.listJsonKey] = _autoData;
     return Column(
       spacing: _margin,
       children: [

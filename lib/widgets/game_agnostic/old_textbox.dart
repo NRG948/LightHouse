@@ -19,6 +19,8 @@ class NRGTextbox extends StatefulWidget {
   final int maxLines; // Maximum number of lines for the text box
   final String? autoFill; // Optional autofill value
   final String? hintText; // Optional hint text
+  final Map<String, dynamic>?
+      dataMap; // If set, writes here instead of DataEntry.exportData
 
   const NRGTextbox(
       {super.key,
@@ -31,7 +33,8 @@ class NRGTextbox extends StatefulWidget {
       required this.fontSize,
       required this.maxLines,
       this.defaultText = "Enter Text",
-      this.hintText});
+      this.hintText,
+      this.dataMap});
 
   @override
   State<NRGTextbox> createState() => _NRGTextboxState();
@@ -50,6 +53,7 @@ class _NRGTextboxState extends State<NRGTextbox>
   bool get _numeric => widget.numeric;
   int get _maxLines => widget.maxLines;
   double get _fontSize => widget.fontSize;
+  Map<String, dynamic>? get _dataMap => widget.dataMap;
 
   // Controller for the text field
   final TextEditingController _controller = TextEditingController();
@@ -58,30 +62,33 @@ class _NRGTextboxState extends State<NRGTextbox>
   @override
   void initState() {
     super.initState();
-    // Add listener to update exportData when text changes
+    var target = _dataMap ?? DataEntry.exportData;
+    target[_key] = "";
+    // Add listener to update data when text changes
     _controller.addListener(() {
       setState(() {
-        if (widget.numeric) {
-          try {
-            // Try to parse the text as JSON
-            DataEntry.exportData[_key] = jsonDecode(_controller.text);
-          } catch (_) {
-            // If parsing fails, store number 0
-            DataEntry.exportData[_key] = 0;
-          }
-        } else {
-          DataEntry.exportData[_key] = _controller.text;
-        }
+        _serializeData();
       });
     });
-    // Initialize exportData with an empty string
-    DataEntry.exportData[_key] = "";
     // Handle autofill if provided
     if (widget.autoFill != null) {
       switch (widget.autoFill) {
         case "scouterName":
           _controller.text = configData["scouterName"] ?? "Scouter";
       }
+    }
+  }
+
+  void _serializeData() {
+    var target = _dataMap ?? DataEntry.exportData;
+    if (widget.numeric) {
+      try {
+        target[_key] = jsonDecode(_controller.text);
+      } catch (_) {
+        target[_key] = 0;
+      }
+    } else {
+      target[_key] = _controller.text;
     }
   }
 
