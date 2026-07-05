@@ -198,6 +198,7 @@ Map<String, dynamic> get pitSchema {
       'exportName',
       'timestamp',
     ],
+    'additionalProperties': false,
   };
 }
 

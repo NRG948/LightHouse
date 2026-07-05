@@ -246,6 +246,7 @@ Map<String, dynamic> get atlasSchema {
       'exportName',
       'timestamp',
     ],
+    'additionalProperties': false,
   };
 }
 

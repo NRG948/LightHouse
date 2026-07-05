@@ -31,7 +31,7 @@ void saveJson(BuildContext context) async {
             TextButton(
                 onPressed: () async {
                   HapticFeedback.mediumImpact();
-                  List<String> missingFields = dataVerification();
+                  List<String> missingFields = getMissingFields();
                   if (missingFields.isEmpty) {
                     if (await saveExport() == 0) {
                       if (["Atlas", "Chronos", "Human Player"]
@@ -101,7 +101,7 @@ void saveJson(BuildContext context) async {
       });
 }
 
-List<String> dataVerification() {
+List<String> getMissingFields() {
   List<String> missingFields = [];
   for (String i in missingFieldMap[DataEntry.activeConfig]!) {
     if (DataEntry.exportData[i] == null ||
