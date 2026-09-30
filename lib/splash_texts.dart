@@ -50,7 +50,7 @@ final List<String> splashTexts = [
   "Bombardino Crocodilo",
   "BOO! Did I scare ya?",
   "Shoutout to 1778, they're pretty chill",
-  "The 2-year curse is real",
+  "The 2-year curse is (not) real",
   "#r4nd0m",
   "WE LOVE DRIVE TEAM",
   "colin was here :3",
